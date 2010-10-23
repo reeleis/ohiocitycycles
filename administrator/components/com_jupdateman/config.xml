@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<params>
+		<param name="extractor" type="list" default="0" label="Extraction Method" description="The method to use when extracting files. Note that PEAR Archive_Tar does not use the Joomla! FTP layer.">
+			<option value="0">1.6 Extractor</option>
+			<option value="1">1.5 Default Extractor</option>
+			<option value="2">1.5 PEAR Archive_Tar</option>
+			<!-- <option value="3">JUpdateMan PEAR Archive_Tar</option>-->
+		</param>
+		<param name="download_method" type="radio" default="0" label="Download Method" description="Method to download files with. Note: If cURL is selected but not installed, fopen will be used">
+			<option value="0">fopen</option>
+			<option value="1">curl</option>
+		</param>
+		<param name="use_proxy" type="radio" default="0" label="Use Proxy" description="Use a named proxy server. Only available if cURL is used or fopen on PHP5+. Only basic authentication is supported for proxies that require authentication.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="proxy_host" type="text" default="" label="Proxy hostname" description="Hostname of the proxy server" />
+		<param name="proxy_port" type="text" default="" label="Proxy port" description="Port of the proxy server" />
+		<param name="proxy_user" type="text" default="" label="Proxy username" description="Username for proxy servers that require authentication. Authentication is disabled if left blank" />
+		<param name="proxy_pass" type="password" default="" label="Proxy password" description="Password for proxy servers taht require authentication. This is ignored if the username is left blank" />
+		<param name="cached_update" type="radio" default="0" label="Use Cached Update Method" description="This method permits you to place the update file and the correct package and this will be used instead of using an internet connection">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param> 
+	</params>
+</config>

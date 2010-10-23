@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Detailed Categories Layout">
+		<message>
+			<![CDATA[DETAILED CATEGORIES LAYOUT DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>DETAILED CATEGORIES LAYOUT</name>
+		<description>DETAILED CATEGORIES LAYOUT DESC</description>
+		<params>
+			<param name="detcat_nr" type="text" size="1" default="3" label="DET CATEGORIES PREVIEW" description="DET CATEGORIES PREVIEW DESC" />
+			<param name="cat_num" type="text" size="2" default="4" label="CAT DISPLAY" description="CAT DISPLAY DESC" />
+		</params>
+	</state>
+</metadata>

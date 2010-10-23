@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mosinstall version="1.0.0" type="mambot" group="acajoom">
+	<name>Acajoom Content Bot</name>
+	<author>Joobi Solutions</author>
+	<creationDate>February 2008</creationDate>
+	<copyright>© 2008 Joobi Solutions. All Rights Reserved</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>dev_support@acajoom.com</authorEmail>
+	<authorUrl>http://www.joobisoft.com</authorUrl>
+	<version>2.0.0</version>
+	<description>Acajoom Bot (for Joomla 1.0.x) to include content items into Acajoom mailings.</description>
+	<files>
+		<filename mambot="acajoombot">acajoombot.php</filename>
+		<filename mambot="acajoombot">index.html</filename>
+	</files>
+	<params>
+		<param name="class_contentpaneopen_nws" type="text" default="" label="Style for Content" description="Acajoom will replace your CSS class='contentpaneopen_nws' by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used to include your Joomla content in a Newsletter" />
+		<param name="class_contentheading_nws" type="text" default="" label="Style for Content Headings" description="Acajoom will replace your CSS class='contentheading_nws' by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used for your Content Title" />
+		<param name="class_eventpaneopen_nws" type="text" default="" label="Style for Event" description="Acajoom will replace your CSS class='eventpaneopen_nws' by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used to include your events from jCalPro in a Newsletter" />
+		<param name="class_eventheading_nws" type="text" default="" label="Style for Event Headings" description="Acajoom will replace your CSS class='eventheading_nws' (for events from jCalPro) by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used for your Event Title" />
+		<param name="class_readon_nws" type="text" default="" label="Style for Read more links" description="Acajoom will replace your CSS class='readon_nws' by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used for the read more link in a Content or in an Event" />
+		<param name="class_subscriptionlink_nws" type="text" default="" label="Style for the subscription links" description="Acajoom will replace your CSS class='subscriptionlink_nws' used for the subscription links in your Newsletter by the inline CSS style='YOUR FIELD'. If left blank, Acajoom won't replace it. This class is used to customize the subscriptions links" />
+	</params>
+</mosinstall>

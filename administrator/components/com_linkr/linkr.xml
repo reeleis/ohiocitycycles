@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+	<name>Linkr</name>
+	<version>1</version>
+	<creationDate>February 2008</creationDate>
+	<author>Frank</author>
+	<authorEmail>francisamankrah@gmail.com</authorEmail>
+	<authorUrl>http://codes.mtlnews.com</authorUrl>
+	<copyright>Copyright (C) 2008 Montreal News. All Rights Reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>Easily link to an article while editing content.</description>
+	<files folder="frontend">
+		<filename>index.html</filename>
+		<filename>linkr.php</filename>
+		<filename>controller.php</filename>
+		<filename>models/index.html</filename>
+		<filename>models/articles.php</filename>
+		<filename>views/index.html</filename>
+		<filename>views/articles/index.html</filename>
+		<filename>views/articles/view.html.php</filename>
+		<filename>views/articles/tmpl/index.html</filename>
+		<filename>views/articles/tmpl/default.php</filename>
+	</files>
+	<administration>
+		<menu>Linkr</menu>
+		<files folder="backend">
+			<filename>index.html</filename>
+			<filename>admin.linkr.php</filename>
+			<filename>controller.php</filename>
+			<filename>assets/index.html</filename>
+			<filename>assets/button.png</filename>
+			<filename>assets/button-rtl.png</filename>
+			<filename>assets/helper.js</filename>
+			<filename>assets/loading.gif</filename>
+			<filename>models/index.html</filename>
+			<filename>models/articles.php</filename>
+			<filename>views/index.html</filename>
+			<filename>views/articles/index.html</filename>
+			<filename>views/articles/view.html.php</filename>
+			<filename>views/articles/tmpl/index.html</filename>
+			<filename>views/articles/tmpl/default.php</filename>
+			<filename>views/linkr/index.html</filename>
+			<filename>views/linkr/view.html.php</filename>
+			<filename>views/linkr/tmpl/index.html</filename>
+			<filename>views/linkr/tmpl/default.php</filename>
+		</files>		
+	</administration>
+</install>

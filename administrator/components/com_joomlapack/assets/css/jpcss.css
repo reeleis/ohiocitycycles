@@ -1,0 +1,210 @@
+.statusok {
+	font-weight: bold;
+	color: green;
+}
+
+.statusnotok {
+	font-weight: bold;
+	color: red;
+}
+
+.maintbl {
+	font-size: medium;
+}
+
+.sanityCheck {
+	text-align: center;
+	background-color: #FFFFCC;
+	border: thin dotted gray;
+	padding: 1em;
+	width: 60%;
+	margin-left: 19%;
+}
+
+div.sitePack {
+	width: 90%;
+	margin: 1em 3%;
+	background-color: #EEEEFF;
+	border: thin dotted black;
+	padding: 1.2em;
+	text-align: left;
+}
+
+div.sitePack h4 {
+	margin: 0em;
+	color: navy;
+}
+
+#Status
+{
+	width: 90%;
+	margin: 1em 3%;
+	background-color: #EEEEFF;
+	padding: 1.2em;
+	font-family: fixed;
+}
+
+#SearchForm, #SiteSelect {
+	text-align: left;
+	width: 90%;
+	margin: 1em 3%;
+	background-color: #EEEEFF;
+	border: thin dotted black;
+	padding: 1.2em;
+	font-size: small;
+}
+
+#SiteSelect label, #SearchForm label {
+	display: block;
+	float: left;
+	width: 25em;
+	margin-top: 0.3em;
+}
+
+#SearchForm input, #SearchForm select, #SiteSelect input, #SiteSelect select {
+	border: thin solid black;
+	margin-bottom: 0.2em;
+	width: 40%;
+	font-size: small;
+}
+
+.JPMiniBar {
+	background: #333333;
+	padding: 0.3em;
+	color: white;
+}
+
+.JPMiniBar a {
+	color: #cccccc;
+}
+
+#NextDirectory, #CurrentFragment {
+	padding: 3px;
+	margin: 0px;
+	font-size: x-small;
+	color: #666666;
+}
+
+#Timeout {
+	text-align: left;
+	background-color: #FFFF99;
+	border: thick solid red;
+	padding: 0.4em;
+	width: 70%;
+	margin-left: 15%;
+}
+
+#Timeout p
+{
+	font-size: normal;
+}
+
+#Timeout a {
+	color: #990000;
+}
+
+#Timeout h4 {
+	color: #CC0000;
+	font-size: large;
+}
+
+#Warnings {
+	text-align: left;
+	border: thick solid yellow;
+	background-color: #ffffaa;
+	padding: 0.4em;
+	width: 70%;
+	margin-left: 15%;
+}
+
+#Warnings h4 {
+	color: #999900;
+	font-size: medium;
+}
+
+
+.jpbutton {
+	display: block;
+	width: 250px;
+	height: 32px;
+	text-align: left;
+	text-decoration: none;
+	cursor: pointer;
+	border: thin dotted #333333;
+	padding: 3px;
+	font-weight: normal;
+	font-size: x-small;
+	margin-bottom: 1em;
+}
+
+.jpbutton:hover {
+	background-color: #ffffee;
+	text-decoration: none;
+	border: thin solid #3333ff;
+}
+
+.jpbutton img {
+	display: block;
+	float: left;
+	width: 32px;
+	height: 32px;
+}
+
+.jpbutton p, .jpbutton span {
+	display: block;
+	float: right;
+	padding: 0px;
+	width: 210px;
+	margin: 0px;
+}
+
+table.stepstable tr {
+	height: 1.5em;
+}
+
+table.stepstable thead tr {
+	height: 0em;
+}
+
+table.stepstable tr td {
+	font-size: 15px;
+}
+
+table.stepstable {
+	font-size: medium;
+	border: thin dotted #aaaaaa;
+	border-collapse: collapse;
+	width: 90%;
+	padding: 4px;
+	color: #999999;
+	background-color: #f3f3f9;
+}
+
+tr.active {
+	color: #000000;
+	font-weight: bold;
+	background-color: #ffff99;
+}
+
+tr.ok {
+	color: #003300;
+	font-weight: normal;
+	background-color: #f3fff9;
+}
+
+tr.error {
+	color: #aa0000;
+	font-weight: bold;
+	background-color: #fff3f9;
+}
+
+p.error {
+	font-weight: bold;
+	color: #000000;
+	background-color: #fff3f9;
+	border-top: thick solid #aa0000;
+	border-bottom: thick solid #aa0000;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	padding: 0px;
+}

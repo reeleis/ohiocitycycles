@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="template">
+  <name>tem_highergrounds</name>
+  <creationDate>02/11/2007</creationDate>
+  <author>cmslounge</author>
+  <copyright>This template is copyrighted.</copyright>
+  <authorEmail>info@cmslounge.com</authorEmail>
+  <authorUrl>www.cmslounge.com</authorUrl>
+  <version>1.0</version>
+  <description>cmslounge.com</description>
+  <files>
+	<filename>css/index.html</filename>  
+		<filename>css/common.css</filename>
+		<filename>css/template_css.css</filename>
+		<filename>params.ini</filename>
+		<filename>index.php</filename>
+		<filename>overIE.js</filename>
+		<filename>template_thumbnail.png</filename>
+		<filename>images/bullet.gif</filename>
+		<filename>images/content.jpg</filename>
+		<filename>images/content-wrap.jpg</filename>
+		<filename>images/dots.jpg</filename>
+		<filename>images/firefox-gray.jpg</filename>
+		<filename>images/footer-bottom.jpg</filename>
+		<filename>images/header-bg.jpg</filename>
+		<filename>images/header-photo.jpg</filename>
+		<filename>images/nav.jpg</filename>
+		<filename>images/nav-current.jpg</filename>
+		<filename>images/nav-hover.jpg</filename>
+		<filename>images/post.jpg</filename>
+		<filename>images/top-bg.jpg</filename>
+		<filename>html/com_content/archive/default_items.php</filename>
+		<filename>html/com_content/archive/default.php</filename>
+		<filename>html/com_content/article/default.php</filename>
+		<filename>html/com_content/article/form.php</filename>
+		<filename>html/com_content/category/blog_item.php</filename>
+		<filename>html/com_content/category/blog_links.php</filename>
+		<filename>html/com_content/category/blog.php</filename>
+		<filename>html/com_content/category/default_items.php</filename>
+		<filename>html/com_content/category/default.php</filename>
+		<filename>html/com_content/frontpage/default_item.php</filename>
+		<filename>html/com_content/frontpage/default.php</filename>
+		<filename>html/com_content/section/default.php</filename>
+		<filename>html/com_content/section/blog_item.php</filename>
+		<filename>html/com_content/section/blog.php</filename>
+		<filename>html/com_search/search/default_error.php</filename>
+		<filename>html/com_search/search/default_form.php</filename>
+		<filename>html/com_search/search/default_results.php</filename>
+		<filename>html/com_search/search/default.php</filename>
+		<filename>html/com_user/login/default_login.php</filename>
+		<filename>html/com_user/login/default_logout.php</filename>
+		<filename>html/mod_newsflash/_item.php</filename>
+		<filename>html/mod_newsflash/horiz.php</filename>
+		<filename>html/mod_poll/default.php</filename>
+ </files>
+
+ <positions>	
+		<position>mainmenu</position>
+		<position>user4</position>
+		<position>left</position>
+		<position>abovemain</position>
+		<position>belowmain</position>
+		<position>bottom</position>
+</positions>
+	<params>
+		<param name="authorName" type="list" default="yes" label="Author Name" description="Display author name on entries">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+		<param name="dateCreated" type="list" default="yes" label="Date Created" description="Display date created on entries">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+		<param name="dateModified" type="list" default="yes" label="Date Modified" description="Display date modified on entries">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+		<param name="Buttons" type="list" default="yes" label="Buttons" description="Show buttons">
+			<option value="yes">Yes</option>
+			<option value="no">No</option>
+		</param>
+	</params>
+</install>

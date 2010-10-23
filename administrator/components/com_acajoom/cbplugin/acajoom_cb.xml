@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cbinstall version="1.0" type="plugin" group="user">
+	<name>Acajoom CB Plugin</name>
+	<creationDate>February 2008</creationDate>
+	<author>Joobi Solutions</author>
+	<copyright>© 2007-2008 Joobi Solutions All Rights Reserved</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>dev_support@acajoom.com</authorEmail>
+	<authorUrl>http://www.joobisoft.com</authorUrl>
+	<version>1.0</version>
+	<description>CB plugin for Acajoom</description>
+	<files>
+		<filename plugin="acajoom_cb">acajoom_cb.php</filename>
+		<filename>index.html</filename>
+	</files>
+    <params>
+	</params>
+    <tabs>
+    	<tab name="Mailing lists" description="Listing of all the mailing lists for Acajoom" class="getAcajoomTab" fields="0">
+    	<params>
+			<param name="@spacer" type="spacer" default="Parameters to configure the Acajoom CB Plugin." label="About:" description="" />
+	        <param name="show_archive" type="radio" default="1" label="Show Archive Links" description="Select yes to show a link to the lists archive if the list allows it.">
+	            <option value="0">_UE_NO</option>
+	            <option value="1">_UE_YES</option>
+	        </param>
+	        <param name="public_view" type="radio" default="0" label="Allow Public View" description="Select yes to allow users to see this tab when viewing other users profiles.">
+	            <option value="0">_UE_NO</option>
+	            <option value="1">_UE_YES</option>
+	        </param>
+	  		<param name="acajoom_itemid" type="text" default="" label="Acajoom Link ItemId" description="If left blank will default to the ItemId for community builder menu link.  This causes links to the list archives to lead to archive pages with the same modules shown when viewing a profile and without the modules that would appear if you followed an acajoom menu link.  To correct this enter in the ItemId for the menu link to component - acajoom. " />
+    	</params>
+	<fields>
+	</fields>
+	</tab>
+    </tabs>
+    <install>
+    	<queries>
+    	</queries>
+    </install>
+    <uninstall>
+        <queries>
+    	</queries>
+    </uninstall>
+</cbinstall>

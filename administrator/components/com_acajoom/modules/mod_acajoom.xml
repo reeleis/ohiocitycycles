@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<mosinstall type="module">
+	<name>Acajoom Module</name>
+	<creationDate>October 2006</creationDate>
+	<author>Acajoom Services</author>
+	<copyright>© 2006-2008 Joobi Solutions. All Rights Reserved.</copyright>
+	<license>http://www.acajoom.com/license.php</license>
+	<authorEmail>support@acajoom.com</authorEmail>
+	<authorUrl>http://www.joobisoft.com</authorUrl>
+	<version>2.0.0</version>
+
+	<description>Acajoom suscriber module</description>
+	<files>
+		<filename module="mod_acajoom">mod_acajoom.php</filename>
+	</files>
+	<params>
+		<param name="listids" type="text" default="0" label="List IDs" description="THIS IS A REQUIRED FIELD. Enter the id number of the lists you wish to allow users to subscribe to seperated by a comma ,  . If only one is entered there will not be an option displayed but they will automatically be subscribed to this list" />
+		<param name="red_url" type="text" size="40" default="" label="Redirect URL" description="The URL that you want the user to be redirected after they have been subscribed, if not specified it will redirect automatically to the user subscription form." />
+
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+
+		<param name="linear" type="radio" default="0" label="Show module in line" description="Select whether or not to show the information in a line or with a vertical presentation.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+		<param name="introtext" type="textarea" cols="40" rows="5" default="" label="Introduction text" description="The text that appears in the introduction. LEAVE BLANK TO NOT SHOW NOTHING.  Use pretext for CSS layout." />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="showlistname" type="radio" default="1" label="Show List Name" description="Select whether or not to show the name of the list after the introduction.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+		<param name="defaultchecked" type="radio" default="1" label="Check list by default" description="Select whether or not to you want the check box for each list checked by default.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+
+		<param name="shownamefield" type="radio" default="1" label="Show Name Field" description="select whether or not to show the name field.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+		<param name="fieldsize" type="text" default="10" label="Field size" description="Enter the ammount of characters for the name and e-mail form fields." />
+		<param name="posttext" type="textarea" cols="40" rows="5" default="" label="Post-text" description="This is the Text or HTML that is displayed at the bottom of the subscription form. LEAVE BLANK TO NOT SHOW ANYTHING. Use postext for CSS layout." />
+
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="receivehtmldefault" type="radio" default="1" label="Default Receive HTML" description="Set this option to show the default html mailing configuration. If the Show Receive HTML is set to No then this option will be the default.">
+			<option value="1">HTML</option>
+			<option value="0">Text</option>
+		</param>
+		<param name="showreceivehtml" type="radio" default="1" label="Show Receive HTML" description="Set to Yes to allow users to decide whether they want HTML or not. Set to No to use default receive html.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+		<param name="button_text" type="text" default="" label="Button Unregistered Text" description="The text that appears on subcribe button, when people are not subcribed yet, if left blank it will load _ACA_MOD_SUBSCRIBE from your language file" />
+		<param name="button_img" type="text" size="40" default="" label="Button Unregistered Image" description="An image that you want to use for the subcribe button,  when people are not subcribed yet, if left blank the button name will be used. If your images is on the site you can specify only the path images/tick.png otherwise specify the full url to your image." />
+		<param name="button_text_change" type="text" default="" label="Button Registered Text" description="The text that appears on subcribe button,  when people are logged in, if left blank it will load _ACA_CHANGE_SUBSCRIPTIONS from your language file" />
+		<param name="button_img_change" size="40" type="text" default="" label="Button Registered Image" description="An image that you want to use for the subcribe button,  when people are logged in, if left blank the button name will be used.  If your images is on the site you can specify only the path images/tick.png otherwise specify the full url to your image." />
+
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="Enter the class suffix you would like to use so you can define custom CSS styling." />
+		<param name="mod_align" type="list" default="" label="Module alignement" description="display alignement of the module.  If left blank , it will use default CSS.">
+			<option value="">No alignement</option>
+			<option value="right">Right</option>
+			<option value="left">Left</option>
+			<option value="center">Center</option>
+		</param>
+		<param name="cache" type="radio" default="0" label="Enable Cache" description="Select whether to cache the content of this module">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</mosinstall>

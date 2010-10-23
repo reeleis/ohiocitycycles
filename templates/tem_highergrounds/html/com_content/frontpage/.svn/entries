@@ -1,0 +1,52 @@
+8
+
+dir
+343
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos/ocbc_joomla_theme/html/com_content/frontpage
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos
+
+
+
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+98ee6473-ddbf-4a7b-91c2-44b7bd84abdc
+
+default_item.php
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+42a96926c16c37bcfe40efcea6abf731
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+
+default.php
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+e8aebfbdd6fa64d63d95e065a5af8aeb
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+

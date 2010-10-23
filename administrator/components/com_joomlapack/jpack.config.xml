@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<OutputDirectory><![CDATA[s:73:"/home/ohiocity/public_html/administrator/components/com_joomlapack/backup";]]></OutputDirectory>
+	<TempDirectory><![CDATA[s:73:"/home/ohiocity/public_html/administrator/components/com_joomlapack/backup";]]></TempDirectory>
+	<MySQLCompat><![CDATA[s:7:"default";]]></MySQLCompat>
+	<listerengine><![CDATA[s:7:"default";]]></listerengine>
+	<dbdumpengine><![CDATA[s:7:"default";]]></dbdumpengine>
+	<packerengine><![CDATA[s:3:"zip";]]></packerengine>
+	<TarNameTemplate><![CDATA[s:25:"site-[HOST]-[DATE]-[TIME]";]]></TarNameTemplate>
+	<dbAlgorithm><![CDATA[s:5:"smart";]]></dbAlgorithm>
+	<packAlgorithm><![CDATA[s:5:"smart";]]></packAlgorithm>
+	<InstallerPackage><![CDATA[s:8:"jpi3.xml";]]></InstallerPackage>
+	<logLevel><![CDATA[s:1:"2";]]></logLevel>
+	<backupMethod><![CDATA[s:4:"ajax";]]></backupMethod>
+	<enableFrontend><![CDATA[b:0;]]></enableFrontend>
+	<secretWord><![CDATA[s:0:"";]]></secretWord>
+	<mnRowsPerStep><![CDATA[s:3:"100";]]></mnRowsPerStep>
+	<mnMaxFragmentSize><![CDATA[s:7:"1048756";]]></mnMaxFragmentSize>
+	<mnMaxFragmentFiles><![CDATA[s:2:"50";]]></mnMaxFragmentFiles>
+	<mnZIPForceOpen><![CDATA[b:0;]]></mnZIPForceOpen>
+	<mnZIPCompressionThreshold><![CDATA[s:7:"1024768";]]></mnZIPCompressionThreshold>
+	<mnZIPDirReadChunk><![CDATA[s:7:"1024768";]]></mnZIPDirReadChunk>
+	<mnMaxExecTimeAllowed><![CDATA[s:2:"14";]]></mnMaxExecTimeAllowed>
+	<mnMinimumExectime><![CDATA[s:1:"2";]]></mnMinimumExectime>
+	<mnExectimeBiasPercent><![CDATA[s:2:"75";]]></mnExectimeBiasPercent>
+	<mysqldumpPath><![CDATA[s:18:"/usr/bin/mysqldump";]]></mysqldumpPath>
+	<mnMSDDataChunk><![CDATA[s:5:"16384";]]></mnMSDDataChunk>
+	<mnMSDMaxQueryLines><![CDATA[s:3:"300";]]></mnMSDMaxQueryLines>
+	<mnMSDLinesPerSession><![CDATA[s:3:"100";]]></mnMSDLinesPerSession>
+	<siteRoot><![CDATA[N;]]></siteRoot>
+</config>

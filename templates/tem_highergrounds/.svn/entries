@@ -1,0 +1,100 @@
+8
+
+dir
+343
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos/ocbc_joomla_theme
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos
+
+
+
+2010-01-25T07:17:38.325654Z
+341
+jeffschuler
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+98ee6473-ddbf-4a7b-91c2-44b7bd84abdc
+
+templateDetails.xml
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+4f97323fe9a6cbdc5fac64afa76ade07
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+
+params.ini
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+616dda3dface96b7e4bff78a05c3fb0b
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+has-props
+
+template_thumbnail.png
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+ee325f255fd4b61399b41102430e75b2
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+has-props
+
+html
+dir
+
+overIE.js
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+759141254dff37bcb1498bf9edaedc66
+2010-01-25T07:14:24.854006Z
+339
+jeffschuler
+
+images
+dir
+
+css
+dir
+
+index.php
+file
+
+
+
+
+2010-01-25T09:37:44.000000Z
+2690b2cae67e058591e47d86bbe4fbe8
+2010-01-25T07:17:09.081762Z
+340
+jeffschuler
+has-props
+

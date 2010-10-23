@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5.0">
+<name>EventList</name>
+<creationDate>21/01/2008</creationDate>
+<author>Christoph Lukes</author>
+<copyright>This component is released under the GNU/GPL License</copyright>
+<authorEmail>schlu@schlu.net</authorEmail>
+<authorUrl>http://www.schlu.net</authorUrl>
+<version>0.9 Alpha</version>
+<description>EventList is just that what the name would lead you to expect. It's not a calendar but an easy way to manage and present your Events for your group, company or community. EventList offers a lot features and possibilities which makes your work easier, like the Venue database, Picture resizing and much more. But also for your site visitors EventList has some additional features to offer, like a simple registration system, map service links, or the submission/edit of events and venues from the frontend...Development release!</description>
+
+<files>
+	<filename>index.html</filename>
+	<filename>eventlist.php</filename>
+	<filename>controller.php</filename>
+	<filename>router.php</filename>
+	<filename>LICENSE.php</filename>
+	<folder>assets</folder>
+	<folder>classes</folder>
+	<folder>helpers</folder>
+	<folder>models</folder>
+	<folder>views</folder>
+</files>
+
+<languages>
+	<language tag="en-GB">languages/site/en-GB.com_eventlist.ini</language>
+	<language tag="de-DE">languages/site/de-DE.com_eventlist.ini</language>
+</languages>
+
+<params>
+	<param name="display_num" default="15" />
+	<param name="cat_num" default="4" />
+	<param name="empty_cat" default="0" />
+	<param name="filter" default="1" />
+	<param name="display" default="1" />
+	<param name="icons" default="1" />
+	<param name="show_print_icon" default="1" />
+	<param name="show_email_icon" default="1" />
+</params>
+
+<install>
+	<sql>
+		<file driver="mysql" charset="utf8">install.mysql.utf8.sql</file>
+		<file driver="mysql">install.mysql.nonutf8.sql</file>
+	</sql>
+</install>
+
+<uninstall>
+	<sql>
+		<file driver="mysql" charset="utf8">uninstall.mysql.utf8.sql</file>
+		<file driver="mysql">uninstall.mysql.nonutf8.sql</file>
+	</sql>
+</uninstall>
+
+<installfile>install.eventlist.php</installfile>
+
+<uninstallfile>uninstall.eventlist.php</uninstallfile>
+
+<administration>
+
+	<menu img="../administrator/components/com_eventlist/assets/images/eventlist.png">EventList</menu>
+
+	<files folder="admin">
+		<filename>index.html</filename>
+		<filename>admin.eventlist.php</filename>
+		<filename>controller.php</filename>
+		<filename>config.xml</filename>
+		<filename>install.mysql.utf8.sql</filename>
+		<filename>install.mysql.nonutf8.sql</filename>
+		<filename>uninstall.mysql.utf8.sql</filename>
+		<filename>uninstall.mysql.nonutf8.sql</filename>
+
+		<folder>classes</folder>
+		<folder>assets</folder>
+		<folder>help</folder>
+		<folder>views</folder>
+		<folder>models</folder>
+		<folder>controllers</folder>
+		<folder>elements</folder>
+		<folder>tables</folder>
+	</files>
+
+	<languages>
+		<language tag="en-GB">languages/admin/en-GB.com_eventlist.ini</language>
+		<language tag="de-DE">languages/admin/de-DE.com_eventlist.ini</language>
+	</languages>
+
+</administration>
+</install>

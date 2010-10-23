@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Venuesview Layout">
+		<message>
+			<![CDATA[VENUES LAYOUT DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>VENUES LAYOUT</name>
+		<description>VENUES LAYOUT DESC</description>
+		<params>
+			<param name="display_venues_num" type="text" size="2" default="5" label="VENUE NUMBER" description="VENUE NUMBER TIP" />
+		</params>
+	</state>
+</metadata>

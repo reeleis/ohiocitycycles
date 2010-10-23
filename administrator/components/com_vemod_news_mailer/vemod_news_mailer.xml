@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+
+	<name>vemod_news_mailer</name>
+	<creationDate>2008</creationDate>
+	<author>Thomas Allin</author>
+	<authorEmail>vemod@musiker.nu</authorEmail>
+	<authorUrl>http://www.musiker.nu/objectstudio/NewsMailer.php</authorUrl>
+	<copyright>This component in released under the GNU/GPL License</copyright>
+	<version>1.2.7</version>
+	
+	<installfile>install.vemod_news_mailer.php</installfile>
+	<uninstallfile>uninstall.vemod_news_mailer.php</uninstallfile>
+	
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">install.mysql.utf8.sql</file>
+			<file driver="mysql">install.mysql.nonutf8.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">uninstall.mysql.utf8.sql</file>
+			<file driver="mysql">uninstall.mysql.nonutf8.sql</file>
+		</sql>
+	</uninstall>
+	
+	<files>
+		<filename>vemod_news_mailer.php</filename>
+		<filename>vemod_news_mailer.html.php</filename>
+        <filename>index.html</filename>
+        <filename>email.gif</filename>
+        <filename>progress.gif</filename>
+        <filename>warning.gif</filename>
+        <filename>apply.gif</filename>
+        <filename>apply_f2.gif</filename>
+        <filename>html.gif</filename>
+        <filename>text.gif</filename>
+        <filename>sms.gif</filename>
+        <filename>view.gif</filename>
+        <filename>tick.png</filename>
+        <filename>publish_x.png</filename>
+        <filename>expandall.png</filename>
+        <filename>collapseall.png</filename>   		
+	</files>
+	
+	<languages>
+		<language tag="en-GB">language/en-GB.com_vemod_news_mailer.ini</language>
+			<language tag="cs-CZ">language/cs-CZ.com_vemod_news_mailer.ini</language>
+			<language tag="da-DK">language/da-DK.com_vemod_news_mailer.ini</language>
+			<language tag="de-DE">language/de-DE.com_vemod_news_mailer.ini</language>
+			<language tag="es-ES">language/es-ES.com_vemod_news_mailer.ini</language>
+			<language tag="fr-FR">language/fr-FR.com_vemod_news_mailer.ini</language>
+			<language tag="hu-HU">language/hu-HU.com_vemod_news_mailer.ini</language>
+			<language tag="it-IT">language/it-IT.com_vemod_news_mailer.ini</language>
+			<language tag="nl-NL">language/nl-NL.com_vemod_news_mailer.ini</language>
+			<language tag="pl-PL">language/pl-PL.com_vemod_news_mailer.ini</language>
+			<language tag="pt-PT">language/pt-PT.com_vemod_news_mailer.ini</language>
+			<language tag="ro-RO">language/ro-RO.com_vemod_news_mailer.ini</language>
+			<language tag="ru-RU">language/ru-RU.com_vemod_news_mailer.ini</language>
+			<language tag="sk-SK">language/sk-SK.com_vemod_news_mailer.ini</language>
+			<language tag="sv-SE">language/sv-SE.com_vemod_news_mailer.ini</language>
+            <language tag="tr-TR">language/tr-TR.com_vemod_news_mailer.ini</language>
+            <language tag="el-GR">language/el-GR.com_vemod_news_mailer.ini</language>	
+	</languages>
+	
+	<administration>
+	
+		<menu task="controlpanel">Vemod News Mailer</menu>
+        <submenu>
+        <menu task="configuration">Configuration</menu>
+        <menu task="showsubscribers">Subscribers</menu>
+        <menu task="showmaintenance">Maintenance</menu>
+        <menu task="showbackup">Backup / Upgrade</menu>     
+        </submenu>
+	
+		<files folder="admin">
+			<filename>admin.vemod_news_mailer.php</filename>
+			<filename>toolbar.vemod_news_mailer.php</filename>
+			<filename>config.vemod_news_mailer.php</filename>
+			<filename>js.vemod_news_mailer.php</filename>
+			<filename>install.mysql.utf8.sql</filename>
+			<filename>install.mysql.nonutf8.sql</filename>
+			<filename>uninstall.mysql.utf8.sql</filename>
+			<filename>uninstall.mysql.nonutf8.sql</filename>
+			<filename>vemod.jpg</filename>
+			<filename>index.html</filename>
+		</files>
+		
+	</administration>
+</install>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<params>
+		<param name="display_num" type="list" default="15" label="EVENT NUMBER" description="EVENT NUMBER TIP">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="25">25</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+		</param>
+		<param name="cat_num" type="text" size="2" default="4" label="CAT DISPLAY" description="CAT DISPLAY DESC" />
+		<param name="empty_cat" type="radio" default="0" label="EMPTY CATEGORIES" description="EMPTY CATEGORIES DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+  		<param name="filter" type="radio" default="1" label="FILTER" description="FILTER DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+		<param name="display" type="radio" default="1" label="DISPLAY SELECT" description="DISPLAY SELECT DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+		<param name="icons" type="radio" default="1" label="SHOW ICONS" description="SHOW ICONS DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+		<param name="show_print_icon" type="radio" default="1" label="PRINT ICON" description="PRINT ICON DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+		<param name="show_email_icon" type="radio" default="1" label="EMAIL ICON" description="EMAIL ICON DESC">
+			<option value="0">Hide</option>
+			<option value="1">Show</option>
+		</param>
+ 	</params>
+</config>

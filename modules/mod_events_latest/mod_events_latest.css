@@ -1,0 +1,64 @@
+/*
+	css template addons for module Latest Events
+
+	Note that these classes can be used to customize the look of the latest events
+	module if desired beyond inherited properties from the mambo template being used.
+	If you don't want to override some of the template properties such as maybe a
+	standard uniform way to display links consistently, then you should comment out
+	the link style directives below or make suitable modifications.
+
+	Classes:
+
+	mod_events_latest_first	- the table cell that contains the first event listed
+	mod_events_latest	- the table cell that contains an event besides the first
+
+	mod_events_latest_date	- the html span that contains the date for the event on the
+				  first line of the table cell.
+
+	mod_events_latest_content - the html span that contains the event title.
+
+	mod_events_latest_content a:{link|visited|hover}  - controls the formatting
+		of the event title links if enabled thru the module parameters. See the
+		Readme.txt file to get info on parameters.
+
+*/
+table.mod_events_latest_table {
+}
+
+.mod_events_latest {
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-top: solid 1px red;
+	height: 30px;
+	}
+
+.mod_events_latest_first {
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	height: 30px;
+	}
+
+.mod_events_latest_date {
+	font-size: 9px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color:gray;
+	}
+
+
+.mod_events_latest_content a:link {
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color:gray;
+	}
+
+.mod_events_latest_content a:visited {
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color:gray;
+	}
+
+.mod_events_latest_content a:hover {
+	font-size: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color:#c0c0c0;
+	}

@@ -1,0 +1,52 @@
+9
+
+dir
+471
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos/com_cbodb/admincom/mailchimp-api
+svn+linssh://jeffschuler@linode.digmob.org/home/jeffschuler/repos
+
+
+
+2010-01-22T08:23:48.345010Z
+329
+jeffschuler
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+98ee6473-ddbf-4a7b-91c2-44b7bd84abdc
+
+MCAPI.class.php
+file
+
+
+
+
+2010-01-25T09:25:48.000000Z
+13dce3ae0fc00b49a810dc78b46de86d
+2010-01-21T07:08:16.858714Z
+325
+jeffschuler
+
+config.inc.php
+file
+
+
+
+
+2010-01-25T09:25:48.000000Z
+355024d8379b219704e2506c87e83614
+2010-01-22T08:23:48.345010Z
+329
+jeffschuler
+

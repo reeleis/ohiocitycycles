@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Categoryevents Layout">
+		<message>
+			<![CDATA[CATEGORYEVENTS LAYOUT DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>CATEGORYEVENTS LAYOUT</name>
+		<description>CATEGORYEVENTS LAYOUT DESC</description>
+		<url addpath="/administrator/components/com_eventlist/elements">
+			<param name="id" type="categories" default="0" label="SELECT CATEGORY" description="SELECT CATEGORY DESC" />
+		</url>
+	</state>
+</metadata>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Venue submission">
+		<message>
+			<![CDATA[VENUE SUBMISSION DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>VENUE SUBMISSION</name>
+		<description>VENUE SUBMISSION DESC</description>
+	</state>
+</metadata>

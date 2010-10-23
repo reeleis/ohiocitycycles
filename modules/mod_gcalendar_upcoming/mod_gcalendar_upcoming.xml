@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5.0">
+	<name>GCalendar Upcoming Events</name>
+	<author>allon</author>
+	<creationDate>January 2008</creationDate>
+	<copyright>This module is released under the GNU/GPL License.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>allon.moritz@gmail.com</authorEmail>
+	<authorUrl>gcalendar.allon.ch</authorUrl>
+	<version>1.5.0</version>
+	<description>This module shows the upcoming events from a google calendar.</description>
+	<files>
+		<filename module="mod_gcalendar_upcoming">mod_gcalendar_upcoming.php</filename>
+		<filename>index.html</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/gcalendar.js</filename>
+        <filename>tmpl/date.format.js</filename>
+        <filename>tmpl/index.html</filename>
+	</files>
+	<languages>
+  		<language tag="en-GB">languages/en-GB.mod_gcalendar_upcoming.ini</language> 
+  	</languages>
+	<params>
+		<param name="name" type="text" size="80" default="" label="Calendar name"
+			description="The name of the google calendar. Specified in the GCalendar component." />
+		<param name="dateFormat" type="text" size="80" default="dd.mm.yyyy HH:MM" label="Date format"
+			description="The format of the date for an event." />
+		<param name="dateFormatFull" type="text" size="80" default="dd.mm.yyyy" label="Date format (full day)"
+			description="The format of the date for a full day event. No hour or minute parameters are allowed!!!!" />
+		<param name="max" type="text" size="2" default="5" label="Max events"
+			description="The maximal count of events should be displayed." />
+		<param name="openWindow" type="radio" default="0"
+			label="Open event in new window"
+			description="If the event should be opened in a new window or inside of joomla.">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</param>
+	</params>
+</install>

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<install type="component" version="1.5" method="upgrade">
+	<name>JUpdateMan</name>
+	<author>Samuel Moffatt</author>
+	<creationDate>January 2008</creationDate>
+	<copyright>(C) 2009 Samuel Moffatt</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>pasamio@gmail.com</authorEmail>
+	<authorUrl>pasamio.id.au</authorUrl>
+	<version>1.5.1</version>
+	<description>This component automates updating a remote Joomla! installation</description>
+	<administration>
+		<menu>Update Manager</menu>
+		<files folder="admin">
+			<folder>libraries</folder>
+			<folder>language</folder>
+			<folder>views</folder>
+			<folder>models</folder>
+			<filename>admin.jupdateman.html.php</filename>
+			<filename>admin.jupdateman.php</filename>
+			<filename>jupdateman.class.php</filename>
+			<filename>controller.php</filename>
+			<filename>jupdateman.css</filename>
+			<filename>step1.php</filename>
+			<filename>step2.php</filename>
+			<filename>step3.php</filename>
+			<filename>config.xml</filename>
+		</files>
+	</administration>
+</install>

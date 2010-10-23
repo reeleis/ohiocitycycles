@@ -1,0 +1,183 @@
+	/* frontend */
+
+/*  Acajoom module CSS*/
+.postext {
+	font-size: small;
+	color: #999999;
+}
+
+.noshow {
+	display:none;
+	color: #CCC;
+}
+
+	/* General definition   */
+
+table.acajoomcss, table.acajoomcss_bots {
+	background-color: #f9f9f9;
+	border: solid 1px #d5d5d5;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 8px 0 10px 0;
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+table.acajoomcss tr.row0 {
+	background-color: #f9f9f9;
+}
+table.acajoomcss tr.row1 {
+	background-color: #eeeeee;
+}
+table.acajoomcss th {
+	font-size: 11px;
+	padding-top: 6px;
+	padding-bottom: 2px;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-align: right;
+	height: 25px;
+	color: #000;
+	background-repeat: repeat;
+}
+table.acajoomcss td {
+	padding: 3px;
+	text-align: right;
+}
+
+fieldset.acajoomcss {
+	border: 1px solid #ccc;
+	margin: 0 10px 10px 10px;
+}
+
+table.acajoomtable td , table.acajoomcss_bots td {
+	padding: 3px;
+	text-align:left;
+}
+
+table.acajoomtable td.key,
+table.acajoomtable td.paramlist_key {
+	background-color: #f6f6f6;
+	text-align: left;
+	width: 150px;
+	color: #666;
+	font-weight: bold;
+	border-bottom: 1px solid #e9e9e9;
+	border-right: 1px solid #e9e9e9;
+}
+
+table.acajoomtable td.key.vtop {
+	vertical-align: top;
+}
+
+.aca_letter_names {
+
+	}
+
+
+/*****************************/
+/********* Backend  **********/
+/*****************************/
+
+
+/*  Admin control Panel*/
+#acajoom table.adminheading th {
+	background: url(../images/acajoom.jpg) no-repeat left;
+	padding: 0px 0px 0px 65px;
+}
+
+#acajoom ul {
+	margin: 0px 0px 0px 0px;
+	padding: 1px 0px 1px 20px;
+	list-style: url(../images/dot.png);
+	border: none;
+}
+
+/* CSS file for Front end User Control Panel */
+
+div.centermain {
+	padding: 0 10px;
+}
+
+table.panelheading {
+	background-color: #f9f9f9;
+	border: solid 1px #d5d5d5;
+	width: 100%;
+	padding: 10px;
+	border-collapse: collapse;
+}
+table.panelheading tr.row0 {
+	background-color: #f9f9f9;
+}
+table.panelheading tr.row1 {
+	background-color: #eeeeee;
+}
+table.panelheading th {
+	font-size: 16px;
+	padding-top: 6px;
+	padding-bottom: 2px;
+	padding-left: 60px;
+	padding-right: 4px;
+	text-align: left;
+	height: 25px;
+	color: #c24733;
+	background: url(../../../administrator/images/generic.png) no-repeat left;
+	background-repeat: repeat;
+}
+
+table.panelheading td {
+	padding: 3px;
+	text-align: left;
+}
+table.panelheading td.editor {
+	font-size: 9px;
+}
+
+table.cpanel td {
+	text-align: center;
+}
+
+#acajoom table.panelheading th.userpanel {
+	background: url(../../../administrator/images/userpanel.png) no-repeat left;
+	height: 58px;
+	padding: 0px 0px 0px 65px;
+}
+
+
+/* mod_quickicon */
+
+#cpanel {  text-align: center;  vertical-align: middle;}
+
+#cpanel div.icon   { margin: 3px;  text-align: center; vertical-align: middle;}
+#cpanel div.icon a {
+	display: block; float: left;
+	height: 97px !important;
+	height: 100px;
+	width: 108px !important;
+	width: 110px;
+	vertical-align: middle;
+	text-decoration : none;
+	border: 1px solid #DDD;
+	padding: 2px 5px 1px 5px;
+}
+
+#cpanel div.icon a:link    {  color : #808080;  }
+#cpanel div.icon a:hover   {
+	color : #333;
+	background-color: #f1e8e6;
+	border: 1px solid #c24733;
+	padding: 3px 4px 0px 6px;
+}
+
+#cpanel div.icon a:active  {  color : #808080;  }
+#cpanel div.icon a:visited {  color : #808080;  }
+
+#cpanel div.icon img { margin-top: 13px; }
+#cpanel div.icon span { display: block; padding-top: 3px;}
+
+
+table.acajoom_stats td {
+ border: 1px;
+ border-color:#CCCCCC;
+border-style: solid;
+}

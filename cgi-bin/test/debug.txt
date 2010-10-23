@@ -1,0 +1,12 @@
+path: /home/ohiocity/www/ohiocitycycles.org
+default: /dh/cgi-system/php5.cgi
+server: x86-64
+n1= 
+n2= 
+n3= 
+n4= x
+n5= 
+n6= 
+n7= 
+n8= 
+n9= 

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install SYSTEM "http://dev.joomla.org/xml/1.5/component-install.dtd">
+<install type="component" version="1.5.0">
+	<name>JoomlaPack</name>
+	<creationDate>2008-09-14</creationDate>
+	<author>JoomlaPack Developers</author>
+	<authorEmail>contact@joomlapack.net</authorEmail>
+	<authorUrl>http://www.joomlapack.net</authorUrl>
+	<copyright>Copyright (c)2006-2008 JoomlaPack Developers</copyright>
+	<license>This component in released under the GNU/GPL v2 or later license</license>
+	<version>1.2.2.b1</version>
+	<description><![CDATA[
+		<div style="font-weight: normal;">
+			<h2>JoomlaPack 1.2.2.b1 - for Joomla! 1.5.x</h2>
+			<h3>The one for all backup solution</h3>
+			<hr/>
+			<p>You have just installed JoomlaPack, the complete open-source backup solution for
+			Joomla!-powered sites.</p>
+			<p>JoomlaPack takes a backup of your site's database and files in a standard .zip archive,
+			preloaded with an installer derived from the standard Joomla! installer.</p>
+			<p>Alternatively, JoomlaPack can get just an SQL dump of your database, much like phpMyAdmin
+			or mysqldump do, in order to restore only your database using an external tool.</p>
+			<p>The 1.2 Series is a carefully planned rewrite of the 1.1.x codebase, striving to provide
+			maximum compatibility with the practically infinite variety of server configurations and
+			unsurpassed efficiency, while providing a native package for 1.5.x and 1.0.x Joomla! branches.</p>
+			<p>If you really like this component, you can consider donating a few money. A PayPal donation
+			link appears on the bottom of the main menu page. It's totally optional.</p>
+			<p><strong>This component is restricted to Super Administrators only.</strong> Remember that
+			it creates a full backup, including your database. Thus, access to the backup can be a
+			potential security risk.</p>
+			<hr/>
+			<h3>Changelog</h3>
+			<p>The changelog is available on-line on the
+			<a href="http://www.joomlapack.net">official JoomlaPack web site</a>.</p>
+		</div>
+	]]></description>
+
+	<!-- Site Main File Copy Section -->
+	<files folder="site">
+		<filename>includes/CFullBackup.php</filename>
+		<filename>includes/index.htm</filename>
+		<filename>index.htm</filename>
+		<filename>joomlapack.php</filename>
+
+	</files>
+	
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">install.sql</file>
+		</sql>
+	</install>
+
+	<uninstall>
+	<sql>
+		<file charset="utf8" driver="mysql">uninstall.sql</file>
+	</sql>
+	</uninstall>
+	
+	<!-- Administrator section -->
+	<administration>
+		<!-- Administration Menu Section -->
+		<menu act="main">JoomlaPack</menu>
+		<submenu>
+			<menu act="main">Control Panel</menu>
+			<menu act="config">Options</menu>
+			<menu act="pack">Backup Now</menu>
+			<menu act="backupadmin">Manage Backup Files</menu>
+			<menu act="log">Backup Log</menu>
+		</submenu>
+		
+		<!-- Administration Main File Copy Section -->
+		<files folder="admin">
+			<filename>admin.joomlapack.html.php</filename>
+			<filename>admin.joomlapack.php</filename>
+			<filename>assets/css/index.htm</filename>
+			<filename>assets/css/jpcss.css</filename>
+			<filename>assets/images/arrow_small.png</filename>
+			<filename>assets/images/backup.png</filename>
+			<filename>assets/images/bufa.png</filename>
+			<filename>assets/images/cmexport.png</filename>
+			<filename>assets/images/cmfix.png</filename>
+			<filename>assets/images/cmimport.png</filename>
+			<filename>assets/images/config.png</filename>
+			<filename>assets/images/configmigrate.png</filename>
+			<filename>assets/images/db.png</filename>
+			<filename>assets/images/dbef.png</filename>
+			<filename>assets/images/def.png</filename>
+			<filename>assets/images/delete.png</filename>
+			<filename>assets/images/dif.png</filename>
+			<filename>assets/images/download.png</filename>
+			<filename>assets/images/error_big.png</filename>
+			<filename>assets/images/error_small.png</filename>
+			<filename>assets/images/full.png</filename>
+			<filename>assets/images/home.png</filename>
+			<filename>assets/images/index.htm</filename>
+			<filename>assets/images/log.png</filename>
+			<filename>assets/images/multidb.png</filename>
+			<filename>assets/images/ok_big.png</filename>
+			<filename>assets/images/ok_small.png</filename>
+			<filename>assets/images/reset.png</filename>
+			<filename>assets/images/sff.png</filename>
+			<filename>assets/installers/index.htm</filename>
+			<filename>assets/installers/jpi2.jpa</filename>
+			<filename>assets/installers/jpi2.xml</filename>
+			<filename>assets/installers/jpi3.jpa</filename>
+			<filename>assets/installers/jpi3.xml</filename>
+			<filename>assets/js/index.htm</filename>
+			<filename>assets/js/pack.js</filename>
+			<filename>assets/js/percent_bar.js</filename>
+			<filename>assets/js/xp_progress.js</filename>
+			<filename>backup/index.htm</filename>
+			<filename>backup/.htaccess</filename>
+			<filename>classes/abstract/enginearchiver.php</filename>
+			<filename>classes/abstract/engineparts.php</filename>
+			<filename>classes/abstract/filter.php</filename>
+			<filename>classes/abstract/index.htm</filename>
+			<filename>classes/abstract/object.php</filename>
+			<filename>classes/core/cube.php</filename>
+			<filename>classes/core/domain/dbbackup.php</filename>
+			<filename>classes/core/domain/index.htm</filename>
+			<filename>classes/core/domain/pack.php</filename>
+			<filename>classes/core/index.htm</filename>
+			<filename>classes/core/utility/altinstaller.php</filename>
+			<filename>classes/core/utility/configuration.php</filename>
+			<filename>classes/core/utility/filtermanager.php</filename>
+			<filename>classes/core/utility/index.htm</filename>
+			<filename>classes/engine/dumper/default.php</filename>
+			<filename>classes/engine/dumper/engine.ini</filename>
+			<filename>classes/engine/dumper/index.htm</filename>
+			<filename>classes/engine/dumper/mysqldump.php</filename>
+			<filename>classes/engine/index.htm</filename>
+			<filename>classes/engine/lister/default.php</filename>
+			<filename>classes/engine/lister/engine.ini</filename>
+			<filename>classes/engine/lister/index.htm</filename>
+			<filename>classes/engine/packer/engine.ini</filename>
+			<filename>classes/engine/packer/index.htm</filename>
+			<filename>classes/engine/packer/jpa.php</filename>
+			<filename>classes/engine/packer/zip.php</filename>
+			<filename>classes/filter/dbef.php</filename>
+			<filename>classes/filter/def.php</filename>
+			<filename>classes/filter/filter.ini</filename>
+			<filename>classes/filter/index.htm</filename>
+			<filename>classes/filter/sff.php</filename>
+			<filename>classes/index.htm</filename>
+			<filename>gui/backup.php</filename>
+			<filename>gui/backupadmin.php</filename>
+			<filename>gui/configeditor.php</filename>
+			<filename>gui/configmigration.php</filename>
+			<filename>gui/cpanel.php</filename>
+			<filename>gui/dbef.php</filename>
+			<filename>gui/debug.php</filename>
+			<filename>gui/def.php</filename>
+			<filename>gui/index.htm</filename>
+			<filename>gui/logview.php</filename>
+			<filename>gui/multidb.php</filename>
+			<filename>gui/reset.php</filename>
+			<filename>gui/sff.php</filename>
+			<filename>gui/stats.php</filename>
+			<filename>helpers/ajaxtool.php</filename>
+			<filename>helpers/filtertable.php</filename>
+			<filename>helpers/frameworkabstraction.php</filename>
+			<filename>helpers/html.php</filename>
+			<filename>helpers/index.htm</filename>
+			<filename>helpers/lang.php</filename>
+			<filename>helpers/logger.php</filename>
+			<filename>helpers/sajax.php</filename>
+			<filename>helpers/tables.php</filename>
+			<filename>index.htm</filename>
+			<filename>lang/brazilian_portuguese.ini</filename>
+			<filename>lang/dutch.ini</filename>
+			<filename>lang/english.ini</filename>
+			<filename>lang/finnish.ini</filename>
+			<filename>lang/french.ini</filename>
+			<filename>lang/german.ini</filename>
+			<filename>lang/greek.ini</filename>
+			<filename>lang/index.htm</filename>
+			<filename>lang/italian.ini</filename>
+			<filename>lang/norwegian.ini</filename>
+			<filename>lang/polish.ini</filename>
+			<filename>lang/russian.ini</filename>
+			<filename>lang/simplified_chinese.ini</filename>
+			<filename>lang/slovenian.ini</filename>
+			<filename>lang/spanish.ini</filename>
+			<filename>lang/swedish.ini</filename>
+			<filename>lang/traditional_chinese.ini</filename>
+			<filename>toolbar.joomlapack.html.php</filename>
+			<filename>toolbar.joomlapack.php</filename>
+			<filename>install.sql</filename>
+			<filename>uninstall.sql</filename>
+
+		</files>
+	</administration>
+</install>

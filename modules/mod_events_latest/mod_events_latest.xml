@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<mosinstall type="module">
+	<name>Latest Events</name>
+	<creationDate>February 2007</creationDate>
+	<author>JEvents Project Group</author>
+	<copyright>(C) 2006-2007 JEvents Project Group</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail></authorEmail>
+	<authorUrl>joomlacode.org/gf/project/jevents</authorUrl>
+	<version>1.4.3SVN</version>
+	<description>Show latest events for Events component</description>
+	<files>
+		<filename module="mod_events_latest">mod_events_latest.php</filename>
+		<filename>mod_events_latest.lib.php</filename>
+		<filename>mod_events_latest.css</filename>
+		<filename>mod_events_latest_ReadMe.txt</filename>
+	</files>
+	<params>
+		<param name="cache" type="radio" default="0" label="Enable Cache" description="Select whether to cache the content of this module">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="A suffix to be applied to the css class of the module (table.moduletable), this allows individual module styling" />
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="catid0" type="mos_category" default="0" scope="com_events" label="Specified category" description="Shows events only from the selected category" />
+		<param name="catid1" type="mos_category" default="0" scope="com_events" label="Additional category" description="Also include events from this additional category" />	
+		<param name="catid2" type="mos_category" default="0" scope="com_events" label="Additional category" description="Also include events from this additional category" />	
+		<param name="catid3" type="mos_category" default="0" scope="com_events" label="Additional category" description="Also include events from this additional category" />	
+		<param name="catid4" type="mos_category" default="0" scope="com_events" label="Additional category" description="Also include events from this additional category" />	
+		<param name="modlatest_inccss" type="radio" default="1" label="Include Events Latest CSS" description="Tells the module if the module Events Latest CSS should be included or not. This is not recommended - you are better off putting a copy of the CSS in your template_css.css file">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>	
+		<param name="@spacer" type="spacer" default="" label="" description="" />
+		<param name="modlatest_useLocalParam" type="list" default="0" label="Use parameter" description="Use parameter defined global in component or defined here">
+			<option value="0">Use component params</option>
+			<option value="1">Use params below</option>
+		</param>
+		<param name="modlatest_CustFmtStr" type="text" size="50" default='${eventDate}[!a: - ${endDate(%I:%M%p)}]&lt;br /&gt;${title}'  label="Custom Format String" description="allows a customized specification of the desired event fields and format to be used to display the event in the module. The string can specify html directly. As well, certain event fields can be specified as ${event_field} in the string. For a detailed information follow the help button on the modules tab page at the components configuration" />
+		<param name="modlatest_MaxEvents" type="text" size="3" default="10" label="Maximum Events to Display" description="Maximum number of events to display in the module(max 150)" />
+		<param name="modlatest_Mode" type="radio" default="3" label="Display Mode" description="&lt;b&gt;= 0 (default)&lt;/b&gt; display closest events for current week and following week only up to maxEvents.&lt;br /&gt;&lt;b&gt;= 1&lt;/b&gt; same as 0 except some past events for the current week will also be displayed if num of future events is less than maxEvents. &lt;br /&gt;&lt;b&gt;= 2&lt;/b&gt; display closest events for +days range relative to current day up to maxEvents. &lt;br /&gt;&lt;b&gt;= 3&lt;/b&gt; same as mode 2 except if there are &lt; maxEvents in the range, then display past events within -days range relative to current day. &lt;br /&gt;&lt;b&gt;= 4&lt;/b&gt; display closest events for current month up to maxEvents relative to current day.">
+			<option value="0">0</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</param>
+		<param name="modlatest_Days" type="text" default="30" size="2" label="Display Events the of the next ? days(modes 1 or 3 only)" description="range of days relative to current day to display events for mode 1 or 3." />
+		<param name="modlatest_NoRepeat" type="radio" default="0" label="Display a Repeating Event Once" description="display any event which has a repeat type only once in the latest events output.">
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="modlatest_DispLinks" type="radio" default="1" label="Display Events As Links" description="display event titles as links to the view_detail com_events task which will display details of the event">
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="modlatest_DispYear" type="radio" default="0" label="Display the Year in the Events Date (default format only)" description="Display the Year in the Events Date (default format only)" >
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="modlatest_DisDateStyle" type="radio" default="0" label="Disable default CSS Date Field Style" description="do not apply the default mod_events_latest_date css class to the date field">
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="modlatest_DisTitleStyle" type="radio" default="0" label="Disable default CSS Title Field Style" description="do not apply the default mod_events_latest_content  css class to the title field">
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="modlatest_LinkCloaking" type="radio" default="0" label="Hide Links" description="If set to YES, links are set dynamically by the javascript &lt;b&gt;onclick&lt;/b&gt; event. This prevents search enginges to follow the links">
+			<option value="0">NO</option>
+			<option value="1">YES</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="Advanced Settings" description="The following settings are for advanced users only"/>    	
+		<param name="target_itemid" type="text" default="" label="Target Menu Itemid" description="Menu itemid for target page" />
+	</params>
+</mosinstall>

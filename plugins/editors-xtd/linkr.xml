@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="editors-xtd">
+	<name>Editor Button - Article Linker</name>
+	<version>1</version>
+	<author>Frank</author>
+	<creationDate>February 2008</creationDate>
+	<author>Frank</author>
+	<authorEmail>francisamankrah@gmail.com</authorEmail>
+	<authorUrl>http://codes.mtlnews.com</authorUrl>
+	<copyright>Copyright (C) 2008 Montreal News. All Rights Reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>Easily link to an article while editing content.</description>
+	<files>
+		<filename plugin="linkr">linkr.php</filename>
+	</files>
+	<params />
+</install>
