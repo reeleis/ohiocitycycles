@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<metadata>
+
+	<name>
+
+	DT Register
+
+	</name>
+
+	<menu>
+
+		<options var="task" >
+
+		<default name="List Of Events" msg="List all current and published events" />
+
+		<option value='category' name="Events by Category" msg="List events of a specific Category" />
+
+        <option value='index' name="User Panel" msg="Frontend user control panel for viewing and editing registration records" />
+
+		<option value="calendar" name="Calendar View" />
+
+        <option value="events" name="Event Management" />
+		
+		<option value="cpanel" name="Events Control Panel" />
+	    </options>
+
+	</menu>
+
+    <state switch="task" default="eventlist">
+
+		<eventlist>
+			<name>DT Register - List of Events</name>
+
+			<description>This is the main DT Register listing that shows all available events, separated by categories.</description>
+		</eventlist>
+
+		<category>
+			<name>DT Register - Category Listing</name>
+
+			<description>This allows you to display events only from a selected category. Select the category on the Parameters (Component) display on the right.</description>
+
+			<url addpath="/administrator/components/com_dtregister/elements/">
+
+				<param name="list1" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list2" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list3" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list4" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list5" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list6" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list7" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list8" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list9" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list10" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list11" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list12" type="list" default="-1"  label="Select category:" description="Shows" />
+
+			</url>
+		</category>
+		
+		<index>
+			<name>DT Register - User Records Panel</name>
+			<description>This is the frontend user control panel for registants to view, edit and cancel their own registration records. Payments can also be made for any amount due.</description>
+			<url>
+			   <param name="controller" default="user" type="text" />
+			 </url>
+		</index>
+		
+		<calendar>
+		     <name>Calendar View</name>
+			 <description>This will display your events within a calendar view.</description>
+			 <url>
+			   <param name="controller" default="calendar" type="text" />
+			 </url>
+		</calendar>
+		
+		<events>
+	         <name>Event Management</name>
+			 <description>This will display the frontend event management area.</description>
+			  <url>
+			   <param name="controller" default="eventmanage" type="text" />
+			 </url>
+		</events>
+	
+		<cpanel>
+		     <name>Control Panel</name>
+			 <description>This will display the event management control panel, giving links to edit events, categories, fields, discount codes, etc.</description>
+			 <url>
+			   <param name="controller" default="cpanel" type="text" />
+			 </url>
+		</cpanel>
+
+	</state>
+
+</metadata>
