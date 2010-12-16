@@ -1,0 +1,104 @@
+/* DT Register Admin CSS - ver. 2.7.0 */
+
+/* Administration Toolbar */
+
+div.header.icon-48-dtregister {
+
+	background-image: url(../images/icon-48-dtregister.png);
+	
+	background-repeat: no-repeat;
+
+	padding-left:330px!important;
+
+	line-height:48px;
+
+	text-transform: uppercase;
+
+}
+
+.dt_heading,
+table.adminlist .dt_heading {
+  background: #d3e8c1;
+  padding:4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #037200;
+  border-left: 1px solid #037200;
+  border-top: 1px solid #defedd;
+  border-right: 1px solid #defedd;
+}
+
+.dt_heading_small {
+  background: #d3e8c1;
+  padding:3px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #037200;
+  border-left: 1px solid #037200;
+  border-top: 1px solid #defedd;
+  border-right: 1px solid #defedd;
+}
+
+.hidden {
+  background: #cecfcd;
+  border: 1px solid #037200;
+}
+
+.icon-32-cpanel    { 
+        background-image: url(../../../../templates/khepri/images/header/icon-48-cpanel.png); 
+}
+
+label.error {
+  background:url("../images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+label.success {
+  background:url("../images/checked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+
+form#adminForm label.error {
+ margin-left: auto;
+ width: 250px;
+}
+
+div.textbutton {
+	background: #349123;
+	padding: 4px;
+	width: 110px;
+	text-align: center;
+	border: 3px groove #000000;
+}
+
+div.textbutton a.colorbox:link,
+div.textbutton a.colorbox:visited {
+	color: #ffffff;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+div.textbutton a.colorbox:hover {
+	text-decoration: underline;
+}
+
+a.addMoreFields:link,
+a.addMoreFields:visited,
+a.removeFields:link,
+a.removeFields:visited {
+	background: #349123;
+	padding: 2px 4px 2px 4px;
+	text-align: center;
+	border: 3px groove #000000;
+	color: #ffffff;
+	font-size:10px;
+	font-weight: bold;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+a.addMoreFields:hover
+a.removeFields:hover, {
+	text-decoration: underline;
+}

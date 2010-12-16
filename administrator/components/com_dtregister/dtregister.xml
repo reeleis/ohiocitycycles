@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5.0">
+<name>DT Register</name>
+<creationDate>Dec. 11, 2010</creationDate>
+<author>DTH Development</author>
+<copyright>(c)2006 DTH Development. All rights reserved.</copyright>
+<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+<authorEmail>dthdev@dthdevelopment.com</authorEmail>
+<authorUrl>www.DTHDevelopment.com</authorUrl>
+<version>2.7.0i</version>
+
+<description>With DT Register, you can take online registrations for your event and collect a registration fee through various payment gateways. Fully integrated calendar is included.</description>
+
+<installfile>install.dtregister.php</installfile>
+<uninstallfile>uninstall.dtregister.php</uninstallfile>
+
+<install>
+   <sql folder="admin">
+		<file driver="mysql" charset="utf8">sql/install.mysql.dtregister.sql</file>
+   </sql>
+</install>
+
+<files folder="front">
+<filename>CaptchaSecurityImages.php</filename>
+<filename>dtregister.php</filename>
+<filename>google_notification.php</filename>
+<filename>index.html</filename>
+<filename>metadata.xml</filename>
+<filename>monofont.ttf</filename>
+<filename>success.php</filename>
+<filename>assets/index.html</filename>
+<filename>assets/css/colorbox.css</filename>
+<filename>assets/css/index.html</filename>
+<filename>assets/css/jquery.lightbox.css</filename>
+<filename>assets/css/main.css</filename>
+<filename>assets/css/calendar/index.html</filename>
+<filename>assets/css/calendar/alert.css</filename>
+<filename>assets/css/calendar/calendar.css</filename>
+<filename>assets/css/calendar/colorselect.css</filename>
+<filename>assets/css/calendar/dialog.css</filename>
+<filename>assets/css/calendar/dp.css</filename>
+<filename>assets/css/calendar/dropdown.css</filename>
+<filename>assets/css/calendar/Error.css</filename>
+<filename>assets/css/calendar/main.css</filename>
+<filename>assets/css/calendar/images/index.html</filename>
+<filename>assets/css/calendar/images/alert/index.html</filename>
+<filename>assets/css/calendar/images/alert/bot.gif</filename>
+<filename>assets/css/calendar/images/alert/close.gif</filename>
+<filename>assets/css/calendar/images/alert/corners.gif</filename>
+<filename>assets/css/calendar/images/alert/cornersBlue.gif</filename>
+<filename>assets/css/calendar/images/alert/help.gif</filename>
+<filename>assets/css/calendar/images/alert/important.gif</filename>
+<filename>assets/css/calendar/images/alert/info.gif</filename>
+<filename>assets/css/calendar/images/alert/title.gif</filename>
+<filename>assets/css/calendar/images/alert/title1.gif</filename>
+<filename>assets/css/calendar/images/bgs/index.html</filename>
+<filename>assets/css/calendar/images/bgs/ch.gif</filename>
+<filename>assets/css/calendar/images/bgs/headbg.gif</filename>
+<filename>assets/css/calendar/images/bgs/minus1.gif</filename>
+<filename>assets/css/calendar/images/bgs/plus1.gif</filename>
+<filename>assets/css/calendar/images/bgs/CardHeadbg.jpg</filename>
+<filename>assets/css/calendar/images/bgs/CardHeadbg.png</filename>
+<filename>assets/css/calendar/images/calendar/index.html</filename>
+<filename>assets/css/calendar/images/calendar/bubble_combined.png</filename>
+<filename>assets/css/calendar/images/calendar/combined.gif</filename>
+<filename>assets/css/calendar/images/calendar/grid.png</filename>
+<filename>assets/css/calendar/images/calendar/gridth.gif</filename>
+<filename>assets/css/calendar/images/calendar/headbg.gif</filename>
+<filename>assets/css/calendar/images/calendar/indicator_web20_working.gif</filename>
+<filename>assets/css/calendar/images/calendar/load-bg.png</filename>
+<filename>assets/css/calendar/images/calendar/tbg.gif</filename>
+<filename>assets/css/calendar/images/dialog/index.html</filename>
+<filename>assets/css/calendar/images/dialog/app-form.png</filename>
+<filename>assets/css/calendar/images/dialog/headbg.gif</filename>
+<filename>assets/css/calendar/images/dialog/left-corners.png</filename>
+<filename>assets/css/calendar/images/dialog/left-right.png</filename>
+<filename>assets/css/calendar/images/dialog/right-corners.png</filename>
+<filename>assets/css/calendar/images/dialog/tool-sprites.gif</filename>
+<filename>assets/css/calendar/images/dialog/top-bottom.png</filename>
+<filename>assets/css/calendar/images/dp/index.html</filename>
+<filename>assets/css/calendar/images/dp/btn-arrow.gif</filename>
+<filename>assets/css/calendar/images/dp/btn-arrow-light.gif</filename>
+<filename>assets/css/calendar/images/dropdown/index.html</filename>
+<filename>assets/css/calendar/images/dropdown/dropdown.gif</filename>
+<filename>assets/css/calendar/images/dropdown/dropdownhover.gif</filename>
+<filename>assets/css/calendar/images/home/index.html</filename>
+<filename>assets/css/calendar/images/home/logo.gif</filename>
+<filename>assets/css/calendar/images/home/toolbarbg.jpg</filename>
+<filename>assets/css/calendar/images/home/top_bg.jpg</filename>
+<filename>assets/css/calendar/images/icons/index.html</filename>
+<filename>assets/css/calendar/images/icons/add.png</filename>
+<filename>assets/css/calendar/images/icons/appt.gif</filename>
+<filename>assets/css/calendar/images/icons/au.gif</filename>
+<filename>assets/css/calendar/images/icons/Btn.Close.gif</filename>
+<filename>assets/css/calendar/images/icons/cacheClear.png</filename>
+<filename>assets/css/calendar/images/icons/cal-day.gif</filename>
+<filename>assets/css/calendar/images/icons/cal-month.gif</filename>
+<filename>assets/css/calendar/images/icons/cal-proc.gif</filename>
+<filename>assets/css/calendar/images/icons/cal-rsc-perm.gif</filename>
+<filename>assets/css/calendar/images/icons/cal-week.gif</filename>
+<filename>assets/css/calendar/images/icons/cal-wk-week.gif</filename>
+<filename>assets/css/calendar/images/icons/cal.gif</filename>
+<filename>assets/css/calendar/images/icons/calendar.gif</filename>
+<filename>assets/css/calendar/images/icons/calwrkwk.gif</filename>
+<filename>assets/css/calendar/images/icons/canmtg.gif</filename>
+<filename>assets/css/calendar/images/icons/circle_animation.gif</filename>
+<filename>assets/css/calendar/images/icons/clndr.gif</filename>
+<filename>assets/css/calendar/images/icons/clndrsmll.gif</filename>
+<filename>assets/css/calendar/images/icons/cn.gif</filename>
+<filename>assets/css/calendar/images/icons/date_add.png</filename>
+<filename>assets/css/calendar/images/icons/date_reflash.png</filename>
+<filename>assets/css/calendar/images/icons/date.png</filename>
+<filename>assets/css/calendar/images/icons/delete.png</filename>
+<filename>assets/css/calendar/images/icons/edit.png</filename>
+<filename>assets/css/calendar/images/icons/folder_user.gif</filename>
+<filename>assets/css/calendar/images/icons/group_add.gif</filename>
+<filename>assets/css/calendar/images/icons/group.gif</filename>
+<filename>assets/css/calendar/images/icons/hk.png</filename>
+<filename>assets/css/calendar/images/icons/ico1.gif</filename>
+<filename>assets/css/calendar/images/icons/indicator.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Add.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Delete.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Edit.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Input.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Save.gif</filename>
+<filename>assets/css/calendar/images/icons/Item.Search.gif</filename>
+<filename>assets/css/calendar/images/icons/msg_center.gif</filename>
+<filename>assets/css/calendar/images/icons/msg_email.gif</filename>
+<filename>assets/css/calendar/images/icons/msg_im.gif</filename>
+<filename>assets/css/calendar/images/icons/msg_mobile.gif</filename>
+<filename>assets/css/calendar/images/icons/mtgreq-cancel.gif</filename>
+<filename>assets/css/calendar/images/icons/mtgreq.gif</filename>
+<filename>assets/css/calendar/images/icons/mtgrsp-accept.gif</filename>
+<filename>assets/css/calendar/images/icons/mtgrsp-decline.gif</filename>
+<filename>assets/css/calendar/images/icons/mtgrsp-tent.gif</filename>
+<filename>assets/css/calendar/images/icons/pgrs-sm.gif</filename>
+<filename>assets/css/calendar/images/icons/resultset_next.png</filename>
+<filename>assets/css/calendar/images/icons/resultset_previous.png</filename>
+<filename>assets/css/calendar/images/icons/rowdelete.png</filename>
+<filename>assets/css/calendar/images/icons/table_c.gif</filename>
+<filename>assets/css/calendar/images/icons/table_copy.png</filename>
+<filename>assets/css/calendar/images/icons/table_r.png</filename>
+<filename>assets/css/calendar/images/icons/table_refresh.png</filename>
+<filename>assets/css/calendar/images/icons/table.gif</filename>
+<filename>assets/css/calendar/images/icons/tick.png</filename>
+<filename>assets/css/calendar/images/icons/turnback.png</filename>
+<filename>assets/css/calendar/images/icons/us.gif</filename>
+<filename>assets/css/calendar/images/icons/view.png</filename>
+<filename>assets/css/calendar/images/share/index.html</filename>
+<filename>assets/css/calendar/images/share/card.gif</filename>
+<filename>assets/css/calendar/images/share/glass-bg.gif</filename>
+<filename>assets/css/calendar/images/share/hd-sprite.gif</filename>
+<filename>assets/css/calendar/images/share/headbg.gif</filename>
+<filename>assets/css/calendar/images/share/information.png</filename>
+<filename>assets/css/calendar/images/share/left-btn.gif</filename>
+<filename>assets/css/calendar/images/share/right-btn.gif</filename>
+<filename>assets/css/calendar/images/share/table_c.gif</filename>
+<filename>assets/css/calendar/images/share/table.gif</filename>
+<filename>assets/css/calendar/images/share/tbg.gif</filename>
+<filename>assets/css/calendar/images/share/tool-sprites.gif</filename>
+<filename>assets/css/calendar/images/validation/index.html</filename>
+<filename>assets/css/calendar/images/validation/accept.png</filename>
+<filename>assets/css/calendar/images/validation/exclamation.png</filename>
+<filename>assets/css/calendar/images/validation/tooltop.gif</filename>
+<filename>assets/css/calendar/images/validation/warning.gif</filename>
+<filename>assets/css/colorpicker/colorpicker.css</filename>
+<filename>assets/css/colorpicker/index.html</filename>
+<filename>assets/css/colorpicker/layout.css</filename>
+<filename>assets/css/colorpicker/images/colorpicker_background.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_hex.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_hsb_b.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_hsb_h.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_hsb_s.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_indic.gif</filename>
+<filename>assets/css/colorpicker/images/colorpicker_overlay.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_rgb_b.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_rgb_g.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_rgb_r.png</filename>
+<filename>assets/css/colorpicker/images/colorpicker_select.gif</filename>
+<filename>assets/css/colorpicker/images/colorpicker_submit.png</filename>
+<filename>assets/css/colorpicker/images/custom_background.png</filename>
+<filename>assets/css/colorpicker/images/custom_hex.png</filename>
+<filename>assets/css/colorpicker/images/custom_hsb_b.png</filename>
+<filename>assets/css/colorpicker/images/custom_hsb_h.png</filename>
+<filename>assets/css/colorpicker/images/custom_hsb_s.png</filename>
+<filename>assets/css/colorpicker/images/custom_indic.gif</filename>
+<filename>assets/css/colorpicker/images/custom_rgb_b.png</filename>
+<filename>assets/css/colorpicker/images/custom_rgb_g.png</filename>
+<filename>assets/css/colorpicker/images/custom_rgb_r.png</filename>
+<filename>assets/css/colorpicker/images/custom_submit.png</filename>
+<filename>assets/css/colorpicker/images/index.html</filename>
+<filename>assets/css/colorpicker/images/select.png</filename>
+<filename>assets/css/colorpicker/images/select2.png</filename>
+<filename>assets/css/south-street/index.html</filename>
+<filename>assets/css/south-street/jquery-ui.css</filename>
+<filename>assets/css/south-street/images/index.html</filename>
+<filename>assets/css/south-street/images/ui-bg_glass_55_fcf0ba_1x400.png</filename>
+<filename>assets/css/south-street/images/ui-bg_gloss-wave_100_ece8da_500x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-hard_15_459e00_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-hard_95_cccccc_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-hard_100_f5f3e5_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-hard_100_fafaf4_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-soft_25_67b021_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_highlight-soft_95_ffedad_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-bg_inset-soft_15_2b2922_1x100.png</filename>
+<filename>assets/css/south-street/images/ui-icons_8dc262_256x240.png</filename>
+<filename>assets/css/south-street/images/ui-icons_847e71_256x240.png</filename>
+<filename>assets/css/south-street/images/ui-icons_808080_256x240.png</filename>
+<filename>assets/css/south-street/images/ui-icons_cd0a0a_256x240.png</filename>
+<filename>assets/css/south-street/images/ui-icons_eeeeee_256x240.png</filename>
+<filename>assets/css/south-street/images/ui-icons_ffffff_256x240.png</filename>
+<filename>assets/css/ui-lightness/index.html</filename>
+<filename>assets/css/ui-lightness/jquery-ui.css</filename>
+<filename>assets/css/ui-lightness/images/index.html</filename>
+<filename>assets/css/ui-lightness/images/ui-anim_basic_16x16.gif</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_diagonals-thick_18_b81900_40x40.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_diagonals-thick_20_666666_40x40.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_flat_10_000000_40x100.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_glass_65_ffffff_1x400.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_glass_100_f6f6f6_1x400.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_glass_100_fdf5ce_1x400.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_gloss-wave_35_f6a828_500x100.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_highlight-soft_75_ffe45c_1x100.png</filename>
+<filename>assets/css/ui-lightness/images/ui-bg_highlight-soft_100_eeeeee_1x100.png</filename>
+<filename>assets/css/ui-lightness/images/ui-icons_228ef1_256x240.png</filename>
+<filename>assets/css/ui-lightness/images/ui-icons_222222_256x240.png</filename>
+<filename>assets/css/ui-lightness/images/ui-icons_ef8c08_256x240.png</filename>
+<filename>assets/css/ui-lightness/images/ui-icons_ffd27a_256x240.png</filename>
+<filename>assets/css/ui-lightness/images/ui-icons_ffffff_256x240.png</filename>
+<filename>assets/js/addmore.js</filename>
+<filename>assets/js/block.js</filename>
+<filename>assets/js/colorpicker.js</filename>
+<filename>assets/js/cookieEnabled.js</filename>
+<filename>assets/js/datemask.js</filename>
+<filename>assets/js/form.js</filename>
+<filename>assets/js/index.html</filename>
+<filename>assets/js/jquery.js</filename>
+<filename>assets/js/jquery-ui.js</filename>
+<filename>assets/js/jquery.lightbox.js</filename>
+<filename>assets/js/jx_dataCheck.js</filename>
+<filename>assets/js/mousewheel.js</filename>
+<filename>assets/js/textareaCounter.js</filename>
+<filename>assets/js/timeEntry.js</filename>
+<filename>assets/js/validate.js</filename>
+<filename>assets/js/validationmethods.js</filename>
+<filename>assets/js/calendar/index.html</filename>
+<filename>assets/js/calendar/Common.js</filename>
+<filename>assets/js/calendar/datepicker_lang_AU.js</filename>
+<filename>assets/js/calendar/datepicker_lang_HK.js</filename>
+<filename>assets/js/calendar/datepicker_lang_US.js</filename>
+<filename>assets/js/calendar/jquery.alert.js</filename>
+<filename>assets/js/calendar/jquery.calendar.js</filename>
+<filename>assets/js/calendar/jquery.colorselect.js</filename>
+<filename>assets/js/calendar/jquery.datepicker.js</filename>
+<filename>assets/js/calendar/jquery.dropdown.js</filename>
+<filename>assets/js/calendar/jquery.form.js</filename>
+<filename>assets/js/calendar/jquery.ifrmdialog.js</filename>
+<filename>assets/js/calendar/jquery.validate.js</filename>
+<filename>assets/js/calendar/wdCalendar_lang_AU.js</filename>
+<filename>assets/js/calendar/wdCalendar_lang_HK.js</filename>
+<filename>assets/js/calendar/wdCalendar_lang_US.php</filename>
+<filename>assets/images/index.html</filename>
+<filename>assets/images/black/index.html</filename>
+<filename>assets/images/blue/index.html</filename>
+<filename>assets/images/brown/index.html</filename>
+<filename>assets/images/green/index.html</filename>
+<filename>assets/images/orange/index.html</filename>
+<filename>assets/images/purple/index.html</filename>
+<filename>assets/images/red/index.html</filename>
+<filename>assets/images/timeEntry/index.html</filename>
+<filename>assets/images/toolbar/index.html</filename>
+<filename>assets/images/yellow/index.html</filename>
+<filename>controllers/index.html</filename>
+<filename>controllers/calendar.php</filename>
+<filename>controllers/category.php</filename>
+<filename>controllers/cpanel.php</filename>
+<filename>controllers/discountcode.php</filename>
+<filename>controllers/event.php</filename>
+<filename>controllers/eventmanage.php</filename>
+<filename>controllers/feeorder.php</filename>
+<filename>controllers/field.php</filename>
+<filename>controllers/file.php</filename>
+<filename>controllers/location.php</filename>
+<filename>controllers/member.php</filename>
+<filename>controllers/message.php</filename>
+<filename>controllers/payment.php</filename>
+<filename>controllers/payoption.php</filename>
+<filename>controllers/user.php</filename>
+<filename>controllers/validate.php</filename>
+<filename>controllers/waiting.php</filename>
+<filename>lib/index.html</filename>
+<filename>lib/class.payment.php</filename>
+<filename>lib/thumbnail.inc.php</filename>
+<filename>lib/barcode/index.html</filename>
+<filename>lib/barcode/class/index.html</filename>
+<filename>lib/barcode/class/barcode.php</filename>
+<filename>lib/barcode/class/barcode1d.php</filename>
+<filename>lib/barcode/class/code39.php</filename>
+<filename>lib/barcode/class/code39extended.php</filename>
+<filename>lib/barcode/class/code93.php</filename>
+<filename>lib/barcode/class/code128.php</filename>
+<filename>lib/barcode/class/color.php</filename>
+<filename>lib/barcode/class/draw.php</filename>
+<filename>lib/barcode/class/draw.png.php</filename>
+<filename>lib/barcode/class/drawing.php</filename>
+<filename>lib/barcode/class/drawjpg.php</filename>
+<filename>lib/barcode/class/drawpng.php</filename>
+<filename>lib/barcode/class/font.php</filename>
+<filename>lib/payment/authorizenet.php</filename>
+<filename>lib/payment/echeck.php</filename>
+<filename>lib/payment/Eway.php</filename>
+<filename>lib/payment/GoogleCheckout.php</filename>
+<filename>lib/payment/ideal.php</filename>
+<filename>lib/payment/idealRabo.php</filename>
+<filename>lib/payment/NetDeposit.php</filename>
+<filename>lib/payment/paypal.php</filename>
+<filename>lib/payment/Sage.php</filename>
+<filename>lib/payment/index.html</filename>
+<filename>lib/payment/eway/index.html</filename>
+<filename>lib/payment/eway/EwayPaymentHosted.php</filename>
+<filename>lib/payment/eway/EwayPaymentLive.php</filename>
+<filename>lib/payment/gcheckout/gc_xmlbuilder.php</filename>
+<filename>lib/payment/gcheckout/index.html</filename>
+<filename>lightbox/index.html</filename>
+<filename>lightbox/css/index.html</filename>
+<filename>lightbox/css/default.css</filename>
+<filename>lightbox/css/lightbox.css</filename>
+<filename>views/index.html</filename>
+<filename>views/authorize/index.html</filename>
+<filename>views/authorize/view.html.php</filename>
+<filename>views/authorize/tmpl/index.html</filename>
+<filename>views/authorize/tmpl/default.php</filename>
+<filename>views/calendar/index.html</filename>
+<filename>views/calendar/view.html.php</filename>
+<filename>views/calendar/tmpl/events.php</filename>
+<filename>views/calendar/tmpl/index_category.php</filename>
+<filename>views/calendar/tmpl/index.html</filename>
+<filename>views/calendar/tmpl/index.php</filename>
+<filename>views/category/index.html</filename>
+<filename>views/category/view.html.php</filename>
+<filename>views/category/tmpl/add.php</filename>
+<filename>views/category/tmpl/edit.php</filename>
+<filename>views/category/tmpl/list.php</filename>
+<filename>views/category/tmpl/index.html</filename>
+<filename>views/cpanel/index.html</filename>
+<filename>views/cpanel/view.html.php</filename>
+<filename>views/cpanel/tmpl/index.html</filename>
+<filename>views/cpanel/tmpl/index.php</filename>
+<filename>views/discountcode/index.html</filename>
+<filename>views/discountcode/view.html.php</filename>
+<filename>views/discountcode/tmpl/index.html</filename>
+<filename>views/discountcode/tmpl/add.php</filename>
+<filename>views/discountcode/tmpl/edit.php</filename>
+<filename>views/discountcode/tmpl/list.php</filename>
+<filename>views/email/index.html</filename>
+<filename>views/email/view.html.php</filename>
+<filename>views/email/tmpl/index.html</filename>
+<filename>views/email/tmpl/registration.php</filename>
+<filename>views/email/tmpl/registrationadmin.php</filename>
+<filename>views/email/tmpl/test.php</filename>
+<filename>views/email/tmpl/userdata.php</filename>
+<filename>views/event/index.html</filename>
+<filename>views/event/view.html.php</filename>
+<filename>views/event/tmpl/index.html</filename>
+<filename>views/event/tmpl/billinginfo.php</filename>
+<filename>views/event/tmpl/confirm.php</filename>
+<filename>views/event/tmpl/confirm_price_header.php</filename>
+<filename>views/event/tmpl/cut_off.php</filename>
+<filename>views/event/tmpl/event_header.php</filename>
+<filename>views/event/tmpl/groupnum.php</filename>
+<filename>views/event/tmpl/individualregister.php</filename>
+<filename>views/event/tmpl/list.php</filename>
+<filename>views/event/tmpl/list_moderator.php</filename>
+<filename>views/event/tmpl/list_row.php</filename>
+<filename>views/event/tmpl/memberdata.php</filename>
+<filename>views/event/tmpl/options.php</filename>
+<filename>views/event/tmpl/price_header.php</filename>
+<filename>views/event/tmpl/registrant.php</filename>
+<filename>views/event/tmpl/registrant_avatar.php</filename>
+<filename>views/event/tmpl/registrant_members.php</filename>
+<filename>views/event/tmpl/registrant_name.php</filename>
+<filename>views/event/tmpl/terms.php</filename>
+<filename>views/event/tmpl/viewcart.php</filename>
+<filename>views/event/tmpl/viewcart_row.php</filename>
+<filename>views/eventmanage/index.html</filename>
+<filename>views/eventmanage/view.html.php</filename>
+<filename>views/eventmanage/tmpl/index.html</filename>
+<filename>views/eventmanage/tmpl/add.php</filename>
+<filename>views/eventmanage/tmpl/add_copyfile.php</filename>
+<filename>views/eventmanage/tmpl/add_editfile.php</filename>
+<filename>views/eventmanage/tmpl/add_editrepeat.php</filename>
+<filename>views/eventmanage/tmpl/add_event_type.php</filename>
+<filename>views/eventmanage/tmpl/add_image.php</filename>
+<filename>views/eventmanage/tmpl/add_repeat.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.discountfee.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.field.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.general.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.message.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.userpanel.php</filename>
+<filename>views/eventmanage/tmpl/list.php</filename>
+<filename>views/eventmanage/tmpl/list_child.php</filename>
+<filename>views/eventmanage/tmpl/list_description.php</filename>
+<filename>views/eventmanage/tmpl/warning.php</filename>
+<filename>views/feeorder/index.html</filename>
+<filename>views/feeorder/view.html.php</filename>
+<filename>views/feeorder/tmpl/index.html</filename>
+<filename>views/feeorder/tmpl/view.php</filename>
+<filename>views/field/index.html</filename>
+<filename>views/field/view.html.php</filename>
+<filename>views/field/tmpl/index.html</filename>
+<filename>views/field/tmpl/add.php</filename>
+<filename>views/field/tmpl/add_parentlist.php</filename>
+<filename>views/field/tmpl/default.php</filename>
+<filename>views/field/tmpl/field_Email.php</filename>
+<filename>views/field/tmpl/field_Textual.php</filename>
+<filename>views/field/tmpl/list.php</filename>
+<filename>views/field/tmpl/options.php</filename>
+<filename>views/file/index.html</filename>
+<filename>views/file/view.html.php</filename>
+<filename>views/location/index.html</filename>
+<filename>views/location/view.html.php</filename>
+<filename>views/location/tmpl/index.html</filename>
+<filename>views/location/tmpl/add.php</filename>
+<filename>views/location/tmpl/edit.php</filename>
+<filename>views/location/tmpl/list.php</filename>
+<filename>views/location/tmpl/show.php</filename>
+<filename>views/member/index.html</filename>
+<filename>views/member/view.html.php</filename>
+<filename>views/member/tmpl/index.html</filename>
+<filename>views/member/tmpl/add.php</filename>
+<filename>views/member/tmpl/edit.php</filename>
+<filename>views/member/tmpl/list.php</filename>
+<filename>views/message/index.html</filename>
+<filename>views/message/view.html.php</filename>
+<filename>views/message/tmpl/index.html</filename>
+<filename>views/message/tmpl/default.php</filename>
+<filename>views/message/tmpl/freethanks.php</filename>
+<filename>views/payment/index.html</filename>
+<filename>views/payment/view.html.php</filename>
+<filename>views/payment/tmpl/index.html</filename>
+<filename>views/payment/tmpl/billinginfo.php</filename>
+<filename>views/payment/tmpl/form.php</filename>
+<filename>views/payment/tmpl/header.php</filename>
+<filename>views/payment/tmpl/options.php</filename>
+<filename>views/payoption/index.html</filename>
+<filename>views/payoption/view.html.php</filename>
+<filename>views/payoption/tmpl/index.html</filename>
+<filename>views/payoption/tmpl/add.php</filename>
+<filename>views/payoption/tmpl/edit.php</filename>
+<filename>views/payoption/tmpl/list.php</filename>
+<filename>views/user/index.html</filename>
+<filename>views/user/view.html.php</filename>
+<filename>views/user/tmpl/index.html</filename>
+<filename>views/user/tmpl/confirm.php</filename>
+<filename>views/user/tmpl/confirm_price_header.php</filename>
+<filename>views/user/tmpl/edit.php</filename>
+<filename>views/user/tmpl/event_header.php</filename>
+<filename>views/user/tmpl/index.php</filename>
+<filename>views/user/tmpl/price_header.php</filename>
+<filename>views/validate/index.html</filename>
+<filename>views/validate/view.html.php</filename>
+</files>
+
+<!-- Site language File -->
+
+<languages folder="language">
+	<language tag="ar-AA">ar-AA.com_dtregister.ini</language>
+	<language tag="cs-CZ">cs-CZ.com_dtregister.ini</language>
+    <language tag="de-DE">de-DE.com_dtregister.ini</language>
+	<language tag="en-GB">en-GB.com_dtregister.ini</language>
+	<language tag="es-ES">es-ES.com_dtregister.ini</language>
+	<language tag="fi-FI">fi-FI.com_dtregister.ini</language>
+	<language tag="fr-FR">fr-FR.com_dtregister.ini</language>	
+    <language tag="it-IT">it-IT.com_dtregister.ini</language>
+    <language tag="nl-NL">nl-NL.com_dtregister.ini</language>
+	<language tag="sv-SE">sv-SE.com_dtregister.ini</language>
+</languages>
+
+<images folder="front">
+<filename>assets/images/blank.gif</filename>
+<filename>assets/images/border.png</filename>
+<filename>assets/images/card_pay.jpg</filename>
+<filename>assets/images/checked.gif</filename>
+<filename>assets/images/controls.png</filename>
+<filename>assets/images/delete.jpg</filename>
+<filename>assets/images/downarrow.png</filename>
+<filename>assets/images/echeck_pay.jpg</filename>
+<filename>assets/images/eway_card_pay.jpg</filename>
+<filename>assets/images/filesave.png</filename>
+<filename>assets/images/group.jpg</filename>
+<filename>assets/images/icon-48-categories.png</filename>
+<filename>assets/images/icon-48-discounts.png</filename>
+<filename>assets/images/icon-48-events.png</filename>
+<filename>assets/images/icon-48-fields.png</filename>
+<filename>assets/images/icon-48-locations.png</filename>
+<filename>assets/images/icon-48-payments.png</filename>
+<filename>assets/images/ideal_pay.jpg</filename>
+<filename>assets/images/individual.jpg</filename>
+<filename>assets/images/loading.gif</filename>
+<filename>assets/images/loading_background.png</filename>
+<filename>assets/images/next.gif</filename>
+<filename>assets/images/overlay.png</filename>
+<filename>assets/images/paypal_pay.jpg</filename>
+<filename>assets/images/pay_later.jpg</filename>
+<filename>assets/images/prev.gif</filename>
+<filename>assets/images/publish_x.png</filename>
+<filename>assets/images/sage_card_pay.jpg</filename>
+<filename>assets/images/tick.png</filename>
+<filename>assets/images/tooltip.png</filename>
+<filename>assets/images/unchecked.gif</filename>
+<filename>assets/images/uparrow.png</filename>
+<filename>assets/images/black/attendees_62x14.png</filename>
+<filename>assets/images/black/close.png</filename>
+<filename>assets/images/black/closed_62x14.png</filename>
+<filename>assets/images/black/down.png</filename>
+<filename>assets/images/black/expand.png</filename>
+<filename>assets/images/black/full_62x14.png</filename>
+<filename>assets/images/black/register_62x14.png</filename>
+<filename>assets/images/black/register_now_195.png</filename>
+<filename>assets/images/black/reload_20x20.png</filename>
+<filename>assets/images/black/up.png</filename>
+<filename>assets/images/black/view_events_195.png</filename>
+<filename>assets/images/black/view_details_62x14.png</filename>
+<filename>assets/images/blue/attendees_62x14.png</filename>
+<filename>assets/images/blue/close.png</filename>
+<filename>assets/images/blue/closed_62x14.png</filename>
+<filename>assets/images/blue/down.png</filename>
+<filename>assets/images/blue/expand.png</filename>
+<filename>assets/images/blue/full_62x14.png</filename>
+<filename>assets/images/blue/register_62x14.png</filename>
+<filename>assets/images/blue/register_now_195.png</filename>
+<filename>assets/images/blue/reload_20x20.png</filename>
+<filename>assets/images/blue/up.png</filename>
+<filename>assets/images/blue/view_events_195.png</filename>
+<filename>assets/images/blue/view_details_62x14.png</filename>
+<filename>assets/images/brown/attendees_62x14.png</filename>
+<filename>assets/images/brown/close.png</filename>
+<filename>assets/images/brown/closed_62x14.png</filename>
+<filename>assets/images/brown/down.png</filename>
+<filename>assets/images/brown/expand.png</filename>
+<filename>assets/images/brown/full_62x14.png</filename>
+<filename>assets/images/brown/register_62x14.png</filename>
+<filename>assets/images/brown/register_now_195.png</filename>
+<filename>assets/images/brown/reload_20x20.png</filename>
+<filename>assets/images/brown/up.png</filename>
+<filename>assets/images/brown/view_events_195.png</filename>
+<filename>assets/images/brown/view_details_62x14.png</filename>
+<filename>assets/images/green/attendees_62x14.png</filename>
+<filename>assets/images/green/close.png</filename>
+<filename>assets/images/green/closed_62x14.png</filename>
+<filename>assets/images/green/down.png</filename>
+<filename>assets/images/green/expand.png</filename>
+<filename>assets/images/green/full_62x14.png</filename>
+<filename>assets/images/green/register_62x14.png</filename>
+<filename>assets/images/green/register_now_195.png</filename>
+<filename>assets/images/green/reload_20x20.png</filename>
+<filename>assets/images/green/up.png</filename>
+<filename>assets/images/green/view_events_195.png</filename>
+<filename>assets/images/green/view_details_62x14.png</filename>
+<filename>assets/images/orange/attendees_62x14.png</filename>
+<filename>assets/images/orange/close.png</filename>
+<filename>assets/images/orange/closed_62x14.png</filename>
+<filename>assets/images/orange/down.png</filename>
+<filename>assets/images/orange/expand.png</filename>
+<filename>assets/images/orange/full_62x14.png</filename>
+<filename>assets/images/orange/register_62x14.png</filename>
+<filename>assets/images/orange/register_now_195.png</filename>
+<filename>assets/images/orange/reload_20x20.png</filename>
+<filename>assets/images/orange/up.png</filename>
+<filename>assets/images/orange/view_events_195.png</filename>
+<filename>assets/images/orange/view_details_62x14.png</filename>
+<filename>assets/images/purple/attendees_62x14.png</filename>
+<filename>assets/images/purple/close.png</filename>
+<filename>assets/images/purple/closed_62x14.png</filename>
+<filename>assets/images/purple/down.png</filename>
+<filename>assets/images/purple/expand.png</filename>
+<filename>assets/images/purple/full_62x14.png</filename>
+<filename>assets/images/purple/register_62x14.png</filename>
+<filename>assets/images/purple/register_now_195.png</filename>
+<filename>assets/images/purple/reload_20x20.png</filename>
+<filename>assets/images/purple/up.png</filename>
+<filename>assets/images/purple/view_events_195.png</filename>
+<filename>assets/images/purple/view_details_62x14.png</filename>
+<filename>assets/images/red/attendees_62x14.png</filename>
+<filename>assets/images/red/close.png</filename>
+<filename>assets/images/red/closed_62x14.png</filename>
+<filename>assets/images/red/down.png</filename>
+<filename>assets/images/red/expand.png</filename>
+<filename>assets/images/red/full_62x14.png</filename>
+<filename>assets/images/red/register_62x14.png</filename>
+<filename>assets/images/red/register_now_195.png</filename>
+<filename>assets/images/red/reload_20x20.png</filename>
+<filename>assets/images/red/up.png</filename>
+<filename>assets/images/red/view_events_195.png</filename>
+<filename>assets/images/red/view_details_62x14.png</filename>
+<filename>assets/images/timeEntry/spinnerDefault.png</filename>
+<filename>assets/images/timeEntry/spinnerDefaultBig.png</filename>
+<filename>assets/images/timeEntry/spinnerGem.png</filename>
+<filename>assets/images/timeEntry/spinnerGemBig.png</filename>
+<filename>assets/images/timeEntry/spinnerGreen.png</filename>
+<filename>assets/images/timeEntry/spinnerGreenBig.png</filename>
+<filename>assets/images/timeEntry/spinnerOrange.png</filename>
+<filename>assets/images/timeEntry/spinnerOrangeBig.png</filename>
+<filename>assets/images/timeEntry/spinnerSquare.png</filename>
+<filename>assets/images/timeEntry/spinnerSquareBig.png</filename>
+<filename>assets/images/timeEntry/spinnerText.png</filename>
+<filename>assets/images/timeEntry/spinnerTextBig.png</filename>
+<filename>assets/images/timeEntry/spinnerUpDown.png</filename>
+<filename>assets/images/timeEntry/spinnerUpDownBig.png</filename>
+<filename>assets/images/toolbar/icon-32-download.png</filename>
+<filename>assets/images/toolbar/icon-32-delete.png</filename>
+<filename>assets/images/toolbar/icon-32-default.png</filename>
+<filename>assets/images/toolbar/icon-32-css.png</filename>
+<filename>assets/images/toolbar/icon-32-copy.png</filename>
+<filename>assets/images/toolbar/icon-32-config.png</filename>
+<filename>assets/images/toolbar/icon-32-cancel.png</filename>
+<filename>assets/images/toolbar/icon-32-back.png</filename>
+<filename>assets/images/toolbar/icon-32-archive.png</filename>
+<filename>assets/images/toolbar/icon-32-apply.png</filename>
+<filename>assets/images/toolbar/icon-32-adduser.png</filename>
+<filename>assets/images/toolbar/icon-32-xml.png</filename>
+<filename>assets/images/toolbar/icon-32-upload.png</filename>
+<filename>assets/images/toolbar/icon-32-unpublish.png</filename>
+<filename>assets/images/toolbar/icon-32-unarchive.png</filename>
+<filename>assets/images/toolbar/icon-32-trash.png</filename>
+<filename>assets/images/toolbar/icon-32-send.png</filename>
+<filename>assets/images/toolbar/icon-32-search.png</filename>
+<filename>assets/images/toolbar/icon-32-save.png</filename>
+<filename>assets/images/toolbar/icon-32-revert.png</filename>
+<filename>assets/images/toolbar/icon-32-refresh.png</filename>
+<filename>assets/images/toolbar/icon-32-publish.png</filename>
+<filename>assets/images/toolbar/icon-32-print.png</filename>
+<filename>assets/images/toolbar/icon-32-preview.png</filename>
+<filename>assets/images/toolbar/icon-32-new.png</filename>
+<filename>assets/images/toolbar/icon-32-move.png</filename>
+<filename>assets/images/toolbar/icon-32-menu.png</filename>
+<filename>assets/images/toolbar/icon-32-lock.png</filename>
+<filename>assets/images/toolbar/icon-32-html.png</filename>
+<filename>assets/images/toolbar/icon-32-help.png</filename>
+<filename>assets/images/toolbar/icon-32-forward.png</filename>
+<filename>assets/images/toolbar/icon-32-export.png</filename>
+<filename>assets/images/toolbar/icon-32-edit.png</filename>
+<filename>assets/images/yellow/attendees_62x14.png</filename>
+<filename>assets/images/yellow/close.png</filename>
+<filename>assets/images/yellow/closed_62x14.png</filename>
+<filename>assets/images/yellow/down.png</filename>
+<filename>assets/images/yellow/expand.png</filename>
+<filename>assets/images/yellow/full_62x14.png</filename>
+<filename>assets/images/yellow/register_62x14.png</filename>
+<filename>assets/images/yellow/register_now_195.png</filename>
+<filename>assets/images/yellow/reload_20x20.png</filename>
+<filename>assets/images/yellow/up.png</filename>
+<filename>assets/images/yellow/view_events_195.png</filename>
+<filename>assets/images/yellow/view_details_62x14.png</filename>
+</images>
+
+   <administration>
+
+     <menu img="components/com_dtregister/assets/images/dt_icon_16x16.png" controller="cpanel">DT Register</menu>
+
+     <submenu>
+       <menu img="templates/khepri/images/menu/icon-16-category.png" controller="category">Categories</menu>
+       <menu img="templates/khepri/images/menu/icon-16-config.png" controller="config">Configuration</menu>
+       <menu img="templates/khepri/images/menu/icon-16-module.png" controller="export">CSV Export</menu>
+       <menu img="templates/khepri/images/menu/icon-16-content.png" controller="field">Fields</menu>
+	   <menu img="templates/khepri/images/menu/icon-16-stats.png" controller="discountcode">Discount Codes</menu>
+	   <menu img="templates/khepri/images/menu/icon-16-massmail.png" controller="registrantemail">Email Registrants</menu>
+       <menu img="templates/khepri/images/menu/icon-16-default.png" controller="event">Events</menu>
+       <menu img="templates/khepri/images/menu/icon-16-frontpage.png" controller="location">Locations</menu>
+       <menu img="templates/khepri/images/menu/icon-16-media.png" controller="payoption">Pay Options</menu>
+       <menu img="templates/khepri/images/menu/icon-16-checkin.png" controller="permission">Permissions</menu>
+	   <menu img="templates/khepri/images/menu/icon-16-user.png" controller="user">Records</menu>
+     </submenu>
+
+	<!-- Administrator language File Copy -->
+
+	<languages folder="language/admin">
+        <language tag="de-DE">de-DE.com_dtregister.ini</language>
+		<language tag="en-GB">en-GB.com_dtregister.ini</language>
+		<language tag="fr-FR">fr-FR.com_dtregister.ini</language>
+		<language tag="nl-NL">nl-NL.com_dtregister.ini</language>
+	</languages>
+
+    <files folder="admin">
+    <filename>index.html</filename>
+	<filename>admin.dtregister.php</filename>
+	<filename>install.dtregister.php</filename>
+    <filename>uninstall.dtregister.php</filename>
+	<filename>assets/index.html</filename>
+    <filename>assets/images/index.html</filename>
+    <filename>assets/css/index.html</filename>
+    <filename>assets/css/admin.dtregister.css</filename>
+	<filename>controllers/index.html</filename>
+	<filename>controllers/aro.php</filename>
+	<filename>controllers/barcode.php</filename>
+	<filename>controllers/category.php</filename>
+	<filename>controllers/config.php</filename>
+	<filename>controllers/cpanel.php</filename>
+	<filename>controllers/discountcode.php</filename>
+	<filename>controllers/email.php</filename>
+	<filename>controllers/emailtest.php</filename>
+	<filename>controllers/event.php</filename>
+	<filename>controllers/eventgroup.php</filename>
+	<filename>controllers/export.php</filename>
+	<filename>controllers/feeorder.php</filename>
+	<filename>controllers/field.php</filename>
+	<filename>controllers/file.php</filename>
+	<filename>controllers/location.php</filename>
+	<filename>controllers/member.php</filename>
+	<filename>controllers/migration.php</filename>
+	<filename>controllers/paylater.php</filename>
+	<filename>controllers/payoption.php</filename>
+	<filename>controllers/permission.php</filename>
+	<filename>controllers/registrantemail.php</filename>
+	<filename>controllers/user.php</filename>
+	<filename>controllers/validate.php</filename>
+	<filename>elements/index.html</filename>
+	<filename>elements/list.php</filename>
+	<filename>helpers/index.html</filename>
+	<filename>helpers/config.php</filename>
+	<filename>helpers/dtregister.php</filename>
+	<filename>helpers/html.php</filename>
+	<filename>lib/index.html</filename>
+	<filename>lib/defines.php</filename>
+	<filename>lib/dtbarcode.php</filename>
+	<filename>lib/dtcart.php</filename>
+	<filename>lib/dtcommon.php</filename>
+	<filename>lib/dtcontroller.php</filename>
+	<filename>lib/dtemail.php</filename>
+	<filename>lib/dtfee.php</filename>
+	<filename>lib/dtfile.php</filename>
+	<filename>lib/dtmodel.php</filename>
+	<filename>lib/dtpagination.php</filename>
+	<filename>lib/dtsession.php</filename>
+	<filename>lib/dttable.php</filename>
+	<filename>lib/dtview.php</filename>
+	<filename>lib/email.php</filename>
+	<filename>lib/tagparser.php</filename>
+	<filename>models/index.html</filename>
+	<filename>models/aco.php</filename>
+	<filename>models/aro.php</filename>
+	<filename>models/barcode.php</filename>
+	<filename>models/buttoncolor.php</filename>
+	<filename>models/cardtype.php</filename>
+	<filename>models/category.php</filename>
+	<filename>models/cbprofiler.php</filename>
+	<filename>models/config.php</filename>
+	<filename>models/country.php</filename>
+	<filename>models/currency.php</filename>
+	<filename>models/dateformat.php</filename>
+	<filename>models/discountcode.php</filename>
+	<filename>models/dtregister.php</filename>
+	<filename>models/event.php</filename>
+	<filename>models/eventgroup.php</filename>
+	<filename>models/export.php</filename>
+	<filename>models/fee.php</filename>
+	<filename>models/feeorder.php</filename>
+	<filename>models/field.php</filename>
+	<filename>models/fieldtype.php</filename>
+	<filename>models/file.php</filename>
+	<filename>models/jomsocial.php</filename>
+	<filename>models/location.php</filename>
+	<filename>models/member.php</filename>
+	<filename>models/migration.php</filename>
+	<filename>models/paylater.php</filename>
+	<filename>models/payoption.php</filename>
+	<filename>models/payoptionconfig.php</filename>
+	<filename>models/paymentmethod.php</filename>
+	<filename>models/permission.php</filename>
+	<filename>models/section.php</filename>
+	<filename>models/user.php</filename>
+	<filename>sql/install.mysql.dtregister.sql</filename>
+    <filename>sql/index.html</filename>
+	<filename>views/index.html</filename>
+	<filename>views/aro/index.html</filename>
+	<filename>views/aro/view.html.php</filename>
+	<filename>views/aro/tmpl/index.html</filename>
+	<filename>views/aro/tmpl/add.php</filename>
+	<filename>views/authorize/index.html</filename>
+	<filename>views/authorize/view.html.php</filename>
+	<filename>views/authorize/tmpl/index.html</filename>
+	<filename>views/authorize/tmpl/default.php</filename>
+	<filename>views/barcode/index.html</filename>
+	<filename>views/barcode/view.html.php</filename>
+	<filename>views/category/index.html</filename>
+	<filename>views/category/view.html.php</filename>
+	<filename>views/category/tmpl/index.html</filename>
+	<filename>views/category/tmpl/add.php</filename>
+	<filename>views/category/tmpl/edit.php</filename>
+	<filename>views/category/tmpl/list.php</filename>
+	<filename>views/cpanel/index.html</filename>
+	<filename>views/cpanel/view.html.php</filename>
+	<filename>views/cpanel/tmpl/index.html</filename>
+	<filename>views/cpanel/tmpl/index.php</filename>	
+	<filename>views/config/index.html</filename>
+	<filename>views/config/view.html.php</filename>
+	<filename>views/config/tmpl/index.html</filename>
+	<filename>views/config/tmpl/edit.php</filename>
+	<filename>views/config/tmpl/tab.barcode.php</filename>
+	<filename>views/config/tmpl/tab.calendar.php</filename>
+	<filename>views/config/tmpl/tab.email.php</filename>
+	<filename>views/config/tmpl/tab.event_listing.php</filename>
+	<filename>views/config/tmpl/tab.fieldmap.php</filename>
+	<filename>views/config/tmpl/tab.general.php</filename>
+	<filename>views/config/tmpl/tab.message.php</filename>
+	<filename>views/config/tmpl/tab.registrant.php</filename>
+	<filename>views/config/tmpl/tab.registrant2.php</filename>
+	<filename>views/config/tmpl/tab.userpanel.php</filename>
+	<filename>views/discountcode/index.html</filename>
+	<filename>views/discountcode/view.html.php</filename>
+	<filename>views/discountcode/tmpl/index.html</filename>
+	<filename>views/discountcode/tmpl/add.php</filename>
+	<filename>views/discountcode/tmpl/edit.php</filename>
+	<filename>views/discountcode/tmpl/list.php</filename>
+	<filename>views/email/index.html</filename>
+	<filename>views/email/view.html.php</filename>
+	<filename>views/email/tmpl/index.html</filename>
+	<filename>views/email/tmpl/registration.php</filename>
+	<filename>views/email/tmpl/registrationadmin.php</filename>
+	<filename>views/email/tmpl/test.php</filename>
+	<filename>views/email/tmpl/userdata.php</filename>
+	<filename>views/event/index.html</filename>
+	<filename>views/event/view.html.php</filename>
+	<filename>views/event/tmpl/index.html</filename>
+	<filename>views/event/tmpl/add.php</filename>
+	<filename>views/event/tmpl/add_copyfile.php</filename>
+	<filename>views/event/tmpl/add_editfile.php</filename>
+	<filename>views/event/tmpl/add_editrepeat.php</filename>
+	<filename>views/event/tmpl/add_event_type.php</filename>
+	<filename>views/event/tmpl/add_image.php</filename>
+	<filename>views/event/tmpl/add_repeat.php</filename>
+	<filename>views/event/tmpl/add_tab.discountfee.php</filename>
+	<filename>views/event/tmpl/add_tab.field.php</filename>
+	<filename>views/event/tmpl/add_tab.general.php</filename>
+	<filename>views/event/tmpl/add_tab.message.php</filename>
+	<filename>views/event/tmpl/add_tab.userpanel.php</filename>
+	<filename>views/event/tmpl/description.php</filename>
+	<filename>views/event/tmpl/list.php</filename>
+	<filename>views/event/tmpl/list_child.php</filename>
+	<filename>views/event/tmpl/list_description.php</filename>
+	<filename>views/event/tmpl/warning.php</filename>
+	<filename>views/export/index.html</filename>
+	<filename>views/export/view.html.php</filename>
+	<filename>views/export/tmpl/index.html</filename>
+	<filename>views/export/tmpl/eventlist.php</filename>
+	<filename>views/export/tmpl/fieldlist.php</filename>
+	<filename>views/feeorder/index.html</filename>
+	<filename>views/feeorder/view.html.php</filename>
+	<filename>views/feeorder/tmpl/index.html</filename>
+	<filename>views/feeorder/tmpl/view.php</filename>
+	<filename>views/field/index.html</filename>
+	<filename>views/field/view.html.php</filename>
+	<filename>views/field/tmpl/index.html</filename>
+	<filename>views/field/tmpl/add.php</filename>
+	<filename>views/field/tmpl/add_parentlist.php</filename>
+	<filename>views/field/tmpl/default.php</filename>
+	<filename>views/field/tmpl/field_Email.php</filename>
+	<filename>views/field/tmpl/field_textual.php</filename>
+	<filename>views/field/tmpl/list.php</filename>
+	<filename>views/field/tmpl/options.php</filename>
+	<filename>views/file/index.html</filename>
+	<filename>views/file/view.html.php</filename>
+	<filename>views/location/index.html</filename>
+	<filename>views/location/view.html.php</filename>
+	<filename>views/location/tmpl/index.html</filename>
+	<filename>views/location/tmpl/add.php</filename>
+	<filename>views/location/tmpl/edit.php</filename>
+	<filename>views/location/tmpl/list.php</filename>
+	<filename>views/member/index.html</filename>
+	<filename>views/member/view.html.php</filename>
+	<filename>views/member/tmpl/index.html</filename>
+	<filename>views/member/tmpl/add.php</filename>
+	<filename>views/member/tmpl/edit.php</filename>
+	<filename>views/member/tmpl/list.php</filename>
+	<filename>views/migration/index.html</filename>
+	<filename>views/migration/view.html.php</filename>
+	<filename>views/migration/tmpl/index.html</filename>
+	<filename>views/migration/tmpl/index.php</filename>
+	<filename>views/migration/tmpl/nojeventsync.php</filename>
+	<filename>views/paylater/index.html</filename>
+	<filename>views/paylater/view.html.php</filename>
+	<filename>views/payoption/index.html</filename>
+	<filename>views/payoption/view.html.php</filename>
+	<filename>views/payoption/tmpl/index.html</filename>
+	<filename>views/payoption/tmpl/add.php</filename>
+	<filename>views/payoption/tmpl/edit.php</filename>
+	<filename>views/payoption/tmpl/list.php</filename>
+	<filename>views/permission/index.html</filename>
+	<filename>views/permission/view.html.php</filename>
+	<filename>views/permission/tmpl/index.html</filename>
+	<filename>views/permission/tmpl/matrix.php</filename>
+	<filename>views/registrantemail/index.html</filename>
+	<filename>views/registrantemail/view.html.php</filename>
+	<filename>views/registrantemail/tmpl/index.html</filename>
+	<filename>views/registrantemail/tmpl/index.php</filename>
+	<filename>views/user/index.html</filename>
+	<filename>views/user/view.html.php</filename>
+	<filename>views/user/tmpl/index.html</filename>
+	<filename>views/user/tmpl/add.php</filename>
+	<filename>views/user/tmpl/edit.php</filename>
+	<filename>views/user/tmpl/list.php</filename>
+	<filename>views/user/tmpl/list_description.php</filename>
+	<filename>views/user/tmpl/memberadd.php</filename>
+	<filename>views/user/tmpl/memtotform.php</filename>
+	<filename>views/validate/index.html</filename>
+	<filename>views/validate/view.html.php</filename>
+    </files>
+
+     <images folder="admin">
+  	   <filename>assets/images/checked.gif</filename>
+	   <filename>assets/images/close.png</filename>
+       <filename>assets/images/dtregister_logo140.jpg</filename>
+	   <filename>assets/images/delete.jpg</filename>
+	   <filename>assets/images/dt_icon_16x16.png</filename>
+	   <filename>assets/images/edit.jpg</filename>
+	   <filename>assets/images/expand.png</filename>
+	   <filename>assets/images/icon-48-categories.png</filename>
+	   <filename>assets/images/icon-48-config.png</filename>
+	   <filename>assets/images/icon-48-csv.png</filename>
+	   <filename>assets/images/icon-48-discounts.png</filename>
+	   <filename>assets/images/icon-48-dtregister.png</filename>
+	   <filename>assets/images/icon-48-email.png</filename>
+	   <filename>assets/images/icon-48-events.png</filename>
+	   <filename>assets/images/icon-48-fields.png</filename>
+	   <filename>assets/images/icon-48-locations.png</filename>
+	   <filename>assets/images/icon-48-migrate.png</filename>
+       <filename>assets/images/icon-48-nojevents.png</filename>
+	   <filename>assets/images/icon-48-payments.png</filename>
+	   <filename>assets/images/icon-48-permissions.png</filename>
+	   <filename>assets/images/icon-48-users.png</filename>
+	   <filename>assets/images/migrate_130.png</filename>
+	   <filename>assets/images/no_jevents_130.png</filename>
+	   <filename>assets/images/unchecked.gif</filename>
+     </images>
+
+ </administration>
+
+ </install>
