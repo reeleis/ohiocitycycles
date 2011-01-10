@@ -304,12 +304,18 @@ function loginMember( $option )
 	$member = new CbodbMember($memberID);
 	
 	if ( !$member->isLoggedIn() )
-	{	
-		$transaction = new CbodbTransaction();
-		$postrow = JRequest::get('post');
-		$transaction->setAll( $postrow );
-		$loginType = JRequest::getVar("logintype");
-		$transaction->dateOpen = date("Y-m-d H:i:s", time());
+	{
+            $transaction = new CbodbTransaction();
+            $postrow = JRequest::get('post');
+            $transaction->setAll( $postrow );
+            $loginType = JRequest::getVar("logintype");
+            //  John Mikolich   December 30, 2010
+            //  Preliminary testing has shown that the "timezone issue"
+            //  can be fixed by preceeding each call to the PHP date
+            //  function with a statement that sets the timezone.
+            //  I added such a statement to the code block below.
+            date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+            $transaction->dateOpen = date("Y-m-d H:i:s", time());
 	
 		foreach(HTML_cbodb::$cbodb_user_logintypes as $typeid => $typestring) {
 			if (strcmp($loginType,$typestring) == 0) $transaction->type = $typeid;
@@ -361,6 +367,9 @@ function saveNewMember( $option )
 		$member = new CbodbMember( );
 		$member->setAll($postRow);
 		$member->creditRate = NULL; // Make the rate set to default
+                //  John Mikolich   December 30, 2010
+                //  Next statement added to resolve the 'timezone issue'.
+                date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
 		$member->timeCreated = date("Y-m-d H:i:s", time());
 		//$member->membershipExpire = date("Y-m-d H:i:s", time());
 		//$member->timeCreated = time();
@@ -395,25 +404,28 @@ function saveNewMemberPurchase( $option )
 		$itemID = $postRow[itemID];
 		$cash = $postRow[cash];
 
-		$member = new CbodbMember( );
-		$member->setAll($postRow);
-		$member->creditRate = NULL; // Make the rate set to default
-		if ($member->emailAddress != NULL) $member->emailNews = 1;
-		$member->timeCreated = time();
-		$member->saveData();		
+            $member = new CbodbMember( );
+            $member->setAll($postRow);
+            $member->creditRate = NULL; // Make the rate set to default
+            if ($member->emailAddress != NULL) $member->emailNews = 1;
+            $member->timeCreated = time();
+            $member->saveData();
+
+            $transaction = new CbodbTransaction();
+            $transaction->memberID = $member->id;
+            $transaction->itemID = $itemID;
+            $transaction->cash = $cash;
+            $transaction->type = 1001;
+            //  John Mikolich   December 30, 2010
+            //  Next statement added to resolve the 'timezone issue'.
+            date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+            $transaction->dateOpen = date("Y-m-d H:i:s", time());
+            $transaction->dateClosed = date("Y-m-d H:i:s", time());
+            $transaction->saveData();
 		
-		$transaction = new CbodbTransaction();
-		$transaction->memberID = $member->id;
-		$transaction->itemID = $itemID;
-		$transaction->cash = $cash;
-		$transaction->type = 1001;
-		$transaction->dateOpen = date("Y-m-d H:i:s", time());
-		$transaction->dateClosed = date("Y-m-d H:i:s", time());
-		$transaction->saveData();
-		
-		CbodbItem::markTagAsSold($itemID);
+            CbodbItem::markTagAsSold($itemID);
 	
-		$mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'Your transaction has been recorded, thank you.');
+            $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'Your transaction has been recorded, thank you.');
 	}
 	else {
 		HTML_cbodb::newMemberPurchase( $option, $postRow );
@@ -427,18 +439,21 @@ function saveOldMemberPurchase( $option )
 	$postRow = JRequest::get('post');
 	if ($postRow[memberID] != 0)
 	{
-		$itemID = $postRow[itemID];
-		$cash = $postRow[cash];
-		$memberID = $postRow[memberID];
+            $itemID = $postRow[itemID];
+            $cash = $postRow[cash];
+            $memberID = $postRow[memberID];
 
-		$transaction = new CbodbTransaction();
-		$transaction->memberID = $memberID;
-		$transaction->itemID = $itemID;
-		$transaction->cash = $cash;
-		$transaction->type = 1001;
-		$transaction->dateOpen = date("Y-m-d H:i:s", time());
-		$transaction->dateClosed = date("Y-m-d H:i:s", time());
-		$transaction->saveData();
+            $transaction = new CbodbTransaction();
+            $transaction->memberID = $memberID;
+            $transaction->itemID = $itemID;
+            $transaction->cash = $cash;
+            $transaction->type = 1001;
+            //  John Mikolich   December 30, 2010
+            //  Next statement added to resolve the 'timezone issue'.
+            date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+            $transaction->dateOpen = date("Y-m-d H:i:s", time());
+            $transaction->dateClosed = date("Y-m-d H:i:s", time());
+            $transaction->saveData();
 		
 		CbodbItem::markTagAsSold($itemID);
 	
@@ -453,27 +468,31 @@ function saveOldMemberPurchase( $option )
 
 function logoutMember( $option )
 {
-	global $mainframe;
-	
-	$memberID = JRequest::getVar("memberID");
-	$member = new CbodbMember($memberID);
-	
-	if ( $member->isLoggedIn() )
-	{
-		$transaction = new CbodbTransaction( CbodbTransaction::getMemberLoginTransaction($memberID) );
-		$transaction->dateClosed = date("Y-m-d H:i:s", time());;
-		$transaction->isOpen = 0;
-    $transaction->totalTime = calculateTotalTime($transaction->dateOpen, $transaction->dateClosed);
-    $transaction->credits = calculateCredits($transaction->totalTime, $transaction->creditRate);
-		$transaction->saveData();
-		
-		$memberCredits = CbodbTransaction::getMemberCredits($transaction->memberID);
-		checkInTaskOnLogout( $memberID );
-		$mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'You are logged out - '. (($transaction->type == 1) ? ('you earned '.sprintf("%.2F",$transaction->credits).' credits and your total is '.sprintf("%.2F",$memberCredits).' - ') : ('thank you!')));
-	}
-	else {
-		$mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'You weren\'t logged in!');
-	}
+    global $mainframe;
+
+    $memberID = JRequest::getVar("memberID");
+    $member = new CbodbMember($memberID);
+
+    if ( $member->isLoggedIn() )
+    {
+        $transaction = new CbodbTransaction( CbodbTransaction::getMemberLoginTransaction($memberID) );
+        //  John Mikolich   December 30, 2010
+        //  Next statement added to resolve the 'timezone issue'.
+        date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+        $transaction->dateClosed = date("Y-m-d H:i:s", time());;
+        $transaction->isOpen = 0;
+        $transaction->totalTime = calculateTotalTime($transaction->dateOpen, $transaction->dateClosed);
+        $transaction->credits = calculateCredits($transaction->totalTime, $transaction->creditRate);
+        $transaction->saveData();
+
+        $memberCredits = CbodbTransaction::getMemberCredits($transaction->memberID);
+        checkInTaskOnLogout( $memberID );
+        $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'You are logged out - '. (($transaction->type == 1) ? ('you earned '.sprintf("%.2F",$transaction->credits).' credits and your total is '.sprintf("%.2F",$memberCredits).' - ') : ('thank you!')));
+    }
+    else
+    {
+        $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'You weren\'t logged in!');
+    }
 }
 
 function listTasks( $option )
@@ -515,6 +534,9 @@ function checkOutTask( $option )
 	$transaction = new CbodbTransaction();
 	$transaction->memberID = $memberID;
 	$transaction->type = 3001;
+        //  John Mikolich   December 30, 2010
+        //  Next statement added to resolve the 'timezone issue'.
+        date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
 	$transaction->dateOpen = date("Y-m-d H:i:s", time());
 	$transaction->isOpen = 1;
 	$transaction->taskID = $taskID;
@@ -536,49 +558,56 @@ function saveCheckedInTask( $option )
 {
 	global $mainframe;
 
-	$memberID = JRequest::getVar("memberID");
-	$taskID = JRequest::getVar("taskID");
-	$transactionID = JRequest::getVar("transactionID");
+    $memberID = JRequest::getVar("memberID");
+    $taskID = JRequest::getVar("taskID");
+    $transactionID = JRequest::getVar("transactionID");
 
-	$transaction = new CbodbTransaction($transactionID);
-	$transaction->dateClosed = date("Y-m-d H:i:s", time());
-	$transaction->isOpen = 0;
-	$transaction->comment = JRequest::getVAR("comment");
+    $transaction = new CbodbTransaction($transactionID);
+    //  John Mikolich   December 30, 2010
+    //  Next statement added to resolve the 'timezone issue'.
+    date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+    $transaction->dateClosed = date("Y-m-d H:i:s", time());
+    $transaction->isOpen = 0;
+    $transaction->comment = JRequest::getVAR("comment");
 
-	$transaction->saveData();
+    $transaction->saveData();
 
-	if ($taskID > 0) {
-		$task = new CbodbTask($taskID);
-		$isDone = JRequest::getVar("isDone");
-		$task->isDone = ($isDone == "on") ? 1 : 0;
-		$task->isOpen = 0;
+    if ($taskID > 0)
+    {
+        $task = new CbodbTask($taskID);
+        $isDone = JRequest::getVar("isDone");
+        $task->isDone = ($isDone == "on") ? 1 : 0;
+        $task->isOpen = 0;
 
-		$task->saveData();
-	}
+        $task->saveData();
+    }
 
-	$mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'Task checked in, thank you!');
+    $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', 'Task checked in, thank you!');
 }
 
 function checkInTaskOnLogout( $memberID )
 {
 
-	$transactionID = CbodbTransaction::getMemberTaskTransaction( $memberID );
+    $transactionID = CbodbTransaction::getMemberTaskTransaction( $memberID );
 
-	$transaction = new CbodbTransaction($transactionID);
-	$transaction->dateClosed = date("Y-m-d H:i:s", time());
-	$transaction->isOpen = 0;
-	$transaction->comment = "SYSTEM MESSAGE: Task left open on logout";
+    $transaction = new CbodbTransaction($transactionID);
+    //  John Mikolich   December 30, 2010
+    //  Next statement added to resolve the 'timezone issue'.
+    date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+    $transaction->dateClosed = date("Y-m-d H:i:s", time());
+    $transaction->isOpen = 0;
+    $transaction->comment = "SYSTEM MESSAGE: Task left open on logout";
 
-	$transaction->saveData();
+    $transaction->saveData();
 
-	if ($taskID > 0) {
-		$taskID = $transaction->taskID;
-		$task = new CbodbTask($taskID);
-		$task->isDone = 0;
-		$task->isOpen = 0;
-
-		$task->saveData();
-	}
+    if ($taskID > 0)
+    {
+        $taskID = $transaction->taskID;
+        $task = new CbodbTask($taskID);
+        $task->isDone = 0;
+        $task->isOpen = 0;
+        $task->saveData();
+    }
 }
 
 function checkInTask( $option )

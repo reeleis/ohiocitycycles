@@ -542,7 +542,7 @@ function showTransactions( $option, &$rows, &$pageNav, &$lists, $member_id, $dat
     $title = "Transactions";
   } else {
     $member = new CbodbMember($member_id);
-    $title .= "Transactions for <em>".$member->nameFirst." ".$member->nameLast."</em> (member #$member_id)";
+    $title = "Transactions for <em>".$member->nameFirst." ".$member->nameLast."</em> (member #$member_id)";
     $numCols--;
   }
   ?>
