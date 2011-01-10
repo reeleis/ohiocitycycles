@@ -103,12 +103,17 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 						<input type="hidden" name="isOpen" value="0">
   						<input type="hidden" name="credits" value="-<?php echo $membershipCost; ?>" />
 						</form>
-					<?php } else { echo "N/A"; } ?>
+					<?php }
+                                        else
+                                            { echo "N/A"; } ?>
 			</td>
 		</tr>
 		</table>
 		<?php
-		if ($credits < $membershipCost) { echo "<br><em>You don't have enough credits to use them to renew, sorry!</em><br>"; }
+		if ($credits < $membershipCost)
+                {
+                     echo "<br><em>You don't have enough credits to use them to renew, sorry!</em><br>";
+                }
 	}
 	
 	function showOptions( $option, $rows, $taskTransactions, $dropdownList )
@@ -137,7 +142,8 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 			}
 		?>
 		</select>
-			<input type="submit" name="logintype" value="Login"><br>
+		<input type="submit" name="logintype" value="Submit">
+                <br>
 		</form>
 		<?php
 		/*$letters = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
@@ -150,27 +156,57 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 		echo '
 		Currently Logged in:
 		<table class="loggedInList">
-		<tr><th width="150px">Name</th><th width="100px">Working on</th><th>Since</th><th>Credits</th><th></th></tr>';
+		<tr>
+                    <th width="150px">Name</th>
+                    <th width="100px">Working on</th>
+                    <th>Clock-In Time</th>
+                    <th>Credits</th>
+                    <th></th>
+                </tr>';
 		$timezone = new DateTimeZone(getConfigValue("timeZone"));
-			foreach ($rows as $row )
-			{
-				$dateOpen = new DateTime($row->dateOpen,new DateTimeZone("UTC"));
-				date_timezone_set($dateOpen,$timezone);
-				echo '<tr><Td>'.$row->nameFirst." ".$row->nameLast.'</td>
-				<td>'.HTML_cbodb::$cbodb_user_loggedintypes[$row->type].'</td>
-				<td>'.date_format($dateOpen,"n/d/Y H:i").'</td>
-				<Td>&nbsp;&nbsp;'.sprintf("%.2F",CbodbTransaction::getMemberCredits($row->id)).'</td>
-				<Td>
-					<form action="index.php#top" method="post" name="loginForm">
-					<input type="submit" name="logout" value="Options">
-					<input type="hidden" name="memberID" value="'.$row->id.'" />
-  					<input type="hidden" name="option" value="'.$option.'" />
-  					<input type="hidden" name="task" value="memberoptions" />  					
-					</form>
-				</td>';
-				/*if ($row->isGroup2) {*/			
-				echo '</tr>';
-			}
+                //  John Mikolich   December 18, 2010
+                //  I'm looking at http://www.tutorialspoint.com/php/php_function_date_format.htm
+                //  and going to try a bunch of different techniques to improve
+                //  how the date/time is presented in the third td below.
+                //  Pete's original statement reads:
+                //  <td>'.date_format($dateOpen,"n/d/Y H:i").'</td>
+                //  I first changed the upper case H to lower case to use
+                //  a 12 hour clock instead of military time.
+                //  The 'A' indicates that an AM/PM indication should
+                //  be shown.
+                //  Then I added the '/e' to display the time zone setting
+                //  John Mikolich   January 1, 2011
+                //  The 'T' that indicates the timezone and the
+                //  final 'e' in the formatted date was removed prior
+                //  to delivering this file to Lee as it is just too
+                //  verbose.  I also removed the parens around the date
+                //  to try and make it appear on just one line.
+                //
+		foreach ($rows as $row )
+		{
+                    //  John Mikolich   December 30, 2010
+                    //  See my other comments from today regarding the
+                    //  hard-coded 'UTC'.
+                    //
+                    //  $dateOpen = new DateTime($row->dateOpen,new DateTimeZone("UTC"));
+                    $dateOpen = new DateTime($row->dateOpen,new DateTimeZone(getConfigValue("timeZone")));
+                    date_timezone_set($dateOpen,$timezone);
+                    echo '<tr>
+                        <td>'.$row->nameFirst." ".$row->nameLast.'</td>
+                    	<td>'.HTML_cbodb::$cbodb_user_loggedintypes[$row->type].'</td>
+                        <td>'.date_format($dateOpen,"h:i A n/d/Y").'</td>
+			<td>&nbsp;&nbsp;'.sprintf("%.2F",CbodbTransaction::getMemberCredits($row->id)).'</td>
+			<td>
+                        <form action="index.php#top" method="post" name="loginForm">
+                            <input type="submit" name="logout" value="Options">
+                            <input type="hidden" name="memberID" value="'.$row->id.'" />
+                            <input type="hidden" name="option" value="'.$option.'" />
+                            <input type="hidden" name="task" value="memberoptions" />
+                        </form>
+			</td>';
+			/*if ($row->isGroup2) {*/			
+			echo '</tr>';
+		}
 		echo '</table>';
 	}
 
@@ -194,18 +230,27 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 			$link = JRoute::_('index.php?option=' . $option . '&task=memberoptions&memberID='.$row->id.'#top');
 			?>
 			<div style="margin: 10px; float: left;">
-			<a href="<?php echo $link; ?>"><?php echo $row->nameFirst . ' ' . $row->nameLast; ?></a>
+			<a href="<?php echo $link; ?>">
+                        <?php echo $row->nameFirst . ' ' . $row->nameLast; ?></a>
 			</div>
 			<?php
 		}
-		?><br><Br><div style="clear: left; float: left;"><h2>Or re-enter your name if it isn't on the list (try a different spelling):</h2>
+		?>
+                <br>
+                <Br>
+                <div style="clear: left; float: left;">
+                    <h2>Or re-enter your name if it isn't on the list (try a different spelling):</h2>
 		<div style="clear: left; float: left;">
 		<form action="index.php#top" method="post" name="nameForm">
   		<input type="hidden" name="option" value="<?php echo $option; ?>" />
   		<input type="hidden" name="task" value="listnamesbylastname" />
 		<input type="text" name="namelast" length="30" />
-		</form></div><br>
-		<br><br><h2>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>
+		</form>
+                </div>
+                    <br>
+		<br>
+                <br>
+                <h2>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>
  <?php
 	}
 
@@ -713,15 +758,32 @@ echo '		<form action="index.php#top" method="post" name="loginForm">';
 	}
 	function listMemberTransactions($transactionList, $memberID, $page)
 	{
-		$timezone = new DateTimeZone(getConfigValue("timeZone"));
-		echo ($page > 1) ? '<h2>Page '.$page.' of your history</h2>' : '<h2>Your most recent activity</h2>';
-		echo '<table class="cbodbTrans">';
-		echo '<tr><th>Date</th><th>Type</th><th>Credits</th><th>Cash</th><th>Comment</th></tr>
-		';
-		$rowType = 1;
-		foreach ($transactionList as $transaction)
-		{
-		$time = new DateTime($transaction->dateOpen,new DateTimeZone("UTC"));
+            //  John Mikolich   December 30, 2010
+            //  Several statements in the logic below make a reference to the
+            //  timezone, which suggests that the original programmer
+            //  was aware of the importance of proper timezone handling.
+            //  And yet, there is a some inconsistency.  I'm
+            //  particularly concerned about statements where 'UTC' is
+            //  hard-coded as a timezone.  I'm going to clean up the
+            //  timezone references in this function and I'll annotate them
+            //  with comments and my 'programmer initials' (JYM4).
+
+            //  Next statement is good; timezone is obtained from a
+            //  configuration file - JYM4.
+            $timezone = new DateTimeZone(getConfigValue("timeZone"));
+
+            echo ($page > 1) ? '<h2>Page '.$page.' of your history</h2>' : '<h2>Your most recent activity</h2>';
+            echo '<table class="cbodbTrans">';
+            echo '<tr><th>Date</th><th>Type</th><th>Credits</th><th>Cash</th><th>Comment</th></tr>';
+            $rowType = 1;
+            foreach ($transactionList as $transaction)
+            {
+                //  Next statement is questionable.  I do not understand why
+                //  the original programmer created a variable ($timezone)
+                //  to hold the timezone and then hardcoded 'UTC' in the
+                //  very first instance where a timezone is needed - JYM4.
+                //  $time = new DateTime($transaction->dateOpen,new DateTimeZone("UTC"));
+                $time = new DateTime($transaction->dateOpen, new DateTimeZone(getConfigValue("timeZone")));
 		date_timezone_set($time,$timezone);
 			echo '<tr class="cbodbRow'.$rowType.'">';
 		echo '<td>'.date_format($time,"m/d/Y H:i").'</td>
@@ -792,23 +854,28 @@ echo '<SELECT NAME="classdate[month]">
 		<table class="loggedInList">
 		<tr><th></th><th width="150px">Name</th><th>Since</th><th width="80px">Credits</th><th width="80px">Member</th><th>Paid Cash</th><th>Paid Credits</th></tr>';
 		$timezone = new DateTimeZone(getConfigValue("timeZone"));
-			foreach ($rows as $row )
-			{
-				if ($row->type == 3) {
-				$dateOpen = new DateTime($row->dateOpen,new DateTimeZone("UTC"));
-				date_timezone_set($dateOpen,$timezone);
-				echo '<tr>';
-				echo '<td><input type="checkbox" name="students['.$row->id.'][inclass]" id="inclass"></td>';
-				echo '<Td>'.$row->nameFirst." ".$row->nameLast.'</td>
-				<td>'.date_format($dateOpen,"n/d/Y H:i").'</td>
-				<Td>&nbsp;&nbsp;'.sprintf("%.2F",CbodbTransaction::getMemberCredits($row->id)).'</td>';
-				echo '<td>'.($row->isMember ? 'Yes' : 'No').'</td>';
-				echo '<td><input type="text" name="students['.$row->id.'][paidcash]" size="5"></td>';
-				echo '<td><input type="text" name="students['.$row->id.'][paidcredits]" size="5"></td>';
-				/*if ($row->isGroup2) {*/			
-				echo '</tr>';
-				}
-			}
+                foreach ($rows as $row )
+                {
+                    if ($row->type == 3)
+                    {
+                        //  John Mikolich   December 30, 2010
+                        //  See my other comments from today regarding the 
+                        //  hard-coded 'UTC'.
+                        //  $dateOpen = new DateTime($row->dateOpen,new DateTimeZone("UTC"));
+                        $dateOpen = new DateTime($row->dateOpen,new DateTimeZone(getConfigValue("timeZone")));
+                        date_timezone_set($dateOpen,$timezone);
+                        echo '<tr>';
+                        echo '<td><input type="checkbox" name="students['.$row->id.'][inclass]" id="inclass"></td>';
+                        echo '<td>'.$row->nameFirst." ".$row->nameLast.'</td>
+                            <td>'.date_format($dateOpen,"n/d/Y H:i").'</td>
+                            <td>&nbsp;&nbsp;'.sprintf("%.2F",CbodbTransaction::getMemberCredits($row->id)).'</td>';
+                        echo '<td>'.($row->isMember ? 'Yes' : 'No').'</td>';
+                        echo '<td><input type="text" name="students['.$row->id.'][paidcash]" size="5"></td>';
+                        echo '<td><input type="text" name="students['.$row->id.'][paidcredits]" size="5"></td>';
+                        /*if ($row->isGroup2) {*/
+                        echo '</tr>';
+                    }
+                }
 		echo '</table>';
 		echo '<br><br><input class="bigbutton" type="submit" name="startclass" value="Start Class">';
 		echo '</form>';

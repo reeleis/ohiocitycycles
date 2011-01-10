@@ -76,7 +76,8 @@ function show_transaction_totaltime($isOpen, $totalTime)
   }
 }
 
-class CbodbMember {
+class CbodbMember
+{
 
 	private $id;
 	private $data; 	
@@ -731,7 +732,10 @@ class CbodbItem {
 	
 	if($this->data->id == 0)
 	{
-		$this->data->timeAdded = date("Y-m-d H:i:s", time());
+            //  John Mikolich   December 30, 2010
+            //  Next statement added to resolve the 'timezone issue'.
+            date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+            $this->data->timeAdded = date("Y-m-d H:i:s", time());
 	}
 
 		
@@ -880,11 +884,18 @@ class CbodbTask {
 				
     }
     
-    public function saveData() {
+    public function saveData()
+    {
+        //  John Mikolich   December 30, 2010
+        //  Preliminary testing has shown that the "timezone issue"
+        //  can be fixed by preceeding each call to the PHP date
+        //  function with a statement that sets the timezone.
+        //  I added such a statement to the code block below.
     	if ($this->data->id == 0)
-    		{
-    			$this->data->timeAdded = date("Y-m-d H:i:s", time());
-    		} 
+    	{
+            date_default_timezone_set(getConfigValue("timeZone") );
+            $this->data->timeAdded = date("Y-m-d H:i:s", time());
+    	} 
     	$this->data->timeChanged = NULL;
     	
 	$this->data->store();
@@ -968,11 +979,17 @@ class CbodbQuery {
 
     }
 
-    public function saveData() {
+    public function saveData()
+    {
+        //  John Mikolich   December 30, 2010
+        //  It appears the "timezone issue" can be fixed by
+        //  preceeding each call to the PHP date function with
+        //  a statement that sets the timezone like the one in the code block below.
         if ($this->data->id == 0)
-                {
-                        $this->data->timeAdded = date("Y-m-d H:i:s", time());
-                }
+        {
+            date_default_timezone_set(getConfigValue("timeZone") );
+            $this->data->timeAdded = date("Y-m-d H:i:s", time());
+        }
         $this->data->timeChanged = NULL;
 
         $this->data->store();
@@ -1394,8 +1411,17 @@ function newProvisionalTransaction( $option, $fromTransaction = FALSE )
 	
 	$transaction = new CbodbTransaction();
 	
-	$transaction->dateOpen = date("Y-m-d H:i:s", time());
-	$transaction->dateClosed = date("Y-m-d H:i:s", time());
+	//  John Mikolich   December 30, 2010
+    //  This is the first (and so far, the only working) example
+    //  of the addition of a statement to set the timezone
+    //  prior to the call to the PHP date function as a 
+    //  resolution to the 'timezone issue'.  With the addition
+    //  of the statement below (marked by the 'NEW!!' decoration),
+    //  any new provisional transactions in 
+    //  the Joomla back-end is started with the correct timezone.
+    date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+    $transaction->dateOpen = date("Y-m-d H:i:s", time());
+    $transaction->dateClosed = date("Y-m-d H:i:s", time());
 	HTML_cbodb::newProvisionalTransaction($option, $transaction, $member, $memberCredits);
 }
 
@@ -1422,6 +1448,7 @@ function newTimeTransaction( $option, $fromTransaction = FALSE )
 	
 	$transaction = new CbodbTransaction();
 	
+	date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
 	$transaction->dateOpen = date("Y-m-d H:i:s", time());
 	$transaction->dateClosed = date("Y-m-d H:i:s", time());
 	HTML_cbodb::newTimeTransaction($option, $transaction, $member);
@@ -1454,6 +1481,9 @@ function adminRenewMember( $option )
 	$member = new Cbodbmember( $memberID );
 	$memberCredits = $member->getMemberInfo();
 
+        //  John Mikolich   December 30, 2010
+        //  Next statement added to resolve the 'timezone issue'.
+        date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
 	$transaction->dateOpen = date("Y-m-d H:i:s",time());
 	$transaction->dateClosed = date("Y-m-d H:i:s",time());
 	$transaction->credits = 80;
@@ -1598,13 +1628,20 @@ function adminLogoutMember( $option, $atTime = FALSE )
 
   $openTime = strtotime($transaction->dateOpen);
 
-	if ($atTime) {
-		$transaction->dateClosed = date("Y-m-d ", $openTime);
+    if ($atTime)
+    {
+        $transaction->dateClosed = date("Y-m-d ", $openTime);
 		$transaction->dateClosed .= ((JRequest::getVar("hour")+5)%24) . ':' . JRequest::getVar("minute");
-	} else {
-    $transaction->dateClosed = date("Y-m-d H:i:s", time());
-	}
-  $transaction->isOpen = 0;
+    }
+    else
+    {
+        //  John Mikolich   December 30, 2010
+        //  Next statement added to resolve the 'timezone issue'.
+        date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+        $transaction->dateClosed = date("Y-m-d H:i:s", time());
+    }
+
+    $transaction->isOpen = 0;
   
   $transaction->totalTime = calculateTotalTime($transaction->dateOpen, $transaction->dateClosed);
   $transaction->credits = calculateCredits($transaction->totalTime, $transaction->creditRate);
@@ -1890,7 +1927,10 @@ function recordClass($instructorID,$classID,$isClassNow,$classdate,$classduratio
   
   if ($isClassNow)
   {
-  	$starttime = date("Y-m-d H:i:s", time());
+      //  John Mikolich   December 30, 2010
+      //  Next statement added to resolve the 'timezone issue'.
+      date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+      $starttime = date("Y-m-d H:i:s", time());
   }
   else
   {
@@ -1903,21 +1943,25 @@ function recordClass($instructorID,$classID,$isClassNow,$classdate,$classduratio
   
   foreach($students as $memberID => $studentdata)
   {
-  	if (!strcmp($studentdata[inclass],"on")) {
-  		$membertransaction = new CbodbTransaction();
-  	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
-  	$membertransaction->dateClosed = date("Y-m-d H:i:s",time());
-  	$membertransaction->type = 4001;
-  	$membertransaction->credits = -(abs($studentdata[paidcredits]));
-  	$membertransaction->cash = $studentdata[paidcash];
-  	$membertransaction->totalTime = $classduration*3600;
-  	$membertransaction->memberID = $memberID;
-  	/* Set the Transaction subtype to the class id so we can find the class */
-  	$membertransaction->subtype = $class->id;
-  	$membertransaction->comment = "Class: ".CbodbClasses::$cbodb_classtypes[$class->typeID];
-  	$membertransaction->saveData();
+  	if (!strcmp($studentdata[inclass],"on"))
+        {
+            $membertransaction = new CbodbTransaction();
+            //  John Mikolich   December 30, 2010
+            //  Next statement added to resolve the 'timezone issue'.
+            date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+            $membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+            $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+            $membertransaction->type = 4001;
+            $membertransaction->credits = -(abs($studentdata[paidcredits]));
+            $membertransaction->cash = $studentdata[paidcash];
+            $membertransaction->totalTime = $classduration*3600;
+            $membertransaction->memberID = $memberID;
+            /* Set the Transaction subtype to the class id so we can find the class */
+            $membertransaction->subtype = $class->id;
+            $membertransaction->comment = "Class: ".CbodbClasses::$cbodb_classtypes[$class->typeID];
+            $membertransaction->saveData();
   
-  	$member = new CbodbMember($memberID);
+            $member = new CbodbMember($memberID);
   	if ($class->typeID == 1) 
   	{
   		if ($member->custom1 == 0 && $member->custom2 == 1 && $member->custom3 == 1 && $member->custom4 == 1)
