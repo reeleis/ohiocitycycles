@@ -1631,7 +1631,7 @@ function adminLogoutMember( $option, $atTime = FALSE )
     if ($atTime)
     {
         $transaction->dateClosed = date("Y-m-d ", $openTime);
-		$transaction->dateClosed .= ((JRequest::getVar("hour")+5)%24) . ':' . JRequest::getVar("minute");
+		$transaction->dateClosed .= ((JRequest::getVar("hour"))%24) . ':' . JRequest::getVar("minute");
     }
     else
     {
