@@ -18,8 +18,8 @@ $mMember = $this->mMember->table ;
      
    
    </table>
-   <input type="text" name="Member[groupMemberId]" value="<?php echo $mMember->groupMemberId; ?>" />
-   <input type="text" name="Member[groupUserId]" value="<?php echo $mMember->groupUserId; ?>" />
+   <input type="hidden" name="Member[groupMemberId]" value="<?php echo $mMember->groupMemberId; ?>" />
+   <input type="hidden" name="Member[groupUserId]" value="<?php echo $mMember->groupUserId; ?>" />
    <input type="hidden" name="formsubmit" value="edit" />
    <input type="hidden" name="option" value="com_dtregister" />
    <input type="hidden" name="controller" value="member" />

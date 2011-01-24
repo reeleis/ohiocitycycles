@@ -1,26 +1,33 @@
 <?php
+
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 defined( '_JEXEC' ) or die( 'Direct Access to this location is not allowed.' );
 require_once( JPATH_SITE.'/components/com_dtregister/lib/class.payment.php');
 class echeck extends Payment{
     
-   	var $bywebservice =  true ;
+   	var $bywebservice = true;
 	var $x_bank_acct_type = "";
    function __construct() {
 
-        global $merchid , $authnetmode, $transkey,$godaddy_hosting;
+        global $merchid, $authnetmode, $transkey,$godaddy_hosting;
 		parent::__construct();
-		$this->godaddy_hosting = $godaddy_hosting ;
-		
-		
-		
-		
-		$this->url = ($this->paymentmode=='test')?"https://test.authorize.net/gateway/transact.dll":"https://secure.authorize.net/gateway/transact.dll" ;
+		$this->godaddy_hosting = $godaddy_hosting;
+
+		$this->url = ($this->paymentmode=='test')?"https://test.authorize.net/gateway/transact.dll":"https://secure.authorize.net/gateway/transact.dll";
 		
 		$this->x_test_request = ($this->paymentmode=='test')?'TRUE':'FALSE';
 		
-		$this->x_login			= $merchid;
+		$this->x_login = $merchid;
 		
-		$this->x_version  =  "3.1";
+		$this->x_version = "3.1";
 		
 		$this->x_tran_key = $transkey;
 		$this->x_delim_char = "|";
@@ -29,17 +36,12 @@ class echeck extends Payment{
 		$this->x_type = "AUTH_CAPTURE";
 		$this->x_method = "ECHECK";
 		$this->x_relay_response = "FALSE";
-		
-	  
-	  
-	  
-	  
 
    }
    
    function billingform(){
-	   global $cardtype ;
-	   $form =  parent::billingform();
+	   global $cardtype;
+	   $form = parent::billingform();
 	  	
 	   $size = count($cardtype);
 	   ob_start();
@@ -63,7 +65,6 @@ class echeck extends Payment{
 
 			echo JHTML::_('select.genericlist', $options,'billing[x_bank_acct_type]','','value','text',$this->x_bank_acct_type);
   ?>
-          
 
 			        </td></tr>
          <tr><td><?php echo JText::_( 'DT_BANK_NAME' ); ?>:<span class='dtrequired'>&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;</span></td>
@@ -77,16 +78,13 @@ class echeck extends Payment{
        <?php
 	   $html = ob_get_clean();
 	   
-	   return $form.$html ;
-	   
-	   
-	      
+	   return $form.$html;
+ 
    }
    
    function setFields(){
 	   
-	   $this->fields	= array(
-	                  
+	   $this->fields = array(             
 
 //  ###########3  MINIMUM TRANSACTION REQUIRED DETAILS  ################3
     //"x_allow_partial_Auth"  => "True",
@@ -157,7 +155,6 @@ class echeck extends Payment{
 //  ###########3  MERCHANT REQUIRED DETAILS  ################3
 
 	"x_invoice_num" 		=> (!isset($this->confirmNum)|| $this->confirmNum=="")?'':$this->confirmNum,
-
 	
 	"x_description"			=> $this->description,
 	
@@ -176,13 +173,6 @@ class echeck extends Payment{
 	"x_recurring_billing"	=> "NO",
 
                      );
-
-	   
-	 
-	   
-	   
-	   
-
 	      
    }
    
@@ -190,8 +180,8 @@ class echeck extends Payment{
 	  
 	  $this->setFields();
 	  
-	  $fields =  $this->formatfields();
-	  $this->url ;
+	  $fields = $this->formatfields();
+	  $this->url;
 	  $ch = curl_init($this->url);
 	  if($this->godaddy_hosting){
 
@@ -212,14 +202,14 @@ class echeck extends Payment{
 		
 		 $resp = curl_exec($ch); //execute post and get results
 		 
-		 $this->response  = $resp ;
+		 $this->response = $resp;
 		 $this->parseResponse() ;
 		 if($this->responseParts[0]==1){
 			  $this->transactionId = $this->responseParts[6] ;
 			  DT_Session::set('register.payment.transactionId',$this->transactionId);
-			 return true ;
+			 return true;
 		 }else{
-			 $res =  $this->responseParts ;
+			 $res = $this->responseParts;
 			 switch($res[0]){
 			
 				case 1:
@@ -249,14 +239,6 @@ class echeck extends Payment{
 					break;
 			
 				case 3:
-			
-					/*
-			
-					echo "This transaction failed due to an error in application. Please notify the site administrator and provide the text that is displayed below:<br />";
-			
-					echo "Reason  :",$res[3],'<br />';
-			
-					*/
 			
 					if($this->paymentmode=='test'){$status =1;
 			
@@ -447,21 +429,17 @@ class echeck extends Payment{
 		  
 			  }
 			  
-			  return false ;
-
+			  return false;
 
 		 }
-		 
-	  
 	     
    }
    
     function parseResponse(){
 	     
-		 $this->responseParts = explode("|",$this->response) ;
+		 $this->responseParts = explode("|",$this->response);
 		
 	 }
-   
-    
+  
 }
 ?>

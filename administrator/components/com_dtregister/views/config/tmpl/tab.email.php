@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -130,7 +130,77 @@
 				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_THANKS_EMAIL_AUTH_SUB' )), '', 'tooltip.png', '', ''); ?></td>
 
 			</tr>
+            <tr>		 	 
 
+	                <td colspan="3"><hr /></td>
+
+	            </tr>
+            <tr align="center" valign="middle">
+
+                 <td align="left" valign="top"><strong><?php echo JText::_( 'DT_WAITING_EMAIL' );?>:</strong>
+
+                 <div style="padding:5px 5px 5px 15px;">
+
+					<br /><?php echo JText::_( 'DT_TAG_INSERT_TEXT' );?>:<br />
+
+	                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
+
+	                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+
+	                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
+
+	                 <br />[LOCATION_DETAILS] - <?php echo JText::_( 'DT_TAG_LOCATION_DETAILS' );?>
+
+	                 <br />[GROUP_NUMBER] - <?php echo JText::_( 'DT_TAG_GROUP_NUMBER' ); ?>
+
+	                 <br />[AMOUNT] - <?php echo JText::_( 'DT_TAG_AMOUNT' );?>
+
+	                 <br />[AMOUNT_PAID] - <?php echo JText::_( 'DT_TAG_AMOUNT_PAID' );?>
+
+	                 <br />[AMOUNT_DUE] - <?php echo JText::_( 'DT_TAG_AMOUNT_DUE' );?>
+
+	                 <br />[AMOUNT_NOTAX] - <?php echo JText::_( 'DT_TAG_AMOUNT_NOTAX' );?>
+
+	                 <br />[TAX] - <?php echo JText::_( 'DT_TAG_TAX' );?>
+
+	                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
+
+	                 <br />[CONFIRM_NUM] - <?php echo JText::_( 'DT_TAG_CONFIRM_NUM' );?>
+
+	                 <br />[BARCODE] - <?php echo JText::_( 'DT_TAG_BARCODE' );?>
+
+	                 <br />[STATUS] - <?php echo JText::_( 'DT_TAG_STATUS' );?>
+
+	                 <br />[PAID_STATUS] - <?php echo JText::_( 'DT_TAG_PAID_STATUS' );?>
+
+	                 <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
+	
+	                 <br />[PASSWORD] - <?php echo JText::_( 'DT_TAG_PASSWORD' );?>
+
+	                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
+	
+					 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
+
+                 </div>
+
+                </td>
+
+				<td align="left" valign="top"><?php echo $editor->display("config[waitingemail]",stripslashes($config->getGlobal('waitingemail','')),'','340','20','20','0'); ?></td>
+
+				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_WAITING_EMAIL_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+			</tr>   
+
+            <tr align="center" valign="middle">
+
+                <td align="left" valign="top"><strong><?php echo JText::_( 'DT_WAITING_EMAIL_SUB' );?>:</strong></td>
+
+				<td align="left" valign="top"><input type="text" name="config[subwaitingemail]" size="80" maxlength="100" value="<?php echo stripslashes($config->getGlobal('subwaitingemail','') ); ?>" /></td>
+
+				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_WAITING_EMAIL_HELP_SUB' )), '', 'tooltip.png', '', ''); ?></td>
+
+			</tr>
+            
 			<tr>		 	 
 
 	                <td colspan="3"><hr /></td>
@@ -176,8 +246,6 @@
 	                 <br />[PAID_STATUS] - <?php echo JText::_( 'DT_TAG_PAID_STATUS' );?>
 
 	                 <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
-	
-	                 <br />[PASSWORD] - <?php echo JText::_( 'DT_TAG_PASSWORD' );?>
 
 	                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 	

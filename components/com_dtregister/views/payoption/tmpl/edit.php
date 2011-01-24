@@ -262,36 +262,63 @@ function submitbutton(pressbutton){
 
 								 </tr>
 
-                          <!-- Net Deposit Options -->
-                          
-                            <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_NETDEPOSIT' ); ?></td></tr>
+                      
+          <!-- *************** Paypal Pro Options ***************	-->
+							  
+							  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PAYPAL_PRO' ); ?></td></tr>
                                  
                  <tr align="center" valign="middle">
 
                      <td align="left" valign="top">
 
-										 <strong><?php echo JText::_( 'DT_NETDEPOSIT_CLIENTID' ); ?>:</strong>
+										 <strong><?php echo JText::_( 'DT_PAYPAL_API_USER' ); ?>:</strong>
 
 										 </td>
 
-									   <td align="left" valign="top"> <input type="text" name="data[config][netdeposit_clientid]" size="30" value="<?php echo $row->config['netdeposit_clientid']; ?>" /> </td>
+									   <td align="left" valign="top"> <input type="text" name="data[config][paypal_api_user]" size="30" value="<?php echo isset($row->config['paypal_api_user'])?$row->config['paypal_api_user']:'' ; ?>" /> </td>
 
-										 <td><?php echo JHTML::tooltip((JText::_( 'DT_NETDEPOSIT_CLIENTID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_API_USER_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 										 
-										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_NETDEPOSIT' ) ;?></td>
+										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_PAYPAL_PRO' ) ;?></td>
 
 								 </tr>
                                  
                  <tr align="center" valign="middle">
 
-                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_NETDEPOSIT_CLIENTCODE' ); ?>:</strong></td>
+                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAYPAL_API_PASSWORD' ); ?>:</strong></td>
 
-									   <td align="left" valign="top">	<input type="text" name="data[config][netdeposit_clientcode]" size="30" value="<?php echo $row->config['netdeposit_clientcode']; ?>" /> </td>
+									   <td align="left" valign="top">	<input type="text" name="data[config][paypal_api_password]" size="30" value="<?php echo isset($row->config['paypal_api_password'])?$row->config['paypal_api_password']:''; ?>" /> </td>
 
-										 <td><?php echo JHTML::tooltip((JText::_( 'DT_NETDEPOSIT_CLIENTCODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_API_PASSWORD_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								 </tr>
-                
+                   
+                     <tr align="center" valign="middle">
+
+                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAYPAL_API_SIGNATURE' ); ?>:</strong></td>
+
+									   <td align="left" valign="top">	<input type="text" name="data[config][paypal_api_signature]" size="30" value="<?php echo isset($row->config['paypal_api_signature'])?$row->config['paypal_api_signature']:''; ?>" /> </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_API_SIGNATURE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+								 </tr>
+
+
+<tr align="center" valign="middle">
+
+                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAYPAL_PRO_COUNTRY' ); ?>:</strong></td>
+
+									   <td align="left" valign="top">	
+                                       <?php
+                                        $options=DtHtml::options($paymentmethod->paypal_country_codes());
+									
+									echo JHTML::_('select.genericlist', $options,'data[config][paypal_pro_country]',' ', 'value','text',isset($row->config['paypal_pro_country'])?$row->config['paypal_pro_country']:'');
+                                       ?>
+                                      </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_PRO_COUNTRY_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+								 </tr>        
 		  					<!-- *************** PayPal Options ***************	-->
 
 							  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'PAYPAL' ); ?></td></tr>
@@ -305,6 +332,22 @@ function submitbutton(pressbutton){
 								  <td valign="top"><?php echo JText::_( 'DT_NOTES_PAYPAL' ); ?></td>
 
 							  </tr>
+                                         <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_SAFER_PAY' ); ?></td></tr>
+  <tr align="center" valign="middle">
+
+                     <td align="left" valign="top">
+
+										 <strong><?php echo JText::_( 'DT_SAFER_PAY_ACCOUNT_ID' ); ?>:</strong>
+
+										 </td>
+
+									   <td align="left" valign="top"> <input type="text" name="data[config][safe_pay_account_id]" size="30" value="<?php echo isset($row->config['safe_pay_account_id'])?$row->config['safe_pay_account_id']:''; ?>" /> </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_SAFER_PAY_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+										 									   
+									   <td valign="top" rowspan="1"><?php echo JText::_( 'DT_NOTES_SAFER_PAY' ) ;?></td>
+
+								 </tr>
  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_EWAY' ); ?></td></tr>
                                  
                 <tr align="center" valign="middle">
@@ -437,7 +480,35 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_SAGE_M_KEY_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								 </tr>
+    <!-- Net Deposit Options -->
+                          
+                            <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_NETDEPOSIT' ); ?></td></tr>
+                                 
+                 <tr align="center" valign="middle">
 
+                     <td align="left" valign="top">
+
+										 <strong><?php echo JText::_( 'DT_NETDEPOSIT_CLIENTID' ); ?>:</strong>
+
+										 </td>
+
+									   <td align="left" valign="top"> <input type="text" name="data[config][netdeposit_clientid]" size="30" value="<?php echo $row->config['netdeposit_clientid']; ?>" /> </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_NETDEPOSIT_CLIENTID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+										 
+										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_NETDEPOSIT' ) ;?></td>
+
+								 </tr>
+                                 
+                 <tr align="center" valign="middle">
+
+                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_NETDEPOSIT_CLIENTCODE' ); ?>:</strong></td>
+
+									   <td align="left" valign="top">	<input type="text" name="data[config][netdeposit_clientcode]" size="30" value="<?php echo $row->config['netdeposit_clientcode']; ?>" /> </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_NETDEPOSIT_CLIENTCODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+								 </tr>
 							<!-- ******************* Pay Later Options ****************	-->
 
 							   <?php

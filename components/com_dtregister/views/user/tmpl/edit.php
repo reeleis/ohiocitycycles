@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $xhtml , $cb_integrated , $cbviewonly;
+global $Itemid, $xhtml, $cb_integrated, $cbviewonly;
 
 $tUser = $this->mUser->table;
 
@@ -35,7 +35,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 	        ?>
 
-        <a href="<?php echo JRoute::_('index.php?option=com_dtregister&controller=member&Itemid='.$Itemid.'&userId='.$tUser->userId,$xhtml ); ?>"><?php echo  JText::_( 'DT_EDIT_MEMBERS' ); ?></a></td>
+        <a class="up_button" href="<?php echo JRoute::_('index.php?option=com_dtregister&controller=member&Itemid='.$Itemid.'&userId='.$tUser->userId,$xhtml ); ?>"><?php echo  JText::_( 'DT_EDIT_MEMBERS' ); ?></a></td>
 
       <?php
 
@@ -44,27 +44,10 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 		    ?>
 
       </tr>
-    <?php if($this->tEvent->use_discountcode){?>
-      <tr>
-
-         <td>
-
-           <?php echo JText::_( 'DT_DISCOUNT_CODE'); ?>
-
-         </td>
-
-         <td>
-
-           <input type="text" name="User[discount_code]" value="<?php echo $tUser->TableDiscountcode->code ?>" class="inputbox" />
-
-         </td>
-
-      </tr>
-<?php } ?>
 
      <?php
 
-	   echo  $this->form;
+	   echo $this->form;
 
 	 ?>
 
@@ -94,7 +77,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 <script type="text/javascript">
 
-  var updateFee =  function(){
+  var updateFee = function(){
 	    
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   var options = {

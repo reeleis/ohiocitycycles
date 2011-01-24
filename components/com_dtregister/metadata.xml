@@ -18,11 +18,12 @@
 
         <option value='index' name="User Panel" msg="Frontend user control panel for viewing and editing registration records" />
 
-		<option value="calendar" name="Calendar View" />
+		<option value="calendar" name="Calendar View" msg="Calendar view with option of category selection, default view, and default date." />
 
-        <option value="events" name="Event Management" />
+        <option value="events" name="Event Management" msg="Link to frontend event management" />
 		
-		<option value="cpanel" name="Events Control Panel" />
+		<option value="cpanel" name="Events Control Panel" msg="Link to frontend Control Panel for managing events, locations, fields, etc" />
+
 	    </options>
 
 	</menu>
@@ -42,18 +43,18 @@
 
 			<url addpath="/administrator/components/com_dtregister/elements/">
 
-				<param name="list1" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list2" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list3" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list4" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list5" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list6" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list7" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list8" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list9" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list10" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list11" type="list" default="-1"  label="Select category:" description="Shows" />
-				<param name="list12" type="list" default="-1"  label="Select category:" description="Shows" />
+				<param name="list1" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list2" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list3" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list4" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list5" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list6" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list7" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list8" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list9" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list10" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list11" type="catlist" default="-1" label="Select category:" description="Shows" />
+				<param name="list12" type="catlist" default="-1" label="Select category:" description="Shows" />
 
 			</url>
 		</category>
@@ -63,14 +64,27 @@
 			<description>This is the frontend user control panel for registants to view, edit and cancel their own registration records. Payments can also be made for any amount due.</description>
 			<url>
 			   <param name="controller" default="user" type="text" />
+			  
 			 </url>
 		</index>
 		
 		<calendar>
 		     <name>Calendar View</name>
 			 <description>This will display your events within a calendar view.</description>
-			 <url>
-			   <param name="controller" default="calendar" type="text" />
+			 <url addpath="/administrator/components/com_dtregister/elements/">
+			    <param name="controller" default="calendar" type="text" description="calview controller" />
+			    <param name="cat" type="catlist" default="" label="Select category:" description="cat desc" />
+				<param name="showby" type="list" default="" label="Show by" description="show by desc">
+					<option value="0">Show By date</option>
+					<option value="1">Show Current date</option>
+				</param>
+				<param name="calview" type="radio" default="" label="View Type" description="calview desc">
+					<option value="month">Month</option>
+					<option value="week">Week</option>
+					<option value="day">Day</option>
+				</param>
+				
+				<param name="showday" default="" type="calendar" description="showday desc" />
 			 </url>
 		</calendar>
 		
@@ -89,7 +103,8 @@
 			   <param name="controller" default="cpanel" type="text" />
 			 </url>
 		</cpanel>
-
+		
+		
 	</state>
 
 </metadata>

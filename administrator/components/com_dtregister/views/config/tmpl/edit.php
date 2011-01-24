@@ -1,64 +1,41 @@
 <?php
 
+/**
+* @version 2.7.0
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
 
-
-   jimport('joomla.html.pane');
-
-
+    jimport('joomla.html.pane');
 
 	jimport('joomla.html.select');
 
-
-
 	$pane =& JPane::getInstance('tabs');
-
-
 
 	$editor =& JFactory::getEditor();
 
-	
-
-   $editor->_loadEditor();
-
- 
-
-		
-
-		
-
-		
-
-		
+    $editor->_loadEditor();
 
 ?>
 
 <form action="index.php" method="post" name="adminForm" autocomplete="off">
 
-   <table cellpadding="4" cellspacing="0" border="0" width="100%">
-
-
+  <table cellpadding="4" cellspacing="0" border="0" width="100%">
 
   <tr><td width="100%" class="sectionname">
 
-
-
   </td></tr>
-
-
 
   </table>
 
   <table width="100%">
 
-
-
  			<tr>
 
-
-
  				<td width="100%">
-
-
 
  					<?php	
 
@@ -120,8 +97,6 @@
 
                             <?php
 
-
-
                             echo $pane->endPanel();
 
                             echo $pane->startPanel(JText::_( 'DT_CALENDAR' ),'dtregister10');
@@ -134,29 +109,16 @@
 
 	 						echo $pane->startPanel(JText::_( 'DT_REGISTER_EMAIL' ),'dtregister2');
 
-
-
 	 					    ?>
-
-
 
                                 <div class="dtTabs1 html" id='message'>
 
                                     <?php
-
-
-
-		    include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.message.php');
-
-
+ include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.message.php');
 
 		 ?>
 
-                        
-
                                </div>		
-
-
 
 	 					<?php
 
@@ -177,16 +139,9 @@
                           <div class="dtTabs1" id='email'>
 
                              <?php
-
-
-
 		    include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.email.php');
 
-
-
 		 ?>
-
-                        
 
                           </div>	
 
@@ -236,7 +191,7 @@
 
 
 
-                            </div--->	
+                            </div -->	
 
 
 
@@ -259,12 +214,7 @@
                                  <div class="dtTabs1" id='registrant'>
 
                                       <?php
-
-
-
 		   include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.registrant.php');
-
-
 
 		 ?>
 
@@ -293,12 +243,7 @@
                                    <div class="dtTabs1" id='userpanel'>
 
  <?php
-
-
-
 		  include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.userpanel.php');
-
-
 
 		 ?>
 
@@ -366,35 +311,21 @@
 
                             <?php
 
-
-
 							echo $pane->endPanel();
 
                             echo $pane->startPanel(JText::_( 'DT_BARCODE' ),'dtregister3');
 
 							?>  
 
-                                
-
                           <div class="dtTabs1" id='fieldmap'>
-
-                                  
 
                                 <?php
 
-
-
 		  include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.barcode.php');
-
-
 
 		 ?>  
 
-                                  
-
                              </div>	 
-
-							    
 
 							<?php
 
@@ -402,19 +333,11 @@
                           
 	 						echo $pane->endPane();
 
-
-
 	 					?>
-
-
 
 	 				</td>
 
-
-
 	 			</tr>
-
-
 
 	 		</table>
 
@@ -428,23 +351,13 @@
 
  <?php  
 
-
-
-           $document	=& JFactory::getDocument();
-
-
+           $document =& JFactory::getDocument();
 
 		   JHTML::script('jquery.js','components/com_dtregister/assets/js/');
 
-
-
     ?>
 
-
-
-   <script type="text/javascript" >
-
- 
+   <script type="text/javascript">
 
       DTjQuery(function(){
          
@@ -455,11 +368,9 @@
               
                 });
 		 
-         var nohtml ;
+         var nohtml;
 
 	     DTjQuery('.dtTabs').each(function(){
-
-             
 
 			 if(DTjQuery(this).hasClass('html')){
 
@@ -470,37 +381,25 @@
 			   nohtml = '&no_html=1';
 
 			 }
-
              DTjQuery(this).load("index.php?option=com_dtregister&controller=config"+nohtml+"&task=loadtab&type="+DTjQuery(this).attr('id'));
 
 			/*if(jQuery(this).attr('id') == 'jomsocial'){
-
-
-
 			   jQuery(this).load("index.php?option=com_dtregister&task=loadtab&type="+jQuery(this).attr('id'),function(data){ loadeditor() ; });
-
-
 
 			}else{
 
-
-
 			   jQuery(this).load("index.php?option=com_dtregister&task=loadtab&type="+jQuery(this).attr('id'));
-
-
 
 			}*/
 
-
-
 		 });
-
-
 
 	  });
 
       function submitbutton(pressbutton){
-    
+    		
+			DTjQuery('.taberror').removeClass('taberror');
+			
 			if(pressbutton == "cancel"){
 				submitform(pressbutton);
 				return;
@@ -509,8 +408,13 @@
 			if(DTjQuery(document.adminForm).valid()){
 				
 				submitform(pressbutton);
-			}
-			
+				
+			}else{
+			  var index =  DTjQuery('.error:input').parents('.current').children().index(DTjQuery('.error:input').parents('dd'));
+			  index++;
+			  DTjQuery('.tabs dt:nth-child('+index+')').addClass('taberror');
+			  DTjQuery('.tabs dt:nth-child('+index+')').css({'background':'#ff0000'});
+			}	
 			  
 			return false;
 		
@@ -518,22 +422,12 @@
 
 	  function loadeditor(){
 
-
-
 		 <?php
-
-
 
 		// include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'view'.DS.'config'.DS.'tab.loadeditor.php');
 
-
-
 		 ?>
 
-
-
 	  }
-
-
 
    </script>

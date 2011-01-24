@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,11 +9,11 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
- $section = $this->getModel('section')->table ;
+ $section = $this->getModel('section')->table;
 
- $discountcode = $this->getModel('discountcode')->table ;
+ $discountcode = $this->getModel('discountcode')->table;
 
- $row = $this->row ;
+ $row = $this->row;
 
  $config = $this->getModel('config');
 
@@ -44,9 +44,9 @@
 		  $defaultpayment = $default->find(' `default`=1 ');
 		  
 		  if($defaultpayment){
-			  $defaultpayment  = $defaultpayment[0];
+			  $defaultpayment = $defaultpayment[0];
 		   }else{
-			   $defaultpayment = new stdClass ;
+			   $defaultpayment = new stdClass;
 			   $defaultpayment->id = "";
 		   }
 		   
@@ -432,13 +432,16 @@
 
 	  }
       if(isset($row->group) && is_array($row->group))
+	  $i = 0 ;
       foreach($row->group as $key=>$group){
-
+        
+		
 	   if($key==0){
 
 	      continue;
 
 	   }
+	   $i++;
 
 	  ?>
 
@@ -448,17 +451,17 @@
 
       <tr>
 
-      <td width="20%" valign="top" align="right"><input class="inputbox" id="groupmember" type="text" name="data[group][1][member]" size="5" maxlength="10" value="<?php echo $group->member;?>" onBlur="if(parseInt(this.value)==1){alert('Group must have members more than 1');this.value='';}" /></td>
+      <td width="20%" valign="top" align="right"><input class="inputbox" id="groupmember" type="text" name="data[group][<?php echo $i; ?>][member]" size="5" maxlength="10" value="<?php echo $group->member;?>" onBlur="if(parseInt(this.value)==1){alert('Group must have members more than 1');this.value='';}" /></td>
 
       <td width="20%">
 
          <?php 
 
-	       echo JHTML::_('select.genericlist', $options,"data[group][1][type]","","value","text",$group->type);
+	       echo JHTML::_('select.genericlist', $options,"data[group][".$i."][type]","","value","text",$group->type);
 
 	     ?>
 
-      <td width="20%" align="left"><input class="inputbox" id="groupamount" type="text" name="data[group][1][amount]" size="20" maxlength="10" value="<?php echo $group->amount;?>" /></td>
+      <td width="20%" align="left"><input class="inputbox" id="groupamount" type="text" name="data[group][<?php echo $i; ?>][amount]" size="20" maxlength="10" value="<?php echo $group->amount;?>" /></td>
 
       <td width="40%" align="left">&nbsp;</td>
 
@@ -514,10 +517,8 @@
 
      </table>
 
-     <script type="text/javascript" >
+     <script type="text/javascript">
 
-	
-      
 	  DTjQuery(function(){
 		  
 		    DTjQuery(".addmorerate").EnableMultiField({linkText:'<?php echo JText::_('DT_ADD_MORE')?>',removeLinkText:'<?php echo JText::_('DT_REMOVE');?>'});
@@ -551,7 +552,6 @@
 		
 		   DTjQuery("#dataeventpartial_payment").trigger('change');
 		   
-		     
 	  });
 	  
 	 </script>

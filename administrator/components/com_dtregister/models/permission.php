@@ -91,6 +91,11 @@ class TablePermission extends DtrTable {
 	  $this->saveAll($data);
 
   }
+  
+  function checkByUserIdAndAco($user_id,$aco){
+	   $user = JFactory::getUser($user_id) ;
+	   $aro = $this->getModel( 'aro' )->table->findaroByUser($user);
+  }
 
 }
 

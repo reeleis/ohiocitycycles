@@ -104,15 +104,15 @@ class TableExport extends DtrTable{
 		$this->general_export_fields = $sgeneral;
 		$this->group_export_fields = $sgroup;
 		$this->loadfirstRow();
-		print_r($sindividual);
 		print_r($sgeneral);
+		print_r($sindividual);
 		print_r($sgroup);
 		if($this->id){
 		   	$this->save_field('general_export_fields' , $this->_db->Quote($sgeneral));
 			echo $this->_db->getErrorMsg();
 			$this->save_field('group_export_fields' , $this->_db->Quote($sgroup));
 			echo $this->_db->getErrorMsg();
-			$this->save_field('individual_export_fields' , $this->_db->Quote($sgroup));
+			$this->save_field('individual_export_fields' , $this->_db->Quote($sindividual));
 			echo $this->_db->getErrorMsg();
 			
 		}else{
@@ -147,10 +147,16 @@ class TableExport extends DtrTable{
 	   }
 	}
 	function mergeCustomFieldHeader(){
-	  $individual_export_fields =  array_combine($this->individual_export_fields,$this->individual_export_fields);
-	  $group_export_fields =  array_combine($this->group_export_fields,$this->group_export_fields);
+	  $group_export_fields = array();
+	  $individual_export_fields =  array();
+	  if (count($this->individual_export_fields) > 0) {
+	  		$individual_export_fields =  array_combine($this->individual_export_fields,$this->individual_export_fields);
+	  }
+	  if (count($this->group_export_fields) > 0) {
+	  		$group_export_fields =  array_combine($this->group_export_fields,$this->group_export_fields);
+	  }
 	  $merge =  array();
-	  
+	
 	   if (count($individual_export_fields) > 0) {
 		   foreach($individual_export_fields as $key=>$id){
 			   
@@ -170,8 +176,9 @@ class TableExport extends DtrTable{
 			   $this->field_settings[$field][]   = 'group';
 		   }
 	   }
-	   
+	
 	   $merge = array_merge($merge,$group_export_fields);
+
 	   $flds = array();
 	   if(count($merge)) {
 		 
@@ -211,16 +218,27 @@ class TableExport extends DtrTable{
 	       $where[] = "  register_date  <= '$dateto' "; 
 		
 		}
+		if(isset($_REQUEST['status']) && count($_REQUEST['status'])){
+			
+			$where[] = " status in(".implode(",",$_REQUEST['status']).") ";
+			
+		}else{
+			
+		   return array();
+		   
+		}
 		
 		$condition =  implode(' and ',$where);
-		  $users = $this->UserModel->table->find($condition,'register_date');
+		$users = $this->UserModel->table->find($condition,'register_date');
 		
 		return $users;
 	}
 	
 	function getgeneralHeader(){
-	 
-	  $generalfields = array_combine($this->general_export_fields,$this->general_export_fields);
+	  $generalfields = '';
+	  if (count($this->general_export_fields) > 0) {
+	  		$generalfields = array_combine($this->general_export_fields,$this->general_export_fields);
+	  }
 	  if (count($generalfields) > 0) {
 		  foreach($generalfields as $field){
 			   $this->field_settings[$field][] = 'general';
@@ -230,6 +248,11 @@ class TableExport extends DtrTable{
 	}
 	function makeheader(){
 	    $header =  array();
+		$header['register_date'] = JText::_('DT_REGISTER_DATE');
+		$header['eventname'] = JText::_('DT_EVENT_NAME');
+		
+		
+		
 		if (count($this->general_export_fields) > 0) {
 			foreach($this->general_export_fields as $field){
 				
@@ -244,7 +267,10 @@ class TableExport extends DtrTable{
 			}
 		}
 		$this->header = $header;
+		pr($this->header);
+		
 		$this->csvoutput .= implode(",",$header)."\n";
+		pr($this->csvoutput);
 			
 	}
 
@@ -351,12 +377,16 @@ class TableExport extends DtrTable{
 				if (count($this->header) > 0) {
 					foreach($this->header as $field => $value){
 						$data[$field] = "";
-						if(in_array('general',$this->field_settings[$field])){
+						if(isset($this->field_settings[$field]) && in_array('general',$this->field_settings[$field])){
 						   $data[$field] = 	$this->getUserColumndata($tUser,$field);
-						}elseif(in_array('individual',$this->field_settings[$field])){
+						}elseif( isset($this->field_settings[$field]) && in_array('individual',$this->field_settings[$field])){
 						   $data[$field] =   $this->getUserColumndata($tUser,$field);
+						}elseif($field == 'register_date'){
+							 $data[$field] = $tUser->register_date;
+						}elseif($field == 'eventname'){
+							$data[$field] = $tUser->TableEvent->title;
 						}else{
-							 $data[$field] = "";
+						   	$data[$field] = "";
 						}
 						
 					}
@@ -380,9 +410,9 @@ class TableExport extends DtrTable{
 				if (count($this->header) > 0) {
 					foreach($this->header as $field => $value){
 						$data[$field] = "";
-						if(in_array('general',$this->field_settings[$field])){
+						if(isset($this->field_settings[$field]) && in_array('general',$this->field_settings[$field])){
 						   $data[$field] = 	$this->getUserColumndata($tUser,$field);
-						}elseif(in_array('group',$this->field_settings[$field])){
+						}elseif(isset($this->field_settings[$field]) && in_array('group',$this->field_settings[$field])){
 						   $data[$field] =   $this->getMemberColumndata($user->TableMember,$field);
 						}else{
 							 $data[$field] = "";
@@ -403,12 +433,13 @@ class TableExport extends DtrTable{
 		$this->makeheader();
 		
 		$users = $this->getUsers($from, $to);
+		
 		$this->addUsersdata($users);
 		
 		$this->output();
 		
 	}
-	function output(){ 
+	function output(){
 		ob_clean();
 	   if (ereg('Opera(/| )([0-9].[0-9]{1,2})', $_SERVER['HTTP_USER_AGENT'])) {
 

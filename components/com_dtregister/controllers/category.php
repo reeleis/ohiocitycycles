@@ -17,18 +17,12 @@ class DtregisterControllerCategory extends DtrController {
 
 	function __construct($config = array()){
 		 
-		 
 		 $config = array('default_task'=>'category','task_map'=>array('new'=>'add'));
 		 parent::__construct($config);
-		 //$this->registerTask( 'new', 'add' );
-		// $this->registerDefaultTask("category");
+
 		 $this->view = & $this->getView( 'category', 'html' );
 
 		 $this->view->setModel($this->getModel('category'),true);
-
-		 
-
-		 
 
 		 JToolBarHelper::title(  JText::_( 'DT_CATEGORY_MANAGEMENT'), 'dtregister' );
 
@@ -71,7 +65,7 @@ class DtregisterControllerCategory extends DtrController {
 
     function publish(){
 	  
-	  global $mainframe , $Itemid;
+	  global $mainframe,$Itemid;
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	  $category = $this->getModel('category')->table;
@@ -93,7 +87,7 @@ class DtregisterControllerCategory extends DtrController {
 	
 	  function unpublish(){
 	  
-	  global $mainframe , $Itemid;
+	  global $mainframe,$Itemid;
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	  $category = $this->getModel('category')->table;
@@ -115,9 +109,9 @@ class DtregisterControllerCategory extends DtrController {
 
 	function orderup(){
 
-	  global  $mainframe ,$Itemid;
+	  global $mainframe,$Itemid;
 
-	  $cid  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
+	  $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	  $this->reorder( intval( $cid[0] ), -1);
 
@@ -127,9 +121,9 @@ class DtregisterControllerCategory extends DtrController {
 
 	function saveorder(){ 
 
-	   global $mainframe , $Itemid;
+	   global $mainframe,$Itemid;
 
-       $cid  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
+       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	   $database = &JFactory::getDBO();
 
@@ -165,7 +159,7 @@ class DtregisterControllerCategory extends DtrController {
 
 	function orderdown(){
 
-	   global  $mainframe , $Itemid;
+	   global $mainframe,$Itemid;
 
 	   $cid  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
@@ -213,7 +207,7 @@ class DtregisterControllerCategory extends DtrController {
 
 	function deletelist(){
 
-	global $mainframe , $Itemid;
+	global $mainframe,$Itemid;
 
     $categories  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
@@ -221,7 +215,7 @@ class DtregisterControllerCategory extends DtrController {
 
 	$warning = false;
 
-	$message =  false;
+	$message = false;
 
 	if (is_array($categories)) 
 	foreach($categories as $category){
@@ -234,11 +228,11 @@ class DtregisterControllerCategory extends DtrController {
 
 		if ($total){
 
-			$warning =  true;
+			$warning = true;
 
 		}else{
 
-		   $message =  true;
+		   $message = true;
 
 		   $sql1='DELETE FROM  #__dtregister_categories WHERE categoryId=' . $database->Quote( $category );
 

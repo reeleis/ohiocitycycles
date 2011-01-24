@@ -1,16 +1,15 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
 * @license Commercial
 */
- 
-defined( 'JPATH_BASE' ) or die( 'Direct Access to this location is not allowed.' );
 
+defined( 'JPATH_BASE' ) or die( 'Direct Access to this location is not allowed.' );
 if (!defined("DT_COM_COMPONENT")){
 
 	define("DT_COM_COMPONENT","com_dtregister");
@@ -21,7 +20,7 @@ if (!defined("DT_COM_COMPONENT")){
 
 if(isset($_REQUEST['cdcaptcha']) && $_REQUEST['cdcaptcha']== 'getScript'){
 		
-		exit ;
+		exit;
 }
 include_once(JPATH_COMPONENT_ADMINISTRATOR.DS.'lib'.DS.'defines.php');
 
@@ -52,17 +51,6 @@ $task = JRequest::getVar( 'task' );
 $cart = JRequest::getVar('cart','');
 $controllerObj	= new $classname();
 
-/*
-$path = JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'controllers'.DS.'email'.'.php';
-
-require_once $path;
-
-$emailc	= new DtregisterControllerEmail(array());
-
-$emailc->registrationuser(1);
-
-*/
-
 // Perform the Request task
 
 $controllerObj->execute( JRequest::getVar( 'task' ) );
@@ -74,5 +62,4 @@ $controllerObj->redirect();
 if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
 	  pr($_SESSION);
 }
-
 ?>

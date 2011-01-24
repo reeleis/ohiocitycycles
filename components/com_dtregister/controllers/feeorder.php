@@ -36,7 +36,7 @@ class DtregisterControllerFeeorder extends DtrController {
 	   	die;
     }
 	function view(){
-		 $feeorderTable = $this->getModel('feeorder')->table ;
+		 $feeorderTable = $this->getModel('feeorder')->table;
 		 $feeorders = $feeorderTable->find('  eventId = '.JRequest::getVar('eventId',0),'ordering');
 		 
 		 if (is_array($feeorders)) 

@@ -99,22 +99,25 @@ class TableMember extends DtrTable {
 
 		     $member['created'] = $now->toMySQL(true);
 
+	   }elseif(isset($member['addnew'])){
+	      unset($member['groupMemberId']);
+		  unset($member['addnew']);
 	   }
-
+       
 	   parent::save($member);
 
 	   $this->TableMemberfield->member_id = $this->groupMemberId;
 
 	   $this->TableMemberfield->removeBymember($this->groupMemberId);
 
-	   $this->TableMemberfield->saveAll(array_filter($member['fields']));
-
+	   $this->TableMemberfield->saveAll($member['fields']);
+     
    }
 
    function findByUserId($user_id=0){
 
 	  $members = $this->find(" groupUserId = $user_id  ");
-
+      
 	  $membersdata = array();
 
 	  $temp =  array();
@@ -131,6 +134,7 @@ class TableMember extends DtrTable {
 
 			  $this->Tablefield->load($field_id);
 
+			  if (isset($this->Tablefield->name)) 
 			  $member->{$this->Tablefield->name} = $value;	    
 
 		  }
@@ -181,7 +185,7 @@ class TableMember extends DtrTable {
 	}
 
   function removeByuser($id){
-
+       
 	   $members = $this->findByUserId($id);
 	   
 	   if (is_array($members)) 
@@ -194,6 +198,7 @@ class TableMember extends DtrTable {
 	   $this->db->setQuery($query);
 
 	   $this->db->query();
+	   
 
   }
   function removeByUserId($id){

@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $show_group_members , $cb_integrated , $registrant_name ,$registrant_show_avatar , $button_color ,$registrant_cb_linked , $xhtml ,$cb_integrated ,$registrant_username ,$showlocation ,$googlekey ,$amp,$xhtml_url , $front_link_type,$registrant_message;
+global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$showlocation,$googlekey,$amp,$xhtml_url, $front_link_type,$registrant_message;
 
 $config = $this->getModel('config');
 $mfield = $this->getModel('field');
@@ -44,11 +44,9 @@ $Tevent->load(JRequest::getVar('eventId'));
 $this->assign('header_eventId',$Tevent->slabId);
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 
-echo "<p>".stripslashes($registrant_message)."</p>" ;
+echo "<p>".stripslashes($registrant_message)."</p>";
 if($showlocation){
-   
-   
-   
+
    if($Tevent->location_id){
        
 	   $locationTable->load($Tevent->location_id);
@@ -73,51 +71,28 @@ $document	=& JFactory::getDocument();
 
  if($config->getGlobal('googlekey','')!==""){
 
-  
-
    $document->addScript( "http://maps.google.com/maps?file=api".$amp."v=2.x".$amp."key=".$googlekey);
-
-
 
  }
 
 ?>
- <script type="text/javascript" >
-
-
+ <script type="text/javascript">
 
     //<![CDATA[
 
-
-
-	
 	DTjQuery(function(){ 
-
-
 
 	  window.status='test';
 
-
-
 	  DTjQuery(".colorbox").colorbox({width:550, height:550,iframe:true});
-
-
 
 	  DTjQuery().bind('cbox_complete', function(){
 
-
-
 		 // initialize();
-
-
 
         //setTimeout($.fn.colorbox.next, 1500);
 
-
-
        });
-
-
 
 	})
 
@@ -158,8 +133,7 @@ $document	=& JFactory::getDocument();
           <input type="text" name="search" value="<?php echo JRequest::getVar( 'search' ,'' ); ?>" />&nbsp;&nbsp;
 
           <input type="submit" name="search_submit" value="<?php echo  JText::_( 'DT_SEARCH'); ?>" />
-
-          
+ 
         </td>
 
     </tr>
@@ -167,7 +141,7 @@ $document	=& JFactory::getDocument();
     </table>
 
     <br />
-<table cellpadding="4" cellspacing="1" border="0" width="100%" class="adminform adminlist">
+<table cellpadding="4" cellspacing="1" border="1" width="100%" class="adminform adminlist">
 
   <tr>
 
@@ -247,10 +221,9 @@ $document	=& JFactory::getDocument();
 
    foreach($this->users as $user){
 
-	  
      $tuser->load($user->userId);
 	 
-	  $rowhtml .="<tr class='eventListRow".($k+1) ." user".$user->id."'>";
+	  $rowhtml .="<tr class='eventListRow".($k+1) ." user".$user->id."' >";
 
 	  if( $show_group_members == 1 ){
 
@@ -258,7 +231,7 @@ $document	=& JFactory::getDocument();
 
 		       $class_show_member = " userpar ";
 
-				$rowhtml .= '<td class="'.$class_show_member.'"><img src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/expand.png" border="0" alt= " "/></td>';
+				$rowhtml .= '<td align="center" class="'.$class_show_member.'" id="'.$user->userId.'"><img src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/expand.png" border="0" alt= " "/></td>';
 
 		  }else{
 
@@ -283,16 +256,20 @@ $document	=& JFactory::getDocument();
 
 			  $rowhtml .= $html;
 
-		   }else{
+		   }else{ 
 			  $fieldClass = 'Field_'.$fieldtypes[$field->type];
 			  
 			  $fieldTable = new $fieldClass();
 			  $fieldTable->load($field->id);
-
-			  $rowhtml .='<td>'.$fieldTable->viewHtml((array)$tuser).'</td>';
+			  $function = 'viewHtml';
+			  if(is_callable(array($fieldTable,'exportView'))){
+				  $function = 'exportView' ;
+			  }
+              
+			  $rowhtml .='<td>'.$fieldTable->$function((array)$tuser).'</td>';
 
 		   }
-
+		
 	   }
 
 	  $rowhtml .= '</tr>';
@@ -308,13 +285,10 @@ $document	=& JFactory::getDocument();
    echo $rowhtml;
 
   ?>
-<tr>
-  <td>
-  <?php echo $this->pageNav->getListFooter() ;?>
-  </td>
-</tr>
 
 </table>
+
+  <?php echo $this->pageNav->getListFooter() ;?>
 
 <input type="hidden" name="option" value="<?php echo DTR_COM_COMPONENT;?>" />
 
@@ -380,34 +354,28 @@ function submitform(pressbutton){
 	DTjQuery(function(){
 
 	  	DTjQuery('.detail').hide();
+		
+		DTjQuery(".userpar").toggle(
 
-		DTjQuery('.userpar').click(function(){
+	   function(){
 
+			var parent = DTjQuery(this).attr('id'); 
+
+			DTjQuery('tr[id="'+parent+'"]').css('display','table-row');
 			var path = new String(DTjQuery(this).children(':first').attr('src')) ; 
+			DTjQuery(this).children(':first').attr('src',path.replace("expand","close"));	 
 
-			if(path.match("expand") != null){
+	   },
 
-				DTjQuery(this).children(':first').attr('src',path.replace("expand","close"));
+		function(){
 
-			}else{
+		    var parent = DTjQuery(this).attr('id');
 
-				DTjQuery(this).children(':first').attr('src',path.replace("close","expand"));
+			DTjQuery('tr[id="'+parent+'"]').css('display','none')
+            var path = new String(DTjQuery(this).children(':first').attr('src')) ;
+			DTjQuery(this).children(':first').attr('src',path.replace("close","expand"));
 
-			}
-
-			cssdisplay = DTjQuery(this).parent().next().css('display');
-
-			if(cssdisplay == null || (typeof(cssdisplay)!= undefined) && (cssdisplay.match("table-row") !=null || cssdisplay.match("block") !=null)){
-
-			   DTjQuery(this).parent().next().css('display','none');
-
-			}else{
-
-			   DTjQuery(this).parent().next().css('display','table-row');
-
-			}
-
-		})
+		});
 
 	})
 

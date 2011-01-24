@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -56,7 +56,7 @@ class DtregisterControllerEvent extends DtrController {
 	
 	function register(){
 	   
-	   global $mainframe ,$xhtml ,$Itemid ,$now;
+	   global $mainframe,$xhtml,$Itemid,$now;
 	   
 	   if(false === DT_Session::get('register.Setting.cart')){
 	       DT_Session::clearAll('');
@@ -107,14 +107,16 @@ class DtregisterControllerEvent extends DtrController {
 	   DT_Session::set('register.Setting.current.userIndex',$userIndex) ;
 	   DT_Session::set('register.User.'.$userIndex.'.eventId',$eventId) ;
 	   $registered =  $tEvent->getTotalregistered($tEvent->slabId);
-		
+
+	   if (isset($tEvent->max_registrations) && $tEvent->max_registrations > 0) {
 		if($tEvent->max_registrations <= $registered){
 		   	if($tEvent->waiting_list){
 			     DT_Session::set('register.User.'.$userIndex.'.status',-2) ;
 			}
-			
+		}
 	    }
-	  
+
+
 	   if($tEvent->registration_type=="individual"){
 		     if(isset($_REQUEST['back'])){
 			    $mainframe->redirect('index.php?option=com_dtregister&Itemid='.$Itemid);
@@ -133,7 +135,7 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	
 	function confirm(){
-	   global $Itemid , $mainframe , $xhtml_url;
+	   global $Itemid,$mainframe,$xhtml_url;
 	   $this->view->setModel($this->getModel( 'field' ));
 	   $this->view->setModel($this->getModel( 'fieldtype' ));
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
@@ -155,8 +157,9 @@ class DtregisterControllerEvent extends DtrController {
 		   $tableUser = $this->getModel('user')->table;
 		   DT_Session::set('register.User.'.$userIndex.'.confirmNum',$tableUser->generateconfirmNum());
 		   $status = DT_Session::get('register.User.'.$userIndex.'.status');
+			
+			
 		   if($paying_amount <= 0 || $status == -2){ // free or waiting
-			  
 			   if($status == -2){
 				   DT_Session::set('register.User.'.$userIndex.'.fee.paid_amount',0);
 		           DT_Session::set('register.User.'.$userIndex.'.fee.paying_amount',0);
@@ -164,8 +167,11 @@ class DtregisterControllerEvent extends DtrController {
 			   }else{
 				   $task = "freethanks";
 			   }
+			   
 			   $tableUser->register(DT_Session::get('register.User.'.$userIndex));
 			   DT_Session::set('register.User.'.$userIndex.'.userId',$tableUser->userId);
+			   		   
+			    
 			   $mainframe->redirect("index.php?option=com_dtregister&controller=message&task=$task&Itemid=".$Itemid);
 		   }else{
 			   $mainframe->redirect("index.php?option=com_dtregister&controller=event&task=viewCart&Itemid=".$Itemid);
@@ -203,7 +209,7 @@ class DtregisterControllerEvent extends DtrController {
 	   $fieldtype =$this->getModel( 'fieldtype' );
 	   $viewMemFields = "";
 	   if(DT_Session::get('register.User.'.$userIndex.'.type')=='G'){
-	      $back = JRoute::_("index.php?option=com_dtregister&Itemid=".$Itemid."&eventId=".$eventId."&controller=event&task=billinginfo&back=1");
+	      $back = JRoute::_("index.php?option=com_dtregister&Itemid=".$Itemid."&eventId=".$eventId."&controller=event&task=billinginfo&back=1", $xhtml_url);
 		  $type = 'B';
 		   $members = DT_Session::get('register.User.'.$userIndex.'.members');
 		   if($members)
@@ -212,7 +218,7 @@ class DtregisterControllerEvent extends DtrController {
 		      $viewMemFields .= $event->viewFields('M',DT_Session::get('register.User.'.$userIndex.'.members.'.$key),false,'frmcart',false);
 		   }
 	   }else{
-	      $back = JRoute::_("index.php?option=com_dtregister&Itemid=".$Itemid."&eventId=".$eventId."&controller=event&task=individualRegister&back=1");
+	      $back = JRoute::_("index.php?option=com_dtregister&Itemid=".$Itemid."&eventId=".$eventId."&controller=event&task=individualRegister&back=1", $xhtml_url);
 		  $type = 'I';
 	   }
 	   
@@ -220,7 +226,7 @@ class DtregisterControllerEvent extends DtrController {
 	   $TableUser->create(DT_Session::get('register.User.'.$userIndex));
 	   $feeObj = new DT_Fee($event,$TableUser);
 	   $feeObj->getFee($my->id);
-	   $feesession = $feeObj ;
+	   $feesession = $feeObj;
 	   unset($feesession->TableEvent);
 	   unset($feesession->TableUser);
 	   
@@ -262,7 +268,7 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	
 	function groupNum(){
-	   global $mainframe, $Itemid ;
+	   global $mainframe,$Itemid;
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
 	   $eventId = JRequest::getVar('eventId',DT_Session::get('register.Event.eventId'));
 	   $tEvent = $this->getModel('event')->table;
@@ -294,7 +300,7 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	
 	function memberdata(){
-	   global $mainframe , $Itemid;
+	   global $mainframe,$Itemid;
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
 	   $this->view->setModel($this->getModel( 'field' ));
 	   $this->view->setModel($this->getModel( 'fieldtype' ));
@@ -311,7 +317,7 @@ class DtregisterControllerEvent extends DtrController {
 		   if(!(($memberIndex+1) < DT_Session::get('register.User.'.$userIndex.'.memtot'))){
 		      $mainframe->redirect('index.php?option=com_dtregister&controller=event&task=billinginfo&Itemid='.$Itemid);
 		   }
-		   $memberIndex++ ;
+		   $memberIndex++;
 		   DT_Session::set('register.Setting.current.memberIndex',$memberIndex);
 	      
 	   }else{
@@ -325,7 +331,7 @@ class DtregisterControllerEvent extends DtrController {
 	   }
 	   if(JRequest::getVar('back',0)){
 	        $dec_memberIndex = $memberIndex - 1;
-	      //  DT_Session::set('register.Setting.current.memberIndex',$dec_memberIndex);
+
 	   }
 	   $this->view->assign('back',$back);
 	  
@@ -339,7 +345,7 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	
 	function billinginfo(){
-	   global $Itemid ;
+	   global $Itemid;
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
 	   $eventId = JRequest::getVar('eventId',DT_Session::get('register.User.'.$userIndex.'.eventId'));
 	   $fieldtype =$this->getModel( 'fieldtype' );
@@ -411,7 +417,7 @@ class DtregisterControllerEvent extends DtrController {
 				 if($currentval === false){
 				    DT_Session::set('register.User.'.$userIndex.'.fields.'.$field_id,$userdata[$field_id]);
 				 }
-	           
+	    
 		   }
 	   }
 	   
@@ -433,7 +439,6 @@ class DtregisterControllerEvent extends DtrController {
 	   
 	   $event->is_registerable($tUser);
 	   $this->loadprofile();
-	   
 	   $this->view->assign( 'form' ,$event->form('I',(array)DT_Session::get('register.User.'.$userIndex),false,'frmcart',false));
 	   $this->view->setLayout('individualRegister');
 	  
@@ -451,7 +456,7 @@ class DtregisterControllerEvent extends DtrController {
 	   
 	}
 function price_header(){
-	$layout = JRequest::getVar('tmpl','price_header');
+	$layout = JRequest::getVar('dttmpl','price_header');
 	   if(isset($_REQUEST['Field'])){
 		   $userIndex = DT_Session::get('register.Setting.current.userIndex');
 		   if(isset($_REQUEST['memberIndex'])){
@@ -498,10 +503,10 @@ function price_header(){
 	    $listLimit = $mainframe->getCfg( 'list_limit', 10 );
         $limit=JRequest::getInt('limit',$listLimit);
 
-	    $limitstart  = JRequest::getVar('limitstart', 0, '', 'int');
+	    $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
 		
 		$searchtxt = JRequest::getVar( 'search' ,'' );
-		$users = $mUser->getUsers(array('eventId'=>JRequest::getVar('eventId'),'query'=>$searchtxt),$order,$dir,$limitstart,$limit);
+		$users = $mUser->getUsers(array('eventId'=>JRequest::getVar('eventId'),'query'=>$searchtxt,'status'=>array(0,1)),$order,$dir,$limitstart,$limit);
 		$total = $mUser->table->getLastCount();
 		
 		$pageNav = new JPagination( $total, $limitstart, $limit );

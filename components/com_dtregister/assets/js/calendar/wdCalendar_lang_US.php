@@ -78,7 +78,33 @@ var i18n = DTjQuery.extend({}, i18n || {}, {
 
             "nov": "<?php echo JText::_('DT_NOV')?>",
 
-            "dec": "<?php echo JText::_('DT_DEC')?>"
+            "dec": "<?php echo JText::_('DT_DEC')?>",
+            
+            "janfull": "<?php echo JText::_('DT_JAN_FULL')?>",
+
+            "febfull": "<?php echo JText::_('DT_FEB_FULL')?>",
+
+            "marfull": "<?php echo JText::_('DT_MAR_FULL')?>",
+
+            "aprfull": "<?php echo JText::_('DT_APR_FULL')?>",
+
+            "mayfull": "<?php echo JText::_('DT_MAY_FULL')?>",
+
+            "junfull": "<?php echo JText::_('DT_JUN_FULL')?>",
+
+            "julfull": "<?php echo JText::_('DT_JUL_FULL')?>",
+
+            "augfull": "<?php echo JText::_('DT_AUG_FULL')?>",
+
+            "sepfull": "<?php echo JText::_('DT_SEP_FULL')?>",
+
+            "octfull": "<?php echo JText::_('DT_OCT_FULL')?>",
+
+            "novfull": "<?php echo JText::_('DT_NOV_FULL')?>",
+
+            "decfull": "<?php echo JText::_('DT_DEC_FULL')?>"
+            
+            
 
         },
 

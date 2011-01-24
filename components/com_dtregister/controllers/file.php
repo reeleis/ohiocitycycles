@@ -1,4 +1,14 @@
 <?php
+
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DtregisterControllerFile extends DtrController {
    
    var $name = "file";
@@ -8,8 +18,7 @@ class DtregisterControllerFile extends DtrController {
 		 parent::__construct($config);
 		 $this->view = & $this->getView( 'file', 'html' );
 		 $this->view->setModel($this->getModel('file'));
-		  
-		 
+
 	}
 	
 	function upload(){
@@ -19,7 +28,7 @@ class DtregisterControllerFile extends DtrController {
 	   $name = JRequest::getVar('name', '');
 	   $types = explode(",",JRequest::getVar('filetypes'.$name, ''));
 	   $file = $_FILES["file_".$name];
-	   $size =  JRequest::getVar('filesize'.$name, '');
+	   $size = JRequest::getVar('filesize'.$name, '');
 	   $newtype = array();
 	   
 	   if (is_array($types)) 
@@ -40,7 +49,11 @@ class DtregisterControllerFile extends DtrController {
 	   }
 	    if(in_array($ext,$types) || count($types) <1){
 		   if(($file['size']/1000) <= $size){
-			  $dt_file->upload($file,'uploads');
+			  $folder = 'uploads';
+               if(isset($_REQUEST['eventpic'])){
+				    $folder = "eventpics";
+			   }
+			  $dt_file->upload($file,$folder);
 			  $value=$dt_file->path;
 			  ?>var data = {Error:'',path:'<?php echo JFile::getName($dt_file->path) ?>',message:'<?php echo JText::_( 'DT_FILE_UPLOADED' ) ?>'}	  <?php
 			}else{// file error
@@ -53,21 +66,19 @@ class DtregisterControllerFile extends DtrController {
      
 		echo "</textarea>";
  		exit;
-
 	  
 	}
 	
 	function thumb(){
-	   global $registrant_avatar_width , $registrant_avatar_height ; 
+	   global $registrant_avatar_width , $registrant_avatar_height; 
 	   ob_clean();
 
 	include(JPATH_SITE."/components/com_dtregister/lib/thumbnail.inc.php");
- $registrant_avatar_width = JRequest::getVar('w', $registrant_avatar_width ) ;
+ $registrant_avatar_width = JRequest::getVar('w', $registrant_avatar_width );
 
-	 $registrant_avatar_height = JRequest::getVar('h', $registrant_avatar_height ) ;
+	 $registrant_avatar_height = JRequest::getVar('h', $registrant_avatar_height );
 
 	$thumb = new Thumbnail($_GET['filename']);
-
     
     $thumb->resize($registrant_avatar_width,$registrant_avatar_height);
 

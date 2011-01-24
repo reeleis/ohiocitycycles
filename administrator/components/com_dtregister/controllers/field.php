@@ -43,7 +43,7 @@ class DtregisterControllerField extends DtrController {
 
 	  $field->load(JRequest::getVar('field_id',0));
 	  
-	  $childs = $field->getchild();
+	  $childs = $field->getchild($published=1);
 
 	  $selectionindex = JRequest::getVar('selection','');
 
@@ -131,7 +131,7 @@ class DtregisterControllerField extends DtrController {
 
 			//}
 
-			 $file = $basepath."field_".$fieldTypes[$field->type].".php";
+			 $file = $basepath."field_".$fieldTypes[$child->type].".php";
 
 			  
 
@@ -201,7 +201,21 @@ class DtregisterControllerField extends DtrController {
 		 
 
 	  }
+  $temp = $remove_elements ;
+  
+     foreach($remove_elements as $remove_element){
+	  $rChilds = array();
+	  
+	  $field->findtree($remove_element,$rChilds);
+	  
+	  foreach($rChilds as $rchild){
+		  if(!in_array($rchild->id,array_keys($elements)))
+		  $temp[$rchild->id] = $rchild->id;
+	  }
+	
+ }
 
+ $remove_elements = $temp ;
  ob_start();
 
 	 ?>
@@ -653,7 +667,6 @@ class DtregisterControllerField extends DtrController {
 	global $mainframe;
 
 
-
 	$database = &JFactory::getDBO();
 
 
@@ -707,10 +720,12 @@ class DtregisterControllerField extends DtrController {
     $_POST['label'] = html_entity_decode($_POST['label']);
 
 	
-
-	$_POST['listing'] = implode("|",$_POST['listing']);
-
-	
+	if (isset($_POST['listing'])) {
+		$_POST['listing'] = implode("|",$_POST['listing']);
+	} else {
+		$_POST['listing'] = "";
+	}
+		
 
 	if (!$row->bind( $_POST )) {
 

@@ -56,10 +56,51 @@ class DtregisterModelMigration extends DtrModel {
 		
 	}
 	
+	function get_jevent_offset(){
+		
+		$table =& JTable::getInstance('component');
+		$table->loadByOption("com_jevents" );
+		$temp = strtotime('now');
+		$system_offset =  (strtotime(strftime('%Y%m%dT%H%M%S',$temp))-strtotime(strftime('%Y%m%dT%H%M%SZ',$temp)));
+		
+		$path = JPATH_ADMINISTRATOR.DS.'components'.DS.'com_jevents'.DS.'config.xml';
+		
+		if (file_exists( $path )) {
+		    $instance = new JParameter( $table->params, $path );
+		} else {
+		    $instance = new JParameter( $table->params );
+		}
+		
+		$jeventTimeZone = $instance->get("icaltimezonelive","");
+		if($jeventTimeZone != ""){
+		
+			if (is_callable("date_default_timezone_set")){
+				$timezone= date_default_timezone_get();
+				date_default_timezone_set($jeventTimeZone);
+				$jevent_offset =  (strtotime(strftime('%Y%m%dT%H%M%S',$temp))-strtotime(strftime('%Y%m%dT%H%M%SZ',$temp)));
+				date_default_timezone_set($timezone);
+				return ($system_offset - $jevent_offset);
+		
+	
+			}
+        }
+        
+		return 0 ;
+			
+	}
+	
 	function dtevents(){
 		$database = &JFactory::getDBO();
 		$this->get_events_error();
 		$this->new_slabId = array();
+		$offset = $this->get_jevent_offset();
+		if($offset === 0){
+			$offset = 0 ;
+		}elseif($offset < 0){
+			$offset = " - ".abs($offset);
+		}elseif($offset > 0){
+			$offset = " + ".abs($offset);
+		}
 		foreach($this->events_error as $eventId){
 			 // insert event
 			 $query = "insert into `#__dtregister_group_event` select * from `#__dtregister_rollback_group_event` where eventId = '$eventId' limit 0,1";
@@ -96,8 +137,8 @@ class DtregisterModelMigration extends DtrModel {
 			 
 			 
 			$query = "update #__dtregister_group_event e inner join #__jevents_vevdetail j on e.eventId=j.evdet_id set e.title = 
-			j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart,'%Y-%m-%d') , e.dtstarttime = FROM_UNIXTIME(j.dtstart,'%h:%i:%s') , 
-			e.dtend =  FROM_UNIXTIME(j.dtend,'%Y-%m-%d') , e.dtendtime = FROM_UNIXTIME(j.dtend,'%h:%i:%s') where slabId = '$slabId'";
+			j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart ".$offset.",'%Y-%m-%d') , e.dtstarttime = FROM_UNIXTIME(j.dtstart ".$offset.",'%H:%i:%s') , 
+			e.dtend =  FROM_UNIXTIME(j.dtend ".$offset.",'%Y-%m-%d') , e.dtendtime = FROM_UNIXTIME(j.dtend ".$offset.",'%H:%i:%s') where slabId = '$slabId'";
 			
 			$this->TableEvent->rawquery($query);
 			
@@ -108,6 +149,18 @@ class DtregisterModelMigration extends DtrModel {
 			$this->TableEvent->TableEventfeeorder->eventId = $slabId; 
             $this->TableEvent->TableEventfeeorder->savebasictypes();
 		}
+		
+		$query = "update #__dtregister_group_event e inner join  #__dtregister_rollback_group_event re on re.slabId = e.slabId inner join #__jevents_vevdetail j on re.eventId=j.evdet_id set e.title = 
+			j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart ".$offset.",'%Y-%m-%d') , e.dtstarttime = FROM_UNIXTIME(j.dtstart ".$offset.",'%H:%i:%s') , 
+			e.dtend =  FROM_UNIXTIME(j.dtend ".$offset.",'%Y-%m-%d') , e.dtendtime = FROM_UNIXTIME(j.dtend ".$offset.",'%H:%i:%s') ";
+			
+			$this->TableEvent->rawquery($query);
+			
+			
+			$query = "update #__dtregister_user u inner join  #__dtregister_rollback_user ru on ru.userId = u.userId inner join #__dtregister_rollback_group_event re  on re.eventId = ru.eventId set u.eventId = re.slabId
+		 ";
+			
+			$this->TableEvent->rawquery($query);
 		
 			
 	}

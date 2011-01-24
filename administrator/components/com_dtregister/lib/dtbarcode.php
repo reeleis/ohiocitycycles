@@ -1,9 +1,19 @@
 <?php
+
+/**
+* @version 2.7.0
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DTbarcode{
 	
    function DTbarcode($text="Testing",$filename=""){
-	    global $barcode_type , $barcode_image_type , $barcodeDpi , $barcodeThick , $barcode_resolution , $barcode_font_size,$barcode_checksum ,$barcode_rotation ,$barCodeImagetypeToExt;
-		$barcode_checksum = 0 ;
+	    global $barcode_type, $barcode_image_type, $barcodeDpi, $barcodeThick, $barcode_resolution, $barcode_font_size,$barcode_checksum,$barcode_rotation,$barCodeImagetypeToExt;
+		$barcode_checksum = 0;
 		$this->barcodeModel =  DtrModel::getInstance('barcode','DtregisterModel');
 		$barCodeImagetypeToExt = $this->barcodeModel->barCodeImagetypeToExt ;
 		$class_dir = JPATH_SITE.'/components/com_dtregister/lib/barcode/class';
@@ -44,9 +54,8 @@ class DTbarcode{
    
    function preview(){
 	   global $barcode_image_type;
-	   	
-		
-	    $barCodeImagetype = $this->barcodeModel->barCodeImagetype ;
+
+	    $barCodeImagetype = $this->barcodeModel->barCodeImagetype;
 		
 	   if($barcode_image_type == 'png') { 
 			//header('Content-Type: image/png');
@@ -56,7 +65,6 @@ class DTbarcode{
 			//header('Content-Type: image/gif');
 		}
         $temp =  array_flip(array_keys($barCodeImagetype));
-		
 		
         $this->drawing->finish($temp[$barcode_image_type]);
 		

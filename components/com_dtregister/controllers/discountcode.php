@@ -34,9 +34,9 @@ class DtregisterControllerDiscountcode extends DtrController {
 	}
 	
 	function status($publish){
-	   global $mainframe ,$Itemid;
+	   global $mainframe,$Itemid;
 
-	$dt_code =   $this->getModel('discountcode')->table; 
+	$dt_code = $this->getModel('discountcode')->table; 
 	$dt_code->load($_REQUEST['cid'][0]);
 	
 	$dt_code->publish = $publish;
@@ -75,7 +75,7 @@ class DtregisterControllerDiscountcode extends DtrController {
 	
 	function delete(){
 	     $dt_code = $this->getModel('discountcode')->table;
-		 global $mainframe ,$Itemid;
+		 global $mainframe,$Itemid;
 
 		if (is_array($_REQUEST['cid'])) 
 		foreach($_REQUEST['cid'] as $value){
@@ -99,7 +99,7 @@ class DtregisterControllerDiscountcode extends DtrController {
 	
 	function save(){
 	   ob_clean();
-	   global $mainframe , $Itemid; 
+	   global $mainframe,$Itemid; 
 	   $discount_code = $this->getModel('discountcode')->table;
        if($_REQUEST['name']!=''){
 
@@ -217,7 +217,7 @@ class DtregisterControllerDiscountcode extends DtrController {
 
     	<?php
 
-			exit ;
+			exit;
 
 		}
 

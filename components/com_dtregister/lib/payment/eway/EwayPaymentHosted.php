@@ -1,32 +1,19 @@
 <?php
 
-
-
 /**
-
-* @version 2.6.5
-
+* @version 2.7.0
 * @package Joomla 1.5
-
 * @subpackage DT Register
-
 * @copyright Copyright (C) 2006 DTH Development
-
 * @copyright contact dthdev@dthdevelopment.com
-
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
-
 */
-
-
 
 define('EWAY_DEFAULT_CUSTOMER_ID','87654321');
 
 define('EWAY_DEFAULT_PAYMENT_METHOD', 'REAL_TIME'); // possible values are: REAL_TIME, REAL_TIME_CVN, GEO_IP_ANTI_FRAUD
 
 define('EWAY_DEFAULT_LIVE_GATEWAY', false); //<false> sets to testing mode, <true> to live mode
-
-
 
 	//define URLs for payment gateway
 
@@ -50,8 +37,6 @@ define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN', 'https://www.eway.com.au/gateway_cvn
 
 define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE', 'https://www.eway.com.au/gateway_cvn/payment.asp');
 
-
-
 	//define script constants
 
 	define('REAL_TIME', 'REAL-TIME');
@@ -59,8 +44,6 @@ define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE', 'https://www.eway.com.a
 	define('REAL_TIME_CVN', 'REAL-TIME-CVN');
 
 	define('GEO_IP_ANTI_FRAUD', 'GEO-IP-ANTI-FRAUD');
-
-
 
 class EwayPaymentHosted {
 
@@ -70,15 +53,11 @@ class EwayPaymentHosted {
 
     var $myTransactionData = array();
 
-	
-
-	var $bywebservice =  false ;
-
-    
+	var $bywebservice = false;
 
 	//Class Constructor
 
-	function EwayPaymentHosted($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD ,$liveGateway  = EWAY_DEFAULT_LIVE_GATEWAY) {
+	function EwayPaymentHosted($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD ,$liveGateway = EWAY_DEFAULT_LIVE_GATEWAY) {
 
 	    $this->myCustomerID = $customerID;
        
@@ -110,10 +89,7 @@ class EwayPaymentHosted {
 
     	}
 		
-
 	}
-
-	
 
 	//Payment Function
 
@@ -143,35 +119,21 @@ class EwayPaymentHosted {
 
 <script type="text/javascript">
 
- 
-
   function redirect(){
 
-
-
 				document.ewaySubmitForm.submit();
-
-
 
 			}
 
    setTimeout("redirect()",5000);	
 
-
-
  </script>
 
-
-
 <?php
-
-
 
 return ob_get_clean();
 
 	}
-
-	
 
 	//Set Transaction Data
 
@@ -188,8 +150,6 @@ return ob_get_clean();
 		$this->myTransactionData["eway" . $field] = htmlentities(trim($value));
 
 	}
-
-	
 
 }
 

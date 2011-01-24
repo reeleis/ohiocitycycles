@@ -1,24 +1,15 @@
 <?php
 
-
-
 /**
-
-* @version 2.6.1
-
+* @version 2.7.2
 * @package Joomla 1.5
-
 * @subpackage DT Register
-
 * @copyright Copyright (C) 2006 DTH Development
-
 * @copyright contact dthdev@dthdevelopment.com
-
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
-
 */
 
-global $idealLiteHashKey , $idealLiteMerchantId ;
+global $idealLiteHashKey, $idealLiteMerchantId;
 
 	define('IDEAL_AQUIRER', 'Rabobank'); // Use Rabobank, ING Bank or Simulator
 
@@ -28,7 +19,7 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 	define('IDEAL_SUB_ID', '0');
 
-	define('IDEAL_TEST_MODE', true);
+	
 
 	define('IDEAL_URL_CANCEL', '');
 
@@ -40,8 +31,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 	class idealRabo extends Payment{
 
-	
-
 		// Default settings
 
 		public $sCurrency = 'EUR'; // Ideal only support payments in EURO.
@@ -49,10 +38,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 		protected $sLanguageCode = 'nl'; // NL
 
 		protected $sPaymentType = 'ideal';
-
-
-
-
 
 		// Account settings
 
@@ -62,15 +47,9 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		protected $sHashKey = '';
 
-
-
 		protected $sAquirerName = '';
 
 		protected $sAquirerUrl = '';
-
-
-
-
 
 		// Order settings
 
@@ -86,10 +65,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		protected $sUrlSuccess = '';
 
-
-
-
-
 		// Form settings
 
 		protected $sButtonLabel = 'Betalen met iDEAL';
@@ -100,9 +75,7 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		protected $iButtonImageHeight = 0;
 
-		var $bywebservice =  false ;
-
-
+		var $bywebservice = false;
 
 		public function __construct()
 
@@ -126,16 +99,14 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			}
 
-
-
 			if(defined('IDEAL_AQUIRER'))
 
 			{
 
-				if(defined('IDEAL_TEST_MODE'))
+				if($this->paymentmode == 'test')
 
 				{
-
+                    
 					$this->setAquirer(IDEAL_AQUIRER, IDEAL_TEST_MODE);
 
 				}
@@ -149,8 +120,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 				}
 
 			}
-
-
 
 			if(defined('IDEAL_MERCHANT_ID'))
 
@@ -174,8 +143,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			}
 
-
-
 			if(defined('IDEAL_URL_CANCEL'))
 
 			{
@@ -184,8 +151,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			}
 
-
-
 			if(defined('IDEAL_URL_ERROR'))
 
 			{
@@ -193,8 +158,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 				$this->setUrlError(IDEAL_URL_ERROR);
 
 			}
-
-
 
 			if(defined('IDEAL_URL_SUCCESS'))
 
@@ -206,8 +169,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Set amount in EURO, use a float or integer 
 
 		public function setAmount($fOrderAmount)
@@ -218,8 +179,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Your secret hash key to secure form data (should match your Ideal Dashboard)
 
 		public function setHashKey($sHashKey)
@@ -229,8 +188,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 			$this->sHashKey = $sHashKey;
 
 		}
-
-
 
 		// Your merchantID and subID
 
@@ -244,8 +201,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Upto 32 characters
 
 		public function setOrderDescription($sOrderDescription)
@@ -255,7 +210,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 			$this->sOrderDescription = substr($sOrderDescription, 0, 32);
 
 		}
-
 
 
 		// Upto 16 characters, should be a unique reference to your order
@@ -268,8 +222,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Set aquirer (Use: Rabobank, ING Bank or ABN Amro)
 
 		public function setAquirer($sAquirerName, $bTestMode = false)
@@ -277,8 +229,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 		{
 
 			$this->sAquirerName = $sAquirerName;
-
-
 
 			if(stripos($sAquirerName, 'rabo') !== false) // Rabobank
 
@@ -316,8 +266,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Set URL for TRANSACTION_CANCEL
 
 		public function setUrlCancel($sUrl)
@@ -327,8 +275,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 			$this->sUrlCancel = $sUrl;
 
 		}
-
-
 
 		// Set URL for TRANSACTION_ERROR
 
@@ -340,8 +286,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 		}
 
-
-
 		// Set URL for TRANSACTION_SUCCESS
 
 		public function setUrlSuccess($sUrl)
@@ -351,8 +295,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 			$this->sUrlSuccess = $sUrl;
 
 		}
-
-
 
 		// Set submit button label, or define an image as submit-button
 
@@ -369,8 +311,6 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 			$this->iButtonImageHeight = $iHeight;
 
 		}
-
-        
 
 		function process(){
 
@@ -390,31 +330,17 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 	         $this->setUrlError($urlError);
 
-			 
-
 			 $this->setAmount($this->cart->getAmount());
 
 	         $this->setOrderId($this->confirmNum);
 
 	         $this->setOrderDescription($this->description);
 
-			
-
 			echo $this->createForm();
-
-			 
-
-				
 
 		}
 
-		
-
 		// Generate iDEAL Lite form
-
-		
-
-		
 
 		public function createForm()
 
@@ -422,11 +348,7 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			$iAmount = round($this->fOrderAmount * 100);
 
-
-
 			$sValidUntil = date('Y-m-d\TG:i:s\Z', strtotime('+1 hour'));
-
-
 
 			// Setup hash string
 
@@ -436,25 +358,17 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			. '1' . $this->sOrderDescription . '1' . $iAmount;
 
-
-
 			// Remove HTML Entities
 
 			$sHashString = html_entity_decode($sHashString);
-
-
 
 			// Remove space characters: "\t", "\n", "\r" and " "
 
 			$sHashString = str_replace(array("\t", "\n", "\r", " "), '', $sHashString);
 
-
-
 			// Generate hash
 
 			$sHash = sha1($sHashString);
-
-
 
 			// Generate HTML form
 
@@ -496,39 +410,23 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 
 			. ($this->sUrlError ? '<input type="hidden" name="urlError" value="' . $this->escapeHtml($this->sUrlError) . '">' : '')
 
-			
-
-			. '</form>';
-
-            
+			. '</form>';  
 
 			$html .= ' <script language="javascript">
 
-
-
 			function rg_direc_to_ideal(){
-
-
 
 				document.ideal_form.submit();
 
-
-
 			}
-
-
 
 			setTimeout("rg_direc_to_ideal()",5000);
 
-
-
-		</script>' ;
+		</script>';
 
 			return $html;
 
 		}
-
-
 
 		protected function escapeHtml($string)
 
@@ -539,7 +437,5 @@ global $idealLiteHashKey , $idealLiteMerchantId ;
 		}
 
 	}
-
-
 
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -49,6 +49,7 @@ class DtregisterModelCountry extends DtrModel
 								'Chad'=>'Chad',
 								'Brazil'=>'Brazil',					
 		                        'Chile'=>'Chile',
+		                        'China'=>'China',
 								'Colombia'=>'Colombia',
 								'Comoros'=>'Comoros',
 								'Congo'=>'Congo',
@@ -89,6 +90,7 @@ class DtregisterModelCountry extends DtrModel
 								'Guyana'=>'Guyana',
 								'Haiti'=>'Haiti',
 								'Honduras'=>'Honduras',
+								'Hong Kong'=>'Hong Kong',
 								'Hungary'=>'Hungary',
 								'Iceland'=>'Iceland',
 								'India'=>'India',
@@ -182,6 +184,7 @@ class DtregisterModelCountry extends DtrModel
 								'Suriname'=>'Suriname',
 								'Swaziland'=>'Swaziland',
 								'Sweden'=>'Sweden',
+								'Switzerland'=>'Switzerland',
 								'Syria'=>'Syria',
 								'Taiwan'=>'Taiwan',
 								'Tajikistan'=>'Tajikistan',

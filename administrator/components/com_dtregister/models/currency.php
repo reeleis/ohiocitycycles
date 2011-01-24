@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -18,7 +18,8 @@ class DtregisterModelCurrency extends DtrModel
 								'BRL'=>'Brazilian Real',
 								'GBP'=>'British Pounds Sterling',
 								'CAD'=>'Canadian Dollars',
-								'CZK'=>'Czech Koruny',
+								'CNY'=>'Chinese Yuan',
+								'CZK'=>'Czech Koruna',
 								'DKK'=>'Danish Kroner',
 								'EUR'=>'Euros',
 								'HKD'=>'Hong Kong Dollars',
@@ -28,7 +29,8 @@ class DtregisterModelCurrency extends DtrModel
 								'MXN'=>'Mexican Pesos',
 								'NZD'=>'New Zealand Dollars',
 								'NOK'=>'Norwegian Kroner',
-								'PLN'=>'Polish Zlotych',
+								'PLN'=>'Polish Zloty',
+								'RUB'=>'Russian Rubles',
 								'SGD'=>'Singapore Dollars',
 								'ZAR'=>'South African Rand',
 								'SEK'=>'Swedish Kronor',

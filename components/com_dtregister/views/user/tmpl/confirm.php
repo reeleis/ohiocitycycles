@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid ,$xhtml_url;
+global $Itemid,$xhtml_url;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'tmpl'.DS.'event_header.php');
 ?>
 
@@ -25,9 +25,9 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
      <?php
 
-       echo  $this->viewFields;
+       echo $this->viewFields;
 
-	   echo  $this->viewMemFields;
+	   echo $this->viewMemFields;
 
 	 ?>
 
@@ -49,8 +49,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
   <?php
   if(DT_Session::get('register.User.process') === 'change'){
   	 
-	 $paying_amount = $this->feeObj->changefee -  $this->feeObj->paid_amount + $this->feeObj->fee;
-	 $paying_amount = $this->feeObj->changefee -  $this->feeObj->paid_amount;
+	 $paying_amount = $this->feeObj->changefee ;// -  $this->feeObj->paid_amount + $this->feeObj->fee;
 	 
   }elseif(DT_Session::get('register.User.process') === 'cancel'){
      $paying_amount = $this->feeObj->cancelfee -  $this->feeObj->paid_amount;
@@ -74,7 +73,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 </form>
 <script type="text/javascript">
    DTjQuery(function(){
-	  DTjQuery("#price_header").load("<?php  echo JRoute::_("index.php?option=com_dtregister&controller=user&task=price_header&no_html=1&tmpl=confirm_price_header",$xhtml_url);?>");
+	  DTjQuery("#price_header").load("<?php echo JRoute::_("index.php?option=com_dtregister&controller=user&task=price_header&no_html=1&dttmpl=confirm_price_header",$xhtml_url);?>");
   })
 
 </script>

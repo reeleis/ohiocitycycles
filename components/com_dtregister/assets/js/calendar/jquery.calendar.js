@@ -5,7 +5,7 @@
   * This is the main class of wdCalendar.
 
   */
-var dateFormat = function () {
+var dateformat = function () {
 	var	token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
 		timezone = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
 		timezoneClip = /[^-+\dA-Z]/g,
@@ -18,7 +18,7 @@ var dateFormat = function () {
 
 	// Regexes and supporting functions are cached through closure
 	return function (date, mask, utc) {
-		var dF = dateFormat;
+		var dF = dateformat;
 
 		// You can't provide utc if you skip other args (use the "UTC:" mask prefix)
 		if (arguments.length == 1 && Object.prototype.toString.call(date) == "[object String]" && !/\d/.test(date)) {
@@ -85,7 +85,7 @@ var dateFormat = function () {
 }();
 
 // Some common format strings
-dateFormat.masks = {
+dateformat.masks = {
 	"default":      "ddd mmm dd yyyy HH:MM:ss",
 	shortDate:      "m/d/yy",
 	mediumDate:     "mmm d, yyyy",
@@ -101,7 +101,7 @@ dateFormat.masks = {
 };
 
 // Internationalization strings
-dateFormat.i18n = {
+dateformat.i18n = {
 	dayNames: [
 		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
@@ -114,7 +114,7 @@ dateFormat.i18n = {
 
 // For convenience...
 Date.prototype.format = function (mask, utc) {
-	return dateFormat(this, mask, utc);
+	return dateformat(this, mask, utc);
 };
 Date.prototype.valid = function() {
   return isFinite(this);
@@ -125,6 +125,8 @@ Date.prototype.valid = function() {
     var __WDAY = new Array(i18n.xgcalendar.dateformat.sun, i18n.xgcalendar.dateformat.mon, i18n.xgcalendar.dateformat.tue, i18n.xgcalendar.dateformat.wed, i18n.xgcalendar.dateformat.thu, i18n.xgcalendar.dateformat.fri, i18n.xgcalendar.dateformat.sat);
 
     var __MonthName = new Array(i18n.xgcalendar.dateformat.jan, i18n.xgcalendar.dateformat.feb, i18n.xgcalendar.dateformat.mar, i18n.xgcalendar.dateformat.apr, i18n.xgcalendar.dateformat.may, i18n.xgcalendar.dateformat.jun, i18n.xgcalendar.dateformat.jul, i18n.xgcalendar.dateformat.aug, i18n.xgcalendar.dateformat.sep, i18n.xgcalendar.dateformat.oct, i18n.xgcalendar.dateformat.nov, i18n.xgcalendar.dateformat.dec);
+
+    var __MonthNameFull = new Array(i18n.xgcalendar.dateformat.janfull, i18n.xgcalendar.dateformat.febfull, i18n.xgcalendar.dateformat.marfull, i18n.xgcalendar.dateformat.aprfull, i18n.xgcalendar.dateformat.mayfull, i18n.xgcalendar.dateformat.junfull, i18n.xgcalendar.dateformat.julfull, i18n.xgcalendar.dateformat.augfull, i18n.xgcalendar.dateformat.sepfull, i18n.xgcalendar.dateformat.octfull, i18n.xgcalendar.dateformat.novfull, i18n.xgcalendar.dateformat.decfull);
 
     if (!Clone || typeof (Clone) != "function") {
 
@@ -171,9 +173,9 @@ Date.prototype.valid = function() {
     }
 
     if (!dateFormat || typeof (dateFormat) != "function") {
-
+        
         var dateFormat = function(format) {
-
+            
             var o = {
 
                 "M+": this.getMonth() + 1,
@@ -193,8 +195,12 @@ Date.prototype.valid = function() {
                 "w": "0123456".indexOf(this.getDay()),
 
                 "W": __WDAY[this.getDay()],
-
+				
+				"F": __MonthNameFull[this.getMonth()], //non-standard
+				
                 "L": __MonthName[this.getMonth()] //non-standard
+				
+				
 
             };
 
@@ -203,10 +209,10 @@ Date.prototype.valid = function() {
                 format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
 
             }
-
+            var orin_format = format ;
             for (var k in o) {
 
-                if (new RegExp("(" + k + ")").test(format))
+                if (new RegExp("(" + k + ")").test(orin_format))
 
                     format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
 
@@ -940,6 +946,7 @@ Date.prototype.valid = function() {
 
                     var show = dateFormat.call(ndate, i18n.xgcalendar.dateformat.Md);
 
+
                     days.push({ display: show, date: ndate, day: ndate.getDate(), year: ndate.getFullYear(), month: ndate.getMonth() + 1 });
 
                 }
@@ -991,7 +998,7 @@ Date.prototype.valid = function() {
             gridcontainer.html(html.join(""));
 
             html = null;
-
+//console.log(days);
             //TODO event handlers
 
             //$("#weekViewAllDaywk").click(RowHandler);
@@ -1643,9 +1650,19 @@ Date.prototype.valid = function() {
             var startformat = getymformat(event[2], null, showtime, true);
 
             var endformat = getymformat(event[3], event[2], showtime, true);
-//console.log(event[2]);
+// console.log(event[2]);
+			//if(event[2].valid()){
+			//   title_start_date = event[2].format(event[11]);
+			//}else{
+				title_start_date = dateFormat.call(event[2], startformat) ;
+			//}
+			//if(event[2].valid()){
+			 //  title_end_date = event[3].format(event[11]);
+			//}else{
+				title_end_date = dateFormat.call(event[3], endformat) ;
+			//}
 //console.log(event[2].format('hh:mm tt'));
-            timeshow = dateFormat.call(event[2], startformat) + " - " + dateFormat.call(event[3], endformat);
+            timeshow = title_start_date + " - " + title_end_date;
 
             locationshow = (event[9] != undefined && event[9] != "") ? event[9] : i18n.xgcalendar.i_undefined;
 
@@ -1676,7 +1693,7 @@ Date.prototype.valid = function() {
                 ret.push($.browser.mozilla?"":"\r\n", i18n.xgcalendar.participant + ":", attendsshow);
 
             }
-
+//console.log(ret.join(""));
             return ret.join("");
 
         }
@@ -1792,7 +1809,7 @@ Date.prototype.valid = function() {
                 rc = 6;
 
             }
-
+			option.showday = showday;
             option.vstart = startdate;
 
             option.vend = enddate;
@@ -2360,8 +2377,15 @@ Date.prototype.valid = function() {
             var cen;
             
             if (!e.allday && !sf && option.showTime) {
-
-                cen = pZero(e.st.hour) + ":" + pZero(e.st.minute) + " " + e.event[1];
+				
+				if(e.event[2].valid()){
+				 
+				  cen = e.event[2].format(e.event[11]) +" " + e.event[1];
+				  
+				}else{
+				  cen = pZero(e.st.hour) + ":" + pZero(e.st.minute) + " " + e.event[1];
+				}
+                
 
             }
 
@@ -2729,9 +2753,9 @@ Date.prototype.valid = function() {
 
             render();
 
-            if (option.onweekormonthtoday) {
+            if (option.onWeekOrMonthToDay) {
 
-                option.onweekormonthtoday(option);
+                option.onWeekOrMonthToDay(option);
 
             }
 
@@ -2905,9 +2929,14 @@ Date.prototype.valid = function() {
 
             } else {
 
-                var strstart= dateFormat.call(startday, getymformat(startday, null, isshowtime, isshowweek));
-
-				var strend=dateFormat.call(endday, getymformat(endday, startday, isshowtime, isshowweek));
+                 if(option.showday != undefined){
+				     var strstart= dateFormat.call(option.showday, 'F yyyy');
+				     strend = "";
+			   		
+			   }else{
+				  var strstart= dateFormat.call(startday, getymformat(startday, null, isshowtime, isshowweek));
+				  var strend=dateFormat.call(endday, getymformat(endday, startday, isshowtime, isshowweek));
+			   }
 
 				var join = (strend!=""? " - ":"");
 
@@ -4194,7 +4223,14 @@ Date.prototype.valid = function() {
             }
 
             else if (viewtype = "month") {
+                    $(".monthdayshow").each(function(i) {
 
+                        $(this).click(function(e){
+							weekormonthtoday.call($(this).parent()[0],e);
+							});
+						
+
+                    });
                 $("div.rb-o", gridcontainer).each(function(i) {
 
                     var chip = $(this);

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.6.3
+* @version 2.7.0
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -12,142 +12,101 @@
 class Thumbnail { 
 
     /**
-
      * Error message to display, if any
-
      * @var string
-
      */
 
     private $errmsg;
 
     /**
-
      * Whether or not there is an error
-
      * @var boolean
-
      */
 
     private $error;
 
     /**
-
      * Format of the image file
-
      * @var string
-
      */
 
     private $format;
 
     /**
-
      * File name and path of the image file
      *      
      * @var string
-
      */
 
     private $fileName;
 
     /**
-
      * Image meta data if any is available (jpeg/tiff) via the exif library
-
      * @var array
-
      */
 
     public $imageMeta;
 
     /**
-
      * Current dimensions of working image
-
      * @var array
-
      */
 
     private $currentDimensions;
 
     /**
-
      * New dimensions of working image
-
      * @var array
-
      */
 
     private $newDimensions;
 
     /**
-
      * Image resource for newly manipulated image
      * @var resource
-
      */
 
     private $newImage;
 
     /**
-
      * Image resource for image before previous manipulation
-
      * @var resource
-
      */
 
     private $oldImage;
 
     /**
-
      * Image resource for image being currently manipulated
-
      * @var resource
-
      */
 
     private $workingImage;
 
     /**
-
      * Percentage to resize image by
-
      * @var int
-
      */
 
     private $percent;
 
     /**
-
      * Maximum width of image during resize
-
      * @var int
-
      */
 
     private $maxWidth;
 
     /**
-
      * Maximum height of image during resize
-
      * @var int
-
      */
 
     private $maxHeight;
 
     /**
-
      * Class constructor
-
      * @param string $fileName
-
      * @return Thumbnail
-
      */
 
     public function __construct($fileName) {
@@ -279,11 +238,8 @@ class Thumbnail {
     }
 
     /**
-
      * Class destructor
-
      *
-
      */
 
     public function __destruct() {
@@ -297,13 +253,9 @@ class Thumbnail {
     }
 
     /**
-
      * Returns the current width of the image
-
      *
-
      * @return int
-
      */
 
     private function getCurrentWidth() {
@@ -313,13 +265,9 @@ class Thumbnail {
     }
 
     /**
-
      * Returns the current height of the image
-
      *
-
      * @return int
-
      */
 
     private function getCurrentHeight() {
@@ -329,17 +277,11 @@ class Thumbnail {
     }
 
     /**
-
      * Calculates new image width
-
      *
-
      * @param int $width
-
      * @param int $height
-
      * @return array
-
      */
 
     private function calcWidth($width,$height) {
@@ -353,17 +295,11 @@ class Thumbnail {
     }
 
     /**
-
      * Calculates new image height
-
      *
-
      * @param int $width
-
      * @param int $height
-
      * @return array
-
      */
 
     private function calcHeight($width,$height) {
@@ -377,17 +313,11 @@ class Thumbnail {
     }
 
     /**
-
      * Calculates new image size based on percentage
-
      *
-
      * @param int $width
-
      * @param int $height
-
      * @return array
-
      */
 
     private function calcPercent($width,$height) {
@@ -401,15 +331,10 @@ class Thumbnail {
     }
 
     /**
-
      * Calculates new image size based on width and height, while constraining to maxWidth and maxHeight
-
      *
-
      * @param int $width
-
      * @param int $height
-
      */
 
     private function calcImageSize($width,$height) {
@@ -440,8 +365,6 @@ class Thumbnail {
 
             }
 
-            //$this->newDimensions = $newSize;
-
         }
 
         $this->newDimensions = $newSize;
@@ -449,15 +372,10 @@ class Thumbnail {
     }
 
     /**
-
      * Calculates new image size based percentage
-
      *
-
      * @param int $width
-
      * @param int $height
-
      */
 
     private function calcImageSizePercent($width,$height) {
@@ -471,11 +389,8 @@ class Thumbnail {
     }
 
     /**
-
      * Displays error image
-
      *
-
      */
 
     private function showErrorImage() {
@@ -501,15 +416,10 @@ class Thumbnail {
     }
 
     /**
-
      * Resizes image to maxWidth x maxHeight
-
      *
-
      * @param int $maxWidth
-
      * @param int $maxHeight
-
      */
 
     public function resize($maxWidth = 0, $maxHeight = 0) {
@@ -522,7 +432,6 @@ class Thumbnail {
 
 		if(function_exists("ImageCreateTrueColor")) {
 			
-				//// commented by Kuldeep
 				if ($this->format == 'PNG') {
 					
 					$temp = ImageCreateTrueColor($this->newDimensions['newWidth'],$this->newDimensions['newHeight']);
@@ -580,13 +489,9 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Resizes the image by $percent percent
-
 	 *
-
 	 * @param int $percent
-
 	 */
 
 	public function resizePercent($percent = 0) {
@@ -642,13 +547,9 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Crops the image from calculated center in a square of $cropSize pixels
-
 	 *
-
 	 * @param int $cropSize
-
 	 */
 
 	public function cropFromCenter($cropSize) {
@@ -708,19 +609,12 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Advanced cropping function that crops an image using $startX and $startY as the upper-left hand corner.
-
 	 *
-
 	 * @param int $startX
-
 	 * @param int $startY
-
 	 * @param int $width
-
 	 * @param int $height
-
 	 */
 
 	public function crop($startX,$startY,$width,$height) {
@@ -788,15 +682,10 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Outputs the image to the screen, or saves to $name if supplied.  Quality of JPEG images can be controlled with the $quality variable
-
 	 *
-
 	 * @param int $quality
-
 	 * @param string $name
-
 	 */
 
 	public function show($quality=100,$name = '') {
@@ -862,15 +751,10 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Saves image as $name (can include file path), with quality of # percent if file is a jpeg
-
 	 *
-
 	 * @param string $name
-
 	 * @param int $quality
-
 	 */
 
 	public function save($name,$quality=100) {
@@ -880,21 +764,13 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Creates Apple-style reflection under image, optionally adding a border to main image
-
 	 *
-
 	 * @param int $percent
-
 	 * @param int $reflection
-
 	 * @param int $white
-
 	 * @param bool $border
-
 	 * @param string $borderColor
-
 	 */
 
 	public function createReflection($percent,$reflection,$white,$border = true,$borderColor = '#a4a4a4') {
@@ -980,11 +856,8 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Inverts working image, used by reflection function
-
 	 * 
-
 	 */
 
 	private function imageFlipVertical() {
@@ -1006,17 +879,11 @@ class Thumbnail {
 	}
 
 	/**
-
 	 * Converts hexidecimal color value to rgb values and returns as array/string
-
 	 *
-
 	 * @param string $hex
-
 	 * @param bool $asString
-
 	 * @return array|string
-
 	 */
 
 	private function hex2rgb($hex, $asString = false) {
@@ -1052,11 +919,8 @@ class Thumbnail {
     }
 
     /**
-
      * Reads selected exif meta data from jpg images and populates $this->imageMeta with appropriate values if found
-
      *
-
      */
 
     private function gatherImageMeta() {
@@ -1134,13 +998,9 @@ class Thumbnail {
     }
 
     /**
-
      * Rotates image either 90 degrees clockwise or counter-clockwise
-
      *
-
      * @param string $direction
-
      */
 
     public function rotateImage($direction = 'CW') {

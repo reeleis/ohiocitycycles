@@ -25,6 +25,7 @@ class DtregisterControllerExport extends DtrController {
 
 		 $this->view->setModel($this->getModel('event'));
 		 $this->view->setModel($this->getModel('field'));
+		 $this->view->setModel($this->getModel('user'));
 
 		 
 
@@ -48,6 +49,9 @@ class DtregisterControllerExport extends DtrController {
 		  $general_export_fields = JRequest::getVar('general_export_fields',array(),null,'array');
 		  $individual_export_fields = JRequest::getVar('individual_export_fields',array(),null,'array');
 		  $group_export_fields = JRequest::getVar('group_export_fields',array(),null,'array');
+		  
+	
+		  
 		  $tExport->saveFields($general_export_fields,$individual_export_fields,$group_export_fields);
 		  
 		  $tExport->doexport($_REQUEST['datefrom'],$_REQUEST['dateto']);

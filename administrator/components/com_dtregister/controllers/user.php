@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -27,7 +27,7 @@ class DtregisterControllerUser extends DtrController {
 
          $this->view->setModel($this->getModel('event'));
 
-		 $this->registerTask( 'new',  'add' );
+		 $this->registerTask( 'new', 'add' );
 
 		 $this->registerDefaultTask("index");
 
@@ -35,7 +35,6 @@ class DtregisterControllerUser extends DtrController {
 
 	}
 
-   
    function delete(){
 	   
 	   global $mainframe;
@@ -49,7 +48,6 @@ class DtregisterControllerUser extends DtrController {
 		}
 	   	 $mainframe->redirect( "index2.php?option=".DTR_COM_COMPONENT."&controller=user" );
 	}
-
 
    function resendthkemail(){
 	   
@@ -67,7 +65,6 @@ class DtregisterControllerUser extends DtrController {
 	      
    }
    
-
    function order($inc){
 
        global $mainframe;
@@ -83,8 +80,6 @@ class DtregisterControllerUser extends DtrController {
 	   $row->reorder();
 
 	   $row->move( $inc, true );
-
-	//$row->updateOrder();
 
 	 $mainframe->redirect( "index2.php?option=".DTR_COM_COMPONENT."&controller=field" );
 
@@ -111,6 +106,10 @@ class DtregisterControllerUser extends DtrController {
 	   JToolBarHelper::divider();
 	   
 	   JToolBarHelper::assign('resendthkemail',JText::_('DT_RESEND_THANKS_EMAIL'));
+	   
+	   JToolBarHelper::divider();
+	   
+	   JToolBarHelper::assign('attend',JText::_('DT_ATTENDED'));
 
 	global $mainframe;
 
@@ -156,8 +155,7 @@ class DtregisterControllerUser extends DtrController {
 
 			   left join #__dtregister_codes d on d.id = u.discount_code_id 
 
-			   ";  /* left join #__dtregister_user_field_values as uf on uf.user_id = u.userId*/
-
+			   ";
 	
     $Andwhere =  array();
 	if (isset($search['eventId']) && $search['eventId']!="") {
@@ -190,19 +188,11 @@ class DtregisterControllerUser extends DtrController {
 
 		$Andwhere[] = "u.status=".$search['status'];
 
-
-
 	}
 
 	 if (isset($search['event_archive']) && $search['event_archive']!="" && $search['event_archive']!=-1) {
 
-       
-
-	   
-
 		$Andwhere[] = "e.archive=".$search['event_archive'];
-
-
 
 	}
 
@@ -212,7 +202,7 @@ class DtregisterControllerUser extends DtrController {
 
 		if (get_magic_quotes_gpc()) {
 
-		    $search['query']	= stripslashes( $search['query']);
+		    $search['query'] = stripslashes( $search['query']);
 
 	    }
 
@@ -266,18 +256,15 @@ class DtregisterControllerUser extends DtrController {
 
     $this->view->setLayout('list');
 
-	$this->view->assign('eventId',(isset($search['eventId']))?$search['eventId']:'') ;
+	$this->view->assign('eventId',(isset($search['eventId']))?$search['eventId']:'');
 
 	$this->view->display();
 
-	  
-
    }
 
-   
    function add(){
 
-		global  $mainframe , $now ;
+		global $mainframe, $now;
 
 		if(isset($_POST['formsubmit'])){
 
@@ -359,22 +346,44 @@ class DtregisterControllerUser extends DtrController {
 		$tUser = $mUser->table;
 		$tUser->type = 'I';
 		$search = JRequest::getVar('search');
-		$eventId = $search['eventId'] ;
+		$eventId = $search['eventId'];
 		$tUser->TableEvent->load($eventId);
 		$type = ($tUser->type=='I')?'I':'B';
-		$memtot = ($tUser->type=='I')?1:2;
+		$memtot = ($tUser->type=='I')?1:2;	
+		
+		// Check for capacity registration for a particular event		
+		
+		$eventTable = $this->getModel('event')->table;
+		$eventTable->load($eventId);
+		$registered = $eventTable->getTotalregistered($eventId);
+		$max_registrations = $eventTable->max_registrations;
+		
+		if ($max_registrations > $registered) {
+			$availableSpots = $max_registrations - $registered;
+		} elseif($max_registrations !=0 ){
+			
+		$mainframe->redirect("index.php?option=com_dtregister&controller=user",JText::_('DT_ALERT_FULL_EVENT'));
+			exit;
+		}
 
 		$this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'adminForm',false));
 		$this->view->assign('mUser',$mUser);
 		$this->view->assign('eventId',$eventId);
 		$this->view->assign('type',$type);
 		$this->view->assign('memtot',$memtot);
-		$this->view->setLayout('add');
-		
+		$this->view->setLayout('add');	
 		$this->display();
 
    }
    
+   function event_full() {
+		global  $mainframe, $now;
+						
+		$this->view->setLayout('event_full');		
+		$this->display();
+   
+   }
+
    function edit(){
 
 	    global $mainframe;
@@ -409,7 +418,7 @@ class DtregisterControllerUser extends DtrController {
 
 			}
 
-			$TableUser  =& DtrTable::getInstance('Duser','Table');
+			$TableUser =& DtrTable::getInstance('Duser','Table');
 
 	        $TableUser->create($data);
 
@@ -423,24 +432,43 @@ class DtregisterControllerUser extends DtrController {
 
 			$feeObj->setPaidStatus($data['Fee']['status']);
 
-		    $fee = $feeObj ;
-
+		    $fee = $feeObj;
+			$fee->fee = $_POST['User']['Fee']['fee'];
+			
 		    unset($fee->TableEvent);
 
 		    unset($fee->TableUser);
 
 			unset($data['members']);
 
-		    $data['fee'] = (array)$fee ;
+		    $data['fee'] = (array)$fee;
 
 			$data['fee']['id'] = $tUser->TableFee->id;
 
 			unset($data['discount_code']);
 
 			//prd($data);
-
+			$paid_status_change = false;
+		    if($tUser->TableFee->status != $data['Fee']['status']){
+				$paid_status_change = true;
+			}
+			$status_change = false;
+			if($tUser->status != $data['status']){
+				$status_change = true;
+			}
 			$TableUser->save($data);
+			$tUser->load($_POST['User']['userId']);
+			
+			if($status_change){
+				
+				$tUser->status_change_email();
+			}
 
+			if($paid_status_change){
+     			$tUser->TableFee->status = $data['Fee']['status'] ;
+     			$tUser->fee_status_change_email();
+   			}
+			
 			$mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
 			die;
@@ -449,124 +477,84 @@ class DtregisterControllerUser extends DtrController {
 
        JToolBarHelper::save('edit',JText::_( 'DT_SAVE'));
 
-
-
        JToolBarHelper::divider();
 
        JToolBarHelper::cancel( 'cancel', JText::_( 'DT_CLOSE') );
 
-       
-
-	    
-
 	   $cid=JRequest::getVar('cid',array(),null,'array');
-
-	  
-
-	   
-
-	  
-
-	    
 
 	   $tUser->load($cid[0]);
 
-	   
-
-	   $type = ($tUser->type=='I')?'I':'B' ;
+	   $type = ($tUser->type=='I')?'I':'B';
 
 	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'adminForm',false));
 
 	   $this->view->assign('mUser',$mUser);
 
-	 
-
 	   $this->view->setLayout('edit');
 
 	   $this->view->display();
 
-	 
-
    }
-
    
    function attend(){
 
-	   global $mainframe ;
+	   global $mainframe;
 
-      $mUser = $this->getModel('user') ;
+      $mUser = $this->getModel('user');
 
-	  $tUser = $mUser->table ;
+	  $tUser = $mUser->table;
+      foreach($_POST['cid'] as $userId){
+	  	 $tUser->load($userId);
 
-	  
-
-	  $tUser->load($_POST['cid'][0]);
-
-	  $tUser->attend = 1 ;
-
-	  $tUser->store();
+	 	 $tUser->attend = 1;
+		 pr($tUser);
+	  	 $tUser->store();
+	  }
 
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
-	 
-
-	  
-
    }
 
-   
    function fee_status(){
+     
+	  global $mainframe;
 
-	  global $mainframe ;
+	  $mUser = $this->getModel('user');
 
-	  
-
-	    $mUser = $this->getModel('user') ;
-
-	  $tUser = $mUser->table ;
-
-	  
+	  $tUser = $mUser->table;
 
 	  $tUser->load($_POST['cid'][0]);
-
-	 
 
 	  $tUser->TableFee->load($tUser->fee->id);
 
-	  $tUser->TableFee->status = 1 ;
+	  $tUser->TableFee->status = 1;
 
 	  $tUser->TableFee->store();
 
-	  
+	  $tUser->fee_status_change_email();
 
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
    }
-
    
    function unfee_status(){
 
-	  global $mainframe ;
+	  global $mainframe;
 
-	  
+	  $mUser = $this->getModel('user');
 
-	    $mUser = $this->getModel('user') ;
-
-	  $tUser = $mUser->table ;
-
-	  
+	  $tUser = $mUser->table;
 
 	  $tUser->load($_POST['cid'][0]);
 
-	 
-
 	  $tUser->TableFee->load($tUser->fee->id);
 
-	  $tUser->TableFee->status = 0 ;
+	  $tUser->TableFee->status = 0;
 
 	  $tUser->TableFee->store();
 
-	  
+	  $tUser->fee_status_change_email();
 
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
@@ -575,58 +563,39 @@ class DtregisterControllerUser extends DtrController {
 
    function unattend(){
 
-	   global $mainframe ;
+	  global $mainframe;
 
-      $mUser = $this->getModel('user') ;
+      $mUser = $this->getModel('user');
 
-	  $tUser = $mUser->table ;
-
-	  
+	  $tUser = $mUser->table;
 
 	  $tUser->load($_POST['cid'][0]);
 
-	  $tUser->attend = 0 ;
+	  $tUser->attend = 0;
 
 	  $tUser->store();
 
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
-	 
-
-	  
-
    }
    
-
    function billing(){
 
-	  
-
-	   global  $mainframe ;
+	   global $mainframe;
 
 	    if(isset($_POST['formsubmit'])){
 
-		
-
 		$data = JRequest::getVar('User',array(),null,'array');
-
-		
-
-		
 
 	   $data['fields'] = JRequest::getVar('Field',array(),null,'array');
 
 	   $eventId = $data['eventId'];
 
-	   
-
-	   $event = & DtrTable::getInstance('Event','Table') ;
+	   $event = & DtrTable::getInstance('Event','Table');
 
 	   $event->load($eventId );
 
 	   if(isset($data['discount_code']) && $data['discount_code']!=""){
-
-			
 
 			$discount_code_id = $event->validate_code($data['discount_code']); 
 
@@ -634,35 +603,23 @@ class DtregisterControllerUser extends DtrController {
 
 			if($discount_code_id !== false){
 
-			   $data['discount_code_id'] = $discount_code_id ;
+			   $data['discount_code_id'] = $discount_code_id;
 
 			}else{
 
-			   $data['discount_code_id'] = false ;
+			   $data['discount_code_id'] = false;
 
 			  $this->view->assign('discountCodeError',$event->TableEventdiscountcode->TableDiscountcode->error );
 
-			  
-
-			}
-
-			
+			}	
 
 		}
 
-		
-
 		$data = array_merge(DT_Session::get('register.User'),array_filter($data));
 
-		
-
-       $TableUser  =& DtrTable::getInstance('Duser','Table');
-
-	  
+       $TableUser =& DtrTable::getInstance('Duser','Table');
 
 	   $TableUser->create($data);
-
-	   
 
 	   $feeObj = new DT_Fee($event,$TableUser);
 
@@ -674,39 +631,32 @@ class DtregisterControllerUser extends DtrController {
 
 	   $feeObj->setPaidStatus($data['Fee']['status']);
 
-	   $fee = $feeObj ;
+	   $fee = $feeObj;
 
        unset($fee->TableEvent);
 
 	   unset($fee->TableUser);
 
-	    $data['fee'] = (array)$fee ;
+	   $data['fee'] = (array)$fee;
 
 	   $confirmNum = $TableUser->generateconfirmNum();
 			
-		$data['confirmNum'] = $confirmNum;
+	   $data['confirmNum'] = $confirmNum;
 
-		$TableUser->register($data);
+	   $TableUser->register($data);
 
-		//unset($_SESSION['DTregister']['register']) ;
        DT_Session::clear('register');
 	   $mainframe->redirect("index.php?option=com_dtregister&controller=user&task=index");
-
-		   
-
-		   
-
-		  
 
 	   }
 
 	   JToolBarHelper::save('billing',JText::_( 'DT_SAVE'));
 
-	   $mUser = $this->getModel('user') ;
+	   $mUser = $this->getModel('user');
 
-	   $tUser = $mUser->table ;
+	   $tUser = $mUser->table;
 
-	   $eventId = DT_Session::get('register.User.eventId') ;
+	   $eventId = DT_Session::get('register.User.eventId');
 
 	   $memtot = DT_Session::get('register.User.memtot');
 
@@ -726,26 +676,17 @@ class DtregisterControllerUser extends DtrController {
 
 	   $this->view->display();
 
-		
-
-   
-
    }
-   
 
    function member(){
 
-	   
-
-	   global $mainframe ;
+	   global $mainframe;
 
 	   if(isset($_POST['formsubmit'])){
 
 		   $data = JRequest::getVar('Field',array(),null,'array');
 
-		   $memberIndex = count(DT_Session::get('register.User.members')) ;
-
-		   //$memberIndex = ($memberIndex)?--$memberIndex:0;
+		   $memberIndex = count(DT_Session::get('register.User.members'));
 
 		   DT_Session::set('register.User.members.'.$memberIndex .'.fields', $data);
 
@@ -753,29 +694,17 @@ class DtregisterControllerUser extends DtrController {
 
 		   $currentCount = count(DT_Session::get('register.User.members'));
 
-		   
-
 		   if($memtot <= $currentCount){
-
-			   
 
 			   $mainframe->redirect("index.php?option=com_dtregister&controller=user&task=billing");
 
-			   
-
 		   }else{
-
-			    
 
 				$mainframe->redirect("index.php?option=com_dtregister&controller=user&task=member");
 
 		   }
 
-	       
-
 	   }else{
-
-		        
 
 	   }
 
@@ -783,7 +712,7 @@ class DtregisterControllerUser extends DtrController {
 
 	   $eventId = DT_Session::get('register.User.eventId');
 
-	   $event = $this->getModel('event')->table ;
+	   $event = $this->getModel('event')->table;
 
 	   $event->load($eventId);
 
@@ -791,7 +720,7 @@ class DtregisterControllerUser extends DtrController {
 
 	   $this->view->assign('currentMember',++$currentCount);
 
-	   $this->view->assign( 'form' ,$event->form('M',array(),false,'adminForm',false));
+	   $this->view->assign( 'form',$event->form('M',array(),false,'adminForm',false));
 
 	   $this->view->setLayout('memberadd');
 
@@ -799,19 +728,16 @@ class DtregisterControllerUser extends DtrController {
 
    }
    
-
    function group_registration(){
 
-	   global $mainframe ;
-
-	  
+	   global $mainframe;
 
 	   if(isset($_POST['formsubmit'])){
 
 		     DT_Session::set('register.User.memtot', JRequest::getVar('memtot',1) );
 			 $eventId = DT_Session::get('register.User.eventId');
 
-	   		 $event = $this->getModel('event')->table ;
+	   		 $event = $this->getModel('event')->table;
 
 	         $event->load($eventId);
 			 if($event->group_registration_type !="detail"){
@@ -823,12 +749,11 @@ class DtregisterControllerUser extends DtrController {
 			 //prd($_SESSION);
 
 	   }else{
-
 		 
           DT_Session::clear('register');
 		  $search = JRequest::getVar('search');
 
-	      $eventId = $search['eventId'] ;
+	      $eventId = $search['eventId'];
 
 		  DT_Session::set('register.User.type', 'G' );
 
@@ -837,8 +762,27 @@ class DtregisterControllerUser extends DtrController {
 		  DT_Session::set('register.User.members', array() );
 
 	   }
+	   
+		// Check for capacity registration for a particular event		
+		
+		$eventTable = $this->getModel('event')->table;
+		$eventTable->load($eventId);
+		$registered = $eventTable->getTotalregistered($eventId);
+		$max_registrations = $eventTable->max_registrations;
+		
+		if ($max_registrations > $registered) {
+			
+			$availableSpots = $max_registrations - $registered;
+		
+		} elseif($max_registrations !=0 ){
+			
+			$mainframe->redirect("index.php?option=com_dtregister&controller=user",JText::_('DT_ALERT_FULL_EVENT'));
+			exit;
+		}
 
-	    JToolBarHelper::save('group_registration',JText::_( 'DT_NEXT_STEP'));
+	   JToolBarHelper::save('group_registration',JText::_( 'DT_NEXT_STEP'));
+	   
+	   $this->view->assign('eventId',$eventId);
 
 	   $this->view->setLayout('memtotform');
 
@@ -846,50 +790,32 @@ class DtregisterControllerUser extends DtrController {
 
    }
 
-   
-
    function loadprofile(){
-
-	   
 
 	   $muser = $this->getModel('user');
 
-	   
+	   $tuser = $muser->table;
 
-	   $tuser = $muser->table ;
-
-	   
-
-	   $profile = $tuser->TableJUser ;
-
-	   
+	   $profile = $tuser->TableJUser;
 
 	   $user_id = JRequest::getVar('id',0);
 
 	   $userdata = $profile->getProfile($user_id);
 
-	
-
 	   echo json_encode($userdata);
 
-	   
-
-	   die ;   
+	   die;   
 
    }
 
-   
    function options(){
-
-       
 
        $this->view->setLayout('options');
 
 	   $this->view->display();
 
    }
-   
-
+ 
 }
 
 ?>
