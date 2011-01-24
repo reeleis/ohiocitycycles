@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -12,9 +12,11 @@
 $mosConfig_live_site = JURI::base( true );
 
 $rows=$this->getModel('category')->find(' parent_id=0 ');
-$temp =  array();
+$temp = array();
+
+if(is_array($rows))
 foreach($rows as $row){
-   $temp[$row->categoryId] = $row->categoryName ;
+   $temp[$row->categoryId] = $row->categoryName;
 }
  $options = DtHtml::options($temp,JText::_( 'DT_SELECT_PARENT' ));
  $list['parent_id'] = JHTML::_('select.genericlist', $options,"parent_id","","value","text");

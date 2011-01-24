@@ -50,7 +50,7 @@ class DtregisterControllerPayoption extends DtrController {
 	}
 	
    function save(){
-	   global $mainframe, $Itemid;
+	   global $mainframe,$Itemid;
 
        $row = $this->getModel('payoption')->table;
       // prd(JRequest::getVar('data')); 
@@ -98,14 +98,12 @@ class DtregisterControllerPayoption extends DtrController {
 	   $row->store();
 	  
 	   $mainframe->redirect("index.php?option=com_dtregister&controller=payoption&Itemid=".$Itemid);
-	   
-	   
-			
+
     }
     
 	function deselectdefault(){
 	   
-	   global $mainframe ,$Itemid;
+	   global $mainframe,$Itemid;
 	   $row = $this->getModel('payoption')->table;
 	   $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 	   JRequest::setVar('id',$cid[0]); 

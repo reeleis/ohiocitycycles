@@ -1,4 +1,14 @@
 <?php
+
+/**
+* @version 2.7.0
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 defined( '_JEXEC' ) or die( 'Restricted access' );
 class DtregisterControllerLocation extends DtrController {
    
@@ -16,8 +26,7 @@ class DtregisterControllerLocation extends DtrController {
 	}
 	
 	function show(){
-	  
-	   
+	 
 	   $this->display();
 	   
 	}
@@ -35,7 +44,6 @@ class DtregisterControllerLocation extends DtrController {
 		$this->view->setLayout('list');
 	    $this->view->display();
 
-		
 	}
 	
 	function add(){
@@ -67,7 +75,7 @@ class DtregisterControllerLocation extends DtrController {
 
   }
   
- die ;
+ die;
 
 	}
 	
@@ -84,8 +92,6 @@ class DtregisterControllerLocation extends DtrController {
 	
 	function save(){
 	   global $mainframe,$Itemid;
-
-      
 
        $row = $this->getModel('location')->location;
 
@@ -128,18 +134,16 @@ class DtregisterControllerLocation extends DtrController {
     }
 
 	$mainframe->redirect( "index.php?option=com_dtregister&controller=location&Itemid=$Itemid" ,JText::_( 'DT_LOCATION_SAVED') );
-	   
-	   
+ 
 	}
 	
 	function delete(){
-		global $mainframe ,$Itemid;
+		global $mainframe,$Itemid;
 	   $cid  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 	    $row = $this->getModel('location')->location;
 		$row->delete(intval( $cid[0] ));
 	   
 	   $mainframe->redirect("index.php?option=com_dtregister&controller=location&task=list&Itemid=$Itemid");	
     }
-	
-   
+
 }

@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $show_group_members , $cb_integrated , $registrant_name ,$registrant_show_avatar , $button_color ,$registrant_cb_linked , $xhtml ,$cb_integrated ,$registrant_username ,$userpanelmessage , $currency_code ,$xhtml_url;
+global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color, $registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$userpanelmessage, $currency_code,$xhtml_url;
 
 $config = $this->getModel('config');
 
@@ -49,7 +49,7 @@ $html = '<tr>
 
 if(count($this->users)>0){
 
-	   $html = "" ;
+	   $html = "";
 
 	}
 
@@ -73,13 +73,13 @@ foreach($this->users as $user){
 
 		 }else{
 
-		    $payment = "" ;
+		    $payment = "";
 
 		 }
 
 	  }else{
 
-	     $payment =  JText::_( 'DT_PAID'); 
+	     $payment = JText::_( 'DT_PAID'); 
 
 	  }
 
@@ -113,7 +113,7 @@ foreach($this->users as $user){
 
 	    $html .= '<tr class="'.$bgRow.'">
 
-	              <td style="width:200px;">'.DTreg::displayEventTitle($tuser->TableEvent).' </td>';
+	              <td style="width:200px;">'.$tuser->TableEvent->displayTitle().' </td>';
 
 				  if($config->getGlobal('upanel_edit_show',0)){  
 					$html .= '<td align="center">'.$edit.'</td>';
@@ -301,9 +301,7 @@ foreach($this->users as $user){
 
 	var form = document.frmcart;
 
-
-
-	form.filter_order.value 	= order;
+	form.filter_order.value	= order;
 
 	form.filter_order_Dir.value	= dir;
 

@@ -236,8 +236,8 @@ class DtrController extends JController {
 	   //$Tagparser->getTagcontent('GROUP_MEMBER',$thanksemail);
 	  // $Tagparser->replaceTagContent('GROUP_MEMBER',$thanksemail);
        $user = $this->getModel('user')->table;
-	   $user->load(75);
-	   
+	   $user->load(200);
+	   $user->TableEvent->load($user->eventId);
 	    if($user->TableEvent->thksmsg_set){
 
 		  $thkmsg = $user->TableEvent->thksmsg;   
@@ -247,30 +247,38 @@ class DtrController extends JController {
 		  $thkmsg = $thanksemail;
 
 	  }
-	 // $subject = $Tagparser->parsetags($subthanksemail,$user);
+	  $subject = $Tagparser->parsetags($subthanksemail,$user);
 	  echo "<br /><b>Subject : </b>".$subject."<br />";
-	  //$groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$thkmsg);
-	 // $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg);
-     // echo  $Tagparser->parsetags($usermsg,$user);
+	  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$thkmsg);
+	  
+	  $memberdata = "" ;
 	  if($user->type == 'G')
 	   foreach($user->members as $member){
-
-		   // echo  $Tagparser->parsetags($groupmsg,$member);	 	 
+           
+		//   pr($member);
+	      // pr($groupmsg);
+		   
+		   $memberdata .= $Tagparser->parsetags($groupmsg,$member);	 	 
 
 		}
+		
+		$usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memberdata);
+      echo  $Tagparser->parsetags($usermsg,$user);
+		die ;
 	  
 	  echo "<br /> <b><<<<======================Admin Email=============================///>>></b>";
 	  
 	  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$admin_registrationemail);
 	  $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$admin_registrationemail);
 	 
-	   echo  $Tagparser->parsetags($admin_registrationemail,$user);
+	   echo  $Tagparser->parsetags($usermsg,$user);
 	   if($user->type == 'G')
 	   foreach($user->members as $member){
 
 		    echo  $Tagparser->parsetags($groupmsg,$member);   
 
 		}
+	   
 	   
 	 /* require_once(JPATH_SITE."/components/com_dtregister/views/email/view.html.php");
 

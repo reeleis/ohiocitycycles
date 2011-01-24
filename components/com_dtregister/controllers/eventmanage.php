@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -69,7 +69,7 @@ class DtregisterControllerEventmanage extends DtrController {
 
 				}
 
-			echo $section_html =  JHTML::_('select.genericlist', $options,"articlecategory","","value","text");
+			echo $section_html = JHTML::_('select.genericlist', $options,"articlecategory","","value","text");
 
 			?>
 
@@ -102,7 +102,7 @@ function getarticle(){
 
 				}
 
-			echo	$section_html =  JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text");
+			echo $section_html =  JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text");
 
 			?>
 
@@ -145,22 +145,18 @@ function getarticle(){
 	   
    }
 
-   
-
-   
-
    function unpublish(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
 	      $event->load($id);
 
-		  $event->publish = 0 ;
+		  $event->publish = 0;
 
 		  $event->store();      
 
@@ -170,22 +166,18 @@ function getarticle(){
 
    }
 
-   
-
     function archive(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
 	      $event->load($id);
 
-		  $event->archive = 1 ;
+		  $event->archive = 1;
 
 		  $event->store();  
 		  
@@ -193,26 +185,18 @@ function getarticle(){
 		  $event->rawquery($query);   
 
 	  }
-	  
-	  
 
-	 
-
-	  $this->events();
-
-	   
+	  $this->events();   
 
    }
 
    function remove(){
 
-      global $mainframe ,$Itemid ,$DT_mailfrom , $DT_fromname;
+      global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname;
 
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	  $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
-
-	 
 
 	  if (is_array($cid)) 
 	  foreach($cid as $id){
@@ -223,16 +207,12 @@ function getarticle(){
 
 	  }
 
-	
-
       $subject = JText::_('DT_EVENT_DELETE_SUBJECT');
 	  $message = JText::_('DT_EVENT_DELETE_MESSAGE');
-	  $email = $frontendEventNotification ;
-	  JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subject,$message,1);
+	  $email = $frontendEventNotification;
+	  JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subject,$message,1);
 
 	 $mainframe->redirect( "index.php?option=".DTR_COM_COMPONENT."&controller=eventmanage&Itemid=$Itemid" );
-
-	  
 
    }
 
@@ -240,16 +220,14 @@ function getarticle(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
 	      $event->load($id);
 
-		  $event->archive = 0 ;
+		  $event->archive = 0;
 
 		  $event->store();      
 		  $query = "update #__dtregister_group_event set archive = ".$event->archive." where parent_id=".$id; 
@@ -257,21 +235,13 @@ function getarticle(){
 
 	  }
 
-	  
-
 	  $this->events();
 
    }
 
-   
-
 	function events(){
 
-	 
-
-       $archive = JRequest::getVar('archive',-1) ;
-
-	
+       $archive = JRequest::getVar('archive',-1);
 
 		if($archive==1){
 
@@ -283,71 +253,37 @@ function getarticle(){
 
 		}
 
-   
-
         JToolBarHelper::divider();
-
-
 
         JToolBarHelper::publishList('publish');
 
-
-
     	JToolBarHelper::divider();
-
-
 
 		JToolBarHelper::unpublishList('unpublish');
 
-
-
         JToolBarHelper::divider();
-
-
 
         JToolBarHelper::editList();
 
-
-
 	    JToolBarHelper::divider();
-
-
 
         JToolBarHelper::addNew();
 
-
-
         JToolBarHelper::divider();
-
-
 
 	    JToolBarHelper::editList('copy', JText::_( 'DT_COPY_EVENT') );
 
-
-
 	    JToolBarHelper::divider();
 
-             
-
-
 	    JToolBarHelper::divider();
-
-
 
         JToolBarHelper::deleteList();
-
-
-	   
 
 	    $this->view->setLayout('list');
 
 		$this->view->display();
 
-	  
-
 	}
-
-	
 
 	function edit(){
 
@@ -390,19 +326,11 @@ function getarticle(){
 
 	}
 
-	
-
 	function apply(){
 
-	  
-
-	  global $mainframe ,$Itemid , $frontendEventNotification ,$DT_mailfrom , $DT_fromname;
-
-	  
+	  global $mainframe,$Itemid,$frontendEventNotification,$DT_mailfrom,$DT_fromname;
 
 	  $row = $this->getModel('event')->table;
-
-	  
 
 	  if($row->save(JRequest::getVar('data'))){
 
@@ -412,16 +340,11 @@ function getarticle(){
 		  JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subject,$message,1);
 
 	  }else{
-
-		  
-
-		  $mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&task=edit&cid[]=".$row->slabId,$row->error);
-
-		    
+	  $mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&task=edit&cid[]=".$row->slabId,$row->error);   
 
 	  }
-
-	  $mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&&task=edit&cid[]=".$row->slabId);
+	
+ $mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&&task=edit&cid[]=".$row->slabId);
 
 	}
 
@@ -448,11 +371,7 @@ function getarticle(){
 
 	function save(){
 
-	  
-
-	  global $mainframe ,$Itemid ,$DT_mailfrom , $DT_fromname;
-
-		 
+	  global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname;
 
 	  $row = $this->getModel('event')->table;
 
@@ -488,15 +407,10 @@ function getarticle(){
             
 		   $subject = JText::_('DT_EVENT_EDIT_SUBJECT');
 		   $message = JText::_('DT_EVENT_EDIT_MESSAGE');
-		   $email = $frontendEventNotification ;
+		   $email = $frontendEventNotification;
 		   JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subject,$message,1);
 		}else{
-  
-			
-  
-			$mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&task=edit&cid[]=".$row->slabId,$row->error);
-  
-			  
+		$mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&task=edit&cid[]=".$row->slabId,$row->error);
   
 		}
   
@@ -504,21 +418,15 @@ function getarticle(){
 
 	  }
 
-	   
-
 	}
 
 	function getjevent(){
-
-	   
 
 	   $jevt = $this->getModel('event')->tableJevt;
 
 	   $data = $jevt->find(' evdet_id='.JRequest::getVar('eventId',0));
 
 	   $rep = $jevt->parserule(JRequest::getVar('eventId',0));
-
-	  
 
 	 //  prd($jevt->getObjData());
 
@@ -584,7 +492,7 @@ function getarticle(){
 
      function saveorder(){
 
-      global $mainframe ,$Itemid;
+      global $mainframe,$Itemid;
 
 	  $row = $this->getModel('event')->table;
 
@@ -627,15 +535,13 @@ function getarticle(){
    }
     function removeimage(){
 	   
-	    $event = $this->getModel('event')->table ;
+	    $event = $this->getModel('event')->table;
 		
-		$slabId = JRequest::getVar('eventId',0) ;
-		
-		
-		$event->slabId = $slabId ;
+		$slabId = JRequest::getVar('eventId',0);
+
+		$event->slabId = $slabId;
 		$event->removeImage();
 		
-	   
    }
 
 }

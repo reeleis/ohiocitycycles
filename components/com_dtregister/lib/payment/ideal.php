@@ -1,40 +1,33 @@
 <?php
 
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 /*-----------------------------------------------------------------------
-
   Start              : 24 februari 2009
-
   Door               : Mollie B.V. (RDF) © 2009
-
-
-
   Versie             : 1.07 (gebaseerd op de Mollie iDEAL class van
-
                        Concepto IT Solution - http://www.concepto.nl/)
-
   Laatste aanpassing : 19 november 2009
-
   Aard v. aanpassing : Gebruik standaard een SSL verbinding naar Mollie toe
-
   Door               : MK
-
   -----------------------------------------------------------------------*/
 
 require_once( JPATH_SITE.'/components/com_dtregister/lib/class.payment.php');
 
 class ideal extends Payment{
 
-
-
 	const     MIN_TRANS_AMOUNT = 118;
-
-
 
 	protected $partner_id      = null;
 
 	protected $testmode        = false;
-
-
 
 	protected $bank_id         = null;
 
@@ -46,8 +39,6 @@ class ideal extends Payment{
 
 	protected $report_url      = null;
 
-
-
 	protected $bank_url        = null;
 
 	protected $transaction_id  = null;
@@ -56,27 +47,21 @@ class ideal extends Payment{
 
 	protected $consumer_info   = array();
 
-
-
 	protected $error_message   = '';
 
 	protected $error_code      = 0;
-
-	
 
 	protected $api_host = 'ssl://secure.mollie.nl';
 
 	protected $api_port = 443;
 
-	var $bywebservice =  true ;
-
-	
+	var $bywebservice = true;
 
 	public function __construct ()
 
 	{
 
-		global $partner_id , $api_host , $api_port  ; 
+		global $partner_id, $api_host, $api_port; 
 
 		parent::__construct();
 
@@ -90,51 +75,31 @@ class ideal extends Payment{
 
 	}
 
-	
-
 	function billingform(){
 
 	    $bank_array = $this->getBanks();
 
-		ob_start() ;
+		ob_start();
 
 		?>
 
 		<tr>
 
-
-
       <td><?php echo JText::_( 'DT_BANK' );?></td>
-
-
 
       <td><select name="billing[bank_id]" id="bank_id">
 
-
-
         <option value=''><?php echo JText::_( 'DT_SELECT_BANK' );?></option>
-
-
 
         <?php foreach ($bank_array as $bank_id => $bank_name) { ?>
 
-
-
         <option value="<?php echo  $bank_id ?>"><?php echo  $bank_name ?></option>
-
-
 
         <?php } ?>
 
-
-
         </select>
 
-
-
       </td>
-
-
 
  </tr>
 
@@ -143,8 +108,6 @@ class ideal extends Payment{
 	    return ob_get_clean();
 
 	}
-
-
 
 	// Haal de lijst van beschikbare banken
 
@@ -158,21 +121,13 @@ class ideal extends Payment{
 
 			return false;
 
-
-
 		$banks_object = $this->_XMLtoObject($banks_xml);
-
-
 
 		if (!$banks_object || $this->_XMlisError($banks_object))
 
 			return false;
 
-
-
 		$banks_array = array();
-
-		
 
 		foreach ($banks_object->bank as $bank) {
 
@@ -180,21 +135,15 @@ class ideal extends Payment{
 
 		}
 
-
-
 		return $banks_array;
 
 	}
-
-
 
 	// Zet een betaling klaar bij de bank en maak de betalings URL beschikbaar
 
 	public function createPayment ($bank_id, $amount, $description="test", $return_url, $report_url)
 
 	{
-
-        
 
 		if (!$this->setBankId($bank_id) or
 
@@ -213,8 +162,6 @@ class ideal extends Payment{
 			return false;
 
 		}
-
-
 
 		$create_xml = $this->_sendRequest(
 
@@ -238,63 +185,45 @@ class ideal extends Payment{
 
 						 '&returnurl=' .   urlencode($this->getReturnURL()));
 
-        
-
 		if (empty($create_xml))
 
 			return false;
 
-
-
 		$create_object = $this->_XMLtoObject($create_xml);
-
-		
 
 		if (!$create_object || $this->_XMLisError($create_object))
 
 			return false;
 
-
-
 		$this->transaction_id = $create_object->order->transaction_id;
 
 		$this->bank_url       = $create_object->order->URL;
-
-
 
 		return true;
 
 	}
 
-     
-
 	function process(){
 
-	    global $mainframe , $Itemid;
+	    global $mainframe, $Itemid;
 
 		$mosConfig_live_site = JURI::root( false );
 
 		$return_url = "{$mosConfig_live_site}index.php?option=com_dtregister&task=success&controller=payment&Itemid=$Itemid";
 
-		$report_url = "{$mosConfig_live_site}index.php?option=com_dtregister&task=cancel&controller=payment&Itemid=$Itemid" ;
+		$report_url = "{$mosConfig_live_site}index.php?option=com_dtregister&task=cancel&controller=payment&Itemid=$Itemid";
 
 	   $data = $this->createPayment($this->bank_id, ($this->cart->getAmount()*100), $this->description, $return_url, $report_url);
 
-	   
-
 	   if(!$data){
 
-		  return $data ;   
+		  return $data;   
 
 	   }
 
 	   $mainframe->redirect( $this->getBankURL());
 
-	   	
-
 	}
-
-	 
 
 	// Kijk of er daadwerkelijk betaald is
 
@@ -309,8 +238,6 @@ class ideal extends Payment{
 			return false;
 
 		}
-
-
 
 		$check_xml = $this->_sendRequest(
 
@@ -330,23 +257,15 @@ class ideal extends Payment{
 
 		);
 
-
-
 		if (empty($check_xml))
 
 			return false;
 
-			
-
 		$check_object = $this->_XMLtoObject($check_xml);
-
-
 
 		if (!$check_object || $this->_XMLisError($check_object))
 
 			return false;
-
-			
 
 		$this->paid_status   = ($check_object->order->payed == 'true');
 
@@ -354,23 +273,15 @@ class ideal extends Payment{
 
 		$this->consumer_info = (isset($check_object->order->consumer)) ? (array) $check_object->order->consumer : array();
 
-
-
 		return true;
 
 	}
-
-	
-
-
 
 /*
 
 	PROTECTED FUNCTIONS
 
 */
-
-
 
 	protected function _sendRequest ($host, $port, $path, $data) 
 
@@ -382,8 +293,6 @@ class ideal extends Payment{
 
 		$buf = '';
 
-		
-
 		if (!$fp) 
 
 		{
@@ -392,13 +301,9 @@ class ideal extends Payment{
 
 			$this->error_code    = 0; 
 
-			
-
 			return false;
 
 		}
-
-		
 
 		@fputs($fp, "POST $path HTTP/1.0\n");
 
@@ -412,19 +317,13 @@ class ideal extends Payment{
 
 		@fputs($fp, $data); 
 
-
-
 		while (!feof($fp)) {
 
 			$buf .= fgets($fp, 128);
 
 		}
 
-		
-
 		fclose($fp);
-
-
 
 		if (empty($buf))
 
@@ -438,15 +337,9 @@ class ideal extends Payment{
 
 			list($headers, $body) = preg_split("/(\r?\n){2}/", $buf, 2);
 
-        
-
-		
-
 		return $body;
 
 	}
-
-
 
 	protected function _XMLtoObject ($xml) 
 
@@ -476,13 +369,9 @@ class ideal extends Payment{
 
 		}
 
-
-
 		return $xml_object;
 
 	}
-
-
 
 	protected function _XMLisError($xml)
 
@@ -502,23 +391,15 @@ class ideal extends Payment{
 
 				$this->error_code    = (string) $xml->item->errorcode;
 
-			
-
 				return true;
 
 			}
 
 		}
 
-		
-
 		return false;
 
 	}
-
-
-
-
 
 	/* Getters en setters */
 
@@ -530,13 +411,9 @@ class ideal extends Payment{
 
 			return false;
 
-
-
 		return ($this->partner_id = $partner_id);
 
 	}
-
-
 
 	public function getPartnerId () {
 
@@ -544,17 +421,13 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setTestmode ($enable = true) 
 
 	{
-
+        
 		return ($this->testmode = $enable);
 
 	}
-
-
 
 	public function setBankId ($bank_id) 
 
@@ -564,13 +437,9 @@ class ideal extends Payment{
 
 			return false;
 
-
-
 		return ($this->bank_id = $bank_id);
 
 	}
-
-
 
 	public function getBankId () 
 
@@ -580,8 +449,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setAmount ($amount) 
 
 	{
@@ -590,19 +457,13 @@ class ideal extends Payment{
 
 			return false;
 
-			
-
 		if (self::MIN_TRANS_AMOUNT > $amount)
 
 			return false;
 
-		
-
 		return ($this->amount = $amount);
 
 	}
-
-
 
 	public function getAmount () 
 
@@ -612,21 +473,15 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setDescription ($description) 
 
 	{
 
 		$description = substr($description, 0, 29);
 
-
-
 		return ($this->description = $description);
 
 	}
-
-
 
 	public function getDescription () 
 
@@ -636,8 +491,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setReturnURL ($return_url) 
 
 	{
@@ -646,13 +499,9 @@ class ideal extends Payment{
 
 			return false;
 
-
-
 		return ($this->return_url = $return_url);
 
 	}
-
-
 
 	public function getReturnURL () 
 
@@ -662,8 +511,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setReportURL ($report_url) 
 
 	{
@@ -672,13 +519,9 @@ class ideal extends Payment{
 
 			return false;
 
-			
-
 		return ($this->report_url = $report_url);
 
 	}
-
-
 
 	public function getReportURL () 
 
@@ -688,8 +531,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function setTransactionId ($transaction_id) 
 
 	{
@@ -698,13 +539,9 @@ class ideal extends Payment{
 
 			return false;
 
-
-
 		return ($this->transaction_id = $transaction_id);
 
 	}
-
-
 
 	public function getTransactionId () 
 
@@ -714,8 +551,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function getBankURL () 
 
 	{
@@ -723,8 +558,6 @@ class ideal extends Payment{
 		return $this->bank_url;
 
 	}
-
-
 
 	public function getPaidStatus () 
 
@@ -734,8 +567,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function getConsumerInfo () 
 
 	{
@@ -744,8 +575,6 @@ class ideal extends Payment{
 
 	}
 
-
-
 	public function getErrorMessage()
 
 	{
@@ -753,8 +582,6 @@ class ideal extends Payment{
 		return $this->error_message;
 
 	}
-
-	
 
 	public function getErrorCode()
 
@@ -765,4 +592,3 @@ class ideal extends Payment{
 	}
 
 }
-

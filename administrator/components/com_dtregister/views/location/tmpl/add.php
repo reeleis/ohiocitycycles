@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.6.2
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -14,7 +14,7 @@
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
 
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
-    $country =  $this->getModel('country');
+    $country = $this->getModel('country');
 ?>
 
 <script type="text/javascript">
@@ -157,8 +157,6 @@ function submitbutton(pressbutton){
       <input type="file" name="locationimage" /> &nbsp;
 
       <input type="button" id="imageUpload" value="<?php echo  JText::_( 'DT_UPLOAD'); ?>" />
-
-      
 
       <br /><?php echo JText::_( 'DT_LOCATION_IMAGE_CHECKBOX_HELP'); ?>
 

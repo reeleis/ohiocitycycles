@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -91,6 +91,7 @@ $config = $this->getModel('config');
                     <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PREREQUISITE_EVENT_MSG'); ?>:</strong>
                       <div style="padding:5px 5px 5px 15px;">
                       <br />[PREREQ_EVENTS] - <?php echo JText::_( 'DT_TAG_PREREQ_EVENTS' );?>
+                      <br />[PREREQ_CATEGORY] - <?php echo JText::_( 'DT_TAG_PREREQ_CATEGORY' );?>
                       </div>
                     </td>
 							      <td align="left" valign="top"><?php echo $editor->display("config[prerequisite_event_msg]",stripslashes($config->getGlobal('prerequisite_event_msg','')),'','','20','20','0'); ?></td>

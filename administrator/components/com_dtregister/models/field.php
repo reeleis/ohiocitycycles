@@ -822,13 +822,15 @@ class TableField extends DtrTable {
 
   }
 
-  function getchild(){
+  function getchild($published=0){
 
 	 
 
     // $query = "Select * from #__dtregister_fields where parent_id=".$this->id." order by ordering";
 
 	  global $mainframe;
+	  
+	  
 	 $condition = "";
 	 if($mainframe->isAdmin()){
 		
@@ -837,6 +839,7 @@ class TableField extends DtrTable {
 	 }else{
 		
 		$condition = " and hidden = 0 ";
+		if ($published == 1) $condition = " and hidden = 0 and published = 1 ";
 			 
 	 }
 
@@ -1604,13 +1607,17 @@ class Field_Text extends Field{
 			 $requiredClass = ($this->required)?'required':'';
 			 $readonly = "";
 			 
-			 global $cbviewonly , $cb_integrated;
+			 global $cbviewonly , $cb_integrated ,$map_cb_fields;
 			 $my = &JFactory::getUser();
-             if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id){
+             if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 				 $readonly = "readonly='readonly'";
 			
 			  
 			 }
+			 if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
+			    $readonly = "";
+			 }
+			
              return "<input type='text' id='Field".$this->id."'$readonly  class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='Field[".$this->id."]' value='$value' />";
 
 	}
@@ -1749,10 +1756,10 @@ EOH;
     if(!is_numeric($value)){
         $value =  $this->getkeyByValue($value);
      }
-      global $cbviewonly , $cb_integrated;
+      global $cbviewonly , $cb_integrated , $map_cb_fields ;
 	  $my = &JFactory::getUser();
      $disabled = "";
-     if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id){
+     if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 		   $disabled = "disabled='disabled'";
 	       
 		
@@ -1768,7 +1775,7 @@ EOH;
 		    $this->values = explode('|',$this->values);
 
 		 }
-
+       
 	  return (isset($obj['fields'][$this->id]) && isset($this->values[$obj['fields'][$this->id]]))?$this->values[$obj['fields'][$this->id]]:'';
 
    }
@@ -1969,10 +1976,16 @@ class Field_Checkbox extends Field{
 
 			// pr($this->selected);
 
-			 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
+             if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0 ){
+			    $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
+			 }else{
+				 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
+			  }
+			 
 
-			
-             $value = $this->getkeyByValue($value);
+			if($value !='')
+             $value = array_filter($this->getkeyByValue($value));
+			 
 			
 
              $outPut="";
@@ -2008,19 +2021,22 @@ class Field_Checkbox extends Field{
 				 
 
 				   $value = ($value=="")?array():$value;
-				   global $cbviewonly , $cb_integrated;
+				   global $cbviewonly , $cb_integrated , $map_cb_fields;
 	 
                  $my = &JFactory::getUser();
                      
                  $disabled = "";
                      
-                 if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id){
+                 if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
                            
                    $disabled = "disabled='disabled'";
                            
                         
                       
                  }
+				  if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
+			         $disabled = "";
+			      }
 				   $value = (!is_array($value))?array($value):$value;
                   
                   if(in_array($i,$value)){
@@ -2198,7 +2214,7 @@ class Field_Radio extends Field{
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
 	    //Radio list
-
+        
 		$this->optionlimit = $this->getOptionLimit($event->slabId);
 
 	    $this->optionused = $this->optionUsageByEvent($event->slabId);
@@ -2239,13 +2255,13 @@ class Field_Radio extends Field{
 
 				 $requiredClass = ($i==0 && $this->required)?'required':'';
 				 
-                 global $cbviewonly , $cb_integrated;
+                 global $cbviewonly , $cb_integrated , $map_cb_fields;
 	 
                  $my = &JFactory::getUser();
                      
                  $disabled = "";
                      
-                 if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id){
+                 if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
                            
                    $disabled = "disabled='disabled'";
                            
@@ -2253,8 +2269,11 @@ class Field_Radio extends Field{
                       
                  }
                  
-                 
-                 if($i == $value){ 
+                  if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
+			         $disabled = "";
+			      }
+                  
+                 if((int)$i === (int)$value){ 
 
                       if($new_line) 
 
@@ -2617,7 +2636,7 @@ class Field_Upload extends Field{
 
                     var $out = DTjQuery('#debug');
 
-            $out.html('Form success handler received: <strong>' + typeof response + '</strong>');
+           // $out.html('Form success handler received: <strong>' + typeof response + '</strong>');
 
             if (typeof response == 'object' && data.nodeType)
 
@@ -2627,7 +2646,7 @@ class Field_Upload extends Field{
 
                 response = objToString(response);
 
-            $out.append('<div><pre>'+ response +'</pre></div>');
+           // $out.append('<div><pre>'+ response +'</pre></div>');
 
 
 
@@ -2698,8 +2717,11 @@ class Field_Upload extends Field{
 	 function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
 	
-
-	  return $obj['fields'][$this->id];
+      if(isset($obj['fields'][$this->id])){
+	    return $obj['fields'][$this->id];
+	  }else{
+		 return "";  
+		}
 
 	     
 
@@ -2775,13 +2797,17 @@ class Field_Email extends Field{
 
 	   $requiredClass = ($this->required)?'required email':'email';
 	   $readonly = "";
-        global $cbviewonly , $cb_integrated;
+        global $cbviewonly , $cb_integrated , $map_cb_fields;
 	   $my = &JFactory::getUser();
-	   if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id){
+	   if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 		   $readonly = "readonly='readonly'";
 	  
 		
 	   }
+	    if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
+			         $readonly = "";
+			      }
+	   
        $fieldhtml = "<input type='text' id='Field".$this->id."' class='inputbox ".$requiredClass."' ".$readonly." size='$this->field_size' $maxlength name='Field[".$this->id."]' value='$value' />";
 
 	   $replace  = array($this->label,$fieldhtml,$description);

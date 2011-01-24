@@ -1,34 +1,19 @@
 <?php
 
-
-
 /**
-
-* @version 2.6.5
-
+* @version 2.7.0
 * @package Joomla 1.5
-
 * @subpackage DT Register
-
 * @copyright Copyright (C) 2006 DTH Development
-
 * @copyright contact dthdev@dthdevelopment.com
-
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
-
 */
-
-
 
     $eWAY_CustomerID = "87654321";    // Set this to your eWAY Customer ID
 
     $eWAY_PaymentMethod = 'REAL_TIME';  // Set this to the payment gatway you would like to use (REAL_TIME, REAL_TIME_CVN or GEO_IP_ANTI_FRAUD)
 
     $eWAY_UseLive = false; // Set this to true to use the live gateway
-
-
-
-
 
 	//define default values for eway
 define('REAL_TIME', 'REAL-TIME');
@@ -42,13 +27,7 @@ define('REAL_TIME', 'REAL-TIME');
 
 	define('EWAY_DEFAULT_LIVE_GATEWAY', false); //<false> sets to testing mode, <true> to live mode
 
-
-
         //define script constants
-
-	
-
-
 
        	//define URLs for payment gateway
 
@@ -72,8 +51,6 @@ define('REAL_TIME', 'REAL-TIME');
 
 	define('EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE', 'https://www.eway.com.au/gateway_cvn/payment.asp');
 
-
-
 class EwayPaymentLive {
 
     var $myGatewayURL;
@@ -84,23 +61,17 @@ class EwayPaymentLive {
 
     var $myCurlPreferences = array();
 
-	var $bywebservice =  true ;
-
-
+	var $bywebservice = true;
 
     //Class Constructor
 
-	function EwayPaymentLive($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD ,$liveGateway  = EWAY_DEFAULT_LIVE_GATEWAY) {
+	function EwayPaymentLive($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD ,$liveGateway = EWAY_DEFAULT_LIVE_GATEWAY) {
 
 		$this->myCustomerID = $customerID;
 
 	    switch($method){
 
-
-
 		    case 'REAL_TIME';
-
-
 
 		    		if($liveGateway)
 
@@ -140,15 +111,7 @@ class EwayPaymentLive {
 
     	}
 
-		
-
-		
-
 	}
-
-	
-
-	
 
 	//Payment Function
 
@@ -162,11 +125,9 @@ class EwayPaymentLive {
 
         $xmlRequest .= "</ewaygateway>";
 
-//echo  htmlentities($xmlRequest) ;
+//echo  htmlentities($xmlRequest);
 
 		$xmlResponse = $this->sendTransactionToEway($xmlRequest);
-
-
 
 		if($xmlResponse!=""){
 
@@ -180,13 +141,9 @@ class EwayPaymentLive {
 
 	}
 
-
-
 	//Send XML Transaction Data and receive XML response
 
 	function sendTransactionToEway($xmlRequest) {
-
-	  
 
 		$ch = curl_init($this->myGatewayURL);
 
@@ -200,10 +157,7 @@ class EwayPaymentLive {
 
         	curl_setopt($ch, $key, $value);
 
-
-
         $xmlResponse = curl_exec($ch);
-
 
         if(curl_errno( $ch ) == CURLE_OK)
 
@@ -211,17 +165,13 @@ class EwayPaymentLive {
 
 	}
 
-	
-
-	
-
 	//Parse XML response from eway and place them into an array
 
 	function parseResponse($xmlResponse){
 
 		$xml_parser = xml_parser_create();
 
-		xml_parse_into_struct($xml_parser,  $xmlResponse, $xmlData, $index);
+		xml_parse_into_struct($xml_parser, $xmlResponse, $xmlData, $index);
 
         $responseFields = array();
 
@@ -235,10 +185,6 @@ class EwayPaymentLive {
 
 	}
 
-	
-
-	
-
 	//Set Transaction Data
 
 	//Possible fields: "TotalAmount", "CustomerFirstName", "CustomerLastName", "CustomerEmail", "CustomerAddress", "CustomerPostcode", "CustomerInvoiceDescription", "CustomerInvoiceRef",
@@ -251,17 +197,13 @@ class EwayPaymentLive {
 
 		 	$value = round($value*100);
 
-		   //$value =  1000 ;
+		   //$value =  1000;
 
 		}
 
 		$this->myTransactionData["eway" . $field] = htmlentities(trim($value));
 
 	}
-
-	
-
-	
 
 	//receive special preferences for Curl
 
@@ -270,10 +212,6 @@ class EwayPaymentLive {
 		$this->myCurlPreferences[$field] = $value;
 
 	}
-
-		
-
-	
 
 	//obtain visitor IP even if is under a proxy
 

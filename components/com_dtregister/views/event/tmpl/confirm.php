@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $xhtml , $currency_code;
+global $Itemid , $xhtml_url , $currency_code;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 
 ?>
@@ -152,6 +152,6 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 </form>
 <script type="text/javascript">
   DTjQuery(function(){
-	  DTjQuery("#price_header").load("<?php echo JRoute::_("index.php?option=com_dtregister&controller=event&task=price_header&no_html=1&tmpl=confirm_price_header");?>");
+	  DTjQuery("#price_header").load("<?php echo JRoute::_("index.php?option=com_dtregister&controller=event&task=price_header&no_html=1&dttmpl=confirm_price_header",$xhtml_url);?>");
   })
 </script>

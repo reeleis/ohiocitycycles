@@ -1,6 +1,16 @@
 <?php
-global $event_show_date ;
-$HeventTable = $this->getModel('event')->table ;
+
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $event_show_date;
+$HeventTable = $this->getModel('event')->table;
 $HeventTable->load($this->header_eventId);
 $HeventTable->overrideGlobal($HeventTable->slabId);
 $duepayment = 'DT_MAKE_PAYMENT';
@@ -13,11 +23,10 @@ $var = DT_Session::get('register.User.process');
 
 		<?php
 
-
-			echo $HeventTable->title." "  ;
+			echo $HeventTable->title." ";
 
             if($event_show_date){
-               echo "(".$HeventTable->displaydateheader(' ').")" ;
+               echo "(".$HeventTable->displaydateheader(' ').")";
 			}
 			
 		?></div>

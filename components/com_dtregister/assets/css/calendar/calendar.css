@@ -78,6 +78,12 @@ border-bottom:2px solid #c3d9ff;
 	padding-right:0;
 	border-left:3px double #ddd;
 }
+
+#txtdatetimeshow {
+	font-weight: bold;
+	font-size: 14pt;
+}
+
 .st-grid {
 	position:relative;
 	table-layout:fixed;

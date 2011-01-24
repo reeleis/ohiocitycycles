@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -26,7 +26,7 @@ function com_install() {
 /******* Database changes from 2.6.9 to 2.7.0 *******/
 
 // Start changes for #__dtregister_categories
-        migrate_backup();
+
 		$sql="Show columns from #__dtregister_categories";
 		$database->setQuery($sql);
 		$rows=$database->loadObjectList();
@@ -538,6 +538,38 @@ function com_install() {
 
     // End of changes to #__dtregister_user
 
+   // Add title field to config table
+
+	$sql="Show columns from #__dtregister_config";
+
+	$database->setQuery($sql);
+
+	$rows=$database->loadObjectList();
+
+	$arrFields=array();
+
+	for($i=0,$n=count($rows);$i<$n;$i++)
+
+	{
+
+		$row=$rows[$i];
+
+		$arrFields[]=$row->Field;
+
+	}
+
+	if(!in_array('title',$arrFields))
+
+	{
+
+		$sql="ALTER TABLE `#__dtregister_config` ADD `title` varchar(50) default NULL";
+
+		$database->setQuery($sql);
+
+		$database->query();
+
+	}
+
 	//Check and insert default data for configuration
 
 	$sql="Select count(*) From #__dtregister_config";
@@ -1029,8 +1061,8 @@ function com_install() {
 	$database->setQuery($sql);
 	$total=$database->loadResult();
 	
-	if( $total != 12)
-	{	
+	if( $total < 1 )
+	{ 
 	    
 	   $sql="delete t1, t2 From #__dtregister_fields t1 left join #__dtregister_field_event t2 on t1.id = t2.field_id where `name`  
 	   in('firstname','title','lastname','address','address2','city','state','zip','country','phone','email','organization')";
@@ -1078,10 +1110,10 @@ function com_install() {
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$text = "Afghanistan|Albania|Algeria|Andorra|Angola|Antigua & Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia & Herzegovina|Botswana|Brazil|Brunei Darussalam|Bulgaria|Burkina Faso|Burma (Myanmar)|Burundi|Cambodia|Cameroon|Canada|Cape Verde|Cayman Islands|Central African|Chad|Chile|China|Colombia|Comoros|Congo|Congo, Democratic Republic of the|Costa Rica|Côte d'Ivoire|Croatia|Cuba|Cyprus|Czech Republic|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|East Timor|Egypt|El Salvador|England|Equatorial Guinea|Eritrea|Estonia|Ethiopia|Fiji|Finland|France|Gabon|Gambia, The|Georgia|Germany|Ghana|Great Britain|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Honduras|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Macedonia|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar|Namibia|Nauru|Nepal|The Netherlands|New Zealand|Nicaragua|Niger|Nigeria|North Korea|Norway|Oman|Pakistan|Palau|Palestinian State|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|St. Kitts & Nevis|St. Lucia|St. Vincent & The Grenadines|Samoa|San Marino|São Tomé & Príncipe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa|South Korea|Spain|Sri Lanka|Sudan|Suriname|Swaziland|Sweden|Switzerland|Syria|Taiwan|Tajikistan|Tanzania|Thailand|Togo|Tonga|Trinidad & Tobago|Tunisia|Turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates|United Kingdom|United States|Uruguay|Uzbekistan|Vanuatu|Vatican City|Venezuela|Vietnam|Western Sahara|Yemen|Yugoslavia|Zaire|Zambia|Zimbabwe";
+		$text = "Afghanistan|Albania|Algeria|Andorra|Angola|Antigua & Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia & Herzegovina|Botswana|Brazil|Brunei Darussalam|Bulgaria|Burkina Faso|Burma (Myanmar)|Burundi|Cambodia|Cameroon|Canada|Cape Verde|Cayman Islands|Central African|Chad|Chile|China|Colombia|Comoros|Congo|Congo, Democratic Republic of the|Costa Rica|Côte d'Ivoire|Croatia|Cuba|Cyprus|Czech Republic|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|East Timor|Egypt|El Salvador|England|Equatorial Guinea|Eritrea|Estonia|Ethiopia|Fiji|Finland|France|Gabon|Gambia, The|Georgia|Germany|Ghana|Great Britain|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Honduras|Hong Kong|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Macedonia|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar|Namibia|Nauru|Nepal|The Netherlands|New Zealand|Nicaragua|Niger|Nigeria|North Korea|Norway|Oman|Pakistan|Palau|Palestinian State|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|St. Kitts & Nevis|St. Lucia|St. Vincent & The Grenadines|Samoa|San Marino|São Tomé & Príncipe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa|South Korea|Spain|Sri Lanka|Sudan|Suriname|Swaziland|Sweden|Switzerland|Syria|Taiwan|Tajikistan|Tanzania|Thailand|Togo|Tonga|Trinidad & Tobago|Tunisia|Turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates|United Kingdom|United States|Uruguay|Uzbekistan|Vanuatu|Vatican City|Venezuela|Vietnam|Western Sahara|Yemen|Yugoslavia|Zaire|Zambia|Zimbabwe";
 		$text = $database->Quote($text);
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'country','Country','150','','10','1','0',".$text.",'1','United States','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','0','COUNTRY');";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'country','Country','150','','10','1','0',".$text.",'1','United States','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','0','COUNTRY');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
@@ -1181,11 +1213,11 @@ FROM `#__dtregister_group_event`
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_acos` VALUES(8,'payment','delete','DT_EDIT_DELETE_PAYOPTION','action');";
+		$sql="INSERT INTO `#__dtregister_acos` VALUES(8,'payoption','delete','DT_EDIT_DELETE_PAYOPTION','action');";
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_acos` VALUES(9,'payment','edit','DT_EDIT_DELETE_PAYOPTION','action');";
+		$sql="INSERT INTO `#__dtregister_acos` VALUES(9,'payoption','edit','DT_EDIT_DELETE_PAYOPTION','action');";
 		$database->setQuery($sql);
 		$database->query();
 		
@@ -1213,7 +1245,7 @@ FROM `#__dtregister_group_event`
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_acos` VALUES(16,'payment','add','DT_CREATE_PAYOPTION','action');";
+		$sql="INSERT INTO `#__dtregister_acos` VALUES(16,'payoption','add','DT_CREATE_PAYOPTION','action');";
 		$database->setQuery($sql);
 		$database->query();
 		
@@ -1250,6 +1282,10 @@ FROM `#__dtregister_group_event`
 		$database->query();
 	}
 	
+	$sql="UPDATE `#__dtregister_acos` SET `controller` = 'payoption' WHERE `controller` = 'payment'";
+	$database->setQuery($sql);
+	$database->query();
+	// echo "<br />".$database->getErrorMsg();
 		
 	// Load default Joomla User groups into database for Permissions use
 
@@ -1485,7 +1521,6 @@ FROM `#__dtregister_group_event`
 		$database->setQuery($sql);
 		$database->query();
 	}
-	
 	
 	
 	// Load default Pay Later options into database
@@ -1980,7 +2015,6 @@ FROM `#__dtregister_group_event`
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'defines.php');
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'dtmodel.php');
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'dttable.php');
-
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'models'.DS.'migration.php'); 
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'models'.DS.'event.php'); 
 	include_once(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'models'.DS.'user.php');
@@ -2000,10 +2034,35 @@ FROM `#__dtregister_group_event`
 		
 	}elseif(!$dtreg->migrated && !$freshinstall){
 		//$migrate->fix_migration();
-	
 			
 	}
-	
+	$migrate->TableUser->renamefield('userType','type');
+	$offset = $migrate->get_jevent_offset();
+		if($offset === 0){
+			$offset = " + 0 " ;
+		}elseif($offset < 0){
+			$offset = " - ".abs($offset);
+		}elseif($offset > 0){
+			$offset = " + ".abs($offset);
+		}
+		
+		$query = "update #__dtregister_group_event e inner join  #__dtregister_rollback_group_event re on 
+
+re.slabId = e.slabId inner join #__jevents_vevdetail j on re.eventId=j.evdet_id set 
+
+e.title = 
+			j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart ".$offset." ,'%Y-%m-%d') , 
+
+e.dtstarttime = FROM_UNIXTIME(j.dtstart ".$offset." ,'%H:%i:%s') , 
+			e.dtend =  FROM_UNIXTIME(j.dtend ".$offset." ,'%Y-%m-%d') , e.dtendtime = 
+
+FROM_UNIXTIME(j.dtend ".$offset." ,'%H:%i:%s') where e.title is null or e.title = ''";
+
+  
+       $database->setQuery($query);
+	   $database->query();
+	  // echo $database->getErrorMsg();
+		
 	
 	// Onscreen text after successful installation
 	
@@ -2024,91 +2083,6 @@ FROM `#__dtregister_group_event`
 
 <br /><br /></p>";
 
-}
-
-function migrate_backup(){
-    
-	$database = &JFactory::getDBO();
-	
-	$tables = $database->getTableList();
-	$table_name = $database->getPrefix()."dtregister_bak_categories";
-	$take_backup = !(in_array($table_name,$tables));
-	
-	
-	
-	if($take_backup){
-	    
-		$query = "create TABLE IF NOT EXISTS `#__dtregister_bak_categories` select * from  `#__dtregister_categories`" ;
-		 $database->setQuery($query);
-		  $database->query();
-		$query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_codes` select * from  `#__dtregister_codes`" ;
-		 $database->setQuery($query);
-		  $database->query();
-		$query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_config` select * from  `#__dtregister_config`" ;
-		 $database->setQuery($query);
-		  $database->query();
-		$query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_events_codes` select * from  `#__dtregister_events_codes`" ;
-		 $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_event_config` select * from  `#__dtregister_event_config`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_export_fields` select * from  `#__dtregister_export_fields`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_fields` select * from  `#__dtregister_fields`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_field_event` select * from  `#__dtregister_field_event`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_files` select * from  `#__dtregister_files`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_group` select * from  `#__dtregister_group`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_group_amount` select * from  `#__dtregister_group_amount`" ;
-		  
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_group_event` select * from  `#__dtregister_group_event`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_group_member` select * from  `#__dtregister_group_member`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_history` select * from  `#__dtregister_history`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_ipn_debug` select * from  `#__dtregister_ipn_debug`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_locations` select * from  `#__dtregister_locations`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_prerequisite` select * from  `#__dtregister_prerequisite`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_prerequisite_category` select * from  `#__dtregister_prerequisite_category`" ;
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_session` select * from  `#__dtregister_session`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_sync` select * from  `#__dtregister_sync`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_user` select * from  `#__dtregister_user`" ;
-		   $database->setQuery($query);
-		  $database->query();
-		  $query =  "create TABLE IF NOT EXISTS `#__dtregister_bak_waiting` select * from  `#__dtregister_waiting`";
-		   $database->setQuery($query);
-		  $database->query();
-		 
-			
-	}
-	
-	
-		
 }
 
 ?>

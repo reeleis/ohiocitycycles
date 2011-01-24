@@ -106,6 +106,7 @@ class DTCBFields extends DtrTable {
 			return false;
 	    }
 		$this->User->load($id);
+		if($this->User->avatar != "")
 		$this->User->avatar ="images/comprofiler/".$this->User->avatar ;
 		$juser->load($id);
 		

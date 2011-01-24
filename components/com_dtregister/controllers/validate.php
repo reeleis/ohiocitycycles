@@ -110,15 +110,13 @@ die;
 
 		$eventTable->overrideGlobal($eventId);
 		
-		$usercreation = $eventTable->usercreation ;
+		$usercreation = $eventTable->usercreation;
 		 $my = &JFactory::getUser();
 		
 		$field_id = key($_REQUEST['Field']);
 		$email=array_pop($_REQUEST['Field']);
 		
 		if(!$my->id &&  $usercreation > 0){
-
-			
 
 			$sql="SELECT COUNT(*) FROM #__users WHERE email='$email' ";
 
@@ -155,9 +153,6 @@ die;
 
 		}else{
             
-
-	        
-
 			$sql="SELECT COUNT(*) FROM #__dtregister_user u inner join #__dtregister_user_field_values v on u.userId  = v.user_id   WHERE eventId='$eventId'  AND v.field_id = $field_id  and v.`value` = '$email' and u.cancel <> 1";
 
 			$database->setQuery($sql);

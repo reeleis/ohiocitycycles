@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,9 +9,9 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-class JElementList extends JElement {
+class JElementCatlist extends JElement {
   
-  var $_name = 'List';
+  var $_name = 'Catlist';
   function fetchElement($name, $value, &$node, $control_name)	{
      
 		$db = &JFactory::getDBO();

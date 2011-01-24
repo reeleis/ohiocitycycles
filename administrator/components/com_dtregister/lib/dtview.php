@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -19,22 +19,22 @@ class DtrView extends JView {
 	   $this->addHelperPath(JPATH_COMPONENT_ADMINISTRATOR.DS.'helpers');
 		$this->loadHelper('html');
 		$this->loadHelper('dtregister');
-		
-		
-	    
+
 	 }
 	 
 	 function display($tpl){
 	    //$this->getModel('config')->setGlobal();
+	//	http://www.joomlaeventregistration.com/dtreg27/media/system/js/mootools.js
 		global $mainframe;
 		$bar = & JToolBar::getInstance('toolbar');
 		$document	=& JFactory::getDocument();
+		 //$document->addScript( JURI::root(true).'/media/system/js/mootools.js');
 		$document->addScript( JURI::root(true).'/includes/js/joomla.javascript.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validate.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validationmethods.js');
 		if(!$mainframe->isAdmin()){
-		   	if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
+		   	if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || (isset($_REQUEST['format']) && $_REQUEST['format']!='html' ))){
 				if(!isset($mainframe->JComponentTitle)){
 						$mainframe->JComponentTitle = "";
 				}
@@ -43,8 +43,24 @@ class DtrView extends JView {
 			}
 			$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/main.css');
 			
+			
+			ob_start();
+			?>
+            
+            DTjQuery(function(){
+   
+               DTjQuery('a.toolbar').click(function(event){
+                  event.preventDefault();
+               
+               })
+                
+            })
+            <?php
+			 $js = ob_get_clean();
+			 $document->addScriptDeclaration( $js );
+			
 		}else{
-			 $document	=& JFactory::getDocument();
+			 $document =& JFactory::getDocument();
 			 $document->addStyleSheet(JURI::root(true).'/administrator/components/com_dtregister/assets/css/admin.dtregister.css');
 			 JToolBarHelper::custom('cpanel','cpanel','',JText::_( 'DT_CONTROL_PANEL'),false);
 		   	
@@ -94,7 +110,7 @@ class DtrView extends JView {
 		  return $html = str_replace($constants,$replace,$tpl); 
     }
 	function userFields($usercreation=0){
-	     global $amp , $xhtml ;
+	     global $amp, $xhtml;
 		 $my = &JFactory::getUser();
 		
 		 if($my->id || $usercreation==0){
@@ -151,7 +167,7 @@ class DtrView extends JView {
           <?php
 		  $js = ob_get_clean();
 		  $document->addScriptDeclaration($js);
-	   	 return $html ;
+	   	 return $html;
 	 }
 	 
 	 function capthaField(){
@@ -243,7 +259,7 @@ class DtrView extends JView {
           <?php
 		  $js = ob_get_clean();
 		  $document->addScriptDeclaration($js);
-		  return $html ;
+		  return $html;
   }
   
 }

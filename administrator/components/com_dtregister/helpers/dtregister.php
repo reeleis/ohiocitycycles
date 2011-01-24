@@ -1,7 +1,16 @@
 <?php
+
+/**
+* @version 2.7.1
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DTreg {
     
-	
 	function getcomItemId($option){
 		
 		global $mainframe;
@@ -27,27 +36,25 @@ class DTreg {
 
 		 if($front_link_type){
 
-		   	 $register = '<img class="event_button" src="components/com_dtregister/assets/images/'.$color.'/closed_62x14.png" border="0" alt="'.JText::_('DT_CLOSED').'" />';
+		   	 $register = '<img class="event_button" src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$color.'/closed_62x14.png" border="0" alt="'.JText::_('DT_CLOSED').'" />';
 
 			 $separater = " ";
 
-             return $register ;
+             return $register;
 
 		   }else{
 
 	    		$register = JText::_( 'DT_CLOSED');
 
-                return $register ;
+                return $register;
 
 		   }
 
    }elseif(($row->cut_off=='y') && ($row->cut_off_date!='0000-00-00')){
 
-		
-
 		 if($front_link_type){
 
-		   	 $register = '<img class="event_button" src="components/com_dtregister/assets/images/'.$color.'/closed_62x14.png" border="0" alt="'.JText::_('DT_CLOSED').'" />';
+		   	 $register = '<img class="event_button" src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$color.'/closed_62x14.png" border="0" alt="'.JText::_('DT_CLOSED').'" />';
 
 			 $separater = " ";
 
@@ -56,14 +63,12 @@ class DTreg {
 	    		$register = JText::_( 'DT_REGISTER');
 
 		   }
-
-	}elseif(($row->registered>=$row->max_registrations)&&($row->max_registrations)&&($row->waiting_list=='0')){
-
-		
+           
+	}elseif(($row->registered>=$row->max_registrations)&&($row->max_registrations)&&($row->waiting_list=='0')){	
 
 		if($front_link_type){
 
-		   	 $register = '<img class="event_button" src="components/com_dtregister/assets/images/'.$color.'/full_62x14.png" border="0" alt="'.JText::_('DT_FULL').'" />';
+		   	 $register = '<img class="event_button" src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$color.'/full_62x14.png" border="0" alt="'.JText::_('DT_FULL').'" />';
 
 			 $separater = " ";
 
@@ -72,12 +77,12 @@ class DTreg {
 	    		$register = JText::_( 'DT_FULL');
 
 		   }
-           return $register ;
+           return $register;
 	}elseif(($row->registered >= $row->max_registrations)&&($row->max_registrations)&&($row->waiting_list > 0)){
 
 		if($front_link_type){
 
-		   	 $register = '<img class="event_button" src="components/com_dtregister/assets/images/'.$color.'/full_62x14.png" border="0" alt="'.JText::_('DT_FULL').'" />';
+		   	 $register = '<img class="event_button" src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$color.'/full_62x14.png" border="0" alt="'.JText::_('DT_FULL').'" />';
 
 			 $separater = " ";
 
@@ -91,7 +96,7 @@ class DTreg {
 
 		if($front_link_type){
 
-		   	 $register = '<img class="event_button" src="components/com_dtregister/assets/images/'.$color.'/register_62x14.png" border="0" alt="'.JText::_('DT_REGISTER').'" />';
+		   	 $register = '<img class="event_button" src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$color.'/register_62x14.png" border="0" alt="'.JText::_('DT_REGISTER').'" />';
 
 			 $separater = " ";
 
@@ -105,26 +110,22 @@ class DTreg {
      $reglink =  self::register_href($row,$task);
 	 return $text ='<a '.$class.' href="'.$reglink.'">'.$register.'</a>';
 		 
-		 
 	}
 	
 	function register_href($row,$task){
-	    global $xhtml_url ,$Itemid ;
-		$eventId = $row->slabId ;
+	    global $xhtml_url ,$Itemid;
+		$eventId = $row->slabId;
 		
 		return JRoute::_("index.php?option=com_dtregister&controller=event&eventId=$eventId&Itemid=$Itemid&task=register",$xhtml_url);
-
 		
 		switch ($row->registration_type) {
 
          case "individual" :
-
   		      $reglink=JRoute::_("index.php?option=com_dtregister&controller=event&eventId=$eventId&Itemid=$Itemid&task=$task&type=individual",$xhtml_url);
 
           	  break;
 
         case "group" :
-
               $reglink=JRoute::_("index.php?option=com_dtregister&controller=event&eventId=$eventId&Itemid=$Itemid&task=$task&type=group_num",$xhtml_url);
 
       		  break;
@@ -136,8 +137,7 @@ class DTreg {
     	    break;
 
       }
-		return $reglink ;
-		
+		return $reglink;
 		
 	}
 	
@@ -187,18 +187,16 @@ class DTreg {
 		
 		return '<span style="float:left">'.$row->dtstart.'<br />&nbsp;'.$row->dtstarttime.'</span>' ;
 		
-		
 	}
 	
 	function eventEndDateDisplay($row){
 	   
-	   
-	   return '<span style="float:right">'.' - ' .$row->dtend.'<br />&nbsp;&nbsp;&nbsp;'.$row->dtendtime.'</span>' ;
+	   return '<span style="float:right">'.' - ' .$row->dtend.'<br />&nbsp;&nbsp;&nbsp;'.$row->dtendtime.'</span>';
 	   
 	}
 	
 	function displayRate($value,$code="USD"){
-	   global $currency_code ;
+	   global $currency_code;
 	   if($code == ""){
 	       $code = "USD";
 		   
@@ -208,7 +206,6 @@ class DTreg {
 	   $currency_symbol = ($currency_symbol=="")?$currency_symbol:$currency_symbol." ";
 	   $code = ($currency_symbol=='')?' '.$code:'';
 	   return $currency_symbol.self::numberFormat($value,2).$code;
-	   
 	    
 	}
 	
@@ -219,17 +216,17 @@ class DTreg {
 	
 	function displayEventTitle($event=null){
 	   
-	   return $event->title ;	
+	   return $event->title;	
 	}
     
 	function showDate($date='now'){
 	   
-	   	return $date ;
+	   	return $date;
 	}
 	
     function numberFormat($value,$precision=2){
-      global $currency_separator ;
-      $number_value = $value ;
+      global $currency_separator;
+      $number_value = $value;
 
       $padString = "";
 
@@ -289,7 +286,7 @@ class DTreg {
 
 		    }else{
 
-			  $formatedValue = $formatedValue.$padString ;
+			  $formatedValue = $formatedValue.$padString;
 
 			}
 

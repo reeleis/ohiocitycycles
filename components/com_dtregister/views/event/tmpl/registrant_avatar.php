@@ -13,7 +13,7 @@ $html = "";
 			 
 			 $profile->getProfile($user->user_id);
 			 
-
+			 
 			 if($profile->profile->User->avatar !=""){
 				 if($registrant_cb_linked == 1){
                            if($cb_integrated==2){

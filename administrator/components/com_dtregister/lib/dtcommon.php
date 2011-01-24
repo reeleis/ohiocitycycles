@@ -1,48 +1,35 @@
 <?php
 
-class DTrCommon{
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
 
-   
+class DTrCommon{
 
    function birdDiscountCalc($type,$discount,$amount){
 
-
-
 	   if($type == 2 || $type == 3){
-
-	
 
 		 $per = (100-$discount)/100;
 
-	
-
-		   $amount= $amount*$per ;
-
-	
+		   $amount= $amount*$per;
 
 		}elseif($type != 0){
 
-	
-
-		   $amount = $amount - $discount ;   
-
-	
+		   $amount = $amount - $discount;   
 
 		}
 
-	
-
-		return $amount ;
-
-	
+		return $amount;
 
 	}
 
-	
-
 	function cntMemtotInSession($members=array()){
-
-	  	
 
 		if(count($members)<=0){
 
@@ -54,31 +41,19 @@ class DTrCommon{
 
 		foreach($members as $member){
 
-			
-
 			 if(isset($member['remove']) && $member['remove']){
-
-
 
 			}else{
 
-			  
-
-			  $cnt++ ;
-
-			  
+			  $cnt++;
 
 			}
 
-					  
-
 		}
 
-		return $cnt ;
+		return $cnt;
 
 	}
-
-	
 
 	function objectToArray( $object ){
 
@@ -102,14 +77,11 @@ class DTrCommon{
 
     }
 
-	
-
 	function getDateRangeByViewType($date=null, $viewType='month'){
 
-		global $now ;
-
+		global $now;
+        $viewType = ($viewType == '')?'month':$viewType;
 		 
-
 		if($date==null){
 
 		  	$date = $now;
@@ -122,15 +94,9 @@ class DTrCommon{
 
 		   $date = 	new JDate( $date );
 
-
-
 		}
 
-		
-
 		switch($viewType){
-
-		   
 
 		   case 'month':
 
@@ -140,21 +106,15 @@ class DTrCommon{
 
 			  $startdate = $date->toFormat('%Y-%m-%d');
 
-			  $endoffest = (35 - $arr[1]) ;
+			  $endoffest = (35 - $arr[1]);
 
 			  $date->setOffset(($endoffest*24));
 
 			  $enddate = $date->toFormat('%Y-%m-%d');
 
-			  			  
-
 		   break;
 
-		   
-
 		   case 'week':
-
-		       
 
 			  $startoffset = -7;
 
@@ -162,13 +122,11 @@ class DTrCommon{
 
 			  $startdate = $date->toFormat('%Y-%m-%d');
 
-			  $endoffest = 7 ;
+			  $endoffest = 7;
 
 			  $date->setOffset(($endoffest*24));
 
 			  $enddate = $date->toFormat('%Y-%m-%d');
-
-			   
 
 		   break;
 
@@ -180,7 +138,7 @@ class DTrCommon{
 
 			  $startdate = $date->toFormat('%Y-%m-%d');
 
-			  $endoffest = 1 ;
+			  $endoffest = 1;
 
 			  $date->setOffset(($endoffest*24));
 
@@ -188,27 +146,13 @@ class DTrCommon{
 
 		   break;
 
-		   
-
-		   	
-
 		}
-
-		
 
 		return array('startdate'=>$startdate , 'enddate'=>$enddate);
 
-		
-
-	   	
-
 	}
 
-	
-
 	function array_push_associative(&$arr) {
-
-
 
 	$args = func_get_args();
 
@@ -216,53 +160,27 @@ class DTrCommon{
 
 	foreach ($args as $arg) {
 
-
-
 		if (is_array($arg)) {
-
-
 
 			foreach ($arg as $key => $value) {
 
-
-
 				$arr[$key] = $value;
-
-
 
 				$ret++;
 
-
-
 			}
-
-
 
 		}else{
 
-
-
 			$arr[$arg] = "";
-
-
 
 		}
 
-
-
 	}
-
-
 
 	return $ret;
 
-
-
 }
-
-	
-
-   
 
 }
 

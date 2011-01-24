@@ -1,6 +1,15 @@
 <?php
 
-global $Itemid , $calendar_startDay ,$calendar_showCat,$calendar_eventTitle_wrap,$calendar_showTime;
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license Commercial
+*/
+
+global $Itemid,$calendar_startDay,$calendar_showCat,$calendar_eventTitle_wrap,$calendar_showTime,$now, $xhtml_url;
 $lang =& JFactory::getLanguage();
 $document =& JFactory::getDocument();
 
@@ -30,13 +39,9 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/calendar/jquery.calendar.js");
 
-
-
 ?>
 
  <div>
-
-
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">          
 
@@ -48,15 +53,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             </div>          
 
-            
-
             <div id="caltoolbar" class="ctoolbar">
 
              <!-- <div id="faddbtn" class="fbutton">
 
                 <div><span title='Click to Create New Event' class="addcal">
-
-
 
                 New Event                
 
@@ -74,11 +75,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             </div>
 
-
-
               <div class="btnseparator"></div>
-
-
 
             <div id="showdaybtn" class="fbutton">
 
@@ -92,13 +89,9 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             </div>
 
-
-
               <div  id="showmonthbtn" class="fbutton fcurrent">
 
                 <div><span title='Month' class="showmonthview"><?php echo  JText::_('DT_MONTH')?></span></div>
-
-
 
             </div>
 
@@ -110,15 +103,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
                 </div>
 
-
-
              <div class="btnseparator"></div>
 
             <div id="sfprevbtn" title="Prev"  class="fbutton">
 
               <span class="fprev"></span>
-
-
 
             </div>
 
@@ -130,21 +119,15 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             <div class="fshowdatep fbutton">
 
-
-
                     <div>
 
                         <input type="hidden" name="txtshow" id="hdtxtshow" />
 
                         <span id="txtdatetimeshow"><?php echo  JText::_('DT_LOADING_DATA')?></span>
 
-
-
                     </div>
 
             </div>
-
-            
 
             <div class="clear"></div>
 
@@ -152,11 +135,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
       </div>
 
-
-
       <div style="padding:1px;">
-
-
 
         <div class="t1 chromeColor">
 
@@ -172,13 +151,9 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             </div>
 
-
-
         </div>
 
         <div class="t2 chromeColor">
-
-
 
             &nbsp;</div>
 
@@ -190,8 +165,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
         </div>
 
-     
-
   </div>
 
 <br />
@@ -199,7 +172,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
   if($calendar_showCat){
 	  echo $this->loadTemplate('category');
   }
-  $datafeedurl = JRoute::_('index.php?option=com_dtregister&Itemid='.$Itemid.'&controller=calendar&format=raw&cat='.$this->cat)."&";
+  $datafeedurl = JRoute::_('index.php?option=com_dtregister&Itemid='.$Itemid.'&controller=calendar&format=raw&cat='.$this->cat,$xhtml_url)."&";
   
   if($calendar_eventTitle_wrap){
 	 $wrapTitle = "true";  
@@ -212,14 +185,27 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
   }else{
 	 $showTime = "false"; 
   }
+  if(isset($_REQUEST['showby'])){
+	  
+	  switch($_REQUEST['showby']){
+		  case 0:
+		     $showday = Jrequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+		  break ;
+		  case 1:
+		     $showday = $now->toFormat('%m/%d/%Y') ;
+		  break ;
+	 }
+	  
+  }else{
+	  $showday = Jrequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+  }
+  
 ?>
 <script type="text/javascript" >
 
  DTjQuery(document).ready(function() {     
 
-           var view="month";          
-
-           
+           var view="<?php echo JRequest::getVar('calview','month');  ?>";          
 
             var DATA_FEED_URL = "<?php echo $datafeedurl; ?>";
 
@@ -229,7 +215,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
                 theme:3,
                 weekstartday : <?php echo ($calendar_startDay-1);?>,
-                showday: new Date(),
+                showday: new Date('<?php echo $showday; ?>'),
 
                 //EditCmdhandler:Edit,
 
@@ -269,8 +255,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             op.eventItems =[];
 
-
-
             var p = DTjQuery("#gridcontainer").bcalendar(op).BcalGetOp();
 
             if (p && p.datestrshow) {
@@ -280,8 +264,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
             }
 
             DTjQuery("#caltoolbar").noSelect();
-
-            
 
             DTjQuery("#hdtxtshow").datepicker({ picker: "#txtdatetimeshow", showtarget: DTjQuery("#txtdatetimeshow"),
 
@@ -337,9 +319,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             {
                 
-			   DTjQuery.each(this.eventItems,function(k,v){
-				    
-					
+			   DTjQuery.each(this.eventItems,function(k,v){		
 					DTjQuery('#gridcontainer').find('span:contains("'+v[1]+'")').parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5])
 					   
 			   })
@@ -370,8 +350,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                     break;
 
                 }              
-
-               
 
             }
 
@@ -430,8 +408,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
             function Delete(data,callback)
 
             {           
-
-                
 
                 DTjQuery.alerts.okButton="Ok";  
 
@@ -507,8 +483,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
                 }
 
-
-
             });
 
             //to show month view
@@ -535,15 +509,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             });
 
-            
-
             DTjQuery("#showreflashbtn").click(function(e){
 
                 DTjQuery("#gridcontainer").reload();
 
             });
-
-            
 
             //Add a new event
 
@@ -567,10 +537,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
                 }
 
-
-
-
-
             });
 
             //previous date range
@@ -584,8 +550,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
 
                 }
-
-
 
             });
 
@@ -603,11 +567,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             });
 
-            
-
         });
 
     </script>    
-
-
-

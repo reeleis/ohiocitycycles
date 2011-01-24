@@ -17,7 +17,8 @@ global $Itemid ;
      
    
    </table>
-   <input type="text" name="Member[groupUserId]" value="<?php echo $this->userId; ?>" />
+   <input type="hidden" name="Member[groupUserId]" value="<?php echo $this->userId; ?>" />
+   <input type="hidden" name="userId" value="<?php echo $this->userId; ?>" />
    <input type="hidden" name="formsubmit" value="add" />
    <input type="hidden" name="option" value="com_dtregister" />
    <input type="hidden" name="controller" value="member" />

@@ -1,4 +1,4 @@
-/* DT Register CSS - ver. 2.7.0 */
+/* DT Register CSS - ver. 2.7.2 */
 
 /* Frontend Event Listing */
 
@@ -272,7 +272,8 @@ table.adminlist .pagination { display:table; padding:0;  margin:0 auto;	 }
 
 .tabs {clear:both;}
 .tabs dl { float:left; width:100%;}
-.tabs dt { 
+.tabs dt,
+.up_button { 
 	float:left; 
 	background: #349123;
     padding: 3px 7px 3px 7px;
@@ -284,6 +285,16 @@ table.adminlist .pagination { display:table; padding:0;  margin:0 auto;	 }
 	text-decoration: none;
 	text-transform: uppercase;
     border: 3px groove #000000; 
+}
+
+a.up_button:link,
+a.up_button:visited {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+a.up_button:hover {
+  text-decoration: underline;
 }
 
 div.current {
@@ -360,20 +371,19 @@ a, img {
 margin:0;
 padding:0;
 }
-div.header.icon-48-dtregister {
-
+div.dt-toolbar.icon-48-dtregister {
 background-repeat:no-repeat;
 line-height:48px;
 padding-left:330px !important;
 text-transform:uppercase;
 }
 
-div.header {
+div.icon-48-dtregister {
 background-repeat:no-repeat;
 color:#0B55C4;
 font-size:22px;
 font-weight:bold;
 line-height:48px;
 margin-left:10px;
-padding-left:55px;
+padding-left:0px;
 }

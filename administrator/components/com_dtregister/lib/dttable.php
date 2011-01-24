@@ -1,53 +1,53 @@
 <?php
+
+/**
+* @version 2.7.0
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 defined( '_JEXEC' ) or die( 'Restricted access' );
 jimport( 'joomla.database.table' );
 JTable::getInstance( 'user', 'JTable');
 JTable::addIncludePath(JPATH_ADMINISTRATOR.DS.'components'.DS.DTR_COM_COMPONENT.DS.'models');
-global $tableInstances ;
-global $queryResults ;
+global $tableInstances;
+global $queryResults;
 global $memcache;
-//$memcache = new Memcache;
-//$memcache->connect('localhost', '11211');
+
 class DtrTable extends JTable{
-    
-	
-	
+
     function __construct($table,$id,&$db){
        parent::__construct($table,$id,$db);
 	}
 	 
 	function getObjData(){
 	   
-	   $temp = clone $this ;
+	   $temp = clone $this;
 	   
 	   unset($temp->db);
 	   unset($temp->_db);
 	   
-	   return (object)(array)$temp ;
+	   return (object)(array)$temp;
 	   
 	} 
 	 
 	function load($id){
-	   global $tableInstances , $memcache ;
-	   $signature =  get_class($this).$id ;
-	   
+	   global $tableInstances, $memcache;
+	   $signature =  get_class($this).$id;
 	   
 	  if(0){
-	 //if(isset($tableInstances[$signature])){
-	  // $data = $memcache->get($signature) ;
-	//   if($data !== false){ die ; var_dump($data);
 		    $vars  = get_object_vars($tableInstances[$signature]);
-		//	 $vars  = get_object_vars($data);
 			 foreach($vars as $key=>$value){
-			    	 $this->$key = $value ;
+			    	 $this->$key = $value;
 			 }
 	     
 	   }else{
 	      parent::load($id);
 		  
-		 // $memcache->set(md5($signature),$this,true,600);
-
-		  $tableInstances[$signature] = $this ;
+		  $tableInstances[$signature] = $this;
 	   }
 	   	
 	}
@@ -69,24 +69,23 @@ class DtrTable extends JTable{
 	   $data = $this->_db->loadObjectList();
 	  
 	   return $data;
-	   
 	   	
 	}
 	function getLastCount(){
        
 	   $this->_db->setQuery('SELECT FOUND_ROWS();');
-	   return    $this->_db->loadResult() ;
+	   return    $this->_db->loadResult();
 	   
      }
      function find($condition = " 1=1 ",$ordering="",$limitstart=0,$limit=0){
-		     global $queryResults ;
+		     global $queryResults;
 			     $where  = "";
 				  if($condition != "1=1" && $condition != ""){
 
-							 $where = " where ".$condition ;
-				
+							 $where = " where ".$condition;
+		
 				   }
-			  $ordering =    ($ordering !=="")?' order by '.$ordering:'';
+			  $ordering =  ($ordering !=="")?' order by '.$ordering:'';
 			  $sql_count = "";
             if($limit != 0 && $limit != ""){
 			    $sql_count = " SQL_CALC_FOUND_ROWS "; 
@@ -105,20 +104,22 @@ class DtrTable extends JTable{
 			if(isset($queryResults[str_replace(" ","",$this->_db->getQuery())])){
 				$data = $queryResults[str_replace(" ","",$this->_db->getQuery())] ;
 		    }else{
-               $data = $this->_db->loadObjectList(); 
-			   $queryResults[str_replace(" ","",$this->_db->getQuery())] = $data ;
+               $data = $this->_db->loadObjectList();
+			   if($data && count($data)){
+			      $queryResults[str_replace(" ","",$this->_db->getQuery())] = $data ;
+			   } 
+			   
 			}
-				
 			
 	  //  pr($this->_db->getErrorMsg());
 				
-			   return  $data ;
+			   return $data;
 
 	  }
 	  
 	 function save_field($field,$value){
 	  
-	  $query = "update ". $this->getTableName()." set ".$field." = ".$value." where ".$this->_tbl_key." = ".$this->{$this->_tbl_key} ;
+	  $query = "update ". $this->getTableName()." set ".$field." = ".$value." where ".$this->_tbl_key." = ".$this->{$this->_tbl_key};
 	  
 	   $this->_db->setQuery($query);
 	   $this->_db->query();
@@ -129,7 +130,7 @@ class DtrTable extends JTable{
 		 
 		 $list =  array();
 		 if(isset($this->displayField)){
-		    $name = $this->displayField ;
+		    $name = $this->displayField;
 		 }else{
 		    $name = 'name';
 		 }
@@ -140,7 +141,7 @@ class DtrTable extends JTable{
 			
 		 }
 		 //pr($list);
-		 return $list ;
+		 return $list;
 	  }
 	
 	 function saveAll($data){
@@ -162,7 +163,7 @@ class DtrTable extends JTable{
          $null = array('NO'=>'NOT NULL','YES'=>'NULL',''=>'');
 		
 		if($fieldDesc){
-		$query = "alter table ". $this->getTableName()." change $oldname $newname ". $fieldDesc->Type." ".$null[$fieldDesc->Null]." DEFAULT  '".$fieldDesc->Default."'" ;
+		$query = "alter table ". $this->getTableName()." change $oldname $newname ". $fieldDesc->Type." ".$null[$fieldDesc->Null]." DEFAULT  '".$fieldDesc->Default."'";
 		$this->_db->setQuery($query);
 		//echo $this->_db->getQuery();
 		$this->_db->query();

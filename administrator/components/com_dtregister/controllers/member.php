@@ -46,7 +46,7 @@ class DtregisterControllerMember extends DtrController {
 			$data = $_POST['Member'] ;
 			$data['fields'] = JRequest::getVar('Field',array(),null,'array');
 			$tMember->save($data);
-			$mainframe->redirect("index.php?option=com_dtregister&controller=member&userId=".$tUser->userId);
+			$mainframe->redirect("index.php?option=com_dtregister&controller=member&userId=".$_POST['Member']['groupUserId']);
 			pr($tUser->TableFee);
 			prd($fee);
 			die ;
@@ -77,10 +77,18 @@ class DtregisterControllerMember extends DtrController {
 	   
 	   	
 	}
+	
+	function userindex(){
+	   global $mainframe ;
+	   
+	   $mainframe->redirect('index.php?option=com_dtregister&controller=user');
+	}
 	function index(){
 	   
 	   global $mainframe ;
-	  JToolBarHelper::back();
+	  
+	  JToolBarHelper :: custom( 'userindex', 'back.png', 'back.png', JText::_('DT_BACK'), false, false );
+      
       JToolBarHelper::divider();
 	  JToolBarHelper::deleteList(JText::_( 'DT_DELETE_GROUP_MEMBER'),'delete');
       JToolBarHelper::divider();
@@ -143,7 +151,7 @@ class DtregisterControllerMember extends DtrController {
 	
     function add(){
 	    
-		
+		global $mainframe ;
 		
 		$userId = JRequest::getVar('userId',0);
 		$mMember = $this->getModel('member') ;	
@@ -166,7 +174,7 @@ class DtregisterControllerMember extends DtrController {
 			$fee = $tUser->calculateFee();
 			$fee->paid_amount = $tUser->TableFee->paid_amount ;
 			$tUser->TableFee->save((array)$fee);
-			$mainframe->redirect("index.php?option=com_dtregister&controller=member&userId=".$tUser->userId);
+			$mainframe->redirect("index.php?option=com_dtregister&controller=member&userId=".$userId);
 			pr($tUser->TableFee);
 			prd($fee);
 			die ;

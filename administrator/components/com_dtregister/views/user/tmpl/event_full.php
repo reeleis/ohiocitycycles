@@ -9,18 +9,10 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-class DtEmail {
-	
-   function __construct($msg="",$user=array()){
-	      
-		$this->message = $msg;
-		$this->User = $user;
-		  
-   }
-   
-   function parsetags(){
-	 	     
-   }
+global $Itemid;
 
-}
 ?>
+
+<div id="debug">
+<?php echo JText::_('DT_ALERT_REGISTRATION_CLOSED_FOR_THIS_EVENT'); ?>
+</div>

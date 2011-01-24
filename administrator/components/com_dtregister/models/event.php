@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -392,7 +392,7 @@ class TableEvent extends DtrTable {
 
 		$this->db =&$db;
 
-	    $this->TableGroup  =& DtrTable::getInstance('Group','Table');
+	    $this->TableGroup  =& DtrTable::getInstance('Group','Dtable');
 		
 		$this->TableCategory  =& DtrTable::getInstance('Category','Table');
 
@@ -482,7 +482,8 @@ class TableEvent extends DtrTable {
 		}
 	}
     function displaydate(){
-
+        global $date_format ;
+		return  JFactory::getDate($this->dtstart)->toFormat($date_format);
 		return $this->dtstart;
 
 	}
@@ -497,12 +498,11 @@ class TableEvent extends DtrTable {
 			if(in_array($field->type,array(1,3,4))){
 				 
 				 if(isset($fields[$field->id])){
-					 if(is_array($fields[$field->id])){
-					 	  
+					 if(is_array($fields[$field->id])){  
 						  
 						  foreach($fields[$field->id] as $value){
 						  	    if($value==""){
-									continue ;
+									continue;
 								}
 								if(!isset($_SESSION['register']['option_used'][$field->id][$value])){
 								   $_SESSION['register']['option_used'][$field->id][$value] = 1;
@@ -511,11 +511,10 @@ class TableEvent extends DtrTable {
 								}
 							
 						  }
-						  
-						  
+						    
 					 }else{
 					 	   if($fields[$field->id]==""){
-								continue ;
+								continue;
 						   }
 							if(!isset($_SESSION['register']['option_used'][$field->id][$fields[$field->id]])){
 							   $_SESSION['register']['option_used'][$field->id][$fields[$field->id]] = 1;
@@ -797,14 +796,19 @@ class TableEvent extends DtrTable {
 		 if(is_array($this->prerequisite) && count($this->prerequisite)){
 
 			  if(!$my->id){
-
-				  $mainframe->redirect($sign_up_redirect , JText::_('DT_ERROR_PREQUISITE_EVENT_SIGN'));
+                  
+				 if($private_event_notification=='onscreen'){
+					$mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=privatevent");
+				} else {
+					
+					$mainframe->redirect( $sign_up_redirect);
+				}
 
 			  }else{
 
 				 if(!$this->is_reg_prequisite($tUser)){
 
-                      $url="index.php?option=com_dtregister&Itemid=$Itemid&task=prequisite&controller=message";
+                      $url="index.php?option=com_dtregister&Itemid=$Itemid&task=prequisite&controller=message&eventId=".$this->slabId;
 
 					 $mainframe->redirect($url);					 
 
@@ -826,7 +830,12 @@ class TableEvent extends DtrTable {
 
 			  if(!$my->id){
 
-				  $mainframe->redirect($sign_up_redirect , JText::_('DT_ERROR_CAT_PREQUISITE_EVENT_SIGN'));
+				  if($private_event_notification=='onscreen'){
+					$mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=privatevent");
+				} else {
+					
+					$mainframe->redirect( $sign_up_redirect);
+				}
 
 			  }else{
 
@@ -834,7 +843,7 @@ class TableEvent extends DtrTable {
 
 				   if(!$this->is_reg_prequisite_cat($tUser)){
 
-					 $url="index.php?option=com_dtregister&Itemid=$Itemid&task=prequisitecat&controller=message";
+					 $url="index.php?option=com_dtregister&Itemid=$Itemid&task=prequisitecat&controller=message&eventId=".$this->slabId;
 
 					 $mainframe->redirect($url);
                      
@@ -955,6 +964,96 @@ class TableEvent extends DtrTable {
         return true;
 
 	}
+	
+	function plugin_registerable($tUser=null){
+
+	     global $mainframe, $sign_up_redirect , $timecheck,$Itemid , $prerequisite_paid , $prerequisite_attend ,$now;
+
+		  $my = &JFactory::getUser();
+
+		 if($this->public != 1 && !$my->id ){ // private event requires to login
+
+		  // return false ;
+
+	     }
+
+         if(strtotime($this->dtend." ".$this->dtendtime) < $now->toUnix(true)){
+		    return false ;
+		 }		 
+		 
+		 if($this->startdate != "" && $this->startdate != "0000-00-00"){
+			 if($this->starttime !=""){
+			    $starttime = strtotime($this->startdate." ".$this->starttime);
+			 }else{
+				$starttime = strtotime($this->starttime);
+			 }
+			 if($starttime > $now->toUnix(true)){
+				return false ;
+			 }
+	     }
+		 
+		 if($this->usetimecheck && $my->id){
+
+		       if($this->is_overlapped($tUser)){
+
+				     $url="index.php?option=com_dtregister&Itemid=$Itemid&task=overlap&controlller=event";
+
+					return false;
+
+			   }	
+
+		 }
+
+		  $this->prerequisite;
+
+		 if(is_array($this->prerequisite) && count($this->prerequisite)){
+
+			  if(!$my->id){
+
+				 // return false;
+
+			  }else{
+
+				 if(!$this->is_reg_prequisite($tUser)){
+
+					//return false;			  
+
+				 }
+
+			  }
+
+		 }
+
+		 if(is_array($this->prerequisitecategory) && count($this->prerequisitecategory) > 0 ){
+
+			  if(!$my->id){
+
+				// return false;
+
+			  }else{
+
+				   if(!$this->is_reg_prequisite_cat($tUser)){
+
+					//return false;	  
+
+				 }   
+
+			  }
+
+		 }
+         
+		 $registered =  $this->getTotalregistered($this->slabId);
+		
+		if($this->max_registrations <= $registered && $this->max_registrations != 0 && $this->max_registrations !=""){
+		   	if(!($this->waiting_list)){
+			     return false;
+			}
+			
+	    }
+		 
+        return true;
+
+	}
 
 	function is_reg_prequisite_cat($tUser){
 
@@ -967,7 +1066,10 @@ class TableEvent extends DtrTable {
 	   
 
 	   $where =  array();
-
+	   $where[] = ' u.status in(1,0) ' ;
+        if($my->id){
+		   $where[] = " u.user_id =  ".$my->id;
+	   }
 	   if($prerequisite_paid==1){
 
 		   $where[] = " f.status=1 ";
@@ -982,17 +1084,15 @@ class TableEvent extends DtrTable {
 
 	   $where = (count($where))?' where '.implode(' and ',$where):'';
 
-	   
-
 	   $query .= $where;
 
-	   $regs = $tUser->query($query);
+	   $regs = $this->query($query);
 
-	   
+	   $prerequisite_id = array();
 
-	     $prerequisite_id =  array();
+	$prerequisites = $this->prerequisitecategory;
 
-		 $prerequisites = $this->prerequisitecategory;
+     if(is_array($prerequisites))
 
 		foreach($prerequisites as $prerequisite){
 
@@ -1006,9 +1106,9 @@ class TableEvent extends DtrTable {
 
 		foreach($regs as $reg){
 
-		   $evt = $testEvt->load($reg->eventId);
-
-		   if(in_array($evt->category,$prerequisite_id)){
+		   $testEvt->load($reg->eventId);
+             
+		   if(in_array($testEvt->category,$prerequisite_id)){
 
 		     $return = true;
 
@@ -1023,15 +1123,19 @@ class TableEvent extends DtrTable {
 	}
 
 	function is_reg_prequisite($tUser){
-
+       
 	   global $prerequisite_paid , $prerequisite_attend;
 
 	   $my = &JFactory::getUser();
 
-	   $query = "select * from #__dtregister_user u inner join #__dtregister_fee f on u.userId = f.user_id "; 
+	   $query = "select * from #__dtregister_user u inner join #__dtregister_fee f on u.userId = f.user_id  "; 
 
 	   $where =  array();
-
+       $where[] = ' u.status in(1,0) ';
+	   if($my->id){
+		   $where[] = " u.user_id =  ".$my->id;
+	   }
+	   
 	   if($prerequisite_paid==1){
 
 		   $where[] = " f.status=1 ";
@@ -1048,17 +1152,21 @@ class TableEvent extends DtrTable {
 
 	   $query .= $where;
 
-	   $regs = $tUser->query($query);
+	   $regs = $this->query($query);
 
 	   $prerequisites = $this->prerequisite;
 
-	   $prerequisite_id =  array();
+	   $prerequisite_id = array();
+
+       if(is_array($prerequisites))
 
 	   foreach($prerequisites as $prerequisite){
 
 		    $prerequisite_id[$prerequisite] = $prerequisite;
 
 	   }
+	
+	   if(is_array($regs))
 
 	   foreach($regs as $reg){
 
@@ -1584,11 +1692,11 @@ return $data ;
      if(isset($data['prerequisite'])){
 	   $this->TablePrerequisite->saveAll($data['prerequisite']);
 	 }
-
+	 
 	 $this->TableGroup->slabId = $this->slabId;
 
 	 $this->removegroups();
-
+     
 	 $this->TableGroup->saveAll($data['group']);
 
 	 $this->TableEventdiscountcode->event_id =  $this->slabId;
@@ -2589,8 +2697,6 @@ echo $this->db->getErrorMsg();
 
 	  $html = "";
 
-	   
-
 	  foreach($fields as $field){
 		
 		  $class = "Field_".$fieldTypes[$field->type];
@@ -2600,7 +2706,7 @@ echo $this->db->getErrorMsg();
 		  $fieldTable->load($field->id);
 		  
 		  if(isset($this->duplicate_check) && !$this->duplicate_check ){
-			  $fieldTable->duplicate_check = $this->duplicate_check ;
+			  $fieldTable->duplicate_check = $this->duplicate_check;
 		  }
 		  if($fieldTypes[$field->type] == "Email"){
 			$fieldTable->emailConfirmation = $emailConfirmation;  
@@ -2673,7 +2779,7 @@ echo $this->db->getErrorMsg();
   }
 
   function viewFields($type='I',$obj,$showHidden=false,$form='frmcart',$overlimitdisable=false){
-
+	  
 	  $fieldTable =  DtrTable::getInstance('field','Table');
 
 	  $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
@@ -2709,8 +2815,47 @@ echo $this->db->getErrorMsg();
 		  $fieldTable = new $class();
 
 		  $fieldTable->load($field->id);
-
-		  if($showHidden || ($fieldTable->type==6 && $fieldTable->textualdisplay == 0 )){
+		  
+          if($fieldTable->type==6 && $fieldTable->textualdisplay == 1){
+			   
+			   $show_field =  false ;
+			   if(isset($obj['fields'][$fieldTable->parent_id])){
+				   
+				   if(is_array($fieldTable->selection_values)){
+					   
+					   if(!is_array($obj['fields'][$fieldTable->parent_id])
+					       && in_array($obj['fields'][$fieldTable->parent_id],$fieldTable->selection_values)){
+						   
+						   $show_field = true ;
+						    
+					   }elseif(is_array($obj['fields'][$fieldTable->parent_id])){
+						    
+							
+							foreach($obj['fields'][$fieldTable->parent_id]  as $parent_value){
+								if(in_array($parent_value,$fieldTable->selection_values)){
+								   $show_field =  true ;
+								   break ;	
+							    }
+						    }
+							
+							
+					   }
+					   					      
+				   }else{
+					   if($obj['fields'][$fieldTable->parent_id] == $fieldTable->selection_values){
+						   $show_field =  true ;
+					   }  
+				   }
+				  
+				  
+			   }
+			    if(!$show_field){
+				   continue;   		
+				}
+		  }elseif($fieldTable->type==6 && $fieldTable->textualdisplay == 0){
+			   continue ;
+		  }
+		  if($showHidden){
 			 
 		     continue;   
 
@@ -3143,9 +3288,9 @@ echo $this->db->getErrorMsg();
 
 }
 
-if (!class_exists('MyClass')) {
 
-class TableGroup extends DtrTable{
+
+class DtableGroup extends DtrTable{
 
   var $id;
 
@@ -3187,7 +3332,7 @@ class TableGroup extends DtrTable{
 
 }
 
-}
+
 
 class TableEventconfig extends DtrTable{
 
@@ -3219,23 +3364,39 @@ class TableEventconfig extends DtrTable{
 
 	  foreach($data as $key=>&$value){
 
+
+
 		  if(is_array($value)){
+
+
 
 		     $value = implode(",",$value);
 
+
+
 		  }
 
-		 $config_data[] =  array('key'=>$key,'value'=>$value); 
+		 $config_data[] =  array('key'=>$key,'value'=>$value);
+
+		 
 
      }
+
+	 
 
 	 parent::saveAll($config_data);
 
   }
 
+   
+
 }
 
+
+
 class TablePrerequisitecategory extends DtrTable{
+
+  
 
    var $event_id; 
 
@@ -3243,13 +3404,23 @@ class TablePrerequisitecategory extends DtrTable{
 
    var $id;
 
+   
+
    function __construct( &$db = null ) {
+
+
 
 		$db = &JFactory::getDBO();
 
+	
+
 		$this->db =&$db;
 
+	
+
 		parent::__construct( '#__dtregister_prerequisite_category', 'id', $db );
+
+
 
   }
 
@@ -3257,11 +3428,17 @@ class TablePrerequisitecategory extends DtrTable{
 
      if(!is_array($data)){
 
+	    
+
 		return;
+
+		
 
 	 }
 
 	 $catdata = array();
+
+	
 
 	 foreach($data as $value){
 
@@ -3273,9 +3450,15 @@ class TablePrerequisitecategory extends DtrTable{
 
   }
 
+   
+
 }
 
+
+
 class TablePrerequisite extends DtrTable{
+
+  
 
    var $event_id; 
 
@@ -3283,13 +3466,23 @@ class TablePrerequisite extends DtrTable{
 
    var $id;
 
+   
+
    function __construct( &$db = null ) {
+
+
 
 		$db = &JFactory::getDBO();
 
+	
+
 		$this->db =&$db;
 
+	
+
 		parent::__construct( '#__dtregister_prerequisite', 'id', $db );
+
+
 
   }
 
@@ -3313,6 +3506,8 @@ class TablePrerequisite extends DtrTable{
 
   }
 
+   
+
 }
 
 class TableEventdiscountcode extends DtrTable{
@@ -3325,9 +3520,15 @@ class TableEventdiscountcode extends DtrTable{
 
    var $id;
 
+   
+
    function __construct( &$db = null ) {
 
+
+
 		$db = &JFactory::getDBO();
+
+	
 
 		$this->db =&$db;
 
@@ -3341,8 +3542,6 @@ class TableEventdiscountcode extends DtrTable{
 
   function saveAll($data=array()){
 
-     
-
 	 if(!is_array($data)){
 
 	    return;	 
@@ -3351,9 +3550,11 @@ class TableEventdiscountcode extends DtrTable{
 
 	 $codedata = array();
 
+     if(is_array($data))
+
 	 foreach($data as $code){
 
-	    $codedata[]= array('discount_code_id'=>$code) ;
+	    $codedata[]= array('discount_code_id'=>$code);
 
 	 }
 
@@ -3377,8 +3578,6 @@ class TableEventdiscountcode extends DtrTable{
 
 	 $not_inserting = array_intersect( $data,$existing_discountcode_ids);
 
-	 
-
 	if($existing_discountcodes)
 
 	foreach($existing_discountcodes as $existing_discountcode){
@@ -3392,6 +3591,8 @@ class TableEventdiscountcode extends DtrTable{
     }
 
 	 $ordering = $this->TableEventfeeorder->getNextOrder("eventId = '".$this->event_id."' ");
+
+     if(is_array($data))
 
 	 foreach($data as $discountcode){
 
@@ -3429,6 +3630,8 @@ class TableEventfield extends DtrTable{
 
    function __construct( &$db = null ) {
 
+
+
 		$db = &JFactory::getDBO();
 
 		$this->db =&$db;
@@ -3447,6 +3650,8 @@ class TableEventfield extends DtrTable{
 
 	 $field_ids = array();
 
+     if(is_array($data))
+
 	 foreach($data as $key=>&$field){
 
 	    $field['field_id'] = $key;
@@ -3455,14 +3660,16 @@ class TableEventfield extends DtrTable{
 			$this->TableField->load($key);
 			$field['group_behave'] = $this->TableField->group_behave;
 			$field['required'] = $this->TableField->required;
-		
-		}
+	
+		}		
 
 	 }
-     
+
 	 parent::saveAll($data);
 
 	 $fields = $this->getFeeField();
+
+     if(is_array($fields))
 
 	 foreach($fields as $field){
 
@@ -3504,13 +3711,15 @@ class TableEventfield extends DtrTable{
 
 	$ordering = $this->TableEventfeeorder->getNextOrder("eventId = '".$this->event_id."' ");
 
+     if(is_array($data))
+
 	 foreach($data as $field){
 
 		if(!in_array($field,$not_inserting)){
 
 		   	$feeorders[] = array('reference_id'=>$field,'type'=>'field','title'=>'','eventId'=>$this->event_id,'ordering'=>$ordering);
 
-			$ordering ++ ;
+			$ordering ++;
 
 	    }  
 
@@ -3529,6 +3738,8 @@ class TableEventfield extends DtrTable{
 	  $this->TableField->findtreeByEvent($this->event_id,0,$fields );
 
 	  $feefields = array();
+	
+	  if(is_array($fields))
 
 	  foreach($fields as  $field){
 
@@ -3552,15 +3763,22 @@ class TableJevent extends DtrTable {
 
       function __construct( &$db = null ) {
 
+
+
 			$db = &JFactory::getDBO();
 
+		
+
 			$this->db =&$db;
+
+		
 
 			parent::__construct( '#__jevents_vevdetail', 'evdet_id', $db );
 
 	  }
       
 	  function isInstall(){
+	    
 		
 		$tables = $this->_db->getTableList();
 		$table_name = $this->_db->getPrefix()."jevents_vevdetail";
@@ -3612,9 +3830,15 @@ class TableJevent extends DtrTable {
 
 		    $data = $data[0];
 
+			
+
 		  return $data;
 
+		    
+
 	  }
+
+	  
 
 	  function parserule($eventid=null){
 
@@ -3645,7 +3869,7 @@ class TableJevent extends DtrTable {
 		  }else{
 			   return false;
 		  }
-
+		  
 		  return true;
 
 	  }
@@ -3676,14 +3900,16 @@ class TableJevent extends DtrTable {
 
 		  $weektoken = array_flip(array('SU','MO','TU','WE','TH','FR','SA'));
 
-		  $weekdayskeys =  array();
+		  $weekdayskeys = array();
+
+          if(is_array($weekdays))
 
 		  foreach($weekdays as $name){
 
-			  $weekdayskeys[] =  $weektoken[$name];
+			  $weekdayskeys[] = $weektoken[$name];
 
 		  }
-
+		
 		  $this->weekdays = $weekdayskeys;
 
 	  }
@@ -3712,9 +3938,11 @@ class TableJevent extends DtrTable {
 
 		  $weekprev = 0;
 
-		  $weeks =  array();
+		  $weeks = array();
 
 		  $byday = array_filter(explode(",",$rep->byday));
+
+          if(is_array($byday))
 
 		  foreach($byday as $day){
 
@@ -3722,7 +3950,7 @@ class TableJevent extends DtrTable {
 
 					$weektest = substr($day,1,1);
 
-				   	$i++ ;
+				   	$i++;
 
 				}
 
@@ -3742,7 +3970,7 @@ class TableJevent extends DtrTable {
 
 				   $name = substr($day,2,2);
 
-			       $weekdayskeys[] =  $weektoken[$name];
+			       $weekdayskeys[] = $weektoken[$name];
 
 				}
 
@@ -3764,10 +3992,11 @@ class TableJevent extends DtrTable {
 
 		  $this->rpuntil = $rep->until;
 
-		  $this->yeardays = $rep->byyearday;	
+		  $this->yeardays = $rep->byyearday ;	
 
 	  }
 
 }
+
 
 ?>

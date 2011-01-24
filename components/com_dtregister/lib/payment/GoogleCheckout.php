@@ -74,7 +74,7 @@ class GoogleCheckout extends Payment
 
 	var $return_url =  array('registeration'=>'googleReturn','duepay'=>'gdueReturn','change'=>'gchgReturn','cancel'=>'gcancelReturn');
 
-	var $bywebservice =  false ;
+	var $bywebservice = false;
 
     // }}}
 
@@ -94,13 +94,13 @@ class GoogleCheckout extends Payment
 
     {
 
-	    global $googlemerchid , $googlemode ,$currency_code,$googleapikey; 
+	    global $googlemerchid, $googlemode ,$currency_code,$googleapikey; 
 
 		parent::__construct();
 
         $this->_merchantId = $googlemerchid;
-        $this->merchant_id = $this->_merchantId ;
-		$this->merchant_key = $googleapikey ;
+        $this->merchant_id = $this->_merchantId;
+		$this->merchant_key = $googleapikey;
 
         $this->_serverType = ($this->paymentmode !='test') ? 'checkout' : 'sandbox';
 
@@ -164,21 +164,17 @@ class GoogleCheckout extends Payment
 
 			$xml_data->Pop('items');
 
-			 $xml_data->Element('merchant-private-data',$this->private_data);
-
-			 // $xml_data->Element('pay_session', $this->private_data);
-
-			 //$xml_data->Pop('merchant-private-data');
+		  $xml_data->Element('merchant-private-data',$this->private_data);
 
 		  $xml_data->Pop('shopping-cart');
 
 		  $xml_data->Push('checkout-flow-support');
 
-		   $xml_data->Push('merchant-checkout-flow-support');
+		  $xml_data->Push('merchant-checkout-flow-support');
 
-		   $xml_data->Element('continue-shopping-url',$this->continue_url);
+		  $xml_data->Element('continue-shopping-url',$this->continue_url);
 
-		   $xml_data->Pop('merchant-checkout-flow-support');
+		  $xml_data->Pop('merchant-checkout-flow-support');
 
           $xml_data->Pop('checkout-flow-support');
 
@@ -494,23 +490,13 @@ class GoogleCheckout extends Payment
 
     }
 
-	
-
 	 function add_field($field, $value) {
-
-
 
       $this->fields["$field"] = $value;
 
-
-
     }
 
-	
-
 	function setformData(){
-
-	    
 
 		$this->addItem($this->description,JText::_( 'DT_REGISTRATION'),1,$this->amount);
 
@@ -518,19 +504,11 @@ class GoogleCheckout extends Payment
 
 		$this->add_field('shopping-cart.items.item-0.merchant-private-item-data',$this->private_data);
 
-		
-
 	}
-
-	
 
 	function setBillinginfo($info){
 
-	   
-
 	}
-
-	
 
 	function CalcHmacSha1($data) {
 
@@ -574,23 +552,17 @@ class GoogleCheckout extends Payment
 
     }
 
-	
-
 	function process(){
 
-		global $Itemid ;
+		global $Itemid;
 
 	   	$session_id = $this->saveSession();
 
-		$this->private_data = 'user|session='.$session_id ;
+		$this->private_data = 'user|session='.$session_id;
 
 		$mosConfig_live_site = JURI::root( false );
 
-		
-
 		$this->continue_url = JURI::root( false )."components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=restore";
-
-		
 
 		$this->addItem($this->description,JText::_( 'DT_REGISTRATION'),1,$this->cart->getAmount());
 
@@ -598,28 +570,17 @@ class GoogleCheckout extends Payment
 
 		$this->add_field('shopping-cart.items.item-0.merchant-private-item-data',$this->private_data);
 
-		
-
 		echo  $this->drawform();
-
-		
-
-		
 
 	}
 
-	
-
 	function beforepayment(){
 
-	   global $Itemid ;
+	   global $Itemid;
        $session_id = $this->saveSession();
-       $this->private_data = $this->paymentType.'|session='.$session_id ;
+       $this->private_data = $this->paymentType.'|session='.$session_id;
        JURI::root( false );
        $this->continue_url = JURI::root( false )."components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=restore";
-	   ///$this->continue_url = JURI::root( false )."index.php?option=com_dtregister&dtevent=".$session_id."&task=".$this->return_url[$this->paymentType]."&Itemid=".$Itemid ;
-
-	   
 
 	}
 	
@@ -627,16 +588,12 @@ class GoogleCheckout extends Payment
 	   if($_REQUEST['_type']=='new-order-notification'){
 		   $this->transactionId = $_REQUEST['google-order-number'];
 		   DT_Session::set('register.payment.transactionId',$this->transactionId);
-		   return true ;   
+		   return true;   
 	   }else{
-		   return false ;   
+		   return false;   
 	   }
 	}
 
-
-
 }
-
-
 
 ?>

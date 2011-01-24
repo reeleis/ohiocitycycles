@@ -9,6 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
+   global $Itemid ;
    jimport('joomla.html.pagination');
 
    $mosConfig_live_site = JURI::base( true );
@@ -80,15 +81,14 @@
    $limit = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 
    $limitstart = $mainframe->getUserStateFromRequest( "view{$option}limitstart", 'limitstart', 0 );
-
-   $limitstart = 0;
-
+  
    $where = (count($where) >0 )?implode(' and ' , $where):'';	
 
    $rows = $event->findalldetail($where,$ordering,$limitstart,$limit);
 
-   $pageNav = new JPagination( $event->getLastCount(), $limitstart, $limit );
-
+   $pageNav = new DtPagination( $event->getLastCount(), $limitstart, $limit );
+   
+   $pageNav->form = "adminForm";
    $this->assign('pageNav',$pageNav);
 
 ?>
@@ -131,7 +131,7 @@
 
 		</script>
 
-   <form action="index.php" method="post" name="adminForm">
+   <form action="index.php?option=com_dtregister&Itemid=<?php echo $Itemid; ?>" method="post" name="adminForm">
 
   <table cellpadding="4" cellspacing="0" border="0" width="100%">
 
@@ -474,7 +474,7 @@
 
     </table>
 
-    <input type="hidden" name="option" value="<?php echo DTR_COM_COMPONENT ;?>" />
+    <input type="hidden" name="option" value="com_dtregister" />
 
     <input type="hidden" name="limitstart" value="<?php echo $pageNav->limitstart; ?>" />
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -34,7 +34,7 @@ class DtregisterModelConfig extends DtrModel {
 
        parent::__construct($config);
 
-	   $this->table =  new DtrTable('#__dtregister_config','id',$this->getDBO());
+	   $this->table = new DtrTable('#__dtregister_config','id',$this->getDBO());
 	   
 	   $this->TablePayoption  =& DtrTable::getInstance('payoption','Table');
 
@@ -147,10 +147,8 @@ class DtregisterModelConfig extends DtrModel {
 		FROM #__dtregister_group_event as  a
 
         LEFT JOIN #__dtregister_categories as c ON a.category = c.categoryId 
-	
-        where a.parent_id = 0
 
-		";
+		"; //  where a.parent_id = 0
 
         $sql .= " order by c.ordering ,$ordering ";
 

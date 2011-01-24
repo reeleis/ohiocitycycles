@@ -1,53 +1,57 @@
 <?php
 
+/**
+* @version 2.7.1
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DT_Fee{
 
-	
+	var $basefee;
 
-	var $basefee ;
+	var $memberdiscount;
 
-	var $memberdiscount ;
-
-	var $latefee ;
+	var $latefee;
 
 	var $birddiscount;
 
-	var $discountcodefee ;
+	var $discountcodefee;
 
-	var $customfee = 0 ;
+	var $customfee = 0;
 
-	var $tax ;
+	var $tax;
 
-	var $currentfee ;
+	var $currentfee;
 
-	var $fee ;
+	var $fee;
 
-	var $paid_fee ;
+	var $paid_fee;
 
-	var $payment_method ;
+	var $payment_method;
 
-	var $changefee ;
+	var $changefee;
 
-	var $cancelfee ;
+	var $cancelfee;
     
-	var $fieldfee =  array();
-	
-
-	
+	var $fieldfee = array();
 
 	function __construct($event=null,$user=null){
 
-	   	$this->TableEvent = $event ;
-        $this->is_changed = false ;
-		$this->TableUser = $user ;
+	   	$this->TableEvent = $event;
+        $this->is_changed = false;
+		$this->TableUser = $user;
 		if($user->userId){
 		   	$this->OldUser = new TableDuser();
 			$this->OldUser->load($user->userId);
 			///$this->OldUser->compare($this->TableUser);
-			$this->is_changed = !$this->OldUser->compare($this->TableUser) ;
+			$this->is_changed = !$this->OldUser->compare($this->TableUser);
 			
 		}else{
-			$this->OldUser = false ;
+			$this->OldUser = false;
 		}
         $fieldtype = DtrModel::getInstance('Fieldtype','DtregisterModel');
 
@@ -55,97 +59,88 @@ class DT_Fee{
 
     }
 
-	
-
-	
-
 	function setPaidAmount($amount){
 
-	  	$this->paid_amount = $amount ;
+	  	$this->paid_amount = $amount;
 
 	}
-
-	
 
 	function setPaidMethod($method){
 
-	  	$this->payment_method = $method ;
+	  	$this->payment_method = $method;
 
 	}
-
-	
 
 	function setPaidStatus($status){
 
-	  $this->status = $status ;	
+	  $this->status = $status;	
 
 	}
 
-	
-
 	function getFee($ismember=false,$date=null){
 
-	   	global $now ;
+	   	global $now;
 
 		if($date != null and is_string($date)){
 
 		   $date =  new JDate($date);
 
 		}
-
+        
+		if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+		  	
+			foreach($this->TableUser->fee as $feepart =>$partvalue){
+			   if(!in_array($feepart , array('id','user_id'))){
+				  
+				  $this->$feepart = $partvalue ;
+				    
+			   }		
+			}
+			  	
+		}
+		
 		if(isset($this->TableUser->process)&& $this->TableUser->process=='due'){
 
-		   	
-
-			// set the fee from session ;
-
-			
+			// set the fee from session;
 
 		}
 
-		
-
-		$date = ($date == null)?$now:$date ;
+		$date = ($date == null)?$now:$date;
 
 		$this->date = $date;
 
-		$this->ismember = $ismember ;
+		$this->ismember = $ismember;
 
 		$this->basefee = $this->getBasefee($this->TableUser->memtot);
-
-		
-
-	    
 
 		$this->processFee();
 
 		$this->fee = $this->currentfee;
 
-		$this->paid_fee = $this->fee ;
-
-		return $this->currentfee ;
+		$this->paid_fee = $this->fee;
+         
+		
+		 
+		return $this->currentfee;
 
 	}
 
-	
-
 	function getChangefee(){
 
-	   global $changefee_enable ,$changefee_type , $changefee ;
+	   global $changefee_enable,$changefee_type, $changefee;
 
 	   if(isset($this->TableUser->process) && ($this->TableUser->process=="due" || $this->TableUser->process=="cancel" ) ){
 
-		    $amount = 0 ;
+		    $amount = 0;
 
-		    $this->changefee = $amount  ;
+		    $this->changefee = $amount;
 
-	        return $amount ;
+	        return $amount;
 
 	   }
 
 	   if(isset($this->TableUser->userId) && $this->TableUser->userId != "" && $this->TableUser->status != -1 ){
 	 
-       
 		 if($this->TableEvent->edit_fee && $this->TableEvent->changefee_enable && $this->is_changed){
 
 			$type = ($this->TableEvent->changefee_type==1)?'amount':'percentage';
@@ -154,94 +149,71 @@ class DT_Fee{
 
 		 }else{
 
-		   	 $amount = 0 ;
+		   	 $amount = 0;
 
 		 }
 
-		
-
-		      
-
 	   }else{
 
-		   	$amount = 0 ;
+		   	$amount = 0;
 
 	   }
 
-	   $this->changefee = $amount  ;
+	   $this->changefee = $amount;
 
-	   return $amount ;
-
-	   	
+	   return $amount;
 
 	}
 
-	
-
 	function getCancelfee(){
 
-	   global $cancelfee_enable ,$cancelfee_type , $cancelfee ;
+	   global $cancelfee_enable,$cancelfee_type, $cancelfee;
 
 	   if(isset($this->TableUser->process) && ($this->TableUser->process=="due" || $this->TableUser->process=="change" )){
 
-		    $amount = 0 ;
+		    $amount = 0;
 
-		    $this->cancelfee = $amount  ;
+		    $this->cancelfee = $amount;
 
-	        return $amount ;
+	        return $amount;
 
 	   }
 
-
 	   if(isset($this->TableUser->userId) && $this->TableUser->userId != "" && $this->TableUser->status != -1 ){
-
-		 
 
 		 if($this->TableEvent->cancel_enable && $this->TableEvent->cancelfee_enable){
 
 			$type = ($this->TableEvent->cancelfee_type==1)?'amount':'percentage';
 
-	   	    $amount = $this->calculatebytype($type,$this->TableEvent->cancelfee  , $this->currentfee );
+	   	    $amount = $this->calculatebytype($type,$this->TableEvent->cancelfee, $this->currentfee );
 
 		 }else{
              
-		   	 $amount = 0 ;
+		   	 $amount = 0;
 
 		 }
 
-		
-
-		      
-
 	   }else{
 
-		   	$amount = 0 ;
+		   	$amount = 0;
 
 	   }
 
-	   $this->cancelfee = $amount ;
+	   $this->cancelfee = $amount;
 
-	   return $amount ;
-
-	   	
+	   return $amount;
 
 	}
 
-	
-
 	function processFee(){
 
-	   
-
-	   $this->currentfee = $this->basefee ;
-
-	   
+	   $this->currentfee = $this->basefee;
 
 	   foreach($this->TableEvent->feeorder  as $feeorder){
 
 		   if($feeorder->type == "basefee"){
 
-			    continue ;
+			    continue;
 
 		   }
 
@@ -249,65 +221,44 @@ class DT_Fee{
 
 			   $amount = $this->getBirdDiscount();
 
-			   $this->currentfee -= $amount ; 
+			   $this->currentfee -= $amount; 
 
 		   }
-
-		   
 
 		   if($feeorder->type == "changefee"){
 
-		      
-
 			  $amount = $this->getChangefee(); 
 
-			  $this->currentfee += $amount ; 
-
-			   
-
+			  $this->currentfee += $amount; 
 		   }
-
-		   
 
 		    if($feeorder->type == "cancelfee"){
 
-		      
-
 			  $amount = $this->getCancelfee();
 
-			  $this->currentfee += $amount ; 
-
-			   
+			  $this->currentfee += $amount; 
 
 		   }
 
-		  
-
 		   if($feeorder->type == "discountcode" && $this->TableUser->discount_code_id == $feeorder->reference_id){
-
-			  
-
-			   
 
 		       $amount = $this->getDiscountcodeamount();
 
-			   $this->currentfee -= $amount ; 
+			   $this->currentfee -= $amount; 
 
 		   }elseif($feeorder->type == "discountcode"){
 
-			    continue ;
+			    continue;
 
 		   }
 
 		   if($feeorder->type == "field"){
 
-			   
+			  $fee = $this->getFieldFee($feeorder->reference_id);
 
-			  $fee =  $this->getFieldFee($feeorder->reference_id);
+			  $this->currentfee += $fee;
 
-			  $this->currentfee += $fee ;
-
-			  $this->customfee += $fee ;
+			  $this->customfee += $fee;
 
 		   }
 
@@ -315,7 +266,7 @@ class DT_Fee{
 
 			  $this->memberdiscount = $this->getMemberDiscount();
 
-			  $this->currentfee -= $this->memberdiscount ;
+			  $this->currentfee -= $this->memberdiscount;
 
 		   }
 
@@ -323,7 +274,7 @@ class DT_Fee{
 
 		       $this->latefee = $this->getLatefee();
 
-			   $this->currentfee += $this->latefee ;
+			   $this->currentfee += $this->latefee;
 
 		   }
 
@@ -331,61 +282,43 @@ class DT_Fee{
 
 			   $this->tax = $this->getTax();
 
-			   $this->currentfee += $this->tax ;
+			   $this->currentfee += $this->tax;
 
 		   }
 
-		  
-
-		   
-
-		      
-
 	   }
 
-	   
-
-	  
-
-	   	
-
 	}
-
-	
 
 	function getTax(){
 
-	    
-
 	  if($this->TableEvent->tax_enable){
 
-	     $tax_amount =  $this->currentfee * $this->TableEvent->tax_amount/100 ;
+	     $tax_amount =  $this->currentfee * $this->TableEvent->tax_amount/100;
 
 	   }else{
 
-	      $tax_amount = 0 ;
+	      $tax_amount = 0;
 
 	   }
 
-	   
-
-	   return $tax_amount ;
-
-			
+	   return $tax_amount;
 
 	}
 
-	
-
 	function getMemberDiscount(){
 
-		$event = $this->TableEvent ;
+		$event = $this->TableEvent;
         if(!$this->ismember){
 
-		   	return 0 ;
+		   	return 0;
 
 		}
-
+        if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+			$this->TableUser->fee = (array) $this->TableUser->fee ;
+			return $this->TableUser->fee['memberdiscount'];
+		   	
+		}
 		$type = ($event->discount_type==1)?'amount':'percentage';
 
 	   	$discount = $this->calculatebytype($type,$event->discount_amount , $this->currentfee );
@@ -394,35 +327,12 @@ class DT_Fee{
 
 		  if($this->TableUser->type == 'G'){
 
-			 
-
-			  $totmemforDiscount = 0 ;
-              $totmemforDiscount = $this->TableUser->memtot ;
-			 /* foreach($this->TableUser->members as $member){
-
-				  
-
-				  if($member['created']=="" ||  strtotime($member['created']) < strtotime($this->date->toMySQL())){
-
-					  
-
-					  $totmemforDiscount++;
-
-					    
-
-				  }
-
-				    
-
-			  }*/
-
-			  
-
-			   
+			  $totmemforDiscount = 0;
+              $totmemforDiscount = $this->TableUser->memtot;
 
 		  }else{
 
-			  $totmemforDiscount = 1 ;
+			  $totmemforDiscount = 1;
 
 		  }
 
@@ -432,37 +342,32 @@ class DT_Fee{
 
 		if($this->currentfee < $discount){
 
-		    $discount = $this->currentfee ;
+		    $discount = $this->currentfee;
 
 		}
 
-		return $discount ;
+		return $discount;
 
 	}
 
-	
-
 	function getFieldFee($field_id){
 
-		$field = $this->TableEvent->TableField ;
+		$field = $this->TableEvent->TableField;
 
         $field->load($field_id);
 
-		$newcontext = "Field_".$this->fieldtypes[$field->type] ;
-
-	    
+		$newcontext = "Field_".$this->fieldtypes[$field->type];
 
 	    $obj = new $newcontext();
 
 		$obj->bind((array)$field);
 
-		$field =  $obj ;
+		$field = $obj;
 
-		$fee = 0 ;
+		$fee = 0;
 
 		if($this->TableUser->type == 'G'){
 
-		   
            if(isset($this->TableUser->members) && is_array($this->TableUser->members))		        
 		   foreach($this->TableUser->members as $member){
 
@@ -472,95 +377,98 @@ class DT_Fee{
 
 				    foreach($member->fields[$field_id] as $feekey){
 
-					   $fee += $field->getfeeByKey($feekey) ;
+					   $fee += $field->getfeeByKey($feekey);
 
 				    }
 
 				 }else{
 
-					 $fee += $field->getfeeByKey($member->fields[$field_id]) ;
+					 $fee += $field->getfeeByKey($member->fields[$field_id]);
 
 				 }
 
-			   
-
 			  }
 
-		   }
-
-		   
+		   }   
 
 		}
 
 		if(isset($this->TableUser->fields[$field_id])){
-
+           
 		   if(is_array($this->TableUser->fields[$field_id])){
 
 			  foreach($this->TableUser->fields[$field_id] as $feekey){
 
-				 $fee += $field->fees[$feekey] ;
+				 $fee += $field->fees[$feekey];
 
 			  }
 
 		   }else{
 
-			   $fee += $field->getfeeByKey($this->TableUser->fields[$field_id]) ;
+			   $fee += $field->getfeeByKey($this->TableUser->fields[$field_id]);
 
 		   }
-
-		 
-
+		
 		}
-        $this->fieldfee[$field->id] = array('field'=>$field,'fee'=>$fee) ;
-		return $fee ;
+		$type = ($field->fee_type==1)?'amount':'percentage';
 
+        $fee = $this->calculatebytype($type,$fee , $this->currentfee );
+        $this->fieldfee[$field->id] = array('field'=>$field,'fee'=>$fee);
+		$childs = $obj->getchild();
 		
+		foreach($childs as $child){
+			if(!$child->fee_field){
+				continue;
+			}
+			$fee += $this->getFieldFee($child->id);
+				
+		}
+		
+		//$type = ($field->fee_type==1)?'amount':'percentage';
 
+        //$fee = $this->calculatebytype($type,$fee , $this->currentfee );
 		
+		return $fee;
 
 	}
 
-	
-
 	function getDiscountcodeamount(){
-
        
+	    if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+			$this->TableUser->fee = (array) $this->TableUser->fee ;
+			return $this->TableUser->fee['discountcodefee'];
+		   	
+		}
 		if($this->TableUser->discount_code_id){
                  $this->TableEvent->TableEventdiscountcode->TableDiscountcode->load($this->TableUser->discount_code_id);
-			$type = ($this->TableEvent->TableEventdiscountcode->TableDiscountcode->discount_type==1)?'amount':'percentage' ;
-
-			
+			$type = ($this->TableEvent->TableEventdiscountcode->TableDiscountcode->discount_type==1)?'amount':'percentage';
 
 			$this->discountcodefee = $this->calculatebytype($type,$this->TableEvent->TableEventdiscountcode->TableDiscountcode->amount , $this->currentfee );
 
 			if($this->currentfee < $this->discountcodefee){
 
-			   	$this->discountcodefee = $this->currentfee ;
+			   	$this->discountcodefee = $this->currentfee;
 
 			}
 
-			
-
-			return $this->discountcodefee ;
+			return $this->discountcodefee;
 
 		}else{
 
-		   	
-
-			return 0 ;
+			return 0;
 
 		}
 
-	   	
-
 	}
-
-	
 
 	function getLatefee(){
 
-		global $now ;
-
+		global $now;
+         if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+			 $this->TableUser->fee = (array) $this->TableUser->fee ;
+			return $this->TableUser->fee['latefee'];
+		   	
+		}
 		if(strtotime($this->date->toFormat('%Y-%m-%d')) > strtotime($this->TableEvent->latefeedate)){
 
 			  if($this->TableUser->type == 'G'){
@@ -571,84 +479,50 @@ class DT_Fee{
 				   
 			   }else{
 
-			      $totmemforDiscount = 0 ;
-				  $totmemforDiscount = $this->TableUser->memtot ;
-				 /* if(isset($this->TableUser->members) && is_array($this->TableUser->members))
-				  foreach($this->TableUser->members as $member){
-	
-					  $member = (array)$member ;
-	
-					  if(!isset($member['created']) || $member['created']=="" ||  strtotime($member['created']) < strtotime($this->date->toMySQL())){
-	
-						  
-	
-						  $totmemforDiscount++;
-	
-							
-	
-					  }
-	
-						
-	
-				  } */
+			      $totmemforDiscount = 0;
+				  $totmemforDiscount = $this->TableUser->memtot;
+
 			   }
-
-			  
-
-			   
 
 		  }else{
 
-			  $totmemforDiscount = 1 ;
+			  $totmemforDiscount = 1;
 
 		  }
             if($this->OldUser !== false){
-			    
-				//$totmemforDiscount = 
 				
 			}
 			$latefee = $this->TableEvent->latefee*$totmemforDiscount;
 
-			return $latefee ;
+			return $latefee;
 
 		}else{
 
-		   
-
-		   return 0 ;
-
-		   
+		   return 0;
 
 		}
 
-		
-
-	    
-
 	}
-
-	
 
 	function getBirdDiscount(){
 
-		global $now ;
-		
-       
+		global $now;
+		if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+			$this->TableUser->fee = (array) $this->TableUser->fee ;
+			return $this->TableUser->fee['birddiscount'];
+		   	
+		}
 		if(strtotime($this->date->toFormat()) < strtotime(trim($this->TableEvent->bird_discount_date." ".$this->TableEvent->bird_discount_time)) 
 
 		&& $this->TableEvent->bird_discount_type != 0 ){
      
-		    $type = ($this->TableEvent->bird_discount_type==1)?'amount':'percentage' ;
-
-	       	
+		    $type = ($this->TableEvent->bird_discount_type==1)?'amount':'percentage';
 
 			if(!isset($this->slab)){
 
 			   $this->slab = $this->getSlab($this->TableUser->memtot);
 
 			}
-
-			   
 
 			if($this->slab->type != 'flat' && $type=="amount" && $this->TableUser->type='G' ){
 
@@ -658,44 +532,20 @@ class DT_Fee{
 				   $totmemforDiscount = $this->TableUser->memtot;
 				   
 			   }else{
-				  $totmemforDiscount = 0 ;
-				  $totmemforDiscount = $this->TableUser->memtot ;
-				  /*if(isset($this->TableUser->members) && is_array($this->TableUser->members))
-				  foreach($this->TableUser->members as $member){
-	
-					  
-	
-					  if(!isset($member['created']) || $member['created']=="" ||  strtotime($member['created']) < strtotime($this->date->toMySQL())){
-	
-						  
-	
-						  $totmemforDiscount++;
-	
-							
-	
-					  }
-				  }*/
-				    
+				  $totmemforDiscount = 0;
+				  $totmemforDiscount = $this->TableUser->memtot;
 
 			  }
 
 			  if(isset($this->TableUser->userId) && $this->TableUser->userId != ""){
 
-			     $this->birddiscount = $this->TableUser->TableFee->birddiscount ;
+			     $this->birddiscount = $this->TableUser->TableFee->birddiscount;
 
 			  }else{
 
 			     $this->birddiscount = $this->calculatebytype($type,$this->TableEvent->bird_discount_amount , $this->currentfee );
-                  $this->birddiscount = $this->birddiscount*$this->TableUser->memtot ;
+                  $this->birddiscount = $this->birddiscount*$this->TableUser->memtot;
 			  }
-
-			  //$this->birddiscount =  $this->birddiscount*$totmemforDiscount/$this->TableUser->memtot ;  
-
-			  
-
-				 // might require changes later ;
-
-				    	 
 
 			}else{
 
@@ -705,55 +555,37 @@ class DT_Fee{
 
 			if($this->currentfee < $this->birddiscount){
 
-			   	$this->birddiscount = $this->currentfee ;
+			   	$this->birddiscount = $this->currentfee;
 
 			}
 
-			return $this->birddiscount ;
+			return $this->birddiscount;
 
 		}else{
 
-		   return 0 ;
+		   return 0;
 
 		}
 
-	   	
-
 	}
-
-	
 
 	function calculatebytype($type='amount',$factor,$amount){
 
 	    if($type == 'percentage'){
 
-
-
 		   $per = $factor/100;
 
-	
-
-		   $amount= $amount*$per ;
-
-	
+		   $amount= $amount*$per;
 
 		}elseif($type == 'amount'){
 
-	
-
-		   $amount =  $factor ;   
-
-	
+		   $amount = $factor;   
 
 		}
 
-	
-
-		return $amount ;
+		return $amount;
 
     }
-
-	
 
 	function getBasefee($memtot=1){
 		
@@ -766,22 +598,20 @@ class DT_Fee{
 	
 		   if($type == "flat"){
 	
-			  $return = $amount ;
+			  $return = $amount;
 	
 		   } else {
 	
-			  $return = $amount * $memtot ;
+			  $return = $amount * $memtot;
 	
 		   }
 	   }
 
 		// echo '<pre>'; print_r($return); exit;	   
 
-		return $return ;
+		return $return;
 
 	}
-
-	
 
 	function getSlab($memtot=1){
         
@@ -789,13 +619,9 @@ class DT_Fee{
 
 	}
 
-    
-
 	function cancel_fee($amount=0){
 
-		 global $cancelfee_type ,$cancelfee_enable ,$cancelfee ;
-
-		 
+		 global $cancelfee_type,$cancelfee_enable,$cancelfee;
 
 		 if($amount == 0){
 
@@ -803,41 +629,25 @@ class DT_Fee{
 
 		 }
 
-		
-
 		if($cancelfee_enable){
 
 		    $type = ($cancelfee_type==1)?'amount':'percentage';
 
 		    $cancelfee = self::calculatebytype($type,$cancelfee,$amount);
 
-		    
-
-			return $cancelfee ;
-
-		   
+			return $cancelfee;
 
 		 }else{
 
-		   return 0 ;
+		   return 0;
 
 		 }
 
-	 
-
      }
-
-	 
 
 	 function change_fee($amount=0){
 
-	    
-
-	   global $changefee_enable , $changefee_type , $changefee ;
-
-	  
-
-	   
+	   global $changefee_enable, $changefee_type, $changefee;
 
 	   if($changefee_enable){
 
@@ -845,25 +655,16 @@ class DT_Fee{
 
 		 $changefee = self::calculatebytype($type,$changefee,$amount);
 
-		 return $changefee ;
-
-		 
+		 return $changefee;
 
 	   }else{
 
-		  return 0 ;   
+		  return 0;   
 
-	   }
-
-			 
+	   }	 
 
 	 }
-
-   
-
-
 
 }
 
 ?>
-

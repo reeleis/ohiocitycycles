@@ -66,12 +66,12 @@ if(!isset($_REQUEST['task'])){
    $_REQUEST['task'] = 'restore';
 }
 set_error_handler("myErrorHandler");
-echo "<pre>";
-print_r($_REQUEST);
+
 $mainframe->dispatch('com_dtregister');
 if($_REQUEST['task']=="cancel"){
 	$mainframe->redirect('../../index.php?option=com_dtregister&task=cancel&controller=payment&Itemid='.$Itemid);
 }
+die;
 //chdir($oldpath);
 
 die();

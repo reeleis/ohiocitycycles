@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="component" version="1.5.0">
 <name>DT Register</name>
-<creationDate>Dec. 11, 2010</creationDate>
+<creationDate>Jan. 20, 2011</creationDate>
 <author>DTH Development</author>
 <copyright>(c)2006 DTH Development. All rights reserved.</copyright>
 <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 <authorEmail>dthdev@dthdevelopment.com</authorEmail>
 <authorUrl>www.DTHDevelopment.com</authorUrl>
-<version>2.7.0i</version>
+<version>2.7.2c</version>
 
 <description>With DT Register, you can take online registrations for your event and collect a registration fee through various payment gateways. Fully integrated calendar is included.</description>
 
@@ -314,6 +314,8 @@
 <filename>lib/payment/idealRabo.php</filename>
 <filename>lib/payment/NetDeposit.php</filename>
 <filename>lib/payment/paypal.php</filename>
+<filename>lib/payment/paypal_pro.php</filename>
+<filename>lib/payment/saferpay.php</filename>
 <filename>lib/payment/Sage.php</filename>
 <filename>lib/payment/index.html</filename>
 <filename>lib/payment/eway/index.html</filename>
@@ -504,6 +506,7 @@
 <filename>assets/images/pay_later.jpg</filename>
 <filename>assets/images/prev.gif</filename>
 <filename>assets/images/publish_x.png</filename>
+<filename>assets/images/saferpay_pay.jpg</filename>
 <filename>assets/images/sage_card_pay.jpg</filename>
 <filename>assets/images/tick.png</filename>
 <filename>assets/images/tooltip.png</filename>
@@ -715,7 +718,7 @@
 	<filename>controllers/user.php</filename>
 	<filename>controllers/validate.php</filename>
 	<filename>elements/index.html</filename>
-	<filename>elements/list.php</filename>
+	<filename>elements/catlist.php</filename>
 	<filename>helpers/index.html</filename>
 	<filename>helpers/config.php</filename>
 	<filename>helpers/dtregister.php</filename>
@@ -898,6 +901,7 @@
 	<filename>views/user/tmpl/index.html</filename>
 	<filename>views/user/tmpl/add.php</filename>
 	<filename>views/user/tmpl/edit.php</filename>
+	<filename>views/user/tmpl/event_full.php</filename>
 	<filename>views/user/tmpl/list.php</filename>
 	<filename>views/user/tmpl/list_description.php</filename>
 	<filename>views/user/tmpl/memberadd.php</filename>

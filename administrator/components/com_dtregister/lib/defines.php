@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -38,9 +38,10 @@ JLoader::register('DTbarcode' , JPATH_SITE.DS.'administrator'.DS.'components'.DS
 JLoader::register('DTrCommon' ,JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'dtcommon.php');
 
 JLoader::register('Tagparser' , JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'tagparser.php');
+JLoader::register('DtPagination' , JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'lib'.DS.'dtpagination.php');
 //$defaultimeZone = date_default_timezone_get();
 function set_tz_by_offset($offset) {
-	    global $defaultimeZone ;
+	    global $defaultimeZone;
         $offset = $offset*60*60;
         $abbrarray = timezone_abbreviations_list();
         foreach ($abbrarray as $abbr) {
@@ -153,10 +154,10 @@ function prd($data=null){ //return;
 }
 
 function db(){
-
+/*
   echo "<pre>";
 
-	 $backtrace =  debug_backtrace();
+	 $backtrace = debug_backtrace();
 
 	 $index = 0;
 
@@ -173,7 +174,7 @@ function db(){
    debug_print_backtrace();
 
    echo "</pre>";
-
+*/
 }
 
 //pr($now->toMySQL(true));

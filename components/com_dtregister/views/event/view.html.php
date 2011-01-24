@@ -71,19 +71,22 @@ class DtregisterViewEvent	 extends DtrView {
 		 
 	      $value = '<input type="text" name="username" id="username" value="" class="'.$requireclass.'" />';
 	      $constants = array('[label]','[value]','[description]');
-		  $replace = array($label,$value,'');
+		  $description =  JHTML::tooltip(JText::_('DT_USERNAME_TIP'), '', 'tooltip.png', '', '');
+		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html = str_replace($constants,$replace,$tpl);
 		  
 		  $label = JText::_('DT_PASSWORD').$requiredlabel;
 	      $value = '<input type="password" name="password" id="password"  value="" class="'.$requireclass.'" />';
-		  $replace = array($label,$value,'');
+		  $description =  JHTML::tooltip(JText::_('DT_PASSWORD_TIP'), '', 'tooltip.png', '', '');
+		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html .= str_replace($constants,$replace,$tpl); 
 		  
 		  $label = JText::_('DT_CONFIRM_PASSWORD').$requiredlabel;
 	      $value = '<input type="password" id="confirmpassword" name="confirmpassword" value="" class="'.$requireclass.'" />';
-		  $replace = array($label,$value,'');
+		  $description =  JHTML::tooltip(JText::_('DT_CONFIRM_PASSWORD_TIP'), '', 'tooltip.png', '', '');
+		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html .= str_replace($constants,$replace,$tpl);
 	   	  $document = &JFactory::getDocument();

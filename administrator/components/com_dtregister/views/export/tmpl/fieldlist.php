@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -13,19 +13,26 @@
  $mexport = $this->getModel('export');
  $mfield->table->displayField = 'label';
 
+ $tuser = $this->getModel('user')->table;
+
  $sql = "select distinct field_id from #__dtregister_field_event where showed <> 0 and event_id in(".implode(",",$this->tExport->events).")";
  $confields = $mfield->table->query($sql,null,null);
 
  $confieldIds = array();
  foreach($confields as $cf){
-   	$confieldIds[] = $cf->field_id; 
+   	$confieldIds[] = $cf->field_id;
+	$tmp_fields = array();
+	$mfield->table->findtree($cf->field_id,$tmp_fields);
+	foreach($tmp_fields as $field_id =>$data){
+		$confieldIds[] = $field_id;
+	}
  }
  
- $fields = $mfield->table->optionslist(' type <> 6 and id in('.implode(",",$confieldIds).') or parent_id in('.implode(",",$confieldIds).')','ordering');
+ $fields = $mfield->table->optionslist(' type <> 6 and id in('.implode(",",$confieldIds).')','ordering'); // or parent_id in('.implode(",",$confieldIds).')
 
 ?> 
  <form action="index.php" method="post" name="adminForm">
-    <table cellpadding="10" cellpadding="10" width="100%" >
+    <table cellpadding="10" cellpadding="10" width="100%">
         <tr>
 
     <td colspan="3">
@@ -63,6 +70,22 @@
          </td>
         </tr>
         <tr>
+        <td colspan="3">
+          <table>
+            <tr>
+              <td> 
+                <?php echo JText::_('DT_STATUS');?>:
+              </td>
+              <td>
+                <?php
+				   echo DtHtml::checkboxListrows('status', $tuser->statustxt,10,array_keys($tuser->statustxt));  
+				?>
+              </td>
+            </tr>
+          </table>
+        </td>
+        </tr>
+        <tr>
            <td colspan="3">
        
                <input type="checkbox" id="checkall" /> <?php echo JText::_('DT_CHECKALL'); ?>
@@ -70,7 +93,7 @@
            </td>
        </tr>
         <tr>
-          <td valign="top">
+          <td valign="top" class="fields">
      <table>
         <tr><td colsapn="2" class="dt_heading">
 	       <strong><?php echo JText::_('DT_GENERAL_INFO'); ?></strong>
@@ -79,7 +102,7 @@
      </table>
   </td>
   
-  <td valign="top">
+  <td valign="top" class="fields">
      <table>
         <tr><td colsapn="2" class="dt_heading">
 	      <strong><?php echo JText::_('DT_INDIVIDUAL_GROUP_OPTIONS'); ?></strong>
@@ -88,7 +111,7 @@
      </table>
   </td>
   
-          <td valign="top">
+          <td valign="top" class="fields">
             <table>
                <tr><td colsapn="2" class="dt_heading">
 	             <strong><?php echo JText::_('DT_GROUP_MEMBER_DETAILS'); ?></strong>
@@ -113,16 +136,15 @@
 
 		   if(this.checked){
 
-		   		DTjQuery("form input[type=checkbox]").attr("checked", 'checked');
+		   		DTjQuery(".fields input[type=checkbox]").attr("checked", 'checked');
 
 		   }else{
 
-		   		 DTjQuery("form input[type=checkbox]").attr("checked", false);
+		   		 DTjQuery(".fields input[type=checkbox]").attr("checked", false);
 
 		   }
 
 		 });
-
 
 	  });
 

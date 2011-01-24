@@ -1,12 +1,17 @@
 <?php
 
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DtregisterControllerCalendar extends DtrController {
 
-
-
    var $name ='calendar';
-
-	
 
 	function __construct($config = array()){
 
@@ -25,17 +30,13 @@ class DtregisterControllerCalendar extends DtrController {
 		  $this->view->setModel($this->getModel( 'field' ));
 		  $this->view->setModel($this->getModel( 'category' ));
 
-		  
-
 		  $this->registerDefaultTask("index");
 
 	}
 
-	
-
 	function index(){
-        global $mainframe ;
-		$cat = $mainframe->getUserStateFromRequest( "com_dtregister.cat", 'cat','all' );
+        global $mainframe;
+		$cat = JRequest::getVar('cat','all' );
         
 		$this->view->assign('cat',$cat);
 	   	$this->view->setLayout('index');
@@ -44,18 +45,13 @@ class DtregisterControllerCalendar extends DtrController {
 
 	}
 
-	
-
 	function events(){
-
-	   
 
 	   $startdate = JREquest::getVar('showdate');
 
-	   $viewtype = JREquest::getVar('viewtype');
+	   $viewtype = JREquest::getVar('viewtype','month');
 
-      $cat = JREquest::getVar('cat','all');
-	   
+       $cat = JREquest::getVar('cat','all');
 
 	   $daterange = DTrCommon::getDateRangeByViewType($startdate,$viewtype);
 
@@ -72,11 +68,7 @@ class DtregisterControllerCalendar extends DtrController {
 
 	   $this->display();
 
-	   	
-
 	}
-
-   
 
 }
 

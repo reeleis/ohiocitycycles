@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -10,7 +10,8 @@
 */
 
 class Tagparser {
-
+   
+   var $parse_password =  false;
    function __construct(){ 
 
 	   $mpaymentmethods =& DtrModel::getInstance('DtregisterModelPaymentmethod');
@@ -44,11 +45,11 @@ class Tagparser {
 		 prd($matches);
 	 }
      
-	 function replaceTagContent($tag,$msg){
+	 function replaceTagContent($tag,$msg,$replace=""){
 	   $tagstart = "\{".$tag."\}";
 		 $tagend   = "\{\/".$tag."\}";
 		 $expression = "/".$tagstart."(.*)*".$tagend."/msU";
-		 $data = preg_replace($expression,'',$msg);
+		 $data = preg_replace($expression,$replace,$msg);
 		 return $data;
 		
      }
@@ -58,7 +59,9 @@ class Tagparser {
        if($msg==""){
 		  //$msg = $this->testRegmsg;   
 	   }
-		 
+	     //
+		// pr($msg);
+		
 		 preg_match_all('/\[[^\]]*\]/',$msg,$matches);
          
 		 $tfield = $this->mfield->table;
@@ -66,13 +69,16 @@ class Tagparser {
 		 $tags = array();
 
 		 $tagvals = array();
-         
+         //pr($matches[0]);
 		 foreach($matches[0] as $value){
 
-			  $str_replace_key =  substr($value,1,-1);
+			  $str_replace_key = substr($value,1,-1);
               if(in_array($str_replace_key,$this->invalid_tags)){
 				   continue;
 			  }
+			  if(!$this->parse_password && $str_replace_key == 'PASSWORD'){
+			       continue;
+		      }
 			  $field = $tfield->findByTag($str_replace_key);
               
 			  $tags[] = $value;
@@ -196,26 +202,24 @@ class Tagparser {
 			if(count(DT_Session::get('register.User'))== 1){
 			  foreach(DT_Session::get('register.User') as $user ){
 				  
-				  break ;
+				  break;
 			  }
 			}else{
 			  foreach(DT_Session::get('register.User') as $user ){
 				  
 				  if(isset($user['userId'])&& $dtuser->userId == $user['userId']){
-				  	 break ;
+				  	 break;
 				  }
 			  }
 			}
 			if(isset($user['password'])){
-			   return $user['password'] ;
+			   return $user['password'];
 			}else{ 
 			   return "";
 			}
 		}else{
 			return "";	 
 		}
-		
-		
 
 	 }
 
@@ -341,40 +345,6 @@ class Tagparser {
 
 	 }
 
-	 /*function group_names($recipient){
-
-		 $user  = $this->getuser($recipient);
-
-		 if($user->type=='G'){
-
-			 $names = array();
-
-			 foreach($user->members as $member){
-
-				 $nameParts = array();
-
-				 $nameParts[] = $member->title ;
-
-				 $nameParts[] = $member->firstname ;
-
-				 $nameParts[] = $member->lastname ;
-
-				 $name = implode(" ",array_filter($nameParts)) ;
-
-				 $names[] = $name ;
-
-			 }
-
-			 return implode(" <br /> ",array_filter($names));
-
-		 }else{
-
-			 return "";
-
-		 }
-
-     }*/
-
 	 function group_number($recipient){
 
 		 $user = $this->getuser($recipient);
@@ -463,7 +433,7 @@ class Tagparser {
 
 			   $groupCustomFields[] = $user->TableMember->contact_custom_fields($member).'<br /><br />';
 
-			   $i++ ;
+			   $i++;
 
 		 }
 
@@ -490,7 +460,11 @@ class Tagparser {
 		return $user->showRegDate();
 
 	} 
+     function registered_date(){
+	    $user = $this->getuser($recipient);
 
+		return $user->showRegDate();
+	 }
 	 function getuser($recipient){
 
 		  if(isset($recipient->groupUserId)){
@@ -513,9 +487,7 @@ class Tagparser {
 
 	 function userdata($userId){
 
-		 //$userId = JRequest::getVar('userId' , 0);
-
-		 $user = & DtrModel::getInstance('DtregisterModelUser');
+		  $user = & DtrModel::getInstance('DtregisterModelUser');
 
 		  $user = $user->table;
 
@@ -543,7 +515,7 @@ class Tagparser {
 
 		      $fieldshtml .= $user->TableEvent->viewFields('M',(array)$member,false,'frmcart',false);
 
-				  $i++ ;
+				  $i++;
 
 			  }
 

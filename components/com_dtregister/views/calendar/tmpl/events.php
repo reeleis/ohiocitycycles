@@ -20,6 +20,7 @@
 	 if($calendar_link){
 	     if($calendar_link == 1){
 			if($event->article_id){
+				$eventTable->load($event->slabId);
 				$article = $eventTable->getArticle($event->article_id);
                 $article_ItemId = $eventTable->getArticleItemid($article);
 		        $href = JRoute::_('index.php?option=com_content&view=article&id='.$article->id.'&Itemid='.$article_ItemId,$xhtml_url);
@@ -74,6 +75,8 @@
 	  $temp[] = $event->loc_name;
 
 	  $temp[] = $href;
+	  
+	  $temp[] = ($event->timeformat == 2)?'HH:MM':'hh:MM tt';
 
 	  $events[] = $temp;
 
@@ -82,7 +85,7 @@
   $json =  new stdClass;
 
   $json->events = $events;
-
+ob_clean();
   echo json_encode($json);
 
   die;

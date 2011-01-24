@@ -1,10 +1,13 @@
 <?php
-global $Itemid , $xhtml ,$full_message;
+global $Itemid , $xhtml_url ,$full_message;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 ?>
 <div>
   <?php
       $tEvent = $this->tEvent ;
+	  
+	  pr($tEvent);
+	  
        $registered = $tEvent->getTotalregistered($tEvent->slabId);
       $message =  ($registered >= $tEvent->max_registrations && $tEvent->max_registrations !=0 &&$tEvent->max_registrations!="")?$full_message:$this->tEvent->topmsg;
 	  
@@ -62,14 +65,15 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 	    
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   var options = {
-		               url : "<?php echo JRoute::_("index.php?no_html=1&tmpl=price_header");?>",
+		               url : "<?php echo JRoute::_("index.php?no_html=1&dttmpl=price_header&controller=event",$xhtml_url);?>",
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
+									  DTjQuery(document.frmcart.task).val('confirm');
 					              }
 		   }
 	   DTjQuery(document.frmcart.task).val('price_header');
 	   DTjQuery(document.frmcart).ajaxSubmit(options);
-	   DTjQuery(document.frmcart.task).val(prevtask);
+	  
 	     
   }
   
@@ -99,7 +103,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 	 DTjQuery('#discount_code').rules('add',
 	  {
 		  remote:{ 
-		     url :"<?php echo JRoute::_('index.php?option=com_dtregister&controller=validate&task=discountcode&no_html=1',$xhtml); ?>",
+		     url :"<?php echo JRoute::_('index.php?option=com_dtregister&controller=validate&task=discountcode&no_html=1',$xhtml_url); ?>",
 			 dataType:'json',
 			 success:function(response){
 			var previous = {};

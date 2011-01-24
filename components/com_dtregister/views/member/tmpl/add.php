@@ -1,6 +1,15 @@
 <?php
 
-global $Itemid ;
+/**
+* @version 2.7.2
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $Itemid;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'tmpl'.DS.'event_header.php');
 ?>
 <div id="price_header">
@@ -12,33 +21,13 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
    <table>
 
-    
-
-      
-
-      
-
-
-
-       
-
      <?php
 
-       
-
-	   echo  $this->form ;
-
-	 
-
-	   
+	   echo $this->form;
 
 	 ?>
 
-    
-
-    <tr><td colspan="3" align="center"><input onclick='window.location="<?php echo JRoute::_("index.php?option=com_dtregister&controller=member&task=index&userId=".$this->userId); ?>"' name="" type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" />&nbsp;&nbsp;<input type="submit" class="button"  name="savemember" value="<?php echo JText::_( 'DT_SAVE' );?>" /></td></tr>
-
-   
+    <tr><td colspan="3" align="center"><input onclick='window.location="<?php echo JRoute::_("index.php?option=com_dtregister&controller=member&task=index&userId=".$this->userId); ?>"' name="" type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" />&nbsp;&nbsp;<input type="submit" class="button" name="savemember" value="<?php echo JText::_( 'DT_SAVE' );?>" /></td></tr>
 
    </table>
 
@@ -64,15 +53,9 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 <script type="text/javascript">
 
- 
-
- 
-
  DTjQuery(function(){
 
    //DTjQuery.validator.messages.required = " ";
-
-
 
     DTjQuery(document.frmcart).validate({
 
@@ -82,25 +65,14 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 			}
 
-
-
 	});
 
-	
-
-	
-
  })
-
- 
-
-
 
 </script>
 <script type="text/javascript">
  
-  
-  var updateFee =  function(){
+  var updateFee = function(){
 	    
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   var prevcontroller = DTjQuery(document.frmcart.controller).val();

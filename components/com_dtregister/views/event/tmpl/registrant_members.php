@@ -4,17 +4,21 @@ $user = $this->user ;
 $muser = $this->muser;
 $tuser = $muser->table ;
 $profile = $tuser->TableJUser ;
+$mfieldtype = $this->getModel('fieldtype');
 
+$fieldtypes = $mfieldtype->getTypes();
 $tuser->load($user->userId);
 $html = "" ;
 if($show_group_members == 1){
-     $html ='<tr class="detail member'.$user->userId.'"><td colspan="9"><table border="0">';
+     $html ='<tr class="detail member'.$user->userId.'"><td colspan="9"><table border="0" cellpadding=1 cellspacing=1 width="100%">';
+	  $html = ""; 
    if(count($tuser->members)){
 	   
 	   foreach($tuser->members as $member){
-		  $html .= "<tr>";
+		  
+		  $html .= "<tr class='child detail' id='".$user->userId."'>";
 
-		  $html .="<td width='100px;'>&nbsp;</td>";
+		  $html .="<td>&nbsp;</td><td>&nbsp;</td>";
 		  
 		  foreach($this->fields as $field){
 			  
@@ -40,13 +44,40 @@ if($show_group_members == 1){
 					$html .=$member->firstname.' '.$member->lastname;
 
 				break;
+				default:
+				  $html .=$member->firstname.' '.$member->lastname;
+				
 
 			 }
 
-			$html .= "</td>";
+			$html .= "</td><td>&nbsp;</td>";
 			
 		   }else{
-			   $html .='<td>'.$member->{$field->name}.'</td>';
+			   
+			   
+			   if (isset($member->{$field->name}) && $member->{$field->name} != '') {
+				   
+			
+				
+					$fieldClass = 'Field_'.$fieldtypes[$field->type];
+			  
+			  $fieldTable = new $fieldClass();
+			  $fieldTable->load($field->id);
+			  $function = 'viewHtml';
+			  if(is_callable(array($fieldTable,'exportView'))){
+				  $function = 'exportView' ;
+			  }
+					//$html .='<td colspan=4></td>';
+					$html .='<td>'.$fieldTable->$function((array)$member).'</td>';	
+					//$html .='<td colspan=2></td>';
+					
+			   
+			   }else{
+				   $html .='<td>&nbsp;</td>';
+			   }
+			   
+			   // if (isset($member->{$field->name}) && $member->{$field->name} != '')
+			   // $html .='<td>'.$member->{$field->name}.'</td>';
 		   }
 			  
 			    
@@ -56,7 +87,8 @@ if($show_group_members == 1){
 	   }
 	   
    }	
-	$html .="</table></td></tr>";
+	//$html .="</table></td></tr>";
+	
 }
 echo $html ;
 ?>

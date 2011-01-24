@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -21,6 +21,67 @@ class DtregisterControllerMessage extends DtrController {
 	
    }
    
+   function prequisite() {
+	    global $prerequisite_event_msg;
+	    $eventTable = $this->getModel('event')->table;
+		$eventTable->load(JRequest::getVar('eventId'));
+		$selection =  array();
+	    foreach($eventTable->prerequisite as $prerequisite){
+			     
+			$data = $eventTable->find('slabId = '.$prerequisite);
+			if($data){
+				$data = $data[0];
+				$selection[] = $data->title;
+			}
+			    
+		}
+	  if(count($selection)){
+		  $prerequisite = "<ul><li>".implode("</li><li>",$selection)."</li></ul>";	
+	  }else{
+	      $prerequisite = "";
+	  }
+	  
+	  $prerequisite_event_msg =  str_replace("[PREREQ_CATEGORY]",'',$prerequisite_event_msg); 
+	  echo str_replace("[PREREQ_EVENTS]",$prerequisite,$prerequisite_event_msg);   
+   }
+   
+   function prequisitecat(){
+	    global $prerequisite_event_msg;
+	    $eventTable = $this->getModel('event')->table;
+		$cat = $this->getModel('category')->table;
+		$eventTable->load(JRequest::getVar('eventId'));
+		$selection =  array();
+		$events = array();
+	    foreach($eventTable->prerequisitecategory as $prerequisite){
+			     
+			$data = $cat->find('categoryId = '.$prerequisite);
+			$evts  = array();
+			if($data){
+				$data = $data[0];
+				$selection[] = $data->categoryName;
+				$evts = $eventTable->find('category ='.$prerequisite);
+				foreach($evts as $event){
+					$events[] = $event->title;
+				}
+			}
+	    
+		}
+	  
+	   if(count($events)){
+		  $prerequisiteEvt = "<ul><li>".implode("</li><li>",$events)."</li></ul>";	
+	  }else{
+	      $prerequisiteEvt = "";
+	  }
+	  $prerequisiteEvt = "";
+	  if(count($selection)){
+		  $prerequisite = "<ul><li>".implode("</li><li>",$selection)."</li></ul>";	
+	  }else{
+	      $prerequisite = "";
+	  }
+	  $prerequisite_event_msg = str_replace("[PREREQ_EVENTS]",$prerequisiteEvt,$prerequisite_event_msg);
+	  echo str_replace("[PREREQ_CATEGORY]",$prerequisite,$prerequisite_event_msg);   
+   }
+   
    function privatevent(){
 	   global $private_event_msg;
 
@@ -28,7 +89,7 @@ class DtregisterControllerMessage extends DtrController {
    }
    
    function change(){
-	  global $mainframe , $Itemid;
+	  global $mainframe, $Itemid;
 	   JText::_('DT_REGISTRATION_MODIFIED');
 	  
 	  DT_Session::clearAll();
@@ -36,7 +97,7 @@ class DtregisterControllerMessage extends DtrController {
    }
    
     function cancel(){
-	   global $mainframe , $Itemid;
+	   global $mainframe, $Itemid;
 	   JText::_('DT_CANCEL_SUCCESSFUL');
 	   DT_Session::clearAll();
 	   
@@ -45,7 +106,7 @@ class DtregisterControllerMessage extends DtrController {
    }
    
    function due(){
-		global $mainframe , $Itemid;
+		global $mainframe, $Itemid;
 		DT_Session::clearAll();
 		$mainframe->redirect('index.php?option=com_dtregister&controller=user&Itemid='.$Itemid ,JText::_( 'DT_PAYMENT_SUCCESSFUL' ) );
    }
@@ -83,11 +144,15 @@ class DtregisterControllerMessage extends DtrController {
 	
 	   foreach(DT_Session::get('register.User') as $key => $user){
 		    
-		    $userTable->load($user['userId']);
-			$TableEvent->load($user['eventId']);
-			$tokenmessage = ($TableEvent->pay_later_thk_msg_set)?$TableEvent->pay_later_thk_msg:$pay_later_thk_msg;
+		    if (isset($user)) {
+				
+				$userTable->load($user['userId']);
+				$TableEvent->load($user['eventId']);
+				$tokenmessage = ($TableEvent->pay_later_thk_msg_set)?$TableEvent->pay_later_thk_msg:$pay_later_thk_msg;
+				
+				$messages[] = $Tagparser->parsetags($tokenmessage,$userTable);
 			
-			$messages[] = $Tagparser->parsetags($tokenmessage,$userTable); 
+			}
 			 
 	   }
 	   

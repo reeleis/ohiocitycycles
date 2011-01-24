@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.1
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
- global $Itemid ,$month_arr , $now , $xhtml_url , $googlekey , $amp , $show_event_image;
+ global $Itemid ,$month_arr , $now , $xhtml_url , $googlekey , $amp , $show_event_image ,$eventListOrder;
 
  $config = $this->getModel('config');
 
@@ -29,33 +29,24 @@
 
  if($config->getGlobal('googlekey','')!==""){
 
-  
-
    $document->addScript( "http://maps.google.com/maps?file=api".$amp."v=2.x".$amp."key=".$googlekey);
-
-
 
  }
 
  $limit = trim( JRequest::getVar('limit',$config->getGlobal('event_list_number','')) );
 
-
-
 $where = array();
 
 $limitstart = trim( JRequest::getVar('limitstart', 0 ) );
 
-$month =  JRequest::getVar('month','');//
+$month = JRequest::getVar('month','');//
 
-$year =  JRequest::getVar('year','');//date('Y',$now->toUnix(true))
+$year = JRequest::getVar('year','');//date('Y',$now->toUnix(true))
 
 jimport('joomla.html.pagination');
 
 $category = JRequest::getVar('category',"");
 $cartcontinue = JRequest::getVar('cart','');
-
-
- 
 
 $search = JRequest::getVar('search');
 
@@ -63,28 +54,22 @@ $task =  JRequest::getVar('task','');
 
 if($task == "category"){
 
-	
-
 	$cats = array();
 
 	for($i=1;$i<=12;$i++){
-
-	  
 
 	   $cat_id = JRequest::getVar('list'.$i,'');
 
 	   if( $cat_id > 0){
 
-		  $cats[] = $cat_id ;
+		  $cats[] = $cat_id;
 
 	   }
-
-	   
 
 	}
     $cat_id  = JRequest::getVar('category','');
 	if($cat_id > 0){
-		$cats[] = $cat_id ;
+		$cats[] = $cat_id;
 	}
 
 	if(count($cats)>0){
@@ -93,21 +78,13 @@ if($task == "category"){
 
 	}
 
-	 
-
  }
 
  	$search = $config->getDBO()->getEscaped( trim( strtolower( $search ) ) );
 
-
-
 if ($search){
 
-  
-
   $where[] = "(b.event_describe LIKE '%{$search}%' OR b.title LIKE '%{$search}%' OR c.categoryName LIKE '%{$search}%'  OR l.name LIKE '%{$search}%' OR b.dtstart LIKE '%{$search}%' OR b.dtend LIKE '%{$search}%') ";
-
-  
 
 }
 
@@ -121,20 +98,13 @@ if($cartcontinue == 'continue'){
     	
 }
 
-
 if(!$config->getGlobal('show_past_event',0)){
 
-
-
    $where[] = " (b.dtend >= '". $now->toFormat('%Y-%m-%d') ."' or b.dtend = '0000-00-00' or b.dtend Is Null) "; //(b.startdate <= now() || b.startdate is null ) and
-
-
 
 }
 
 $conf =& JFactory::getConfig();
-
-
 
 $tzoffest = $conf->getValue('config.offset');
 
@@ -144,7 +114,7 @@ if($month !="" && $year !="" ){
 
 $start_date->setOffset($conf->getValue('config.offset'));
 
-$end_month = $month + 1 ;
+$end_month = $month + 1;
 
 if($end_month > 12){
 
@@ -154,53 +124,31 @@ if($end_month > 12){
 
    }else{
 
-      $end_year = $year ;
+      $end_year = $year;
 
    }
 
     $end_date = new JDate($end_year."-".$end_month."-01");
 
-
-
 $end_date->setOffset($conf->getValue('config.offset'));
-
-   
 
    $where[] = " b.dtstart >= '".($start_date->toFormat('%Y-%m-%d'))."' and b.dtstart <  '".($end_date->toFormat('%Y-%m-%d'))."' " ;
 
-   
-
 }
-
-
 
 if($month =="" && $year !="" ){
 
-   
-
    $start_date = $year."-01-01";
 
+   $end_year =  $year + 1;
 
-
-   $end_year =  $year + 1 ;
-
-
-
-   $end_date = $end_year."-01-01" ;
-
-
+   $end_date = $end_year."-01-01";
 
    $where[] = " b.dtstart >= '".($start_date)."' and b.dtstart <  '".($end_date)."' " ;
 
-   
-
 }
 
-
-
 $my = & JFactory::getUser();
-
-
 
 if(!$my->id){  // not logged in view only public event
 
@@ -212,80 +160,43 @@ $rows1 = $categoryTable->find('published = 1 and access <= '.$user->get('aid'),'
 
  $arrCategory = array();
 
-        
-
 	    for ($i=0,$n=count($rows1);$i<$n;$i++){
-
-
 
 	    	$row1 = $rows1[$i];
 
-
-
 	    	$catId = $row1->categoryId;
-
-
 
 	    	$catName = $row1->categoryName;
 
-
-
 	    	//$options[]=JHTML::_('select.option',$catId,$catName);
-
-            
 
 	    	$tmpArr=array($catId=>$catName);
 
-
-
 	    	DTrCommon::array_push_associative($arrCategory,$tmpArr);
-
-
 
 	    }
 
 $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
 
-
-
 ?>
 
  <script type="text/javascript" >
 
-
-
     //<![CDATA[
 
-
-
-	
 	DTjQuery(function(){ 
-
-
 
 	  window.status='test';
 
-
-
 	  DTjQuery(".colorbox").colorbox({width:550, height:550,iframe:true});
-
-
 
 	  DTjQuery().bind('cbox_complete', function(){
 
-
-
 		 // initialize();
-
-
 
         //setTimeout($.fn.colorbox.next, 1500);
 
-
-
        });
-
-
 
 	})
 
@@ -293,7 +204,7 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 </script>
 
-<form action="<?php echo  JRoute::_("index.php?option=".DTR_COM_COMPONENT."&Itemid=".$Itemid, $xhtml_url ); ?>" method="post" name="sort">
+<form action="<?php echo  JRoute::_("index.php?option=".DTR_COM_COMPONENT."&Itemid=".$Itemid, $xhtml_url ); ?>" method="post" name="frmcart">
 
    <table class="event_message" width="100%">
 
@@ -386,8 +297,6 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 	<?php
 
-
-
 		if($config->getGlobal('price_column',0)){
 
            $j++;
@@ -412,103 +321,59 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 			
 		}
 
-
-
 	?>
-
-
 
 	</tr>
 
     <?php
 
-    
-
 	if($rows){
-
-
 
 		$total = count($rows);
 
-
-
 		$limit = trim( JRequest::getVar('limit',$config->getGlobal('event_list_number')) );
-
-
 
 		if($limit==""){
 
-
-
-			$limit = $config->getGlobal('event_list_number') ;
-
-
+			$limit = $config->getGlobal('event_list_number');
 
 		}
 
-
-
 		$limitstart = trim( JRequest::getVar('limitstart', 0 ) );
-
-
-
-		$pageNav = new JPagination( $total, $limitstart, $limit  );
-
- 
+        
+		$pageNav = new DtPagination( $total, $limitstart, $limit  );
 
 	//Get the number of registrants
 
     $rows = array_splice($rows,$pageNav->limitstart,$pageNav->limit);
 
-		
-
-
-
 	//End the number of registrants
-
-
 
 	$link="index.php?option=$option&Itemid=$Itemid";
 
-
-
 	$prevCat=NULL;
 
-
-
 	$currCat=NULL;
-
-
 
 	// Display an event on each row
 
     $k = 0;
 
-	$prevCat =  NUll ;
+	$prevCat = NUll;
 
 	$parent = $categoryTable;
     
 	for($i=0,$n=count($rows);$i<$n;$i++){
 
-
-
 		if($k == 0){$bgRow='eventListRow1';}else{$bgRow='eventListRow2';}
-
-
 
 		$row=$rows[$i];
 
-	
-
-		$currCat = $row->category ;
+		$currCat = $row->category;
 
 		if($currCat!=$prevCat || $currCat==""){
 
-
-
 			if (isset($arrCategory[$row->category]) && $arrCategory[$row->category]){
-
-                
 
 				$parent->categoryName = "";
 				
@@ -525,15 +390,9 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 				echo '<tr class="categoryRow"><td colspan="'.$j.'" '. $subclass .' >'.$parent->categoryName.$arrCategory[$row->category].'</td></tr>';
 
-
-
 			}
 
-
-
 		}
-
-		
 
         $this->assign('row',$row);
 
@@ -547,20 +406,13 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 		$prevCat = $currCat;
 
-		$k = 1-$k ;
+		$k = 1-$k;
 
 	}// END LOOP -> for($i=0,$n=count($rows);$i<$n;$i++)?>
 
-
-
 	</table>
 
-
-
-
 	<br /><br />
-
-
 
 	<?php 
 
@@ -568,50 +420,25 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 	  echo $pageNav->getPagesLinks($link);
 
-
-
 	}else if (!$rows && $search){
-
-
 
 		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_SEARCH_RESULTS' )."</td></tr></table></form>";
 
-
-
 	} else {
-
-
 
 		// no events to list
 
-
-
 		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_EVENTS' )."</td></tr></table></form>";
-
-
 
 	} // END -> if($rows)
 
-
-
-	
-
-	
-
 	?>
-
-    
-
-
 
    </table> 
 
    <input type="hidden" name="option" value="<?php echo DTR_COM_COMPONENT; ?>" />
-
-   
-
    <input type="hidden" name="controller" value="event" />
    <input type="hidden" name="task" value="category" />
+    <input type="hidden" name="limitstart" value="<?php echo $pageNav->limitstart; ?>" />
 
 </form>
-

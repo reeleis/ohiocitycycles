@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -63,30 +63,13 @@ class DT_Session{
 				$str .="['".$e."']";
 			
 		 }
-		   //${"DTregister".$str} = $value;
+
 		   $eval = "\$DTregister$str = \$value;";
 		   if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
 		     //pr($eval);
 		   }
 		   eval($eval);
-		   /*$pathdata =& $DTregister;
-		   
-		 foreach($depth as $e){
 
-		   if (!isset($pathdata[$e])) {
-              prd($e);
-		      $pathdata[$e] = null;
-
-		   } 
-
-		   $pathdata =& $pathdata[$e];
-		   
-		   pr($pathdata);
-
-		 }
- 
-		 $pathdata = $value;
-         */
 		 if($session->has('DTH','dtregisterdup')){
 			 
 		 }else{
@@ -117,15 +100,15 @@ class DT_Session{
 				$str .="['".$e."']";
 				
 				if(!isset($pathdata[$e])){
-				   	return false ;
+				   	return false;
 			    }
 				if ($pathdata[$e] === "") return $emptyResponse;
 			    $pathdata = $pathdata[$e];	
 			 
 		}
 		unset($pathdata);
-		$pathdata =  $DTregister;
-		  // $value = ${"DTregister".$str};
+		$pathdata = $DTregister;
+
 		   $eval = "\$value = \$pathdata$str;";
 		   if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
   		      //pr($eval);
@@ -216,23 +199,32 @@ class DT_Session{
         $database->query();
        // echo $database->getQuery();
 		$row = $database->loadObjectList();
+		
         $data = unserialize($row[0]->data);
         $dt_userId = $row[0]->user_id;
-		$_SESSION = $data;
-		//pr($_SESSION);
+		$session =& JFactory::getSession();
+		
+		
 		DT_Session::set('register.restore.userId',$dt_userId);
 		DT_Session::set('register.restore.processed',$row[0]->processed);
 		DT_Session::set('register.restore.id',$paypal_session_id);
-		$session =& JFactory::getSession();
-		$session->getToken(true);
-		$session->fork();
+		
+		$session->getToken(true); 
+		//$session->fork();
+		$_SESSION = $data;
+		$session->set('session.timer.start',strtotime('now'));
+		$session->set('session.counter',1);
+		
+		$session->set('session.timer.last',(strtotime('now')));
+		$session->set('session.timer.now',(strtotime('now')));  
+		
+		$session->set('__dtregister',$data['__dtregister']);
+		$_SESSION['__dtregister'] = $data['__dtregister'];
 		//pr($session->getExpire());
 		//pr($session->getStores());
 		//pr($session->getState());
 		//pr($session);
-		$session->set('session.timer.start',strtotime('now'));
-		$session->set('session.counter',1);
-		$session->set('session.timer.now',(strtotime('now')+10));  
+		
   }
   
 }

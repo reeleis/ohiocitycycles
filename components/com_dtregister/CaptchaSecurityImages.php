@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.5.8
+* @version 2.7.0
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,15 +9,15 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-session_start();
+@session_start();
 
-ob_start();
+@ob_start();
 
 define( '_JEXEC', 1 );
 
 define( 'DS', DIRECTORY_SEPARATOR );
 
-$_SESSION['old_path'] = getcwd();
+//@$_SESSION['old_path'] = getcwd();
 
 chdir('../../');
 
@@ -55,48 +55,28 @@ require_once ( JPATH_BASE .DS.'includes'.DS.'framework.php' );
 
 		$database =& JDatabase::getInstance( $options );
 
-		chdir($_SESSION['old_path']);
+		//@chdir($_SESSION['old_path']);
 
 /*
-
 * File: CaptchaSecurityImages.php
-
 * Author: Simon Jarvis
-
 * Copyright: 2006 Simon Jarvis
-
 * Date: 03/08/06
-
 * Updated: 07/02/07
-
 * Requirements: PHP 4/5 with GD and FreeType libraries
-
 * Link: http://www.white-hat-web-design.co.uk/articles/php-captcha.php
-
 *
-
 * This program is free software; you can redistribute it and/or
-
 * modify it under the terms of the GNU General Public License
-
 * as published by the Free Software Foundation; either version 2
-
 * of the License, or (at your option) any later version.
-
 *
-
 * This program is distributed in the hope that it will be useful,
-
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
-
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-
 * GNU General Public License for more details:
-
 * http://www.gnu.org/licenses/gpl.html
-
 *
-
 */
 
 class CaptchaSecurityImages {
@@ -173,7 +153,7 @@ class CaptchaSecurityImages {
 
 	/* output captcha image to browser */
 
-@ob_clean();
+   @ob_clean();
 
 	header('Content-Type: image/jpeg');
 
@@ -183,7 +163,7 @@ class CaptchaSecurityImages {
 
 		//We will use database for storing captcha information
 
-		require_once("../../configuration.php");
+		require_once("configuration.php");
 
 		//require_once("config.dtregister.php");
 
@@ -265,4 +245,5 @@ $characters = isset($_GET['characters']) && $_GET['characters'] > 2 ? $_GET['cha
 
 $captcha = new CaptchaSecurityImages($width,$height,$characters);
 
+die;
 ?>

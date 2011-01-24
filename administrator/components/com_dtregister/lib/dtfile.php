@@ -1,9 +1,19 @@
 <?php
+
+/**
+* @version 2.7.0
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 class DT_file{
 
-	var $id ;
+	var $id;
 
-	var $path ; 
+	var $path; 
 
 	function DT_file($id=null){
 
@@ -39,11 +49,11 @@ class DT_file{
 
 			$this->re_name($filename,$destfolder);
 
-			$dest =  $this->path;
+			$dest = $this->path;
 
 		}else{
 
-			$this->path = $dest ; 
+			$this->path = $dest; 
 
 		}
 
@@ -53,7 +63,7 @@ class DT_file{
 
 	function re_name($filename,$destfolder=null){
 
-	    static $number ; 
+	    static $number; 
 
 		jimport('joomla.filesystem.file');
 
@@ -68,15 +78,15 @@ class DT_file{
             if($number>0){
 			  $name = substr($name,0,"-".$len);
 			}
-			$number++ ;
+			$number++;
 
-			$name = $name.$number ; 
+			$name = $name.$number; 
 
 			$this->re_name($name.".".$ext,$destfolder);
 
 		}else{
 
-		    $this->path = $dest ;
+		    $this->path = $dest;
 
 		}
 

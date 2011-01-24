@@ -19,7 +19,7 @@ $custom_field_types =  $this->getModel('fieldtype')->getTypes();
 global $Itemid ;
 ?>
 
-	<form action="index.php" method="post" name="adminForm">
+	<form action="index.php?option=com_dtregister&Itemid=<?php echo $Itemid; ?>" method="post" name="adminForm">
 
     <p><?php echo JText::_( 'DT_CUSTOM_FIELD_INSTRUCTIONS' ); ?></p>
 
