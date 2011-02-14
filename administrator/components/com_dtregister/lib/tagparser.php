@@ -60,11 +60,11 @@ class Tagparser {
 		  //$msg = $this->testRegmsg;   
 	   }
 	     //
-		// pr($msg);
 		
 		 preg_match_all('/\[[^\]]*\]/',$msg,$matches);
          
 		 $tfield = $this->mfield->table;
+		 
 
 		 $tags = array();
 
@@ -83,10 +83,12 @@ class Tagparser {
               
 			  $tags[] = $value;
              
+			 
+			 
 			  if($field){
 				  
 				  if(isset($recipient->fields[$field->id])){
-            $recipient->fields[$field->id];
+            		  $recipient->fields[$field->id];
 					  $fielddata = $this->tfield->find(' id='.$field->id);
 					  
 					  $fielddata = $fielddata[0];
@@ -97,7 +99,10 @@ class Tagparser {
 					  if(is_callable(array($fieldTable,'exportView'))){
 						  $function = 'exportView';
 					  }
-					  $tagvals[] = $fieldTable->$function((array)$recipient,null,'',false);//$this->tfield->load($field->id);
+					  
+					  $tagvalues = $fieldTable->$function((array)$recipient,null,'',false);//$this->tfield->load($field->id);
+					  $tagvals[] = $tagvalues;
+					 
 					 
 				  }else{
 
@@ -107,16 +112,42 @@ class Tagparser {
 
 			  }else{
 
-            if(is_callable(array($this,$str_replace_key)))
+			  $function = strtolower($str_replace_key);
+			  
+            if(is_callable(array($this,$function)))
 				 {
-				    $tagvals[] =  $this->{$str_replace_key}($recipient);
-				 }
+				    $tagvals[] =  $this->{$function}($recipient);
+				 }else{
+				       $tagvals[] = "" ;
+				}
 
 			  }
 
 		 }
-        
-		 return str_replace($tags,$tagvals,$msg);
+		 $tags_new = $tags;
+		 $tagvals_new = $tagvals;
+        /* foreach ($tagvals_new as $key=>$value) {
+		 
+		 	if ($value != "")  {
+				$tagvals2[$key] = $value;
+				$tags2[$key] = $tags_new[$key];
+			}
+		 
+		 }*/
+		 
+		  // pr($tags_new);
+		  // pr($tagvals_new);
+		  // return str_replace($tags,$tagvals,$msg);
+		  $msg = str_replace($tags,$tagvals,$msg);
+		  $msg =  nl2br($msg);
+		  $msg = preg_replace("/<p>([\s])*<\/p>/",'',$msg);
+		  $msg = preg_replace("/<br \/>[\s]*<br \/>/",'null_space',$msg);
+		  $msg = preg_replace("/<p>([\s])*<\/p>/",'',$msg);
+		  $msg = preg_replace("/<br \/>[\s]*<br \/>/",'null_space',$msg);
+		  $msg = preg_replace("/null_space/",'<br />',$msg);
+		  $msg = preg_replace("/<\/p>([\s])*<br \/>/",'</p>',$msg);
+		 
+		  return $msg ;
 
 	 }
 
@@ -126,6 +157,52 @@ class Tagparser {
 
 		 return $user->TableEvent->title;
 
+	 }
+	 
+	 function all_fields($recipient){
+	 	
+		$user = $this->getuser($recipient);
+		$field =  DtrTable::getInstance('field','Table');
+		
+	    $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
+        $txt =  "";
+		$txt_parts = array();
+	    $fieldTypes =  $fieldType->getTypes();
+		foreach($user->fields as $field_id => $value){
+			
+			$field->load($field_id);
+			if($field->all_tag_enable){
+				
+				$class = "Field_".$fieldTypes[$field->type];
+
+		    	$fieldTable = new $class();
+
+		    	$fieldTable->load($field->id);
+				$function = "viewHtml";
+				if(method_exists($fieldTable,'exportView')){
+			   		$function = "exportView";
+				}
+		    	
+				$value = $fieldTable->{$function}((array)$user);
+				
+				//$txt .= $fieldTable->label.': '.$value.'<br />' ;
+				$txt_parts[] = $fieldTable->label.': '.$value ;
+			}
+			
+			
+			
+		}
+		$txt_parts = array_reverse($txt_parts);
+		$txt =  implode("<br />",$txt_parts);
+		return $txt ;
+		
+	 }
+	 
+	 function event_time($recipient){
+	 	
+		$user = $this->getuser($recipient);
+		 
+		return $user->TableEvent->displaytimecolumn(' ');
 	 }
 
 	  function event_date($recipient){
@@ -174,7 +251,7 @@ class Tagparser {
 		 global $barCodeImagetypeToExt , $barcode_image_type;
 //pr($barCodeImagetypeToExt);
          $barcodePath =JURI::root( false )."images/dtregister/barcode/".$user->confirmNum.".".$barcode_image_type;
-
+         $barcodePath = str_replace('/components/com_dtregister','',$barcodePath);
          return  '<img border="0" src="'.$barcodePath.'" alt="[BARCODE_MISSING] '.$barcodePath.'" />';
 
 	 }
@@ -230,10 +307,10 @@ class Tagparser {
 		 $location = $user->TableEvent->TableLocation;
 
 		 $locParts = array();
-
+         $secondline = array($location->city , trim($location->state.' '.$location->zip));
 		 $locParts[] = $location->address.$location->address2;
 
-		 $locParts[] = $location->city.', '.$location->state.' '.$location->zip;
+		 $locParts[] = implode(", ",array_filter($secondline));
 
 		 $locParts[] = $location->country;
 
@@ -387,7 +464,7 @@ class Tagparser {
 		 // pr($methods[$user->TableFee->payment_method]);
 		 // prd($methods); echo 'hello';
 		
-		 return $methods[$user->TableFee->payment_method];
+		 return isset($methods[$user->TableFee->payment_method])?$methods[$user->TableFee->payment_method]:JText::_('DT_FREE');
 
 	 }
 

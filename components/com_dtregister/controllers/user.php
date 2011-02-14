@@ -14,10 +14,16 @@ class DtregisterControllerUser extends DtrController {
    var $name = "User";
 
     function __construct($config = array()){
- 
-		 parent::__construct($config);
-
-		 $this->view = & $this->getView( 'User', 'html' );
+          global $mainframe ;
+		  parent::__construct($config);
+          
+		  $user =  JFactory::getUser();
+		  if(!$user->id){
+		  	  
+			  JRequest::setVar('task','auth');
+			  
+		  }
+		  $this->view = & $this->getView( 'User', 'html' );
 
 		  $this->view->setModel($this->getModel('event'));
 
@@ -28,7 +34,9 @@ class DtregisterControllerUser extends DtrController {
 		  $this->view->setModel($this->getModel( 'member' ));
 
 		  $this->view->setModel($this->getModel( 'field' ));
-
+		
+		  $this->view->setModel($this->getModel('field'));
+		  
 		 $this->registerDefaultTask("index");
 
 		 $this->user = &JFactory::getUser();
@@ -90,7 +98,7 @@ class DtregisterControllerUser extends DtrController {
 		DT_Session::set('register.User',$user);
 
 		DT_Session::set('register.User.process','duepayment');
-
+		
 		$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
 
 	}
@@ -192,7 +200,7 @@ class DtregisterControllerUser extends DtrController {
 
 	   $type = ($tUser->type=='I')?'I':'B' ;
        $tUser->TableEvent->duplicate_check = false ;
-	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'frmcart',false));
+	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'frmcart',true));
        $tUser->TableEvent->load($eventId) ;
        $this->view->assign('tEvent',$tUser->TableEvent);
 	   $this->view->assign('mUser',$mUser);
@@ -203,6 +211,7 @@ class DtregisterControllerUser extends DtrController {
 	function price_header(){
 	   
 	   $layout = JRequest::getVar('dttmpl','price_header');
+	   $this->getModel('field');
 	   if(isset($_REQUEST['Field'])){
 		   //$userIndex = DT_Session::get('register.Setting.current.userIndex');
 		   if(isset($_REQUEST['key'])){
@@ -230,12 +239,20 @@ class DtregisterControllerUser extends DtrController {
 	   $this->view->setModel($this->getModel( 'field' ));
 
 	   $this->view->setModel($this->getModel( 'fieldtype' ));
-
+	   
 	   $step = JRequest::getVar('step',0);
 	   
 	   if($step ==="confirm"){
-
-		   $paying_amount = JRequest::getVar('paying_amount',0);
+           if(isset($_REQUEST['partial_payment'])){
+			    if($_REQUEST['partial_payment'] == 'full'){
+					$paying_amount = JRequest::getVar('paying_amount',0);
+				}else{
+					$paying_amount = JRequest::getVar('partial_payment_amount',0);
+				}
+		   }else{
+		   	    $paying_amount = JRequest::getVar('paying_amount',0);
+		   }
+		   
            if($paying_amount >0 ){
 			   $paid_amount = DT_Session::get('register.User.fee.paid_amount') + $paying_amount;
 		   }else{
@@ -259,7 +276,7 @@ class DtregisterControllerUser extends DtrController {
 
 		   $paymethod = DT_Session::get('register.payment.method');
 		   
-		   if($paying_amount < 1){
+		   if($paying_amount <= 0){
 			  $function =  DT_Session::get('register.User.process');
 			 
 			  $tableUser = $this->getModel('user')->table;
@@ -330,8 +347,7 @@ class DtregisterControllerUser extends DtrController {
 	   unset($feesession->TableEvent);
 
 	   unset($feesession->TableUser);
-
-	  // prd(DT_Session::get('register.User.members'));
+       
 
 	   DT_Session::set('register.User.fee',(array)$feesession);
        
@@ -346,6 +362,8 @@ class DtregisterControllerUser extends DtrController {
 	   $this->view->assign( 'viewFields' ,$event->viewFields($type,DT_Session::get('register.User'),false,'frmcart',false));
 
 	   $this->view->assign( 'viewMemFields',$viewMemFields);
+	   
+	   $this->view->assign( 'partial_payment_enable', $event->partial_payment_enable);
 
 	   $this->display();	
 

@@ -64,7 +64,7 @@ class DtregisterControllerMember extends DtrController {
 	   $tUser->load($tMember->groupUserId);
 	   $type = 'M' ;
 	   
-	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tMember,false,'adminForm',false));
+	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tMember,false,'adminForm',true));
 	   $this->view->assign('mMember',$mMember);
 		$this->display();
 			

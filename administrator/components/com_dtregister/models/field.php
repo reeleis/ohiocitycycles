@@ -133,6 +133,8 @@ class TableField extends DtrTable {
    var $applychangefee = 1;
    
    var $tag = '';
+   
+   var $all_tag_enable = 0 ;
 
     function __construct( &$db = null ) {
 
@@ -758,7 +760,7 @@ class TableField extends DtrTable {
 
 		 $eventsql = " and ef.event_id = '$eventid' ";
 
-		 $query = "Select * from #__dtregister_fields f inner join #__dtregister_field_event ef on ef.field_id = f.id where f.published=1 and f.parent_id=".$parent_id.$eventsql;
+		 $query = "Select * , f.id from #__dtregister_fields f inner join #__dtregister_field_event ef on ef.field_id = f.id where f.published=1 and f.parent_id=".$parent_id.$eventsql;
 
 	 }else{
 
@@ -1114,9 +1116,30 @@ class Field extends TableField{
 			   }
 
 		}
-
+	   
+		
+		if(isset($_SESSION['__dtregister']['option_used'][$this->id]) && count($_SESSION['__dtregister']['option_used'][$this->id]) > 0  ){
+			foreach($_SESSION['__dtregister']['option_used'][$this->id] as $key=>$used){
+				
+				
+				
+			
+					if(isset($usage[$key])){
+					 
+						   $usage[$key] += $used ;
+					   
+					   
+					  
+					}else{
+						 $usage[$key] = $used; 
+					}
+				
+				
+				
+			}
+		}
 	
-
+        
 		return $usage;
 
      }
@@ -1404,7 +1427,9 @@ class Field extends TableField{
 
                      not_remove = [];
 
-                    
+                     if(DTjQuery.isFunction(updateFee)){
+                        updateFee();
+                    }
 
                   }
 
@@ -1664,6 +1689,8 @@ class Field_Dropdown extends Field{
 
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
+       $overlimitdisable = true ;
+	   
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
 	   $this->optionlimit = $this->getOptionLimit($event->slabId);
@@ -1742,12 +1769,15 @@ class Field_Dropdown extends Field{
 	  
        $code = $html = <<<EOH
 <script type="text/javascript">
+DTjQuery(function(){
 DTjQuery("#Field$this->id").live('change',function(){
 		
 	 if(DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
 	
+})
+DTjQuery('input[id="Field$this->id"]').trigger('change');
 })
 </script>
 EOH;
@@ -1967,7 +1997,7 @@ class Field_Checkbox extends Field{
 	     //Checkbox
 
 			  
-             
+             $overlimitdisable = true ;
 			 $this->optionlimit = $this->getOptionLimit($event->slabId);
 
              $this->optionused = $this->optionUsageByEvent($event->slabId);
@@ -1984,7 +2014,7 @@ class Field_Checkbox extends Field{
 			 
 
 			if($value !='')
-             $value = array_filter($this->getkeyByValue($value));
+             $value = array_filter($this->getkeyByValue($value),'my_array_filter_fn');
 			 
 			
 
@@ -2111,6 +2141,7 @@ DTjQuery('input[id="Field$this->id"]').live('click',function(){
 	   	updateFee();
     }
 })
+DTjQuery('input[id="Field$this->id"]:checked').trigger('click');
 })
 </script>
 EOH;
@@ -2208,8 +2239,8 @@ class Field_Radio extends Field{
 	}
 
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
-
-	   
+   
+	   $overlimitdisable = true ;   
 
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2233,21 +2264,22 @@ class Field_Radio extends Field{
 
 			 $new_line=$this->new_line;
 
+               
              for($i=0,$n=count($dropDownDatas);$i<$n;$i++){
 
                      $disabled = "";
 
                  if(isset($this->optionlimit[$i]) && $this->optionlimit[$i]!=0 && $this->optionlimit[$i] <= $this->optionused[$i]){
 
-                      if($overlimitdisable){
+                    if($overlimitdisable){
 
-					      $disabled = "disabled";
+					 
 
-					   }else{
+					 }else{
 
 					      continue ;
 
-					   }
+					  }
 
                  }
 
@@ -2269,11 +2301,18 @@ class Field_Radio extends Field{
                       
                  }
                  
+                 
                   if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
 			         $disabled = "";
 			      }
-                  
-                 if((int)$i === (int)$value){ 
+                   if(isset($this->optionlimit[$i]) && $this->optionlimit[$i]!=0 && $this->optionlimit[$i] <= $this->optionused[$i]){
+                  if($overlimitdisable){
+                    
+                    $disabled = "disabled='disabled'";         
+                    
+                 }
+                 }
+                 if($value !== false && (int)$i === (int)$value ){ 
 
                       if($new_line) 
 
@@ -2336,12 +2375,16 @@ class Field_Radio extends Field{
 	  
        $code = $html = <<<EOH
 <script type="text/javascript">
-DTjQuery('input[id="Field$this->id"]').live('click',function(){
-		
+DTjQuery(function(){
+DTjQuery('input[id="Field$this->id"]').live('change',function(){
+	
      if(DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
 	
+})
+
+//DTjQuery('input[id="Field$this->id"]:checked').trigger('change');
 })
 </script>
 EOH;

@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_fields` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(50) default NULL,
   `label` varchar(255) default NULL,
-  `field_size` tinyint(3) unsigned default NULL,
+  `field_size` smallint(3) unsigned default NULL,
   `description` varchar(255) default NULL,
   `ordering` tinyint(3) unsigned default NULL,
   `published` tinyint(3) unsigned default NULL,
@@ -169,6 +169,7 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_fields` (
   `textualdisplay` int(1) default '0',
   `applychangefee` int(2) default '1',
   `tag` varchar(255) default NULL,
+  `all_tag_enable` int(2) default '0',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
@@ -285,6 +286,9 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_group_event` (
   `group_registration_type` varchar(20) default NULL,
   `cancel_enable` tinyint(1) default '0',
   `min_group_size` int(4) default '2',
+  `admin_notification_set` tinyint(2) default '0',
+  `admin_notification` text default NULL,
+  `partial_payment_enable` int(1) default '0',
   PRIMARY KEY  (`slabId`)
 ) TYPE=MyISAM;
 

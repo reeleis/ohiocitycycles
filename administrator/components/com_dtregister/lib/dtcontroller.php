@@ -71,6 +71,8 @@ class DtrController extends JController {
 		$view->setModel($this->getModel( 'permission' ),false);
 
 		$view->setModel($this->getModel( 'aco' ),false);
+		
+		$this->getModel('field');
 
 		$eventId = DT_Session::get('register.Event.eventId');
         
@@ -236,8 +238,8 @@ class DtrController extends JController {
 	   //$Tagparser->getTagcontent('GROUP_MEMBER',$thanksemail);
 	  // $Tagparser->replaceTagContent('GROUP_MEMBER',$thanksemail);
        $user = $this->getModel('user')->table;
-	   $user->load(200);
-	   $user->TableEvent->load($user->eventId);
+	   $user->load(312);
+	  // $user->TableEvent->load($user->eventId);
 	    if($user->TableEvent->thksmsg_set){
 
 		  $thkmsg = $user->TableEvent->thksmsg;   
@@ -262,8 +264,9 @@ class DtrController extends JController {
 
 		}
 		
-		$usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memberdata);
-      echo  $Tagparser->parsetags($usermsg,$user);
+		 $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memberdata);
+		
+         echo  $Tagparser->parsetags($usermsg,$user);
 		die ;
 	  
 	  echo "<br /> <b><<<<======================Admin Email=============================///>>></b>";

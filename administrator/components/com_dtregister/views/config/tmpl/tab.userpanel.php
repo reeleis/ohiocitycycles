@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -20,7 +20,7 @@ $config = $this->getModel('config');
 
                      <td align="left" style="width:620px">
 
-                      <?php echo $editor->display("config[userpanelmessage]",stripslashes($config->getGlobal('userpanelmessage','')),'','','20','20','0'); ?>
+                      <?php echo $editor->display("config[userpanelmessage]",stripslashes($config->getGlobal('userpanelmessage','')),'','','70','20','0'); ?>
 
                      </td>
 
@@ -153,6 +153,8 @@ $config = $this->getModel('config');
 					                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 					                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+					
+					                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 					                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -184,6 +186,8 @@ $config = $this->getModel('config');
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 					
+						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+					
 									 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
@@ -194,7 +198,7 @@ $config = $this->getModel('config');
 
                                   <?php $email_cancel_confirm = isset($email_cancel_confirm)?$email_cancel_confirm:'';?>
 
-                                  <?php echo $editor->display("config[email_cancel_confirm]",stripslashes($config->getGlobal('email_cancel_confirm','')),'','340','20','20','0'); ?>
+                                  <?php echo $editor->display("config[email_cancel_confirm]",stripslashes($config->getGlobal('email_cancel_confirm','')),'','340','70','20','0'); ?>
 
                                  </td>
 
@@ -229,6 +233,8 @@ $config = $this->getModel('config');
 					                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 					                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+					
+					                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 					                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -260,6 +266,8 @@ $config = $this->getModel('config');
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 					
+						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+					
 				                  	 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
@@ -270,7 +278,7 @@ $config = $this->getModel('config');
 
                                   <?php $email_change_confirm = isset($email_change_confirm)?$email_change_confirm:'';?>
 
-                                  <?php echo $editor->display("config[email_change_confirm]",stripslashes($config->getGlobal('email_change_confirm','')),'','340','20','20','0'); ?>                                      
+                                  <?php echo $editor->display("config[email_change_confirm]",stripslashes($config->getGlobal('email_change_confirm','')),'','340','70','20','0'); ?>                                      
 
                                  </td>
 
@@ -305,6 +313,8 @@ $config = $this->getModel('config');
 					                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 					                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+					
+					                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 					                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -336,6 +346,8 @@ $config = $this->getModel('config');
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 					
+						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+					
 					                 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
@@ -344,7 +356,7 @@ $config = $this->getModel('config');
 
                                  <td>
 
-                                  <?php echo $editor->display("config[payment_confirm]",stripslashes($config->getGlobal('payment_confirm','')),'','340','20','20','0'); ?>
+                                  <?php echo $editor->display("config[payment_confirm]",stripslashes($config->getGlobal('payment_confirm','')),'','340','70','20','0'); ?>
 
                                  </td>
 

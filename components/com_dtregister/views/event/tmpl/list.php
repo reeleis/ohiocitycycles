@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
- global $Itemid ,$month_arr , $now , $xhtml_url , $googlekey , $amp , $show_event_image ,$eventListOrder;
+ global $Itemid,$month_arr, $now, $xhtml_url, $googlekey, $amp, $show_event_image,$eventListOrder;
 
  $config = $this->getModel('config');
 
@@ -17,7 +17,7 @@
 
  $eventTable = $this->getModel('event')->table;
 
- $document	=& JFactory::getDocument();
+ $document =& JFactory::getDocument();
 
  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
 
@@ -39,7 +39,7 @@ $where = array();
 
 $limitstart = trim( JRequest::getVar('limitstart', 0 ) );
 
-$month = JRequest::getVar('month','');//
+$month = JRequest::getVar('month','');
 
 $year = JRequest::getVar('year','');//date('Y',$now->toUnix(true))
 
@@ -50,7 +50,7 @@ $cartcontinue = JRequest::getVar('cart','');
 
 $search = JRequest::getVar('search');
 
-$task =  JRequest::getVar('task',''); 
+$task = JRequest::getVar('task',''); 
 
 if($task == "category"){
 
@@ -67,7 +67,7 @@ if($task == "category"){
 	   }
 
 	}
-    $cat_id  = JRequest::getVar('category','');
+    $cat_id = JRequest::getVar('category','');
 	if($cat_id > 0){
 		$cats[] = $cat_id;
 	}
@@ -155,7 +155,7 @@ if(!$my->id){  // not logged in view only public event
    //$where[]  = " b.public = 1 ";	
 
 }
-$user	=& JFactory::getUser();
+$user =& JFactory::getUser();
 $rows1 = $categoryTable->find('published = 1 and access <= '.$user->get('aid'),'ordering');
 
  $arrCategory = array();
@@ -168,8 +168,6 @@ $rows1 = $categoryTable->find('published = 1 and access <= '.$user->get('aid'),'
 
 	    	$catName = $row1->categoryName;
 
-	    	//$options[]=JHTML::_('select.option',$catId,$catName);
-
 	    	$tmpArr=array($catId=>$catName);
 
 	    	DTrCommon::array_push_associative($arrCategory,$tmpArr);
@@ -180,7 +178,7 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 ?>
 
- <script type="text/javascript" >
+ <script type="text/javascript">
 
     //<![CDATA[
 
@@ -232,7 +230,7 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
     <?php 
 
-	if($config->getGlobal('month_filter_show',0)){ /// month filter flag 
+	if($config->getGlobal('month_filter_show',0)){ // month filter flag 
 
 	  $month_opts=DtHtml::options($month_arr,JText::_( 'DT_SELECT_MONTH' ));
 
@@ -408,9 +406,7 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 		$k = 1-$k;
 
-	}// END LOOP -> for($i=0,$n=count($rows);$i<$n;$i++)?>
-
-	</table>
+	} ?>
 
 	<br /><br />
 
@@ -422,13 +418,13 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 
 	}else if (!$rows && $search){
 
-		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_SEARCH_RESULTS' )."</td></tr></table></form>";
+		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_SEARCH_RESULTS' )."</td></tr>";
 
 	} else {
 
 		// no events to list
 
-		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_EVENTS' )."</td></tr></table></form>";
+		echo "<tr><td colspan='2'>".JText::_( 'DT_NO_EVENTS' )."</td></tr>";
 
 	} // END -> if($rows)
 
@@ -439,6 +435,6 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
    <input type="hidden" name="option" value="<?php echo DTR_COM_COMPONENT; ?>" />
    <input type="hidden" name="controller" value="event" />
    <input type="hidden" name="task" value="category" />
-    <input type="hidden" name="limitstart" value="<?php echo $pageNav->limitstart; ?>" />
+   <input type="hidden" name="limitstart" value="<?php echo $pageNav->limitstart; ?>" />
 
 </form>

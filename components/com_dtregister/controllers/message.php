@@ -105,7 +105,7 @@ class DtregisterControllerMessage extends DtrController {
 	  
    }
    
-   function due(){
+   function duepayment(){
 		global $mainframe, $Itemid;
 		DT_Session::clearAll();
 		$mainframe->redirect('index.php?option=com_dtregister&controller=user&Itemid='.$Itemid ,JText::_( 'DT_PAYMENT_SUCCESSFUL' ) );
@@ -116,6 +116,8 @@ class DtregisterControllerMessage extends DtrController {
 	   // payment thanks 
 	   // prd("index");
 	   DT_Session::clearAll();
+	   global $mainframe ;
+	   
    }
    function waiting(){
 	   

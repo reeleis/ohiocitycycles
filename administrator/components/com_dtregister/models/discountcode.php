@@ -259,7 +259,7 @@ class TableDiscountcode extends DtrTable {
 
 		  $query = "SELECT *
 
-						FROM jos_dtregister_codes AS dc
+						FROM #__dtregister_codes AS dc
 
 						WHERE (
 

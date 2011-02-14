@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -42,8 +42,7 @@ DTjQuery(function(){
 			}
 
 	});
-	// DTjQuery(document.adminForm).find("input[name='data\\[paylater\\]\\[\\]']").rules('add','uniquevalue');
-	
+
  })
 
 function submitbutton(pressbutton){
@@ -109,7 +108,7 @@ function submitbutton(pressbutton){
                 <?php
 
                    	$options=array();
-
+					$options[]=JHTML::_('select.option', '0', JText::_( 'NONE' ));
 					$options[]=JHTML::_('select.option', '1', JText::_( 'COMMA' )." ( , )");
 
 					$options[]=JHTML::_('select.option', '2', JText::_( 'DOT' )." ( . )");
@@ -343,6 +342,10 @@ function submitbutton(pressbutton){
 									   <td valign="top" rowspan="1"><?php echo JText::_( 'DT_NOTES_SAFER_PAY' ) ;?></td>
 
 								 </tr>
+                                 
+                                 
+                                 
+                                 
 	 <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_EWAY' ); ?></td></tr>
                                  
                 <tr align="center" valign="middle">
@@ -360,28 +363,6 @@ function submitbutton(pressbutton){
 										 <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
 
 								 </tr>
-
-				<!---tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EWAY_MODE' );?>:</strong></td>
-
-							    <td align="left" valign="top">
-
-							    <?php
-
-								    $options=array();
-
-								    $options[]=JHTML::_('select.option', 'test', JText::_( 'DT_TEST' ));
-
-								    $options[]=JHTML::_('select.option', 'live', JText::_( 'DT_LIVE' ));
-
-								    echo JHTML::_('select.genericlist', $options,'data[config][ewaymode]','','value','text');
-
-							     ?>
-
-							    </td>
-
-								  <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_MODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-							  </tr--->
                              
                 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EWAY_TYPE' );?>:</strong></td>
 
@@ -420,7 +401,6 @@ function submitbutton(pressbutton){
 								  <td valign="top"> </td>
 
 							  </tr>
-
 								
 							  
                 <!--- ************************* Ideal Rabobank Lite ************************* -->
@@ -522,15 +502,6 @@ function submitbutton(pressbutton){
 
                   <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAY_LATER_OPTIONS' ) ;?>:</strong></td>
 
-							    <!--td align="left" valign="top">
-
-							   	<?php
-
-							   		//echo JHTML::_('select.genericlist', $options, 'data[config][pay_later_options][]',' multiple=true ', 'value','text', $selectedOptions);
-
-							   	?>
-
-							    </td-->
 							     <td>
                                   
                                    <a href="#" id="addmore">Add more</a>
@@ -617,7 +588,7 @@ function submitbutton(pressbutton){
 	   
 	   DTjQuery.each(DTjQuery('.container').find(".checkboxes"),function(k,v){
 		   
-		   v.value = k ;
+		   v.value = k;
 		 
 	  });
 	      

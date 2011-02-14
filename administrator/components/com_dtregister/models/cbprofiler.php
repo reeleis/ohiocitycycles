@@ -55,8 +55,9 @@ class DTCBFields extends DtrTable {
 	
 	if (count($this->fields) > 0) {
 		foreach($this->fields as $field){
-				
-			$this->{$field->name} =  null;
+			  $name = $field->name;
+			if(isset($name) && $name != "" )
+			  $this->$name = "";
 	
 		}
 	}

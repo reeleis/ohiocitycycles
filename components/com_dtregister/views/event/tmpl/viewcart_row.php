@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,9 +9,10 @@
 * @license Commercial
 */
 $type = array('I'=>JText::_('DT_INDIVIDUAL'),'G'=>JText::_('DT_GROUP'));
-global $currency_code ;
+global $currency_code;
 $config = $this->getModel('config');
 $this->event->overrideGlobal($this->event->slabId);
+
 ?>
 
 <tr>

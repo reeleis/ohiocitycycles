@@ -29,9 +29,90 @@
  }
  
  $fields = $mfield->table->optionslist(' type <> 6 and id in('.implode(",",$confieldIds).')','ordering'); // or parent_id in('.implode(",",$confieldIds).')
-
+ $document =& JFactory::getDocument();
+ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/form.js");
+ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/jquery-ui.js");
+ $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
 ?> 
- <form action="index.php" method="post" name="adminForm">
+<div id="progressbarWrapper" style="height:30px; " class="ui-widget-default">
+	<div id="progressbar" style="height:100%;"></div>
+</div>
+<script>
+  var page = 0 ;
+  var file = "";
+  var totalpages = "" ;
+  var limit = <?php echo  DtregisterModelExport::$limit ; ?>;
+  
+  
+  function populate_file(){
+  	 
+	 document.adminForm.task.value = 'fieldlist';
+	 
+	 var options = {
+		             data:{'page':page,'file':file},
+					 dataType: 'json',
+					 forceSync:true ,
+					 success : function(data){
+					 	
+						file = data.file;
+						totalpages = Math.ceil(data.total/limit) ;
+						totalpages -- ;
+						DTjQuery( "#progressbar" ).progressbar('option','value',page*100/totalpages);
+						
+						if(page < totalpages){
+							page++
+							populate_file();
+						}else{
+							
+							document.adminForm.filename.value = file ;
+							document.adminForm.task.value = 'downloadfile';
+							page = 0 ;
+  							file = "";
+  							totalpages = "" ;
+							document.adminForm.submit();
+						}
+					 }
+					 
+	 
+	                };
+					
+		DTjQuery('#adminForm').ajaxSubmit(options); 
+			
+		
+  }
+  
+  DTjQuery(function(){
+	  DTjQuery( "#progressbar" ).progressbar({
+			value: 0
+	  });
+	  
+	  
+	  
+      
+  })
+  
+  
+  function submitbutton(task){
+	  
+	  document.adminForm.task.value = task ;
+	  if(task == "fieldlist"){
+		  alert('<?php echo JText::_('DT_PROCESSING_WAIT'); ?>');
+	  	  if(page == 0 ){
+	  		 populate_file();
+			 return false ;
+		  }else if(page == totalpages){
+		  
+		  }
+		  
+		  
+	  }
+	  
+	 
+  	  
+	  
+  }
+</script>
+ <form action="index.php" method="post" id="adminForm" name="adminForm">
     <table cellpadding="10" cellpadding="10" width="100%">
         <tr>
 
@@ -127,6 +208,7 @@
 <input name="controller" type="hidden" value="export" />
 <input name="formsubmit" type="hidden" value="1" />
 <input name="task" type="hidden" value="" />
+<input name="filename" type="hidden" value="" />
 </form>
  <script>
 

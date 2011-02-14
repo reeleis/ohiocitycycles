@@ -34,13 +34,13 @@
 
 		  $options=array();
 
-      $options[]=JHTML::_('select.option',"-1",JText::_( 'DT_HIDE_ARCHIVE' ));
+      $options[]=JHTML::_('select.option',"0",JText::_( 'DT_HIDE_ARCHIVE' ));
 
 	    $options[]=JHTML::_('select.option',"1",JText::_( 'DT_SHOW_ARCHIVE' ));
 
-	    $options[]=JHTML::_('select.option',"0",JText::_( 'DT_ALL_EVENT' ));
+	    $options[]=JHTML::_('select.option',"-1",JText::_( 'DT_ALL_EVENT' ));
 
-      $archive = JRequest::getVar('archive',-1) ;
+      $archive = JRequest::getVar('archive',0) ;
 
 	    echo JHTML::_('select.genericlist', $options,"search[event_archive]",' onchange="submit()" ',"value","text",$event_archive);
 

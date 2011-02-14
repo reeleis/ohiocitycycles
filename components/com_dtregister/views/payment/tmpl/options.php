@@ -47,12 +47,17 @@ $paylateroptions=DtHtml::options($paymentmhd->paylater->getOptions(),JText::_( '
 
 $i=1;
 
-// echo '<pre>'; print_r($pay_images); 
+// echo '<pre>'; print_r($paymentmethods);  print_r($paymentmhds); 
+
+
 $paymcnt = 0 ;
 foreach($paymentmethods as $key=>$method){
 	if($method == "pay_later" && DT_Session::get('register.User.process')){
+		unset($method) ;
+		$method = $last_method ;
 		continue ;
     }
+	$last_method = $method ;
 $paymcnt++ ;
 // echo '<pre>'; echo $pay_images[$method].'<br>';
   ?>
@@ -157,8 +162,8 @@ if($paymcnt == 1){
 	});
 
 	 DTjQuery('#pay_later_option').rules('add',{required: function(){
-
-		                      return ( DTjQuery("#paymentmethod:checked").val() == 'pay_later');          
+		  					
+		                      return ( DTjQuery('input[id="paymentmethod"]:checked').val() == 'pay_later');          
 
 		                   }
 

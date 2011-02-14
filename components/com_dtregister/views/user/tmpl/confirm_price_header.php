@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.0
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,23 +9,26 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
+
 ?>
 
 <div id="pricebox">
   
 	  <?php
-       global $currency_code,$show_price_tax,$show_fee_breakdown;
+       global $currency_code ,$show_price_tax,$show_fee_breakdown ;
        
        $mEvent = $this->getModel('event');
-       $tEvent = $mEvent->table;
+       $tEvent = $mEvent->table ;
        $tEvent->load(DT_Session::get('register.User.eventId'));
 	   $tEvent->overrideGlobal(DT_Session::get('register.User.eventId'));
        //pr($tEvent);
       
-        $TableUser =& DtrTable::getInstance('Duser','Table');
-	    $userdata = DT_Session::get('register.User');
+        $TableUser  =& DtrTable::getInstance('Duser','Table');
+	    $userdata =  DT_Session::get('register.User');
+	   
 			   
 	   $TableUser->create($userdata);
+	   
 	   
 	   $feeObj = new DT_Fee($tEvent,$TableUser);
 	   $juser = JFactory::getUser();
@@ -33,7 +36,7 @@
 	   $feeObj->getFee($juser->id);
 	   
 		if($feeObj->paid_fee > 0){
-			$memtot = $TableUser->memtot;
+			$memtot =  $TableUser->memtot ;
 			$discount = $feeObj->memberdiscount + $feeObj->birddiscount + $feeObj->discountcodefee ;
 			?>
             <strong><?php echo JText::_( 'TOTAL_REGISTRATION_COST' );?>:</strong> <?php echo  DTreg::displayRate($feeObj->paid_fee,$currency_code); ?>
@@ -60,8 +63,9 @@
 			
 			if($feeObj->customfee != 0 && $feeObj->customfee !="" && is_array($feeObj->fieldfee)){
 				foreach($feeObj->fieldfee as $key=>$feefield){
+					
 					if($feefield['fee']!=0){
-				   echo "<br />".$feefield['field']->label.": ".DTreg::displayRate($feefield['fee'],$currency_code);
+				   echo "<br />".$feefield['field']->label.": ".DTreg::displayRate($feefield['fee'],$currency_code) ;
 					}
 				}
 

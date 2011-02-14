@@ -306,7 +306,7 @@ class paypal extends Payment{
    }
 
    function log_ipn_results($success) {
-
+       return ;
       if (!$this->ipn_log) return;  // is logging turned off?
 
       // Timestamp

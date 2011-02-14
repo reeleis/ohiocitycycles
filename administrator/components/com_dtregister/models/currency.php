@@ -31,11 +31,13 @@ class DtregisterModelCurrency extends DtrModel
 								'NOK'=>'Norwegian Kroner',
 								'PLN'=>'Polish Zloty',
 								'RUB'=>'Russian Rubles',
+								'SAR'=>'Saudi Riyal',
 								'SGD'=>'Singapore Dollars',
 								'ZAR'=>'South African Rand',
 								'SEK'=>'Swedish Kronor',
-								'CHF'=>'Swiss Francs'						
-		
+								'CHF'=>'Swiss Francs',
+								'TWD'=>'Taiwan Dollars',
+								'UAE'=>'United Arab Emirates Dirham'
 							);
 
   function getCurrency(){

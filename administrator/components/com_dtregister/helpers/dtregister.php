@@ -243,7 +243,9 @@ class DTreg {
 		  $formatedValue = str_replace(".",",",$formatedValue);
 
 		}
-
+        if($currency_separator == 0){
+			   $formatedValue = round($formatedValue);
+		}
 		return $formatedValue;
 
 	  }else{
@@ -261,7 +263,9 @@ class DTreg {
 			  $formatedValue = str_replace(".",",",$formatedValue);
 
 			}
-
+            if($currency_separator == 0){
+			   $formatedValue = round($formatedValue);
+			}
 			return $formatedValue;
 
 		}
@@ -289,7 +293,9 @@ class DTreg {
 			  $formatedValue = $formatedValue.$padString;
 
 			}
-
+            if($currency_separator == 0){
+			   $formatedValue = round($formatedValue);
+			}
 			return $formatedValue;
 
 		}

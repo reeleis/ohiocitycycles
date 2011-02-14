@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -91,9 +91,11 @@
 
                                                 $options=array();
 
-                                                $options[]=JHTML::_('select.option',"0",JText::_( 'DT_PRIVATE' ));
+                                                $options[]=JHTML::_('select.option',"0",JText::_( 'DT_PUBLIC' ));
 
-                                                $options[]=JHTML::_('select.option',"1",JText::_( 'DT_PUBLIC' ));
+                                                $options[]=JHTML::_('select.option',"1",JText::_( 'DT_REGISTERED' ));
+												
+												$options[]=JHTML::_('select.option',"2",JText::_( 'DT_SPECIAL' ));
 
                                               echo JHTML::_('select.radiolist', $options, 'config[registrant_list]','','value','text',$config->getGlobal('registrant_list',''));
 

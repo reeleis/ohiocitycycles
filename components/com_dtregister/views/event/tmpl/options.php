@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $xhtml_url ;
+global $Itemid, $xhtml_url;
 $eventId = JRequest::getVar('eventId',0);
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -554,7 +554,7 @@ if($row->type<3){
 
 			</tr>
 
-      <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
+           <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
 
 
 
@@ -581,6 +581,35 @@ if($row->type<3){
 
 
 			</tr>
+           
+           <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
+
+
+
+				<td valign="top"><?php echo JText::_( 'DT_INCLUDE_IN_ALL_TAG' );?>:</td>
+
+
+
+				<td valign="top">
+
+
+
+				<?php echo JHTMLSelect::booleanlist('all_tag_enable',$atttribute,$row->all_tag_enable);
+
+				 ?>
+
+
+
+				</td>
+
+
+
+				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_INCLUDE_IN_ALL_TAG' )), '', 'tooltip.png', '', '');?></td>
+
+
+
+			</tr> 
+            
 
 			<tr class="typeshow type3 type4">
 

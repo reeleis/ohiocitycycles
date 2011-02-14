@@ -2765,12 +2765,12 @@ Date.prototype.valid = function() {
 
         function parseDate(str){
 
-            date = new Date(Date.parse(str));
+            dateObj = new Date(Date.parse(str));
 			//console.log(date);
-			if(date.valid()){
+			if(dateObj.valid()){
 			  //console.log(date.format('hh:mm tt'));
 			}
-			return date ;
+			return dateObj ;
 
         }
 

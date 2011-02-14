@@ -62,7 +62,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 		//$debug = ob_get_clean();
 	  $path = JPATH_BASE."/components/com_dtregister/lib/payment/ipnlog.html";
 	  //if($log)
-	  file_put_contents($path,$debug,FILE_APPEND);
+	  //file_put_contents($path,$debug,FILE_APPEND);
      
     return true;
 }
@@ -73,8 +73,8 @@ $xml_response = isset($HTTP_RAW_POST_DATA)?
 					var_dump($xml_response);
 					$v = var_export($xml_response, true);
 $path = JPATH_BASE."/components/com_dtregister/lib/payment/ipnlog.txt";
-file_put_contents($path,"\n".$v."\n",FILE_APPEND);
-file_put_contents($path,"\n".var_export($_REQUEST)."\n",FILE_APPEND);
+//file_put_contents($path,"\n".$v."\n",FILE_APPEND);
+//file_put_contents($path,"\n".var_export($_REQUEST)."\n",FILE_APPEND);
 if (get_magic_quotes_gpc()) {
   $xml_response = stripslashes($xml_response);
 }

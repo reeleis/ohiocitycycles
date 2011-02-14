@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.2
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -16,6 +16,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 <div>
 <?php echo JText::_('DT_CONFIRM_PAGE_HELP'); ?>
 </div>
+
 <div id="price_header">
 <?php
   //include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'price_header.php');
@@ -35,14 +36,14 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 			?>
 
            <?php
-                 	if($this->event->partial_minimum_amount!="" && $this->event->partial_minimum_amount  > 0 ){
+                 	if($this->event->partial_minimum_amount!="" && $this->event->partial_minimum_amount > 0 ){
 					   $minimum_amount = $this->event->partial_minimum_amount;
 					}else{
 					    $minimum_amount = $this->event->partial_amount;
 					}
 				 ?>
 
-			<tr><td><?php  echo JText::_( 'DT_DEPOSIT_AMOUNT'); ?></td>
+			<tr><td><?php echo JText::_( 'DT_DEPOSIT_AMOUNT'); ?></td>
                
                <td><input type="text" name="paying_amount" id="paying_amount" value="<?php echo  $minimum_amount; ?>" />
 
@@ -83,9 +84,9 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
                <td>
                  <?php
                  	if($this->event->partial_minimum_amount!="" && $this->event->partial_minimum_amount  > 0 ){
-					   $minimum_amount = $this->event->partial_minimum_amount ;
+					   $minimum_amount = $this->event->partial_minimum_amount;
 					}else{
-					    $minimum_amount = $this->event->partial_amount ;
+					    $minimum_amount = $this->event->partial_amount;
 					}
 				 ?>
                  <input type="" readonly="readonly" value="<?php echo $minimum_amount; ?>" name="paying_amount" />

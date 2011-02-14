@@ -40,6 +40,14 @@ class DtregisterControllerExport extends DtrController {
 
 	}
 	
+	function downloadfile(){
+    	$tExport = $this->getModel('export')->table;
+		
+		$tExport->filename = JRequest::getVar('filename');
+		
+		$tExport->output();
+	}
+	
 	function fieldlist(){
 	   global $mainframe ;
 	   $tExport = $this->getModel('export')->table;
@@ -54,7 +62,7 @@ class DtregisterControllerExport extends DtrController {
 		  
 		  $tExport->saveFields($general_export_fields,$individual_export_fields,$group_export_fields);
 		  
-		  $tExport->doexport($_REQUEST['datefrom'],$_REQUEST['dateto']);
+		  $tExport->doexport($_REQUEST['datefrom'],$_REQUEST['dateto'],JRequest::getVar('page',0));
 		//  $mainframe->redirect('index.php?option=com_dtregister&controller=export&task=fieldlist');
 		  
 	   }
