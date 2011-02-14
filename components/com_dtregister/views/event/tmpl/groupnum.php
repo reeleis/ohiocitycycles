@@ -95,7 +95,11 @@ function validateForm(){
 
  <table><tr><td><?php echo JText::_( 'GROUP_NUMBER' );?>: </td><td>
   <input type="text" size="4" name="memtot" id="memtot" /></td> </tr>
-  <tr><td colspan="2"><input type="submit" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
+  <tr><td colspan="2">
+  
+  <input type="button" value="<?php echo JText::_( 'DT_BACK' );?>" class="button" onclick="window.location='<?php echo JRoute::_('index.php?option=com_dtregister&controller=event&task=register&eventId='. $tEvent->slabId) ?>'"  />
+  &nbsp;
+  <input type="submit" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
   </table>
   <input type="hidden" name="option" value="com_dtregister" />
   <input type="hidden" name="controller" value="event" />

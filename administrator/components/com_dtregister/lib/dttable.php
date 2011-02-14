@@ -67,7 +67,7 @@ class DtrTable extends JTable{
 	    //pr($this->_db->getQuery());
 	   
 	   $data = $this->_db->loadObjectList();
-	  
+
 	   return $data;
 	   	
 	}
@@ -85,7 +85,10 @@ class DtrTable extends JTable{
 							 $where = " where ".$condition;
 		
 				   }
+				   
+				   
 			  $ordering =  ($ordering !=="")?' order by '.$ordering:'';
+			  
 			  $sql_count = "";
             if($limit != 0 && $limit != ""){
 			    $sql_count = " SQL_CALC_FOUND_ROWS "; 
@@ -98,7 +101,7 @@ class DtrTable extends JTable{
 			      $this->_db->setQuery($sql,$limitstart,$limit);
 			   }
 			   
-		  // pr($this->_db->getQuery());
+		     // pr($this->_db->getQuery());
 			 //  $this->_db->query();
 			
 			if(isset($queryResults[str_replace(" ","",$this->_db->getQuery())])){
@@ -111,9 +114,9 @@ class DtrTable extends JTable{
 			   
 			}
 			
-	  //  pr($this->_db->getErrorMsg());
-				
-			   return $data;
+	           // pr($this->_db->getErrorMsg());
+
+			return $data;
 
 	  }
 	  

@@ -129,7 +129,7 @@ class DT_Fee{
 
 	   global $changefee_enable,$changefee_type, $changefee;
 
-	   if(isset($this->TableUser->process) && ($this->TableUser->process=="due" || $this->TableUser->process=="cancel" ) ){
+	   /*if(isset($this->TableUser->process) && ($this->TableUser->process=="duepayment" || $this->TableUser->process=="due" || $this->TableUser->process=="cancel" ) ){
 
 		    $amount = 0;
 
@@ -137,8 +137,17 @@ class DT_Fee{
 
 	        return $amount;
 
+	   }*/
+	   
+	   if(!isset($this->TableUser->process) || $this->TableUser->process != 'change'){
+		    $amount = 0;
+            
+		    $this->changefee = $amount;
+
+	        return $amount;
 	   }
 
+       
 	   if(isset($this->TableUser->userId) && $this->TableUser->userId != "" && $this->TableUser->status != -1 ){
 	 
 		 if($this->TableEvent->edit_fee && $this->TableEvent->changefee_enable && $this->is_changed){
@@ -169,7 +178,7 @@ class DT_Fee{
 
 	   global $cancelfee_enable,$cancelfee_type, $cancelfee;
 
-	   if(isset($this->TableUser->process) && ($this->TableUser->process=="due" || $this->TableUser->process=="change" )){
+	   /*if(isset($this->TableUser->process) && ($this->TableUser->process=="due" || $this->TableUser->process=="change" )){
 
 		    $amount = 0;
 
@@ -177,8 +186,16 @@ class DT_Fee{
 
 	        return $amount;
 
-	   }
+	   }*/
+	   
+	    if(!isset($this->TableUser->process) || $this->TableUser->process != 'cancel'){
+		    $amount = 0;
+           
+		    $this->cancelfee = $amount;
 
+	        return $amount;
+	   }
+	   
 	   if(isset($this->TableUser->userId) && $this->TableUser->userId != "" && $this->TableUser->status != -1 ){
 
 		 if($this->TableEvent->cancel_enable && $this->TableEvent->cancelfee_enable){
@@ -208,7 +225,9 @@ class DT_Fee{
 	function processFee(){
 
 	   $this->currentfee = $this->basefee;
-
+	   if(isset($this->customfee) && $this->customfee >0 ){
+	   		$this->currentfee += $this->customfee ;
+	   }
 	   foreach($this->TableEvent->feeorder  as $feeorder){
 
 		   if($feeorder->type == "basefee"){
@@ -255,10 +274,14 @@ class DT_Fee{
 		   if($feeorder->type == "field"){
 
 			  $fee = $this->getFieldFee($feeorder->reference_id);
+			  if(!isset($this->TableUser->process) || $this->TableUser->process != "duepayment"){
+			  	 
+				 $this->currentfee += $fee;
 
-			  $this->currentfee += $fee;
-
-			  $this->customfee += $fee;
+			  	 $this->customfee += $fee;
+				 
+			  }
+			  
 
 		   }
 
@@ -291,7 +314,7 @@ class DT_Fee{
 	}
 
 	function getTax(){
-
+      
 	  if($this->TableEvent->tax_enable){
 
 	     $tax_amount =  $this->currentfee * $this->TableEvent->tax_amount/100;
@@ -351,7 +374,12 @@ class DT_Fee{
 	}
 
 	function getFieldFee($field_id){
-
+         
+		 
+		 if(isset($this->fieldfee[$field_id])){
+		    
+			return ;	 
+		 }
 		$field = $this->TableEvent->TableField;
 
         $field->load($field_id);
@@ -413,7 +441,8 @@ class DT_Fee{
 		$type = ($field->fee_type==1)?'amount':'percentage';
 
         $fee = $this->calculatebytype($type,$fee , $this->currentfee );
-        $this->fieldfee[$field->id] = array('field'=>$field,'fee'=>$fee);
+		
+        $this->fieldfee[$field->id] = array('field'=>(object)(array)$field,'fee'=>$fee);
 		$childs = $obj->getchild();
 		
 		foreach($childs as $child){

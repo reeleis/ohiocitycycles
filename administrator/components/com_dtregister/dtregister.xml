@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="component" version="1.5.0">
 <name>DT Register</name>
-<creationDate>Jan. 20, 2011</creationDate>
+<creationDate>Feb. 12, 2011</creationDate>
 <author>DTH Development</author>
 <copyright>(c)2006 DTH Development. All rights reserved.</copyright>
 <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 <authorEmail>dthdev@dthdevelopment.com</authorEmail>
 <authorUrl>www.DTHDevelopment.com</authorUrl>
-<version>2.7.2c</version>
+<version>2.7.3a</version>
 
 <description>With DT Register, you can take online registrations for your event and collect a registration fee through various payment gateways. Fully integrated calendar is included.</description>
 
@@ -209,24 +209,6 @@
 <filename>assets/css/south-street/images/ui-icons_cd0a0a_256x240.png</filename>
 <filename>assets/css/south-street/images/ui-icons_eeeeee_256x240.png</filename>
 <filename>assets/css/south-street/images/ui-icons_ffffff_256x240.png</filename>
-<filename>assets/css/ui-lightness/index.html</filename>
-<filename>assets/css/ui-lightness/jquery-ui.css</filename>
-<filename>assets/css/ui-lightness/images/index.html</filename>
-<filename>assets/css/ui-lightness/images/ui-anim_basic_16x16.gif</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_diagonals-thick_18_b81900_40x40.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_diagonals-thick_20_666666_40x40.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_flat_10_000000_40x100.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_glass_65_ffffff_1x400.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_glass_100_f6f6f6_1x400.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_glass_100_fdf5ce_1x400.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_gloss-wave_35_f6a828_500x100.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_highlight-soft_75_ffe45c_1x100.png</filename>
-<filename>assets/css/ui-lightness/images/ui-bg_highlight-soft_100_eeeeee_1x100.png</filename>
-<filename>assets/css/ui-lightness/images/ui-icons_228ef1_256x240.png</filename>
-<filename>assets/css/ui-lightness/images/ui-icons_222222_256x240.png</filename>
-<filename>assets/css/ui-lightness/images/ui-icons_ef8c08_256x240.png</filename>
-<filename>assets/css/ui-lightness/images/ui-icons_ffd27a_256x240.png</filename>
-<filename>assets/css/ui-lightness/images/ui-icons_ffffff_256x240.png</filename>
 <filename>assets/js/addmore.js</filename>
 <filename>assets/js/block.js</filename>
 <filename>assets/js/colorpicker.js</filename>
@@ -395,6 +377,7 @@
 <filename>views/eventmanage/tmpl/add_image.php</filename>
 <filename>views/eventmanage/tmpl/add_repeat.php</filename>
 <filename>views/eventmanage/tmpl/add_tab.discountfee.php</filename>
+<filename>views/eventmanage/tmpl/add_tab.email.php</filename>
 <filename>views/eventmanage/tmpl/add_tab.field.php</filename>
 <filename>views/eventmanage/tmpl/add_tab.general.php</filename>
 <filename>views/eventmanage/tmpl/add_tab.message.php</filename>
@@ -833,6 +816,7 @@
 	<filename>views/event/tmpl/add_image.php</filename>
 	<filename>views/event/tmpl/add_repeat.php</filename>
 	<filename>views/event/tmpl/add_tab.discountfee.php</filename>
+	<filename>views/event/tmpl/add_tab.email.php</filename>
 	<filename>views/event/tmpl/add_tab.field.php</filename>
 	<filename>views/event/tmpl/add_tab.general.php</filename>
 	<filename>views/event/tmpl/add_tab.message.php</filename>

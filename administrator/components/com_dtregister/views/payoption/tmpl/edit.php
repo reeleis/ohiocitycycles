@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-	$document	=& JFactory::getDocument();
+	$document =& JFactory::getDocument();
 
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
 
@@ -18,8 +18,6 @@
    
     $row = $this->row;
 	$currency= $this->getModel('currency');
-    
-
  
  $config = $this->getModel('config');
  $paymentmethod = $this->getModel('paymentmethod');
@@ -45,8 +43,7 @@
 			}
 
 	});
-	// DTjQuery(document.adminForm).find("input[name='data\\[paylater\\]\\[\\]']").rules('add','uniquevalue');
-	
+
  })
  
 
@@ -95,7 +92,7 @@ function submitbutton(pressbutton){
 				$currency_code='USD';
 			}else{
 
-			   $currency_code = $row->config['currency_code'] ;
+			   $currency_code = $row->config['currency_code'];
 
 			}
 
@@ -119,6 +116,7 @@ function submitbutton(pressbutton){
 
                    	$options=array();
 
+                    $options[]=JHTML::_('select.option', '0', JText::_( 'NONE' ));
 					$options[]=JHTML::_('select.option', '1', JText::_( 'COMMA' )." ( , )");
 
 					$options[]=JHTML::_('select.option', '2', JText::_( 'DOT' )." ( . )");
@@ -126,7 +124,7 @@ function submitbutton(pressbutton){
 						 $currency_separator=2;
 					}else{
 
-			             $currency_separator = $row->config['currency_separator'] ;
+			             $currency_separator = $row->config['currency_separator'];
 
 			         }
 					echo JHTML::_('select.genericlist', $options, 'data[config][currency_separator]',' ', 'value','text', $currency_separator);
@@ -351,6 +349,47 @@ function submitbutton(pressbutton){
 									   <td valign="top" rowspan="1"><?php echo JText::_( 'DT_NOTES_SAFER_PAY' ) ;?></td>
 
 								 </tr>
+                                 
+                                 <!-- *********** PSIGate Payment options ***********  -->
+                                 
+<!--
+                                 <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PSIGATE' ); ?></td>
+                                 </tr>
+                                 <tr align="center" valign="middle">
+                                 	<td align="left" valign="top">
+										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+									</td>
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    </td>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    </td>
+                                    <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_PSIGATE' ) ;?></td>
+								 </tr>
+                                 <tr align="center" valign="middle">
+                                 	<td align="left" valign="top">
+										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+									</td>
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    </td>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    </td>
+                                    
+								 </tr>
+                                 <tr align="center" valign="middle">
+                                 	<td align="left" valign="top">
+										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+									</td>
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    </td>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    </td>
+                                    
+								 </tr>
+								
+								-->
+                                 
+                                 <!-- *********** PSIGate Payment options ***********  -->
+                                 
  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_EWAY' ); ?></td></tr>
                                  
                 <tr align="center" valign="middle">
@@ -368,28 +407,6 @@ function submitbutton(pressbutton){
 										 <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
 
 								 </tr>
-
-				<!--tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EWAY_MODE' );?>:</strong></td>
-
-							    <td align="left" valign="top">
-
-							    <?php
-
-								    $options=array();
-
-								    $options[]=JHTML::_('select.option', 'test', JText::_( 'DT_TEST' ));
-
-								    $options[]=JHTML::_('select.option', 'live', JText::_( 'DT_LIVE' ));
-
-								    echo JHTML::_('select.genericlist', $options,'data[config][ewaymode]','','value','text',(isset($row->config['ewaymode']))?$row->config['ewaymode']:'test');
-
-							     ?>
-
-							    </td>
-
-								  <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_MODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-							  </tr-->
                              
                 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EWAY_TYPE' );?>:</strong></td>
 
@@ -527,15 +544,6 @@ function submitbutton(pressbutton){
 
                   <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAY_LATER_OPTIONS' ) ;?>:</strong></td>
 
-							    <!--td align="left" valign="top">
-
-							   	<?php
-
-							   		//echo JHTML::_('select.genericlist', $options, 'data[config][pay_later_options][]',' multiple=true ', 'value','text', $row->config['pay_later_options']);
-print_r($paylater);
-							   	?>
-
-							    </td -->
 							    <td>
                                   
                                    <a href="#" id="addmore">Add more</a>
@@ -576,16 +584,14 @@ print_r($paylater);
 	   DTjQuery("#addmore").click(function(){
 		   DTjQuery('.container').append(DTjQuery("#newelement").html());
 		   arrangeAddmoreValues();
-		   return false ;
+		   return false;
 	   });
 		 
 	   DTjQuery('.remove').live('click',function(){
-		  
-		   
          
 		    if(DTjQuery(this).prev().val() != 'new'){
 				   DTjQuery(this).prev().prev().rules("remove", "uniquevalue");
-				   var ajaxcontext = this ;
+				   var ajaxcontext = this;
 			       DTjQuery("form input[name='"+DTjQuery(this).prev().prev().attr('name')+"']").rules("add", { 
 				   remote: {
 					   url:"index.php?option=com_dtregister&controller=paylater&task=validate&no_html=1&value="+DTjQuery(this).prev().val(), 
@@ -607,15 +613,12 @@ print_r($paylater);
 						    arrangeAddmoreValues();
 						  }
 					   }});
-				   DTjQuery(document.adminForm).validate().element( DTjQuery(this).prev().prev());
-				 
-				   
+				   DTjQuery(document.adminForm).validate().element( DTjQuery(this).prev().prev());	   
 				  
 			}else{
 			   	DTjQuery(this).parent().remove();
 			}
         
-		  
 		   arrangeAddmoreValues();
 		   
 		   return false;   
@@ -627,7 +630,7 @@ print_r($paylater);
 	   
 	   DTjQuery.each(DTjQuery('.container').find(".checkboxes"),function(k,v){
 		   
-		   v.value = k ;
+		   v.value = k;
 		 
 	  });
 	      

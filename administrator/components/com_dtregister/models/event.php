@@ -261,6 +261,10 @@ class TableEvent extends DtrTable {
 	 var $thksmsg;
 
 	 var $thksmsg_set;
+	 
+	 var $admin_notification;
+	 
+	 var $admin_notification_set;
 
 	 var $event_describe;
 
@@ -320,6 +324,8 @@ class TableEvent extends DtrTable {
 	 
 	 var $cancel_date;
 
+	 var $partial_payment_enable = 0;
+	 
 	 var $cancel_refund_status = 0;
 
 	 var $excludeoverlap;
@@ -504,10 +510,10 @@ class TableEvent extends DtrTable {
 						  	    if($value==""){
 									continue;
 								}
-								if(!isset($_SESSION['register']['option_used'][$field->id][$value])){
-								   $_SESSION['register']['option_used'][$field->id][$value] = 1;
+								if(!isset($_SESSION['__dtregister']['option_used'][$field->id][$value])){
+								   $_SESSION['__dtregister']['option_used'][$field->id][$value] = 1;
 								}else{
-									$_SESSION['register']['option_used'][$field->id][$value]++;
+									$_SESSION['__dtregister']['option_used'][$field->id][$value]++;
 								}
 							
 						  }
@@ -516,10 +522,10 @@ class TableEvent extends DtrTable {
 					 	   if($fields[$field->id]==""){
 								continue;
 						   }
-							if(!isset($_SESSION['register']['option_used'][$field->id][$fields[$field->id]])){
-							   $_SESSION['register']['option_used'][$field->id][$fields[$field->id]] = 1;
+							if(!isset($_SESSION['__dtregister']['option_used'][$field->id][$fields[$field->id]])){
+							   $_SESSION['__dtregister']['option_used'][$field->id][$fields[$field->id]] = 1;
 							}else{
-								$_SESSION['register']['option_used'][$field->id][$fields[$field->id]]++;
+								$_SESSION['__dtregister']['option_used'][$field->id][$fields[$field->id]]++;
 							}
 						  
 					 }
@@ -663,6 +669,52 @@ class TableEvent extends DtrTable {
 		   //$htmlrow2 = implode(" - ",array_filter(array($startTime,$endTime))); 
 		}else{
 		   $htmlrow1 ='<span>'.$start_date.' - '.$end_date.'</span>';
+		  // $htmlrow2 = implode(" - ",array($startTime,$endTime)); 
+		}
+		
+		return $html = implode($separator,array_filter(array($htmlrow1,$htmlrow2)));
+		
+    }
+	
+	
+	function displaydatecolumn_no_html($separator=" "){
+	   	
+		global $date_format , $displaytime;
+		$start_date = JFactory::getDate($this->dtstart)->toFormat($date_format);
+		$end_date = JFactory::getDate($this->dtend)->toFormat($date_format);
+		$isSameDay = false;
+		if($start_date == $end_date){
+		   	$isSameDay = true ;
+		}
+		if($this->timeformat==1){
+  
+		  $timeformat = "%I:%M %p";
+  
+	    }else{
+  
+		  $timeformat = "%H:%M";
+  
+	    }
+		
+		if($displaytime){
+			$startTime = JFactory::getDate($this->dtstart." ".$this->dtstarttime)->toFormat($timeformat);
+			if($displaytime==1){
+			   	$endTime = "";
+			}else{
+		       $endTime = JFactory::getDate($this->dtend." ".$this->dtendtime)->toFormat($timeformat);
+			}
+		}else{
+		   $startTime ="";
+		   $endTime = "";
+		}
+		$html = "";
+		$htmlrow1 = "";
+		$htmlrow2 ="";
+		if($isSameDay || $this->dtend=="" ||$this->dtend=="0000-00-00"){
+	       $htmlrow1 = $start_date ;
+		   //$htmlrow2 = implode(" - ",array_filter(array($startTime,$endTime))); 
+		}else{
+		   $htmlrow1 = $start_date.' - '.$end_date ;
 		  // $htmlrow2 = implode(" - ",array($startTime,$endTime)); 
 		}
 		
@@ -976,6 +1028,10 @@ class TableEvent extends DtrTable {
 		  // return false ;
 
 	     }
+		 
+		 if($this->is_cutoff($this)){
+		 	return false ;
+		 }
 
          if(strtotime($this->dtend." ".$this->dtendtime) < $now->toUnix(true)){
 		    return false ;
@@ -3668,12 +3724,12 @@ class TableEventfield extends DtrTable{
 	 parent::saveAll($data);
 
 	 $fields = $this->getFeeField();
-
+pr($fields);
      if(is_array($fields))
 
 	 foreach($fields as $field){
 
-		 $field_ids[] = $field->field_id;
+		 $field_ids[] = $field->id;
 
 	  }
 

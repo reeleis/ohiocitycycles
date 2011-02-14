@@ -204,14 +204,12 @@ class DT_Session{
         $dt_userId = $row[0]->user_id;
 		$session =& JFactory::getSession();
 		
+		$_SESSION = $data;
 		
-		DT_Session::set('register.restore.userId',$dt_userId);
-		DT_Session::set('register.restore.processed',$row[0]->processed);
-		DT_Session::set('register.restore.id',$paypal_session_id);
 		
 		$session->getToken(true); 
 		//$session->fork();
-		$_SESSION = $data;
+		
 		$session->set('session.timer.start',strtotime('now'));
 		$session->set('session.counter',1);
 		
@@ -220,6 +218,11 @@ class DT_Session{
 		
 		$session->set('__dtregister',$data['__dtregister']);
 		$_SESSION['__dtregister'] = $data['__dtregister'];
+		DT_Session::set('register.restore.userId',$dt_userId);
+		DT_Session::set('register.restore.processed',$row[0]->processed);
+		DT_Session::set('register.restore.id',$paypal_session_id);
+		
+		//prd($data);
 		//pr($session->getExpire());
 		//pr($session->getStores());
 		//pr($session->getState());

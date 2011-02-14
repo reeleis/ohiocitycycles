@@ -220,13 +220,18 @@ echo $this->loadTemplate('description');
 
            <td align="center">
 				<?php // echo (isset($fee->payment_method) && isset($pMethods[$fee->payment_method]))?$pMethods[$fee->payment_method]:isset($fee->payment_method)?$fee->payment_method:'' ;
-				if ( (isset($fee) && $fee != "") && isset($pMethods[$fee->payment_method]) ) echo $pMethods[$fee->payment_method]; 
+				if(isset($fee->fee) && $fee->fee >0){
+				    	if ( (isset($fee) && $fee != "") && isset($pMethods[$fee->payment_method]) ) echo $pMethods[$fee->payment_method]; 
 				else if (isset($fee->payment_method)) echo $fee->payment_method;
+				}else{
+				  echo Jtext::_('DT_FREE') ;
+				}
+			
 				//echo '<pre>fghfgh '; if(isset($fee)) print_r($fee); echo ' asdasd</pre>';
 				?>
            </td>
 
-           <td align="center"><?php echo  DtHtml::gridTask($row, $i,'fee_status'); ?></td>
+           <td align="center"><?php echo  (isset($fee->fee) && $fee->fee >0)?DtHtml::gridTask($row, $i,'fee_status'):''; ?></td>
 
            <td><?php echo  DtHtml::gridTask($row, $i,'attend'); ?></td>
 
@@ -270,8 +275,7 @@ echo $this->loadTemplate('description');
                  <td align="center"><?php 
 
 				  
-
-				   echo $this->mUser->table->statustxt[$row->user_status];
+				    echo $this->mUser->table->statustxt[$row->user_status];
 
 				  
 

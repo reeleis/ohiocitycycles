@@ -1,18 +1,33 @@
 <?php
-global $Itemid , $xhtml_url ,$full_message;
+
+/**
+* @version 2.7.3
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $Itemid,$xhtml_url,$full_message;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 ?>
 <div>
   <?php
-      $tEvent = $this->tEvent ;
-	  
-	  pr($tEvent);
-	  
-       $registered = $tEvent->getTotalregistered($tEvent->slabId);
+      $tEvent = $this->tEvent;
+	
+      $registered = $tEvent->getTotalregistered($tEvent->slabId);
       $message =  ($registered >= $tEvent->max_registrations && $tEvent->max_registrations !=0 &&$tEvent->max_registrations!="")?$full_message:$this->tEvent->topmsg;
 	  
 	  echo ($message!="")?$message."<br /><br />":'';
   ?>
+</div>
+<div>
+<?php 
+ if(isset($this->pageTile)){
+ 	echo $this->pageTile;
+ }
+?>
 </div>
 <div id="price_header">
 <?php
@@ -33,9 +48,8 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
       <?php } ?>
      <?php
        
-	   echo  $this->form ;
-	   
-	   echo  $this->userFields($this->tEvent->usercreation);
+	   echo $this->form;
+	   echo $this->userFields($this->tEvent->usercreation);
 	   echo $this->capthaField();
 	   echo $this->termsField($this->eventId);
 	   
@@ -60,28 +74,25 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 </div>
 <script type="text/javascript">
  
-  
- var updateFee =  function(){
+ var updateFee = function(){
 	    
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   var options = {
 		               url : "<?php echo JRoute::_("index.php?no_html=1&dttmpl=price_header&controller=event",$xhtml_url);?>",
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
-									  DTjQuery(document.frmcart.task).val('confirm');
+									 DTjQuery(document.frmcart.task).val('confirm');
 					              }
 		   }
 	   DTjQuery(document.frmcart.task).val('price_header');
 	   DTjQuery(document.frmcart).ajaxSubmit(options);
-	  
-	     
+	  	     
   }
   
   updateFee();
  
  DTjQuery(function(){
 	  DTjQuery('#next').live('click',function(){
-	     
 		 
 		 if(DTjQuery(document.frmcart).valid()){
 		   DTjQuery('select').removeAttr('disabled');
@@ -108,8 +119,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 			 success:function(response){
 			var previous = {};
 			var element = DTjQuery('#discount_code')[0];
-			var validator = DTjQuery(document.frmcart).data().validator ;
-			//validator.settings.messages[element.name].remote = DTjQuery('#discount_code').data().previous.originalMessage;
+			var validator = DTjQuery(document.frmcart).data().validator;
 
 						var valid = response === true;
 
@@ -139,7 +149,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 						}
 
 						previous.valid = valid;
-                         valid = true ;
+                         valid = true;
 						validator.stopRequest(element, valid);
 			 }
 
@@ -148,14 +158,6 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 		  
       });
 	<?php } ?>
-	/* DTjQuery('#next').live('click',function(){
-	     console.log("enter");
-		 DTjQuery('#discount_code').rules('remove','remote');
-		 if(DTjQuery(documnent.frmcart).valid()){
-		   console.log("valid");
-		 }
-		 	 
-	 });*/
 	
  })
 

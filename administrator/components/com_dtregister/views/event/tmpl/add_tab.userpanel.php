@@ -15,6 +15,30 @@ $row = $this->row;
 
 <table class="adminlist" width="100%" cellpadding="10" cellspacing="10">
 
+	  <tr align="center" valign="middle">
+
+      <td align="left" valign="top"><?php echo JText::_( 'DT_PARTIAL_PAYMENT_ENABLE' ); ?>:</td>
+
+	  <td width="400" align="left" valign="top">
+
+	    <?php
+
+	    $options=array();
+
+        $options[]=JHTML::_('select.option',"0",JText::_( 'NO'));
+
+	    $options[]=JHTML::_('select.option',"1",JText::_( 'YES'));
+		
+	    echo JHTML::_('select.radiolist', $options,"data[event][partial_payment_enable]","","value","text",$row->partial_payment_enable);
+
+	    ?>
+
+	  </td>
+
+	  <td><?php echo JHTML::tooltip((JText::_( 'DT_PARTIAL_PAYMENT_ENABLE_HELP' )), '', 'tooltip.png', '', ''); ?></td>
+
+	  </tr>
+
       <tr align="center" valign="middle">
 
       <td align="left" valign="top"><?php echo JText::_( 'DT_CANCEL_REFUND' ); ?>:</td>

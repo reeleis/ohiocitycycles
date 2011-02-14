@@ -10,7 +10,7 @@
 */
 
 class DtregisterModelExport extends DtrModel {
-	
+	public static $limit = 4;
 	function __construct($config = array()){
 	   
 	   parent::__construct($config);
@@ -201,7 +201,7 @@ class TableExport extends DtrTable{
 	   $this->customFields = $flds;
 
 	}
-	function getUsers($datefrom="", $dateto=""){
+	function getUsers($datefrom="", $dateto="",$page=0){
 	   	
 		$where[] =  " eventId in(".implode(",",$this->events).") ";
 		$dateto_con = "";
@@ -229,13 +229,16 @@ class TableExport extends DtrTable{
 		}
 		
 		$condition =  implode(' and ',$where);
-		$users = $this->UserModel->table->find($condition,'register_date');
+	    $limitstart = $page*DtregisterModelExport::$limit;
 		
+		$users = $this->UserModel->table->find($condition,'register_date',$limitstart,DtregisterModelExport::$limit);
+		$this->totalcount = $this->UserModel->table->getLastCount();
+		pr($this->totalcount);
 		return $users;
 	}
 	
 	function getgeneralHeader(){
-	  $generalfields = '';
+	  $generalfields = array();
 	  if (count($this->general_export_fields) > 0) {
 	  		$generalfields = array_combine($this->general_export_fields,$this->general_export_fields);
 	  }
@@ -267,10 +270,12 @@ class TableExport extends DtrTable{
 			}
 		}
 		$this->header = $header;
-		pr($this->header);
 		
-		$this->csvoutput .= implode(",",$header)."\n";
-		pr($this->csvoutput);
+		if($_REQUEST['page']==0){
+		   $this->csvoutput .= implode(",",$header)."\n";
+		}
+		
+		
 			
 	}
 
@@ -425,20 +430,40 @@ class TableExport extends DtrTable{
 		}
 		
 	}
-	function doexport($from=null,$to=null){
+	function doexport($from=null,$to=null,$page=0){
 		$this->csvoutput = "";
 		$this->field_settings = array();
 		$this->getgeneralHeader() ;
 		$this->mergeCustomFieldHeader();
-		$this->makeheader();
+		//if($page == 0){
+			$this->makeheader();	
+		//}
 		
-		$users = $this->getUsers($from, $to);
+		
+		$users = $this->getUsers($from, $to,$page);
 		
 		$this->addUsersdata($users);
 		
-		$this->output();
+		$this->writeTofile($page);
 		
 	}
+	
+	function writeTofile($page){
+		
+		if(!isset($_REQUEST['file']) || $_REQUEST['file']=='' ){
+			pr(sys_get_temp_dir());
+			$this->filename = tempnam(sys_get_temp_dir(),null);
+			pr('enter');
+		}else{
+			$this->filename = $_REQUEST['file'] ;
+		}
+		file_put_contents($this->filename, trim($this->csvoutput)."\n",FILE_APPEND);
+		ob_clean();
+		echo json_encode(array('total'=>$this->totalcount,'file'=>$this->filename,'limit'=> DtregisterModelExport::$limit, 'page'=>$page, 'csv'=>file_get_contents($this->filename), 'current'=>$this->csvoutput));
+		die ;
+		prd($this->filename);
+	}
+	
 	function output(){
 		ob_clean();
 	   if (ereg('Opera(/| )([0-9].[0-9]{1,2})', $_SERVER['HTTP_USER_AGENT'])) {
@@ -480,8 +505,9 @@ class TableExport extends DtrTable{
 				header('Pragma: no-cache');
 
 			}
-
-			echo $this->csvoutput;
+           echo   file_get_contents($this->filename);
+		   unlink($this->filename);
+			//echo $this->csvoutput;
 
 			exit();	
 	}

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -23,14 +23,12 @@ class DtregisterControllerMigration extends DtrController {
 		 $this->view->setModel($this->getModel('migration'));
 		 $this->view->setModel($this->getModel('dtregister'));
          $this->registerDefaultTask("index");
-		 JToolBarHelper::title(  JText::_( 'DT_REMOVE_JEVENT_SYNC'), 'dtregister' );
+		 JToolBarHelper::title( JText::_( 'DT_MIGRATE'), 'dtregister' );
      }
 	
 	function index(){
 
-	   global $mainframe;
-		//$mainframe->redirect("index.php?option=com_dtregister&controller=cpanel");
-	   
+	   global $mainframe;	   
 	   $this->display();
 
 	}
@@ -38,12 +36,22 @@ class DtregisterControllerMigration extends DtrController {
 	function process(){
 		global $mainframe;
 		$migrate = $this->getModel('migration');
-		$migrate->dtevents();
-		$migrate->usertable();
-		$dtreg = $this->getModel('dtregister');
-		$dtreg->setmigrated(1);
-		$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_MIGRATION_SUCCESSFUL'));
-			
+		if($migrate->migrated){
+			$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_ALREADY_MIGRATED'));
+		}else{
+		    $migrate->event();
+			$migrate->usertable();
+			$dtreg = $this->getModel('dtregister');
+			$dtreg->setmigrated(1);
+			$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_MIGRATION_SUCCESSFUL'));	
+		}
+		
+	}
+	
+	function test(){
+		global $mainframe;
+		$migrate = $this->getModel('migration');
+		$migrate->event();
 	}
 	
 	function migrate(){

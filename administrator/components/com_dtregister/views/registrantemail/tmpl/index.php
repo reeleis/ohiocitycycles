@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -30,6 +30,8 @@ $options=DtHtml::options($mevent->table->optionslist(),JText::_('DT_SELECT_EVENT
                  <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
                  <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+
+                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
                  
                  <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION_DETAILS' );?>
 
@@ -60,6 +62,8 @@ $options=DtHtml::options($mevent->table->optionslist(),JText::_('DT_SELECT_EVENT
                  <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
 
                  <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
+
+	             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
 
                  </div>
                  

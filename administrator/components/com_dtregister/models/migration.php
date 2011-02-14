@@ -116,20 +116,20 @@ class DtregisterModelMigration extends DtrModel {
 			 
 			 $links = $this->get_event_field_links($eventId);
 			 if(count($links)){
-			 	$query = "update #__dtregister_field_event set event_id = $slabId where id in(".implode(",",$links)."  ";
+			 	$query = "update #__dtregister_field_event set event_id = $slabId where id in(".implode(",",$links).")  ";
 				$this->TableEvent->rawquery($query);
 			 }
 			 // get discount code links and  update them .
 			 $links = $this->get_event_code_links($eventId);
 			 if(count($links)){
-			 	$query = "update #__dtregister_events_codes set event_id = $slabId where id in(".implode(",",$links)."  ";
+			 	$query = "update #__dtregister_events_codes set event_id = $slabId where id in(".implode(",",$links).")  ";
 				$this->TableEvent->rawquery($query);
 			 }
 			 
 			 // get user links and update
 			  $links = $this->get_event_user_links($eventId);
 			 if(count($links)){
-			 	$query = "update #__dtregister_user set eventId = $slabId where id userId in(".implode(",",$links)."  ";
+			 	$query = "update #__dtregister_user set eventId = $slabId where id userId in(".implode(",",$links).")  ";
 				$this->TableEvent->rawquery($query);
 			 }
 			 
@@ -221,7 +221,7 @@ class DtregisterModelMigration extends DtrModel {
 	
 	function get_member_ids(){
 		
-		$query = "select  	groupMemberId from #__dtregister_group_member ";
+		$query = "select groupMemberId from #__dtregister_group_member ";
 		$ids = $this->TableEvent->query($query,null,"","");
 		
 		$ret = array();
@@ -230,6 +230,7 @@ class DtregisterModelMigration extends DtrModel {
 		}
 		return $ret ;
 	}
+	
 	
 	function get_users(){
 		
@@ -255,7 +256,7 @@ class DtregisterModelMigration extends DtrModel {
 		$rollbackthere = !(in_array($table_name,$tables));
 		$query = "select distinct re.eventId from #__dtregister_rollback_group_event re 
 		           left join #__dtregister_group_event e on e.eventId = re.eventId 
-				   where e.eventId is null	 " ;
+				   	 " ; // where e.eventId is null
 				   
 		$events = $this->TableEvent->query($query,null,"","");
 		
@@ -285,13 +286,13 @@ class DtregisterModelMigration extends DtrModel {
 	}
 	
 	function getFieldValue($field,$value){
-	   	
+	   
 		if($field->type == '3'){ // checkbox
 		   $index =  array();
 		   $values = explode("|",$value);
-		   
+		   $field->values = explode('|',$field->values);
 		   if (is_array($field->values)) 
-		   foreach(explode('|',$field->values) as $key => $val){
+		   foreach($field->value as $key => $val){
 				
 				if(in_array($val,$values)){
 				   	$index[] = $key;
@@ -301,9 +302,9 @@ class DtregisterModelMigration extends DtrModel {
 			}
 			return implode("|",$index);
 		}elseif(in_array($field->type,array(1,4))){ // radio and dropdown
-			
+			$field->values = explode('|',$field->values);
 		   	if (is_array($field->values)) 
-			foreach(explode('|',$field->values) as $key => $val){
+			foreach($field->values as $key => $val){
 				
 				if($value == $val){
 				   	
@@ -335,6 +336,7 @@ class DtregisterModelMigration extends DtrModel {
 		//$this->TableUser->renamefields('userType','type');
 	  $user_ids = $this->get_users();
 	  $where = "";
+	  
 	  if(count($user_ids )){
 		  
 		  $where = " userId in (".implode(",",$user_ids).") ";
@@ -342,13 +344,96 @@ class DtregisterModelMigration extends DtrModel {
 	  }
 	 
 	  $users  = $this->TableUser->find($where);
-	  
+	
 		$this->renamefields();
 		//$this->waiting();
 		
 		$userdata = array();
 		$usersRemoveData = array(0);
+		pr($users);
+		pr($this->UserFldsTodefault);
+		if (is_array($users)) 
+		foreach($users as $user){
+		    $userfield =  array();
+			$userfield['user_id'] = $user->userId;
+			
+			if (is_array($this->fieldmapByName)) 
+			foreach($this->fieldmapByName as $field_name => $field){ pr($field_name);
+			   if(isset($this->UserFldsTodefault[$field_name])){ // default field 
+			   
+				    if(isset($user->{$this->UserFldsTodefault[$field_name]}) && $user->{$this->UserFldsTodefault[$field_name]} != "" ){
+				       $userfield['field_id'] = $field->id;
+				       $userfield['value'] = $user->{$this->UserFldsTodefault[$field_name]};
+					   $userdata[] = $userfield;
+					   $usersRemoveData[] = $user->userId ;
+			        }elseif(isset($user->{$field_name}) && $user->{$field_name} != ""){
+						
+					  $userfield['field_id'] = $field->id;
+						$userfield['value'] = $this->getFieldValue($field,$user->{$field_name});
+						
+						$userdata[] = $userfield;
+						$usersRemoveData[] = $user->userId;
+						
+				    }
+				   
+			   }else{ //custom default field
+				    
+					if(isset($user->{$field_name}) && $user->{$field_name} != ""){
+					  $userfield['field_id'] = $field->id;
+						$userfield['value'] = $this->getFieldValue($field,$user->{$field_name});
+						$userdata[] = $userfield;
+						$usersRemoveData[] = $user->userId;
+						
+				    }
+					
+			   }
+			  	
+			}
+			
+		}
 		
+		if(count($usersRemoveData)){
+			
+			$query = "delete from #__dtregister_user_field_values where user_id in (".implode(",",$usersRemoveData).") ";
+			$this->TableEvent->rawquery($query);
+			echo $this->TableEvent->_db->getErrorMsg();
+			
+		}
+		//$this->TableUser->TableUserfield->truncate();
+		
+		$this->TableUser->TableUserfield->saveAll_migration($userdata);
+		
+		$this->updatememtot();
+		$this->updatestatus($user_ids);
+		$this->membertable($user_ids);
+		$this->fee($user_ids);
+	 		
+	}
+	
+	function get_user_ids(){
+		
+		$user_ids = $this->get_users_test();
+		prd($user_ids);
+		$where = "";
+		if(count($user_ids )){
+			
+			$where = " userId in (".implode(",",$user_ids).") ";
+			
+		}
+	 
+		$users  = $this->TableUser->find($where);
+		$members = $this->memberusers($user_ids);
+		
+		pr($users);
+		prd($members);
+	  
+		// $this->renamefields();
+		// $this->waiting();
+		
+		$userdata = array();
+		$usersRemoveData = array(0);
+		
+		/*
 		if (is_array($users)) 
 		foreach($users as $user){
 		    $userfield =  array();
@@ -394,14 +479,44 @@ class DtregisterModelMigration extends DtrModel {
 			echo $this->TableEvent->_db->getErrorMsg();
 			
 		}
+		*/
 		//$this->TableUser->TableUserfield->truncate();
 		
-		$this->TableUser->TableUserfield->saveAll_migration($userdata);
-		$this->updatememtot();
-		$this->updatestatus($user_ids);
-		$this->membertable($user_ids);
-		$this->fee($user_ids);
+		// $this->TableUser->TableUserfield->saveAll_migration($userdata);
+		// $this->updatememtot();
+		// $this->updatestatus($user_ids);
+		// $this->membertable($user_ids);
+		// $this->fee($user_ids);
 	 		
+	}
+	
+	function get_users_test(){
+	
+		$query = "select  userId from #__dtregister_rollback_user where `type` = 'G' ";
+		$ids = $this->TableEvent->query($query,null,"","");
+		
+		$ret = array();
+		foreach($ids as $id){
+			$ret[] = $id->userId ;
+		}
+
+		return $ret ;
+	
+	}
+	
+	function memberusers($user_ids){
+	   
+	   $member_ids = $this->get_member_ids();
+	   if(count($member_ids) < 1){
+		   return ;
+	   }else{
+			$where = " 	groupMemberId in(".implode(",",$member_ids).") ";
+	   }
+	   
+	   $members =  $this->TableMember->find($where,null,"","");
+	   
+	   return $members;
+	
 	}
 	
 	function updatestatus($user_ids ){
@@ -564,7 +679,7 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 	}
 	
 	function groupEvents(){
-		$query = "SELECT sum( 1 ) AS tot, eventId, slabId FROM `#__dtregister_group_event` GROUP BY eventId HAVING tot >1 where eventId <> 0";
+		$query = "SELECT sum( 1 ) AS tot, eventId, slabId FROM `#__dtregister_group_event` where eventId <> 0 GROUP BY eventId HAVING tot >1 ";
 
 		$events = $this->TableEvent->query($query,null,"","");
 		
@@ -583,6 +698,7 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 				
 			}
 		}
+		
 		if($events){
 			$query = "ALTER TABLE `#__dtregister_group_event` CHANGE `slabId` `slabId` INT( 11 ) NOT NULL";
 			$this->TableEvent->rawquery($query);
@@ -658,15 +774,26 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 	
 	function populateEventDetails(){
 		
-	$query = 	"insert into #__dtregister_event_detail select null , slabId ,memberTotal, if (memberTotal*regGroupRate=regGroupPerRate,'per_person','flat'),if (memberTotal*regGroupRate=regGroupPerRate,regGroupPerRate,regGroupRate) from #__dtregister_group_event ";
+	$query = 	"insert into #__dtregister_event_detail select null , eventId  ,memberTotal, if (memberTotal*regGroupRate=regGroupPerRate,'per_person','flat'),if (memberTotal*regGroupRate=regGroupPerRate,regGroupPerRate,regGroupRate) from #__dtregister_group_event ";
 	
 	  $this->TableEvent->rawquery($query);
 	  
 	}
 	
 	function updateAssocJevent(){
-		$query = "update #__dtregister_group_event e inner join #__jevents_vevdetail j on e.eventId=j.evdet_id set e.title = j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart,'%Y-%m-%d') , e.dtstarttime = FROM_UNIXTIME(j.dtstart,'%h:%i:%s') , e.dtend =  FROM_UNIXTIME(j.dtend,'%Y-%m-%d') , e.dtendtime = FROM_UNIXTIME(j.dtend,'%h:%i:%s') ";
-		
+		$offset = $this->get_jevent_offset();
+		if($offset === 0){
+			$offset = 0 ;
+		}elseif($offset < 0){
+			$offset = " - ".abs($offset);
+		}elseif($offset > 0){
+			$offset = " + ".abs($offset);
+		}
+$query = "update #__dtregister_group_event e inner join  #__dtregister_rollback_group_event re on re.slabId = e.slabId inner join #__jevents_vevdetail j on re.eventId=j.evdet_id set e.title = 
+			j.summary ,  e.dtstart = FROM_UNIXTIME(j.dtstart ".$offset.",'%Y-%m-%d') , e.dtstarttime = FROM_UNIXTIME(j.dtstart ".$offset.",'%H:%i:%s') , 
+			e.dtend =  FROM_UNIXTIME(j.dtend ".$offset.",'%Y-%m-%d') , e.dtendtime = FROM_UNIXTIME(j.dtend ".$offset.",'%H:%i:%s') ";
+			
+
 		$this->TableEvent->rawquery($query);
 	}
 	
@@ -681,7 +808,7 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 			$where = " 	groupMemberId in(".implode(",",$member_ids).") ";
 	   }
 	   
-	   $members =  $this->TableMember->find($where,null,"","");
+	   $members =  $this->TableMember->find($where,"","","");
 	   $memberdata = array();
 	   $membersRemoveData = array();
 	   
@@ -717,7 +844,7 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 	
 	function updatememtot(){
 		     
-		 $query = "update #__dtregister_user as u inner join #__dtregister_group as g on g.useid= u.userId inner join #__dtregister_group_amount ga  set  u.memtot = ga.numberOfPerson ";
+		 $query = "update #__dtregister_user as u inner join #__dtregister_group as g on g.useid= u.userId inner join #__dtregister_group_amount as ga on  ga.groupId = g.groupId  set  u.memtot = ga.numberOfPerson ";
 		 
 		 $this->TableUser->rawquery($query);
 		 $query = "update #__dtregister_user set memtot = 1 where memtot = 0";
@@ -729,10 +856,10 @@ INNER JOIN #__dtregister_user u ON g.useid = u.userId where u.userId in(".implod
 	
 	
 	function updateUserId(){
-		
-	   $query = "update from #__dtregister_group_member as gm  inner join #__dtregister_group as g on g.groupId= gm.groupUserId  set gm.groupUserId = g.useid ";
-		 
-		 $this->TableMember->rawquery($query);
+	
+		$query = "update  #__dtregister_group_member as gm  inner join #__dtregister_group as g on g.groupId= gm.groupUserId  set gm.groupUserId = g.useid ";
+		$this->TableMember->rawquery($query);
+	
 	}
 	
 	function rollback(){

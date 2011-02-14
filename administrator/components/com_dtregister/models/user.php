@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2b
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -106,7 +106,7 @@ class DtregisterModelUser extends DtrModel {
 	    }
 
 	}
-
+	
 	function userlistquery($search = array(),$filter_order=" name ",$filter_order_Dir=" asc "){
 
 	    $fieldSelectQuery = $this->table->TableUserfield->pivotFields();
@@ -171,10 +171,6 @@ class DtregisterModelUser extends DtrModel {
 		    $search['query'] = stripslashes( $search['query']);
 
 	    }
-
-		//$grpByHaving = " having ";
-
-		//$grpByHaving .= $this->searchQuery('u',$searchQuery);
 
 	}
 		$where = (count($Andwhere)>0)?" where ".implode(' and ', $Andwhere):'';
@@ -683,7 +679,7 @@ class TableDuser extends DtrTable {
 	}
 
 	function showRegDate(){
-         global $date_format ;
+         global $date_format;
 		 //return  JFactory::getDate($this->dtstart)->toFormat($date_format);
 		 return strftime($date_format , strtotime($this->register_date));
 
@@ -700,7 +696,11 @@ class TableDuser extends DtrTable {
 		  return false;
 
 	    }else{
-
+           if($this->status == -2){
+			     
+				 return false;
+				 
+		   }
 		   return true;
 
 		}
@@ -961,8 +961,8 @@ class TableDuser extends DtrTable {
    }
    
    function fee_status_change_email(){
-	  global $subpaidstatusemail , $paid_status_change_msg_send , $paid_status_change_msg,$DT_mailfrom ,$DT_fromname;
-	  $Tagparser =  new Tagparser();
+	  global $subpaidstatusemail, $paid_status_change_msg_send, $paid_status_change_msg,$DT_mailfrom,$DT_fromname;
+	  $Tagparser = new Tagparser();
 	  
 	  // pr($paid_status_change_msg_send);
 	  // pr($paid_status_change_msg);
@@ -979,18 +979,16 @@ class TableDuser extends DtrTable {
 		  JUTility::sendMail( $DT_mailfrom, $DT_fromname,$email,$subject,$messge,1);
 		  if($this->type == 'G'){
 
-			 foreach($this->members as $member){
-  
-				 if(!isset($member->email) || $member->email == ""){
-  
-					 continue;
-  
-				 }
+			 foreach($this->members as $member){		 
   
 				  $messge = $Tagparser->parsetags($groupmsg,$member);
+                  
+				  if(!isset($member->email) || $member->email == ""){
   
-				  JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject,$messge,1);
+					 JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject,$messge,1);
   
+				 }
+			
 			}
   
 		}
@@ -999,8 +997,8 @@ class TableDuser extends DtrTable {
    }
    
    function status_change_email(){
-	  global $subchangestatusemail , $status_change_msg_send , $status_change_msg,$DT_mailfrom ,$DT_fromname;
-	  $Tagparser =  new Tagparser();
+	  global $subchangestatusemail, $status_change_msg_send, $status_change_msg,$DT_mailfrom,$DT_fromname;
+	  $Tagparser = new Tagparser();
 	  if($status_change_msg_send){
 		  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$status_change_msg);
 	      $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$status_change_msg);
@@ -1011,17 +1009,14 @@ class TableDuser extends DtrTable {
 		  if($this->type == 'G'){
 
 			 foreach($this->members as $member){
+
+				  $messge = $Tagparser->parsetags($groupmsg,$member);
+                  if(!isset($member->email) || $member->email == ""){
   
-				 if(!isset($member->email) || $member->email == ""){
-  
-					 continue;
+					  JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject,$messge,1);
   
 				 }
-  
-				  $messge = $Tagparser->parsetags($groupmsg,$member);
-  
-				  JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject,$messge,1);
-  
+				 
 			}
   
 		}
@@ -1031,17 +1026,18 @@ class TableDuser extends DtrTable {
    
    function registrantemail(){
 	   
-
-	  global $subthanksemail,$thanksemail,$DT_mailfrom,$DT_fromname , $waitingemail , $subwaitingemail;
+	  global $subthanksemail,$thanksemail,$DT_mailfrom,$DT_fromname, $waitingemail, $subwaitingemail;
 
 	  $this->load($this->userId);
-	
+	  $this->TableEvent->load($this->eventId);
 	  $Tagparser = new Tagparser();
       
 	  if($this->status == -2){
-		  $thkmsg =  $waitingemail ;
-		  $subject = $subwaitingemail ;
+		  
+		  $thkmsg = $waitingemail;
+		  $subject = $subwaitingemail;
 	  }else{
+         
 		  if($this->TableEvent->thksmsg_set){
 	
 			  $thkmsg = $this->TableEvent->thksmsg;   
@@ -1051,7 +1047,7 @@ class TableDuser extends DtrTable {
 			  $thkmsg = $thanksemail;
 	
 		  }
-		  $subject = $subthanksemail ;
+		  $subject = $subthanksemail;
 	  }
 
 	  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$thkmsg);
@@ -1061,25 +1057,22 @@ class TableDuser extends DtrTable {
 	  if($this->type == 'G'){ 
 	  
 		  foreach($this->members as $member){
-               
-			   
-			   if(!isset($member->email) || $member->email == ""){
-
-				   continue;
-
-			   }
 
 			    $messge = $Tagparser->parsetags($groupmsg,$member);
 				$memberdata .= $messge;
 				 $subject_mem = $Tagparser->parsetags($subject,$member);
-				JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject_mem,$messge,1,null,null,$attachments);
+				 if(!isset($member->email) || $member->email == ""){
 
+				   JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject_mem,$messge,1,null,null,$attachments);
+
+			   }
+			
 		  }
 		
 	  }
-	  $Tagparser->parse_password =  true ;
+	  $Tagparser->parse_password = true;
 	  $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memberdata);
-	  $message = $Tagparser->parsetags($usermsg,$this);
+	  $message = $Tagparser->parsetags($usermsg,$this); 
 	  
 	  $subject = $Tagparser->parsetags($subject,$this);
 
@@ -1098,7 +1091,8 @@ class TableDuser extends DtrTable {
 
    function registrationemail(){
 
-	  global $DT_mailfrom,$DT_fromname,$thanksmsg,$admin_registrationemail,$subject_admin_registrationemail;
+	  global $DT_mailfrom,$DT_fromname,$thanksmsg, $admin_registrationemail, $admin_notification, $subject_admin_registrationemail;
+
 
       if(isset($this->sendemail)){
 		  
@@ -1110,11 +1104,20 @@ class TableDuser extends DtrTable {
 	  $this->load($this->userId);
 	 
 	  $this->registrantemail();
+	  
+	  if($this->TableEvent->admin_notification_set){
+	
+			  $admin_notification = $this->TableEvent->admin_notification;   
+			  
+	  }else{
+		      $admin_notification =  $admin_registrationemail;
+	  }
 
-	  // prd($admin_registrationemail);
+	  // prd($admin_notification);
 
-	  $Tagparser =  new Tagparser();
-      $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$admin_registrationemail);
+	  $Tagparser = new Tagparser();
+	  
+	  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$admin_notification);
 
 	  $memberdata = "";
 	  if($this->type == 'G')
@@ -1123,7 +1126,8 @@ class TableDuser extends DtrTable {
 		    $memberdata .= $Tagparser->parsetags($groupmsg,$member);
 
 	  }
-	   $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$admin_registrationemail,$memberdata);
+
+	   $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$admin_notification,$memberdata);
 	   $adminmsg = $Tagparser->parsetags($usermsg,$this);
 	  
       $adminemails=$this->TableEvent->email;
@@ -1384,7 +1388,7 @@ class TableDuser extends DtrTable {
 
 		global $map_jomsocial_fields, $map_cb_fields, $cb_integrated;
 		
-		$fieldTable = DtrTable::getInstance('field','Table');
+	  $fieldTable = DtrTable::getInstance('field','Table');
 	  $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
 	  $fieldTypes =  $fieldType->getTypes();
 
@@ -1415,39 +1419,48 @@ class TableDuser extends DtrTable {
    function save($data){
 	   
 	   // prd($data); exit;
+		global $mainframe ;
+		global $now, $partial_default_status, $paylater_default_status, $paid_default_status;
 
-	  global $now, $partial_default_status, $paylater_default_status, $paid_default_status;
+		$my = &JFactory::getUser();
 
-	  $my = &JFactory::getUser();
-
-	  if($this->userId == "" && !isset($data['userId'])){
+		if($this->userId == "" && !isset($data['userId'])){ // if new registeration
 
          $this->register_date = $now->toMySQL(true); 
 		 $data['register_date'] = $now->toMySQL(true); 
-		 if($data['status'] == -2){
-			 $data['fee']['status'] = 0 ; 
+		 
+		 if(isset($data['status']) && $data['status'] == -2){
+			 $data['fee']['status'] = 0; 
 			 
 		 }else{
+			
 		   if($data['fee']['fee'] > 0){ // not free
-			   if($data['fee']['paid_amount'] < $data['fee']['fee'] && $data['fee']['paid_amount'] > 0){ // partial paid
+		     
+			  
+			   if(Comp($data['fee']['fee'],$data['fee']['paid_amount'],10) < 0 && $data['fee']['paid_amount'] > 0 && $data['fee']['paid_amount'] !== $data['fee']['fee']){ // partial paid
+			  
 				  $data['status'] = $partial_default_status;
-				  $data['fee']['status'] = 0 ;
+				  $data['fee']['status'] = 0;
 			   }else{// paid
 				  $data['status'] = $paid_default_status;
 				  $data['fee']['status'] = 1;
+				   
 			   }
-			   if($data['fee']['paid_amount'] < $data['fee']['fee'] && $data['fee']['paid_amount'] == 0){ // paylater
+			   if($data['fee']['paid_amount'] < $data['fee']['fee'] && $data['fee']['paid_amount'] == 0){ // paylater 
+			     
 				  $data['status'] = $paylater_default_status;
 				  $data['fee']['status'] = 0;
 			   }
 		   }else{ // free 
 			  $data['status'] = $paid_default_status;
 			  $data['fee']['status'] = 1;
+			  $data['fee']['payment_method'] = " ";
 		   }
 		 }
 
 	  }
-      if(!isset($data['user_id']) || $data['user_id'] == ""){
+	  
+      if((!isset($data['user_id']) || $data['user_id'] == "") && !$mainframe->isAdmin()){
 	    $data['user_id'] = $my->id;
 	  }
  	 //prd($data);
@@ -1468,7 +1481,7 @@ class TableDuser extends DtrTable {
 		  
 		  foreach($profile_fields as $field_id => $value){
 		     if(!isset($data['fields'][$field_id])){
-				 $data['fields'][$field_id] = $value ;
+				 $data['fields'][$field_id] = $value;
 			 }
 		  }
 	  }
@@ -1480,7 +1493,6 @@ class TableDuser extends DtrTable {
       $this->fields = $data['fields'];
 
 	  $this->TableMember->groupUserId = $this->userId;
-	  
 
 	  if(isset($data['members'])){
 		 

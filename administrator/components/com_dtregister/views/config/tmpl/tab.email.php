@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.2
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -76,6 +76,8 @@
 	                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 	                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+	
+	                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 	                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -109,13 +111,15 @@
 
 	                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 	
+		             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+	
 					 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
 
                 </td>
 
-				<td align="left" valign="top"><?php echo $editor->display("config[thanksemail]",stripslashes($config->getGlobal('thanksemail','')),'','340','20','20','0'); ?></td>
+				<td align="left" valign="top"><?php echo $editor->display("config[thanksemail]",stripslashes($config->getGlobal('thanksemail','')),'','340','70','20','0'); ?></td>
 
 				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_THANKS_EMAIL_AUTH' )), '', 'tooltip.png', '', ''); ?> </td>
 
@@ -146,6 +150,8 @@
 	                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 	                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+	
+	                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 	                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -179,13 +185,15 @@
 
 	                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 	
+		             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+	
 					 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
 
                 </td>
 
-				<td align="left" valign="top"><?php echo $editor->display("config[waitingemail]",stripslashes($config->getGlobal('waitingemail','')),'','340','20','20','0'); ?></td>
+				<td align="left" valign="top"><?php echo $editor->display("config[waitingemail]",stripslashes($config->getGlobal('waitingemail','')),'','340','70','20','0'); ?></td>
 
 				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_WAITING_EMAIL_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
@@ -218,6 +226,8 @@
 	                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 	                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+	
+	                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 	                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -249,13 +259,15 @@
 
 	                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 	
+		             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+	
 					 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
 
                 </td>
 
-				<td align="left" valign="top"><?php echo $editor->display("config[admin_registrationemail]",stripslashes($config->getGlobal('admin_registrationemail','')),'','340','20','20','0'); ?></td>
+				<td align="left" valign="top"><?php echo $editor->display("config[admin_registrationemail]",stripslashes($config->getGlobal('admin_registrationemail','')),'','340','70','20','0'); ?></td>
 
 				<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_ADMIN_REGISTRATION_EMAIL' )), '', 'tooltip.png', '', ''); ?> </td>
 
@@ -288,6 +300,8 @@
 		                 <br />[EVENT_NAME] - <?php echo JText::_( 'DT_TAG_EVENT_NAME' );?>
 
 		                 <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
+		
+  		                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
 
 		                 <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
@@ -319,6 +333,8 @@
 
 		                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 		
+			             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+		
 						 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
@@ -330,7 +346,7 @@
 
                                echo JHTML::_('select.booleanlist', "config[status_change_msg_send]","",$config->getGlobal('status_change_msg_send',1));  ?>
 
-                    <?php echo $editor->display("config[status_change_msg]",stripslashes($config->getGlobal('status_change_msg','')),'','340','20','20','0'); ?></td>
+                    <?php echo $editor->display("config[status_change_msg]",stripslashes($config->getGlobal('status_change_msg','')),'','340','70','20','0'); ?></td>
 
 					<td align="center"><?php echo JHTML::tooltip(JText::_( 'DT_STATUS_CHANGE_MSG_HELP'));?> </td>
 
@@ -364,6 +380,8 @@
 
                  <br />[EVENT_DATE] - <?php echo JText::_( 'DT_TAG_EVENT_DATE' );?>
 
+                 <br />[EVENT_TIME] - <?php echo JText::_( 'DT_TAG_EVENT_TIME' );?>
+
                  <br />[LOCATION] - <?php echo JText::_( 'DT_TAG_LOCATION' );?>
 
                  <br />[LOCATION_DETAILS] - <?php echo JText::_( 'DT_TAG_LOCATION_DETAILS' );?>
@@ -394,6 +412,8 @@
 
                  <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
 
+	             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
+
 				 <br />{GROUP_MEMBER}  {/GROUP_MEMBER} - <?php echo JText::_( 'DT_TAG_GROUP_MEMBER' );?>
 
                  </div>
@@ -406,7 +426,7 @@
 
 					           echo JHTMLSelect::booleanlist("config[paid_status_change_msg_send]","",$config->getGlobal('paid_status_change_msg_send',1)); ?>
 
-                    <?php echo $editor->display("config[paid_status_change_msg]",stripslashes($config->getGlobal('paid_status_change_msg','')),'','340','20','20','0'); ?></td>
+                    <?php echo $editor->display("config[paid_status_change_msg]",stripslashes($config->getGlobal('paid_status_change_msg','')),'','340','70','20','0'); ?></td>
 
 					<td align="center"><?php echo JHTML::tooltip(JText::_( 'DT_PAID_STATUS_CHANGE_MSG_HELP'));?> </td>
 

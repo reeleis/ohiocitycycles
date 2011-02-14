@@ -81,7 +81,13 @@
 			echo  $this->loadTemplate('tab.message');
 
 			echo $pane->endPanel();
-
+			
+			echo $pane->startPanel(JText::_( 'DT_EMAILS' ),'dtregister3');
+			
+			echo  $this->loadTemplate('tab.email');
+			
+			echo $pane->endPanel();
+			
 	        echo $pane->startPanel(JText::_( 'DT_REGISTER_FIELDS' ),'dtregister5');
 
 			echo  $this->loadTemplate('tab.field');

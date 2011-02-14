@@ -26,7 +26,7 @@ class DtregisterControllerUser extends DtrController {
 		 $this->view->setModel($this->getModel('paymentmethod'));
 
          $this->view->setModel($this->getModel('event'));
-
+		 
 		 $this->registerTask( 'new', 'add' );
 
 		 $this->registerDefaultTask("index");
@@ -194,6 +194,8 @@ class DtregisterControllerUser extends DtrController {
 
 		$Andwhere[] = "e.archive=".$search['event_archive'];
 
+	}elseif(!isset($search['event_archive'])|| $search['event_archive'] !=-1 ){
+	   	$Andwhere[] = " e.archive= 0";
 	}
 
 	$grpByHaving = "";
@@ -228,8 +230,7 @@ class DtregisterControllerUser extends DtrController {
 
 		$mUser->orderBYPivot($query,$filter_order);
 
-	  // pr($where);
-
+	  
 	$where = (count($Andwhere)>0)?" where ".implode(' and ', $Andwhere):'';
 
 	//$query .= " $where group  by u.userId ".$grpByHaving;
@@ -487,7 +488,7 @@ class DtregisterControllerUser extends DtrController {
 
 	   $type = ($tUser->type=='I')?'I':'B';
 
-	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'adminForm',false));
+	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'adminForm',true));
 
 	   $this->view->assign('mUser',$mUser);
 

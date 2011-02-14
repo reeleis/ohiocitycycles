@@ -42,17 +42,17 @@ class Payment {
 			
 		    $firstname = $fieldTable->fingbyName('firstname');
 		    if($firstname){
-			   $this->firstname = $user['fields'][$firstname->id];
+			   $this->firstname = isset($user['fields'][$firstname->id])?$user['fields'][$firstname->id]:'';
 	        }
 		   
 		    $lastname = $fieldTable->fingbyName('lastname');
 		    if($lastname){
-			   $this->lastname = $user['fields'][$lastname->id];
+			   $this->lastname = isset($user['fields'][$lastname->id])?$user['fields'][$lastname->id]:'';
 	        }
 			
 			$address = $fieldTable->fingbyName('address');
 		    if($address){
-			   $this->address = $user['fields'][$address->id];
+			   $this->address = isset($user['fields'][$address->id])?$user['fields'][$address->id]:'';
 	        }
 			
 			$state = $fieldTable->fingbyName('state');
@@ -69,12 +69,12 @@ class Payment {
 	        }
 			
 			$city = $fieldTable->fingbyName('city');
-		    if($address){
+		    if($city){
 			   $this->city = $user['fields'][$city->id];
 	        }
 			
 			$zip = $fieldTable->fingbyName('zip');
-		    if($address){
+		    if($zip){
 			   $this->zip = $user['fields'][$zip->id];
 	        }
 			$email = $fieldTable->fingbyName('email');
@@ -209,16 +209,24 @@ class Payment {
                     <td width="69%" align="left"> <input id="billingEmail" class="inputbox required" type="text" name="billing[email]" value="<?php echo isset($this->email)?$this->email:'' ?>" /> </td>
 
                  </tr>
+                 <?php
+							   foreach(DT_Session::get('register.User') as $key => $user){
+							      		if(!intval($key)){
+											continue;
+											
+											
+										}
+										break;						
+							   }
+							   
+							   
+							?>
 
 				<script language="javascript" type="text/javascript">
 
                     //<![CDATA[
 							<?php
-							   foreach(DT_Session::get('register.User') as $user){
-							      		
-										break;						
-							   }
-							   $field = $countylist->fingbyName('firstname');
+							  $field = $countylist->fingbyName('firstname');
 							?>
 							var billing_firstname = "<?php echo ($field)?$user['fields'][$field->id]:'' ; ?>";
 							<?php
