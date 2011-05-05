@@ -85,4 +85,4 @@ $mainframe->triggerEvent( 'onAfterRender' );
  * RETURN THE RESPONSE
  */
 echo JResponse::toString($mainframe->getCfg('gzip'));
-?>?>
+?>
