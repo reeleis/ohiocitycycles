@@ -11,6 +11,7 @@
 
 global $event_show_date;
 $HeventTable = $this->getModel('event')->table;
+
 $HeventTable->load($this->header_eventId);
 $HeventTable->overrideGlobal($HeventTable->slabId);
 $duepayment = 'DT_MAKE_PAYMENT';

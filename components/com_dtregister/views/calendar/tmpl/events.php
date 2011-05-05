@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,10 +9,34 @@
 * @license Commercial
 */
 
-  global $calendar_link,$xhtml_url,$Itemid;
+  global $calendar_link,$xhtml_url,$Itemid,$calendar_show_moderator,$calendar_show_location,$calendar_show_registered;
+  global $calendar_show_capacity,$calendar_show_price,$calendar_show_date,$calendar_show_time,$calendar_show_image, $calendar_showTime;
+  global $calendar_show_image_gridview,$event_image_gridview_width,$event_image_gridview_height,$calendar_show_available_spots;
   
-  $events =   array();
+  
+  $events = array();
   $eventTable = $this->eventTable;
+  $config = $this->getModel('config');
+  $locationTable = $this->getModel('location')->table;
+  
+  $muser = $this->getModel( 'user' );
+  $tuser = $muser->table;
+  $profile = $tuser->TableJUser;
+
+  $cal_configs = array('calendar_showTime'=>$calendar_showTime,
+                       'calendar_show_image'=>$calendar_show_image,
+					   'calendar_show_date'=>$calendar_show_date,
+					   'calendar_show_time'=>$calendar_show_time,
+					   'calendar_show_price'=>$calendar_show_price,
+					   'calendar_show_capacity'=>$calendar_show_capacity,
+					   'calendar_show_registered'=>$calendar_show_registered,
+					   'calendar_show_available_spots' => $calendar_show_available_spots,
+					   'calendar_show_location'=>$calendar_show_location,
+					   'calendar_show_moderator'=>$calendar_show_moderator,
+					   'calendar_show_image_gridview'=>$calendar_show_image_gridview,
+					   'event_image_gridview_width'=>$event_image_gridview_width,
+					   'event_image_gridview_height'=>$event_image_gridview_height
+                        );
 
   foreach($this->events as $event){
 	
@@ -51,8 +75,12 @@
 			
 		 }
 	 }
+	 
+	  $eventTable->load($event->slabId);
+	  $eventTable->formatTimeproperty($row->dtstarttime);
+	  $eventTable->formatTimeproperty($row->dtendtime);
 
-	  $temp  =  array();
+	  $temp = array();
 
 	  $temp[] = $event->slabId;
 
@@ -77,15 +105,90 @@
 	  $temp[] = $href;
 	  
 	  $temp[] = ($event->timeformat == 2)?'HH:MM':'hh:MM tt';
+	  
+	  if(isset($event->imagepath)) {
+			$temp[] = $event->imagepath;
+	  }else{
+			$temp[] = '';
+	  }
+      
+	  $temp[] = $cal_configs;
+	  
+	  $temp[] = $eventTable->displaydatecolumnonly();
+	  
+	  if($eventTable->getIndividualRate($event) > 0){  
 
+			$price = $eventTable->getIndividualRate($event);
+			$price =  DTreg::displayRate($price,$config->getGlobal('currency_code','USD'));
+			global $show_price_tax;
+			if($show_price_tax && $eventTable->tax_enable){
+				 $price += ($price*$event->tax_amount)/100;
+
+			}
+
+	  } else {
+			$price = JText::_('DT_FREE');
+	  }
+	  $temp[] = $price;
+	  
+	  if($event->max_registrations > 0) {
+	  	  $capacity = $event->max_registrations;
+	  } else {
+		  $capacity = JText::_('DT_UNLIMITED');
+	  }
+	  $temp[] = $capacity;
+	  
+	  $registered = $eventTable->getTotalregistered($event->slabId);
+	  if($registered > 0) {
+	  	  $registered = $registered;
+	  } else {
+		  $registered = 0;
+	  }
+	  $temp[] = $registered;
+
+	  $locationTable->load($event->location_id);
+	  if($locationTable->name != ""){
+			$location = stripslashes($locationTable->name);
+	  } else {
+	  		$location = JText::_('DT_NOT_SPECIFY');
+	  }
+	  $temp[] = $location;
+	  
+	  if ($event->max_registrations > 0 && $event->max_registrations > $registered) {
+	  		$spaces_left = $event->max_registrations - $registered;
+	  } else if($event->max_registrations == 0){
+	  		$spaces_left = JText::_('DT_UNLIMITED');
+	  } else{
+	       $spaces_left =  JText::_('DT_WAITING');
+	  }
+	  $temp[] = $spaces_left;
+	  
+      $profile->load($event->user_id) ;
+	  if ($profile->name != "") {
+		  $moderator = $profile->name;
+	  } else {
+		  $moderator = 'None';
+	  }
+	  $temp[] = $moderator;
+	  
+	   if(isset($event->imagepath) && $event->imagepath != "") {
+			$temp[] = '<img border="0" alt="" src="'.JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w='.$event_image_gridview_width.'&h='.$event_image_gridview_height.'&filename=images%2Fdtregister%2Feventpics%2F').$event->imagepath.'" />';
+	  }else{
+			$temp[] = '';
+	  }
+	  
+	  $temp[] = $eventTable->displaytimecolumn();
+	 
 	  $events[] = $temp;
 
   }
+  
+  // echo '<pre>'; print_r($events); exit;
 
-  $json =  new stdClass;
+  $json = new stdClass;
 
   $json->events = $events;
-ob_clean();
+  ob_clean();
   echo json_encode($json);
 
   die;

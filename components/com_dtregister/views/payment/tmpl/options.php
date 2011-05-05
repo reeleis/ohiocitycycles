@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,11 +9,11 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $mainframe;
+global $Itemid,$mainframe;
 
 $document =& JFactory::getDocument();
 
-$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/jquery.js");
+$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/dt_jquery.js");
 
 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validate.js");
 
@@ -35,31 +35,38 @@ if(DT_Session::get('register.User.process')){
 
 <?php
 
-global $Itemid, $xhtml ,$paymentmethod;
+global $Itemid,$xhtml,$paymentmethod;
 
 $paymentmhd = $this->getModel('paymentmethod');
 
 $paymentmhds = $paymentmhd->getMethods();
-$paymentmethods = $paymentmethod ;
+$paymentmethods = $paymentmethod;
+
 $pay_images = $paymentmhd->images;
 
-$paylateroptions=DtHtml::options($paymentmhd->paylater->getOptions(),JText::_( 'DT_SELECT_PAY_OPTIONS' ));
+$paylateroptions = DtHtml::options($paymentmhd->paylater->getOptions(),JText::_( 'DT_SELECT_PAY_OPTIONS' ));
+
+/*
+$paylateroptions = array();
+foreach($paylateroptions_new as $paylateroption) {
+	if($paylateroption->value != "") {
+		$paylateroptions[] = $paylateroption;
+	}
+}
+*/
 
 $i=1;
 
-// echo '<pre>'; print_r($paymentmethods);  print_r($paymentmhds); 
-
-
-$paymcnt = 0 ;
+$paymcnt = 0;
 foreach($paymentmethods as $key=>$method){
 	if($method == "pay_later" && DT_Session::get('register.User.process')){
-		unset($method) ;
-		$method = $last_method ;
-		continue ;
+		unset($method);
+		$method = $last_method;
+		continue;
     }
-	$last_method = $method ;
-$paymcnt++ ;
-// echo '<pre>'; echo $pay_images[$method].'<br>';
+	$last_method = $method;
+	$paymcnt++;
+
   ?>
 
 	 <tr> 
@@ -73,13 +80,13 @@ $paymcnt++ ;
 
 			</td>
 
-             <td valign="top" ><input type="radio" class="required" id="paymentmethod" name="paymentmethod" value="<?php echo $method; ?>"  /><?php echo $paymentmhds[$method] ;?>
+             <td valign="top" ><input type="radio" class="required" id="paymentmethod" name="paymentmethod" value="<?php echo $method; ?>" /><?php echo $paymentmhds[$method] ;?>
 
 			 <?php 
 
 			  if($method == "pay_later"){
 
-				   echo JHTML::_('select.genericlist', $paylateroptions,'pay_later_option','','value','text');
+				   echo JHTML::_('select.genericlist', $paylateroptions,'pay_later_option','onchange=check_value(this.value)','value','text');
 
 			  }
 
@@ -89,7 +96,7 @@ $paymcnt++ ;
 
    	<?php
 
-	$i++ ;
+	$i++;
 
 }
 
@@ -144,7 +151,15 @@ if($paymcnt == 1){
 </table>
 
 </form>
-
+<script type="text/javascript">
+	function check_value(value) {
+		if(value != "") {
+			DTjQuery(":radio[value=pay_later]").attr('checked',true);
+		} else {
+			DTjQuery(":radio[value=pay_later]").attr('checked',false);
+		}
+	}
+</script>
 <script type="text/javascript">
 
  DTjQuery(function(){

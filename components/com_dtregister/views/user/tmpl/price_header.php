@@ -46,6 +46,7 @@
 	   $juser = JFactory::getUser();
 	   
 	   $feeObj->getFee($juser->id);
+	  // pr(get_object_vars($feeObj));
 	  //pr( $feeObj);
 		if($feeObj->paid_fee > 0){
 			$memtot = $TableUser->memtot;

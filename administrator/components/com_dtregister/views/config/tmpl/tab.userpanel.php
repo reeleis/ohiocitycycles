@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -173,6 +173,8 @@ $config = $this->getModel('config');
 					                 <br />[TAX] - <?php echo JText::_( 'DT_TAG_TAX' );?>
 
 					                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
+					
+					                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
 
 					                 <br />[CONFIRM_NUM] - <?php echo JText::_( 'DT_TAG_CONFIRM_NUM' );?>
 
@@ -185,6 +187,8 @@ $config = $this->getModel('config');
 					                 <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
+					
+					                 <br />[CODE] - <?php echo JText::_( 'DT_TAG_CODE' );?>
 					
 						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
 					
@@ -253,6 +257,8 @@ $config = $this->getModel('config');
 					                 <br />[TAX] - <?php echo JText::_( 'DT_TAG_TAX' );?>
 
 					                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
+					
+					                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
 
 					                 <br />[CONFIRM_NUM] - <?php echo JText::_( 'DT_TAG_CONFIRM_NUM' );?>
 
@@ -265,6 +271,8 @@ $config = $this->getModel('config');
 					                 <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
+					
+					                 <br />[CODE] - <?php echo JText::_( 'DT_TAG_CODE' );?>
 					
 						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
 					
@@ -334,6 +342,8 @@ $config = $this->getModel('config');
 
 					                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
 					
+					                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
+					
 					                 <br />[CONFIRM_NUM] - <?php echo JText::_( 'DT_TAG_CONFIRM_NUM' );?>
 
 					                 <br />[BARCODE] - <?php echo JText::_( 'DT_TAG_BARCODE' );?>
@@ -345,6 +355,8 @@ $config = $this->getModel('config');
 					                 <br />[USERNAME] - <?php echo JText::_( 'DT_TAG_USERNAME' );?>
 
 					                 <br />[DATE_REGISTERED] - <?php echo JText::_( 'DT_TAG_DATE_REGISTERED' );?>
+					
+					                 <br />[CODE] - <?php echo JText::_( 'DT_TAG_CODE' );?>
 					
 						             <br />[ALL_FIELDS] - <?php echo JText::_( 'DT_TAG_ALL_FIELDS' );?>
 					

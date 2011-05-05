@@ -1,16 +1,25 @@
 <?php
 
-global $Itemid , $full_message;
+/**
+* @version 2.7.4
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $Itemid,$full_message;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 
 ?>
 <div>
   <?php
-     $tEvent = $this->tEvent ;
-       $registered = $tEvent->getTotalregistered($tEvent->slabId);
-      $message = ($registered >= $tEvent->max_registrations && $tEvent->max_registrations !=0 &&$tEvent->max_registrations!="")?$full_message:$this->tEvent->topmsg;
+     $tEvent = $this->tEvent;
+     $registered = $tEvent->getTotalregistered($tEvent->slabId);
+     $message = ($registered >= $tEvent->max_registrations && $tEvent->max_registrations !=0 &&$tEvent->max_registrations!="")?$full_message:$this->tEvent->topmsg;
 	  
-	  echo ($message!="")?$message."<br /><br />":'';
+	 echo ($message!="")?$message."<br /><br />":'';
   ?>
 </div>
 <div id="price_header">
@@ -22,7 +31,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
  <table>
 
- <tr >
+ <tr>
 
 		<td colspan="3" align="left" ><strong><?php echo JText::_( 'DT_MEMBER' ) . ' ' .($this->memberIndex +1). ' ' . JText::_( 'DT_INFORMATION' ); //$currentMember; ?></strong></td>
 
@@ -30,9 +39,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
  <?php
 
-       echo  $this->form ;
-
-	  
+       echo  $this->form;
 
 	 ?>
 
@@ -42,11 +49,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
   <input type="submit" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
 
-
-
   </table>
-
-
 
   <input type="hidden" name="option" value="com_dtregister" />
 
@@ -56,29 +59,23 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
   <input type="hidden" name="memberIndex" value="<?php echo  $this->memberIndex; ?>" />
 
-
-
   <input type="hidden" name="Itemid" value="<?php echo $Itemid;?>" />
-
-
 
 </form>
 <script type="text/javascript">
- 
-  
- var updateFee =  function(){
-	    
-	   var prevtask = DTjQuery(document.frmcart.task).val();
+
+ var updateFee = function(){
+	   
 	   var options = {
 		               url : "<?php echo JRoute::_("index.php?no_html=1");?>",
+					   data : {task:'price_header'},
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
 					              }
 		   }
-	   DTjQuery(document.frmcart.task).val('price_header');
+	   
 	   DTjQuery(document.frmcart).ajaxSubmit(options);
-	   DTjQuery(document.frmcart.task).val(prevtask);
-	     
+	   
   }
   
   updateFee();

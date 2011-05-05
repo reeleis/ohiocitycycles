@@ -15,7 +15,7 @@
 
   $document	=& JFactory::getDocument();
 
-  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
   $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/addmore.js');
   $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/mousewheel.js');
   $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/timeEntry.js');
@@ -36,12 +36,24 @@
 	   DTjQuery('#dataeventtimeformat').change(function(){
 		   var format = DTjQuery(this).val();
 		   
+		   var readonly = DTjQuery("*[readonly]") ;
+		   
+		   DTjQuery.each(readonly,function(k,v){
+			  DTjQuery(v).removeAttr('readonly');
+		   });
+		  
+		   DTjQuery(".timeEntry").timeEntry();
 		   if(format == 2){
+			   
 		       DTjQuery(".timeEntry").timeEntry('change','show24Hours',true);
 		   }else{
 			   DTjQuery(".timeEntry").timeEntry('change','show24Hours',false); 
 			   DTjQuery(".timeEntry").timeEntry('change','ampmPrefix',' ');  
 		   }
+		    DTjQuery.each(readonly,function(k,v){
+			  DTjQuery(v).attr('readonly',true);
+		   });
+		   
 		   
 	  });
 	  DTjQuery('#dataeventtimeformat').trigger('change');

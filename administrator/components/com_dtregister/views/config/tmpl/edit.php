@@ -353,7 +353,7 @@
 
            $document =& JFactory::getDocument();
 
-		   JHTML::script('jquery.js','components/com_dtregister/assets/js/');
+		   JHTML::script('dt_jquery.js','components/com_dtregister/assets/js/');
 
     ?>
 

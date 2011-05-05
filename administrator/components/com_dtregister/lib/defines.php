@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -61,6 +61,7 @@ $conf =& JFactory::getConfig();
 //set_tz_by_offset($conf->getValue('config.offset')); 
 
 global $DT_config , $month_arr , $now , $xhtml_url , $amp , $sign_up_redirect;
+jimport( 'joomla.application.module.helper' );
 
 jimport('joomla.utilities.date');
 
@@ -135,9 +136,10 @@ function pr($data=array()){ //return;
 
 	    var_dump($data);
 
-	}
+	}else{
 
 	  print_r($data);
+	}
 
 	echo "</pre>";
 */
@@ -194,6 +196,7 @@ function Comp($Num1,$Num2,$Scale=null) {
         else
           if((int)$Num1{$i}<(int)$Num2{$i}) return(-1);
       }
+	  
 
       // if the two numbers have no difference (they're the same).. return 0
       return(0);
@@ -236,5 +239,24 @@ function my_array_filter_fn($val) {
 }
 //pr($now->toMySQL(true));
 //pr(strftime('%Y-%m-%d %H:%M:%S %Z%n'));
+
+if (!function_exists('sys_get_temp_dir')) {
+    function sys_get_temp_dir() {
+        // check environment variables.
+        foreach (array('TMP', 'TEMP', 'TMPDIR') as $env_var) {
+            if ($temp = getenv($env_var)) {
+                return $temp;
+            }
+        }
+        // test for a temp directory by having PHP create a temporary file.
+        $temp = tempnam(__FILE__, '');
+        if (file_exists($temp)) {
+            unlink($temp);
+            return dirname($temp);
+        }
+        // couldn't find a temp directory.
+        return null;
+    }
+}
 
 ?>

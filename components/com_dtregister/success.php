@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -12,7 +12,7 @@
 // http://dthdevelopment.com/joomla15/components/com_dtregister/success.php?return=35&Itemid=0
 ob_start();
 define( '_JEXEC', 1 );
-global $oldpath ;
+global $oldpath;
 $oldpath = getcwd();
 chdir('../../');
 define('JPATH_BASE', getcwd() );
@@ -44,7 +44,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
    
       $debug .= sprintf("PHP %s:  %s in %s on line %d", $errors, $errstr, $errfile, $errline);
 		//$debug = ob_get_clean();
-	  $path = JPATH_BASE."/components/com_dtregister/lib/payment/ipnlog.html" ;
+	  $path = JPATH_BASE."/components/com_dtregister/lib/payment/ipnlog.html";
 	  //if($log)
 	  //file_put_contents($path,$debug,FILE_APPEND);
      
@@ -62,6 +62,9 @@ JPluginHelper::importPlugin('system');
 $lang =& JFactory::getLanguage();
 $lang->load('com_dtregister');
 JRequest::setVar('controller','payment');
+//echo "<pre>";
+//print_r($_REQUEST);
+//die;
 if(!isset($_REQUEST['task'])){
    $_REQUEST['task'] = 'restore';
 }

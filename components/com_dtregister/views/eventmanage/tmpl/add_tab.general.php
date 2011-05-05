@@ -27,13 +27,13 @@ $jusertable = $this->getModel('user')->table->TableJUser;
 
 <table cellpadding="4" cellspacing="1" border="1" width="100%" class="adminform">
 
-    <tr><td><?php echo JText::_( 'DT_EVENT_OWNER' ); ?>:</td>
+    <!--<tr><td><?php echo JText::_( 'DT_EVENT_OWNER' ); ?>:</td>
 	
 	    <td><?php  echo JHTML::_('select.genericlist', DtHtml::options($jusertable->optionslist(),JText::_("DT_SELECT_USER")),'data[event][user_id]',' ','value','text',$row->user_id)?></td>
 	
 	    <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_OWNER_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 	
-	</tr>  
+	</tr> -->
     <?php 
 	  if($row->slabId == ""){
 		  echo $this->loadTemplate('event_type');
@@ -176,14 +176,14 @@ $jusertable = $this->getModel('user')->table->TableJUser;
       	<td align="right"><?php echo JText::_( 'DT_EVENT_START' ); ?>:</td>
 
       	<td>
-        <input type="text" class="error" id="dtstart" name="data[event][dtstart]" value="<?php echo $row->dtstart; ?>">
+        <input type="text" class="error" id="dtstart" name="data[event][dtstart]" value="<?php echo $row->dtstart; ?>" readonly="readonly">
          <?php //echo   JHTML::_("calendar",$row->dtstart,"data[event][dtstart]","dtstart",'%Y-%m-%d','class="checkdate"');?>
 
            <input type="button" class="button jeventdisable" value="..."
 
 onclick="return DTshowCalendar('dtstart','%Y-%m-%d');" />
 
-			<input type="text" class="timeEntry checkdate " id="dtstarttime" name="data[event][dtstarttime]" value="<?php echo $row->dtstarttime; ?>" />&nbsp;
+			<input type="text" readonly="readonly" class="timeEntry checkdate " id="dtstarttime" name="data[event][dtstarttime]" value="<?php echo $row->dtstarttime; ?>" />&nbsp;
            <label for="dtstart" generated="true" class="error" style="display:none"></label>
            
       	</td>
@@ -201,14 +201,14 @@ onclick="return DTshowCalendar('dtstart','%Y-%m-%d');" />
       	<td align="right"><?php echo JText::_( 'DT_EVENT_END' ); ?>:</td>
 
       	<td>
-            <input type="text" class="" id="dtend" name="data[event][dtend]" value="<?php echo $row->dtend; ?>">
+            <input type="text" class="" id="dtend" name="data[event][dtend]" readonly="readonly" value="<?php echo $row->dtend; ?>">
             <?php //echo  JHTML::_("calendar",$row->dtend,"data[event][dtend]","dtend",'%Y-%m-%d','class="checkdate"');?>
 
              <input type="button" class="button jeventdisable" value="..."
 
 onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
-            <input type="text" class="timeEntry checkdate" id="dtendtime" name="data[event][dtendtime]" value="<?php echo $row->dtendtime; ?>" />
+            <input type="text" class="timeEntry checkdate" id="dtendtime" readonly="readonly" name="data[event][dtendtime]" value="<?php echo $row->dtendtime; ?>" />
 
       	</td>
 

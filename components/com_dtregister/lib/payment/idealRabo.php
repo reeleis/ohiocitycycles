@@ -317,10 +317,14 @@ global $idealLiteHashKey, $idealLiteMerchantId;
 		     global $currency_code , $Itemid;
 
 			 $this->sCurrency = $currency_code ;
+			 $this->setOrderId($this->confirmNum);
+			 
+			 $session_id = $this->saveSession();
+			 DT_Session::set('register.payment.transactionId', $this->sOrderId);
                $mosConfig_live_site = JURI::root( false );
-			 $urlSuccess = "{$mosConfig_live_site}index.php?option=com_dtregister&task=success&controller=payment&Itemid=$Itemid";
+			 $urlSuccess = "{$mosConfig_live_site}components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=restore";
 
-		$urlCancel = "{$mosConfig_live_site}index.php?option=com_dtregister&task=cancel&controller=payment&Itemid=$Itemid" ;
+		$urlCancel = "{$mosConfig_live_site}components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=cancel" ;
 
 		$urlError = "{$mosConfig_live_site}index.php?option=com_dtregister&task=error&controller=payment&Itemid=$Itemid" ;
 
@@ -332,7 +336,7 @@ global $idealLiteHashKey, $idealLiteMerchantId;
 
 			 $this->setAmount($this->cart->getAmount());
 
-	         $this->setOrderId($this->confirmNum);
+	         
 
 	         $this->setOrderDescription($this->description);
 
@@ -371,7 +375,7 @@ global $idealLiteHashKey, $idealLiteMerchantId;
 			$sHash = sha1($sHashString);
 
 			// Generate HTML form
-
+            
 			$html = "<center><h3>".JText::_( 'DT_IDEAL_REDIRECT_MSG')."</h3></center>\n";
 
 			$html .= '<form action="' . $this->escapeHtml($this->sUrlAquirer) . '" id="ideal_form" method="post" name="ideal_form">'

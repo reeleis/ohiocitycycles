@@ -125,20 +125,11 @@ class DtregisterControllerUser extends DtrController {
 
 	$limitstart = intval( $mainframe->getUserStateFromRequest( "viewuser{$option}limitstart", 'limitstart', 0 ) );
 
-	$search=JRequest::getVar('search',array(),null,'array');
-
-	$filter_order  = Jrequest::getVar('filter_order','date');
-    	
-    $filter_order_Dir  = Jrequest::getVar('filter_order_Dir','desc');
-
-    if($filter_order == ""){
-		$filter_order = 'date';
-	}
+	$search  =  $mainframe->getUserStateFromRequest( 'dtreg_user_search.search', 'search', array(),'array'  );
+	$filter_order = $mainframe->getUserStateFromRequest( 'dtreg_user_order.filter_order', 'filter_order', 'date'  );
 	
-	if($filter_order_Dir == ""){
-		$filter_order_Dir = 'desc';
-	}
-
+	$filter_order_Dir = $mainframe->getUserStateFromRequest( 'dtreg_user_dir.filter_order_Dir', 'filter_order_Dir', 'desc'  );
+	
 	$where = array();
 
 	$mUser = $this->getModel('user');
@@ -237,6 +228,8 @@ class DtregisterControllerUser extends DtrController {
 
 	$query .= " $where ";
 
+	
+	
 	$query .= $mUser->orderBy($filter_order,$filter_order_Dir);
 
 // pr($query);

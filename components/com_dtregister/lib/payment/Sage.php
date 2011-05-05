@@ -99,7 +99,7 @@ class Sage extends Payment{
 
    function setFields(){
 
-	   $exp_date=$this->x_exp_date;
+	 $this->x_exp_date =str_replace("/","",$this->x_exp_date);
 
 	   $this->fields = array(
 
@@ -109,9 +109,9 @@ class Sage extends Payment{
 
 	"M_key"				=> $this->M_key,
 
-    "T_code"=> '06',
+    "T_code"=> '01',
 
-    'C_name' => trim($this->firstname.' '.$this->lastname) ,
+    'C_name' => trim($this->firstname.' '.$this->lastname),
 
 	"C_cardnumber"			=> $this->x_card_num,
 
@@ -122,6 +122,8 @@ class Sage extends Payment{
     "x_card_code"           => $this->x_card_code,
 
 	"T_amt"				=>  $this->cart->getAmount(),
+	
+	//"T_amt"				=>  1,
 
 //	"CompanyName"      		=>$this->organization,
 
@@ -181,7 +183,7 @@ class Sage extends Payment{
 			 return true;
 
 		 }else{
-
+              echo $this->responseParts['message'] ;
 			  return false;
 
 		}
@@ -209,8 +211,13 @@ class Sage extends Payment{
       $data['risk'] = substr($resp, 44, 2);
 
       $data['reference'] = substr($resp, 46, 10);
+	
+	  $start  =  strpos($resp, chr(28)) + 1 ;
+	  $end = strrpos($resp, chr(28)) ;
+	  $length = $end - $start ;
+	
 
-      $data['TransactionID'] = substr($resp, strpos($resp, chr(28)) + 1,strrpos($resp, chr(28) - 1));
+      $data['TransactionID'] = substr($resp, $start,$length);
 
        $this->responseParts = $data;
 

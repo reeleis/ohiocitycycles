@@ -15,6 +15,9 @@ if($show_group_members == 1){
    if(count($tuser->members)){
 	   
 	   foreach($tuser->members as $member){
+		   
+		   $username = '';
+		   $username = $tuser->TableJUser->username;
 		  
 		  $html .= "<tr class='child detail' id='".$user->userId."'>";
 
@@ -82,7 +85,6 @@ if($show_group_members == 1){
 			  
 			    
 		  }
-		 
 		   
 	   }
 	   

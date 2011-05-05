@@ -141,7 +141,7 @@ $custom_field_types =  $this->getModel('fieldtype')->getTypes();
 
 				<td align="center">
 
-				<?php echo $row->label?>
+				<?php echo stripslashes($row->label); ?>
 
 				</td>
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $xhtml;
+global $Itemid,$xhtml;
 
 $mfield = $this->getModel('field');
 
@@ -23,6 +23,12 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 ?>
 
 <form action="index.php" name="frmcart" method="post">
+
+<div style="padding: 0px 0px 10px 0px">
+	
+	<?php echo JText::_('DT_EDIT_GROUP_MEMBER_INSTRUCTIONS'); ?>
+	
+</div>
 
 <div>
 
@@ -80,7 +86,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
     <td>		<?php
 
-				 echo  JHtml::link("index.php?option=com_dtregister&task=edit&controller=member&key=".$key."&Itemid=".$Itemid,'<img border="0"  src="'.JURI::root(true).'/images/M_images/edit.png" alt="'.JText::_( 'DT_EDIT').'" />');
+				 echo JHtml::link("index.php?option=com_dtregister&task=edit&controller=member&key=".$key."&Itemid=".$Itemid,'<img border="0" src="'.JURI::root(true).'/images/M_images/edit.png" alt="'.JText::_( 'DT_EDIT').'" />');
 
 				  ?>
 

@@ -1,8 +1,18 @@
 <?php
-global $Itemid , $xhtml ;
+
+/**
+* @version 2.7.4
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $Itemid,$xhtml;
 
 $mfield = $this->getModel('field');
-$tfield = $mfield->table ;
+$tfield = $mfield->table;
 
 $fields = $tfield->memberlistfields();
 $fieldtype = $this->getModel('fieldtype');
@@ -32,13 +42,13 @@ $fieldtypes = $fieldtype->getTypes();
     </tr>
 <?php
   $k=0;
-  $i=0 ;
+  $i=0;
  foreach($this->members as $member){
 ?>
 <tr class="<?php echo "row$k"; ?>">
    
     <td>		<?php
-                  echo $checked  = JHTML::_('grid.id', $i,$member->groupMemberId);	 ?>
+                  echo $checked = JHTML::_('grid.id', $i,$member->groupMemberId); ?>
 
 	</td>
     
@@ -72,7 +82,7 @@ $fieldtypes = $fieldtype->getTypes();
 </tr>
 <?php	 
  $k = 1 - $k;
- $i++ ;
+ $i++;
   }    
 ?>
 </table>

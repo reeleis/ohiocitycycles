@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -25,7 +25,7 @@ if(isset($_POST['name'])){
 
 	  $row->bind( $_POST );
 
-	  $row->name =  "";
+	  $row->name = "";
 
 }
 
@@ -294,7 +294,7 @@ if($row->type<3){
 
                 <?php
 
-				echo  $this->loadTemplate('parentlist');
+				echo $this->loadTemplate('parentlist');
 
 				?>
 
@@ -556,57 +556,33 @@ if($row->type<3){
 
            <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
 
-
-
 				<td valign="top"><?php echo JText::_( 'DT_HIDDEN' );?>:</td>
 
-
-
 				<td valign="top">
-
-
 
 				<?php echo JHTMLSelect::booleanlist('hidden',$atttribute,$row->hidden);
 
 				 ?>
 
-
-
 				</td>
 
-
-
 				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_FIELD_HIDDEN' )), '', 'tooltip.png', '', '');?></td>
-
-
 
 			</tr>
            
            <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
 
-
-
 				<td valign="top"><?php echo JText::_( 'DT_INCLUDE_IN_ALL_TAG' );?>:</td>
 
-
-
 				<td valign="top">
-
-
 
 				<?php echo JHTMLSelect::booleanlist('all_tag_enable',$atttribute,$row->all_tag_enable);
 
 				 ?>
 
-
-
 				</td>
 
-
-
 				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_INCLUDE_IN_ALL_TAG' )), '', 'tooltip.png', '', '');?></td>
-
-
 
 			</tr> 
             
@@ -735,7 +711,7 @@ if($row->type<3){
                              if(in_array($row->name,$row->defaultListing)){
 							    
 								$listattr = " class = 'listing' ";
-								
+								$listattr = "";
 							 }else{
 								 
 								 $listattr = "";
@@ -758,31 +734,17 @@ if($row->type<3){
 
 			</tr>
 
-
-
       <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
-
-
 
 				<td valign="top"><?php echo JText::_( 'DT_ALL_EVENT' );?>:</td>
 
-
-
 				<td valign="top">
-
-
 
 				<?php echo JHTMLSelect::booleanlist('allevent',$atttribute,$row->allevent); ?>
 
-
-
 				</td>
 
-
-
 				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_FIELD_ALL_EVENT' )), '', 'tooltip.png', '', '');?></td>
-
-
 
 			</tr>
 
@@ -1041,35 +1003,21 @@ if($row->type<3){
 
 				{
 
-
-
 					form.fees.disabled=false;
 
 					form.textareafee.disabled=false;
 
-
-
 				}
-
-
 
 				else
 
-
-
 				{
-
-
 
 					form.fees.disabled=true;
 
 					form.textareafee.disabled=true;
 
-
-
 				}
-
-
 
 			}
 
@@ -1077,7 +1025,7 @@ if($row->type<3){
 			   
 			   if(is_array($row->selection_values) && count($row->selection_values)){
 				   ?>
-				    var selection_values = <?php echo json_encode($row->selection_values);?> ;
+				    var selection_values = <?php echo json_encode($row->selection_values);?>;
 				   <?php
 			    }elseif($row->selection_values!= "" && !is_array($row->selection_values)){
 					 ?>
@@ -1085,7 +1033,7 @@ if($row->type<3){
 				   <?php
 				}else{
 					?>
-					var selection_values = [] ;
+					var selection_values = [];
 					<?php
 				   	
 				}
@@ -1127,4 +1075,3 @@ if($row->type<3){
 			})
 
 		</script>
-

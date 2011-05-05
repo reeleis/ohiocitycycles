@@ -31,7 +31,10 @@ class DtregisterControllerField extends DtrController {
 	    
 	  global $mainframe; 
       $field = $this->getModel('field')->table;
-     
+     $document =& JFactory::getDocument();
+	 if(isset($document->_script["text/javascript"])){
+	  unset($document->_script["text/javascript"]);
+	 }
 	  $field->load(JRequest::getVar('field_id',0));
 	  
 	  $childs = $field->getchild($published=1);
@@ -136,8 +139,12 @@ class DtregisterControllerField extends DtrController {
       var ordering = <?php echo json_encode($ordering); ?>;
      <?php 
 	 echo $childjs;
+	 echo  chr(13);
+	 if(isset($document->_script["text/javascript"])){
+	 echo $document->_script['text/javascript'];
+	 }
 	$data = ob_get_clean();
-	 
+	  
 	 echo str_replace("\n",' ',$data)."/*DTendScript*/";
 	 die;
 	   

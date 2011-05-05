@@ -25,7 +25,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 <div>
 <?php 
  if(isset($this->pageTile)){
- 	echo $this->pageTile;
+ 	echo $this->pageTile ;
  }
 ?>
 </div>
@@ -78,13 +78,14 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 	    
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   var options = {
-		               url : "<?php echo JRoute::_("index.php?no_html=1&dttmpl=price_header&controller=event",$xhtml_url);?>",
+		               url : "<?php echo JRoute::_("index.php?test=1&no_html=1&dttmpl=price_header&controller=event",$xhtml_url);?>",
+					   data : {task:'price_header'},
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
-									 DTjQuery(document.frmcart.task).val('confirm');
+									
 					              }
 		   }
-	   DTjQuery(document.frmcart.task).val('price_header');
+	  // DTjQuery(document.frmcart.task).val('price_header');
 	   DTjQuery(document.frmcart).ajaxSubmit(options);
 	  	     
   }

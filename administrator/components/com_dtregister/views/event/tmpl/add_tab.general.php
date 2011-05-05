@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -176,14 +176,14 @@ $jusertable = $this->getModel('user')->table->TableJUser;
       	<td align="left"><?php echo JText::_( 'DT_EVENT_START' ); ?>:</td>
 
       	<td>
-        <input type="text" class="error" id="dtstart" name="data[event][dtstart]" value="<?php echo $row->dtstart; ?>">
+        <input type="text" class="error" id="dtstart" name="data[event][dtstart]" value="<?php echo $row->dtstart; ?>" readonly="readonly">
          <?php //echo   JHTML::_("calendar",$row->dtstart,"data[event][dtstart]","dtstart",'%Y-%m-%d','class="checkdate"');?>
 
            <input type="button" class="button jeventdisable" value="..."
 
 onclick="return DTshowCalendar('dtstart','%Y-%m-%d');" />
 
-			<input type="text" class="timeEntry checkdate " id="dtstarttime" name="data[event][dtstarttime]" value="<?php echo $row->dtstarttime; ?>" />&nbsp;
+			<input type="text" class="timeEntry checkdate " id="dtstarttime" name="data[event][dtstarttime]" value="<?php echo $row->dtstarttime; ?>" readonly="readonly" />&nbsp;
            <label for="dtstart" generated="true" class="error" style="display:none"></label>
            
       	</td>
@@ -201,14 +201,14 @@ onclick="return DTshowCalendar('dtstart','%Y-%m-%d');" />
       	<td align="left"><?php echo JText::_( 'DT_EVENT_END' ); ?>:</td>
 
       	<td>
-            <input type="text" class="" id="dtend" name="data[event][dtend]" value="<?php echo $row->dtend; ?>">
+            <input type="text" class="" id="dtend" name="data[event][dtend]" value="<?php echo $row->dtend; ?>" readonly="readonly">
             <?php //echo  JHTML::_("calendar",$row->dtend,"data[event][dtend]","dtend",'%Y-%m-%d','class="checkdate"');?>
 
              <input type="button" class="button jeventdisable" value="..."
 
 onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
-            <input type="text" class="timeEntry checkdate" id="dtendtime" name="data[event][dtendtime]" value="<?php echo $row->dtendtime; ?>" />
+            <input type="text" readonly="readonly" class="timeEntry checkdate" id="dtendtime" name="data[event][dtendtime]" value="<?php echo $row->dtendtime; ?>" />
 
       	</td>
 
@@ -263,6 +263,8 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
              $options[]=JHTML::_('select.option',"group",JText::_('DT_GROUP'));
 
              $options[]=JHTML::_('select.option',"both",JText::_('DT_BOTH'));
+			 
+			 // $options[]=JHTML::_('select.option',"no",JText::_('DT_NO_REGISTRATION'));
 
 			echo JHTML::_('select.genericlist', $options,'data[event][registration_type]','','value','text',$row->registration_type); 
 
@@ -366,51 +368,27 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
         	<?php
 
-
-
 				if(defined('_JEXEC'))
 
-
-
         		{
-
-
 
         			echo JHTML::_("calendar",$row->startdate,"data[event][startdate]","startdate");
 
-
-
         		}
-
-
 
         		else
 
-
-
         		{
-
-
 
         		?>
 
-
-
         			<input class="inputbox" type="text" name="data[event][startdate]" id="startdate" size="12" maxlength="10" value="<?php echo $row->startdate; ?>" />
-
-
 
             	<input type="reset" class="button" value="..." onclick="return showCalendar('startdate', 'y-mm-dd');" />
 
-
-
         		<?php
 
-
-
         		}
-
-
 
         	?>
 
@@ -418,75 +396,39 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
 		    </td>
 
-
-
         <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_REGISTRATION_OPEN_DATE_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
-
-
-      </tr>
-
-      
+      </tr>  
 
       <tr>
 
-
-
         <td align="left"><?php echo JText::_( 'DT_CUT_OFF_DATE' ); ?>:</td>
-
-
 
         <td>
 
-
-
         	<?php
-
-
 
            	if(defined('_JEXEC'))
 
-
-
         		{
-
-
 
         			echo JHTML::_("calendar",$row->cut_off_date,"data[event][cut_off_date]","cut_off_date");
 
-
-
         		}
-
-
 
         		else
 
-
-
         		{
-
-
 
         		?>
 
-
-
-        			<input class="inputbox" type="text" name="data[event][cut_off_date]" id="cut_off_date" size="12" maxlength="10" value="<?php echo $row->cut_off_date; ?>" />
-
-
+        	    <input class="inputbox" type="text" name="data[event][cut_off_date]" id="cut_off_date" size="12" maxlength="10" value="<?php echo $row->cut_off_date; ?>" />
 
             	<input type="reset" class="button" value="..." onclick="return showCalendar('cut_off_date', 'y-mm-dd');" />
 
-
-
         		<?php
 
-
-
         		}
-
-
 
         	?>
 
@@ -494,67 +436,35 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
 		    </td>
 
-
-
         <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_CUT_OFF_DATE_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
-
-
       </tr>
-
-      
 
       <tr>
 
-
-
       <td align="left"><?php echo JText::_( 'DT_WAITING_LIST' ); ?>:</td>
-
-
 
       <td align="left" valign="top">
 
-
-
 	    <?php
-
-
 
 	    $options=array();
 
-
-
 	    $options[]=JHTML::_('select.option',"0",JText::_( 'DT_DISABLE' ));
-
-
 
 	   // $options[]=JHTML::_('select.option',"1",JText::_( 'DT_ENABLE_AUTO' ));
 
-		
-
 		$options[]=JHTML::_('select.option',"2",JText::_( 'DT_ENABLE_MANUAL' ));
-
-        
 
 	    echo JHTML::_('select.genericlist', $options,"data[event][waiting_list]","","value","text",$row->waiting_list);
 
-
-
 	    ?>
-
-
 
 	    </td>
 
-
-
       <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_WAITING_LIST_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
-
-
       </tr>
-
-       
 
     <tr>
 
@@ -576,9 +486,9 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
         <td>
 
- 			  <?php 
+ 			 <?php 
 
-			   $options=DtHtml::options($row->optionslist(),JText::_('DT_SELECT_EVENT'));
+			  $options=DtHtml::options($row->optionslist(),JText::_('DT_SELECT_EVENT'));
 
               echo JHTML::_( 'select.genericlist', $options, 'data[prerequisite][]', 'multiple="multiple" size="5"',"value","text",$row->prerequisite);
 
@@ -586,103 +496,53 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
         ?></td>
 
-
-
         <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_PREREQUISITE_HELP' )), '', 'tooltip.png', '', ''); ?></td>
-
-
 
       </tr>
 
-      
-
       <tr>
-
-
 
         <td align="left"><?php echo JText::_( 'DT_ARTICLE' ); ?>:</td>
 
-
-
         <td>
 
-
-
 			<?php
-
-
-
-              
 
                 $options=DtHtml::options($section->optionslist(),JText::_('DT_SELECT_SECTION'));
 
 				$section_html =  JHTML::_('select.genericlist', $options,"articlesection","","value","text");
 
-
-
 				$options=array();
-
-
 
 				$options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_CATEGORY' ));
 
-
-
 				$category_html =  JHTML::_('select.genericlist', $options,"articlecategory","","value","text");
-
-
 
 				$options=array();
 
-
-
 				$options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_ARTICLE' ));
-
-
 
 				$article_html =  JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text",$row->article_id);
 
-
-
 			?>
 
-
-
-			  <span id="section_id" ><?php echo $section_html; ?></span>
-
-
+	    <span id="section_id" ><?php echo $section_html; ?></span>
 
         <span id="category_id" ><?php echo $category_html; ?></span>
 
-
-
         <span id="article_id" ><?php echo $article_html; ?></span>
 
-
-
- 		    </td>
-
-
+ 		</td>
 
         <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_ARTICLE_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
-
-
       </tr>
 
-
-
-	    <tr>
-
-         
-
+	   <tr>
+ 
        <tr>
 
-
-
       	<td align="left"><?php echo JText::_( 'DT_DETAILS_ITEMID' ); ?>:</td>
-
-
 
       	<td> 
 
@@ -690,223 +550,114 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
       	</td>
 
-
-
       	<td colspan="2" align="left">
-
-
 
       		&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_DETAILS_ITEMID_HELP' )), '', 'tooltip.png', '', ''); ?>
 
-
-
       	</td>
 
-
-
       </tr>
-
-      
 
       	<td align="left"><?php echo JText::_( 'DT_EVENT_DETAIL_LINK_DISPLAY' ); ?>:</td>
 
-
-
       	<td>
-
-
 
 			<?php
 
-
-
 				 		$options=array();
-
-
 
 						$options[]=JHTML::_('select.option',"0",JText::_( 'NO' ));
 
-
-
 						$options[]=JHTML::_('select.option',"1",JText::_( 'YES' ));
-
-
-
-            
+       
 
             echo JHTML::_('select.radiolist', $options, 'data[event][detail_link_show]','','value','text',$row->detail_link_show);
 
-
-
 			?>
-
-
 
       	</td>
 
-
-
       	<td colspan="2" align="left">
-
-
 
       		&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_DETAIL_LINK_DISPLAY_HELP' )), '', 'tooltip.png', '', ''); ?>
 
-
-
       	</td>
 
-
-
       </tr>
-
-
 
 	  <tr>
 
-
-
       	<td align="left"><?php echo JText::_( 'DT_EVENT_SHOW_REGISTRANT' ); ?>:</td>
-
-
 
       	<td>
 
-
-
 			<?php
 
+				 	$options=array();
 
+					$options[]=JHTML::_('select.option',"0",JText::_( 'NO' ));
 
-				 		$options=array();
-
-
-
-						$options[]=JHTML::_('select.option',"0",JText::_( 'NO' ));
-
-
-
-						$options[]=JHTML::_('select.option',"1",JText::_( 'YES' ));
-
-
-
-
+					$options[]=JHTML::_('select.option',"1",JText::_( 'YES' ));
 
             echo JHTML::_('select.radiolist', $options, 'data[event][show_registrant]','','value','text',$row->show_registrant );
 
-
-
 			?>
 
-
-
       	</td>
-
-
 
       	<td colspan="2" align="left">
 
-
-
       		&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_SHOW_REGISTRANT_HELP' )), '', 'tooltip.png', '', ''); ?>
-
-
 
       	</td>
 
-
-
       </tr>
-
-
 
       <tr>
 
-
-
 				<td align="left" valign="top"><?php echo JText::_( 'DT_DUPLICATION_OVERRIDE' );?>:</td>
-
-
 
         <td>
 
-
-
                    <?php
 
+						    $options=array();
 
+							$options[]=JHTML::_('select.option', '1', JText::_( 'No' ));
 
-								   $options=array();
+							$options[]=JHTML::_('select.option', '0', JText::_( 'Yes' ));
 
+                  			echo JHTML::_('select.radiolist', $options,'data[event][prevent_duplication]','','value','text',isset($row->prevent_duplication)?$row->prevent_duplication:1);
 
+					?>
 
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'No' ));
+		</td>
 
+		<td>&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_DUPLICATION_OVERRIDE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
+	  </tr>
+                             
+       <tr>
 
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'Yes' ));
-
-                  								   echo JHTML::_('select.radiolist', $options,'data[config][prevent_duplication]','','value','text',isset($row->config['prevent_duplication'])?$row->config['prevent_duplication']:1);
-
-
-
-								   ?>
-
-
-
-					</td>
-
-
-
-					<td>&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_DUPLICATION_OVERRIDE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
-
-				</tr>
-
-                               
-
-        <tr>
-
-
-
-					<td align="left" valign="top"><?php echo JText::_( 'DT_OVERRIDE_OVERLAP' );?>:</td>
-
-
+		<td align="left" valign="top"><?php echo JText::_( 'DT_OVERRIDE_OVERLAP' );?>:</td>
 
           <td>
 
-
-
                    <?php
 
+							$options=array();
 
+							$options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
 
-								   $options=array();
+							$options[]=JHTML::_('select.option', '1', JText::_( 'Yes' ));
 
-
-
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
-
-
-
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'Yes' ));
-
-                  			   echo JHTML::_('select.radiolist', $options,'data[config][usetimecheck]','','value','text',isset($row->config['usetimecheck'])?$row->config['usetimecheck']:0);
-
-
+                  			echo JHTML::_('select.radiolist', $options,'data[event][usetimecheck]','','value','text',isset($row->usetimecheck)?$row->usetimecheck:0);
 
 								   ?>
 
-
-
 					</td>
 
-
-
 					<td>&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_OVERRIDE_OVERLAP_HELP' )), '', 'tooltip.png', '', ''); ?></td>
-
-
 
 	</tr>
 
@@ -918,29 +669,17 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
                    <?php
 
-								   $options=array();
+							$options=array();
 
+							$options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
 
+							$options[]=JHTML::_('select.option', '1', JText::_( 'Yes' ));
 
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
-
-
-
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'Yes' ));
-
-                   
-
-								   echo JHTML::_('select.radiolist', $options,'data[config][excludeoverlap]','','value','text',isset($row->config['excludeoverlap'])?$row->config['excludeoverlap']:0);
-
-
+							echo JHTML::_('select.radiolist', $options,'data[event][excludeoverlap]','','value','text',isset($row->excludeoverlap)?$row->excludeoverlap:0);
 
 								   ?>
 
-
-
 					</td>
-
-
 
 					<td>&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EXCLUDE_OVERLAP_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
@@ -962,18 +701,18 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
         <td>
 
-                                       <?php
+                        <?php
 
-								   $options=array();
+							$options=array();
 
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
+							$options[]=JHTML::_('select.option', '0', JText::_( 'No' ));
 
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'DT_YES_REQUIRED' ));
-								   $options[]=JHTML::_('select.option', '2', JText::_( 'DT_YES_OPTIONAL' ));
+							$options[]=JHTML::_('select.option', '1', JText::_( 'DT_YES_REQUIRED' ));
+							$options[]=JHTML::_('select.option', '2', JText::_( 'DT_YES_OPTIONAL' ));
 
-								   echo JHTML::_('select.genericlist', $options,'data[event][usercreation]','','value','text',$row->usercreation);
+							echo JHTML::_('select.genericlist', $options,'data[event][usercreation]','','value','text',$row->usercreation);
 
-								   ?>
+						?>
 
 		</td>
 
@@ -985,14 +724,10 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 <?php echo $this->loadTemplate('image'); ;?>
 </table>
 
-
-
 <script type="text/javascript">
  
   DTjQuery(function(){
-	    DTjQuery.validator.messages.required ;
-		
-		
+	    DTjQuery.validator.messages.required;
 		
 	    DTjQuery(document.adminForm).validate({
                         success: function(label) {
@@ -1041,7 +776,7 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 		DTjQuery("#dataeventregistration_type").trigger('change');	
 	});
    
-   var article = <?php echo json_encode($article);?> ;
+   var article = <?php echo json_encode($article);?>;
 
    if(article ==  null){
 	   article = {};
@@ -1049,21 +784,15 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
    DTjQuery('#articlesection').change(function(){
 
-
-
-			DTjQuery('#category_id').load("index.php?option=com_dtregister&controller=event&no_html=1&sectionId="+DTjQuery(this).val()+"&task=getcategory",article,function(){
-
-		   
+	DTjQuery('#category_id').load("index.php?option=com_dtregister&controller=event&no_html=1&sectionId="+DTjQuery(this).val()+"&task=getcategory",article,function(){  
 
 			 article['sectionid'] = DTjQuery(this).val();
-
-			
 
 			DTjQuery('#articlecategory').change(function(){
 
                 article['catid'] = DTjQuery(this).val();
 
-			DTjQuery('#article_id').load("index.php?option=com_dtregister&controller=event&no_html=1&categoryId="+DTjQuery(this).val()+"&task=getarticle",article,function(){
+	DTjQuery('#article_id').load("index.php?option=com_dtregister&controller=event&no_html=1&categoryId="+DTjQuery(this).val()+"&task=getarticle",article,function(){
 
 				});
 
@@ -1077,11 +806,7 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
 	    DTjQuery("#dataeventarticle_id").change(function(){
 
-		     
-
-			 article['id'] = DTjQuery(this).val();
-
-			 	
+			 article['id'] = DTjQuery(this).val();	 	
 
 		});
 
@@ -1092,24 +817,12 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 		?>
 
 		   DTjQuery('#articlesection').val(<?php echo (isset($article->sectionid))?$article->sectionid:''; ?>);
-
-		   
-
-		   DTjQuery('#category_id').load("index.php?option=com_dtregister&controller=event&no_html=1&sectionId="+article['sectionid']+"&task=getcategory",article,function(){
-
-			   
+		   DTjQuery('#category_id').load("index.php?option=com_dtregister&controller=event&no_html=1&sectionId="+article['sectionid']+"&task=getcategory",article,function(){			   
 
 			      DTjQuery('#articlecategory').val(article['catid']);
-
-				  
-
 				  DTjQuery('#article_id').load("index.php?option=com_dtregister&controller=event&no_html=1&categoryId="+article['catid']+"&task=getarticle",article,function(){
 
-				 
-
 				   DTjQuery('#dataeventarticle_id').val(article['id']);
-
-				 
 
 				});			   
 
@@ -1164,10 +877,8 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 			
 			}
 		
-		
 		   return false;
 			
-		
 		}
   
 </script>

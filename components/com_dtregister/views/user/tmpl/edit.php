@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,13 +9,20 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $xhtml, $cb_integrated, $cbviewonly;
+global $Itemid,$xhtml,$cb_integrated,$cbviewonly;
 
 $tUser = $this->mUser->table;
 
 $dfields = $tUser->TableUserfield->Tablefield->getDefaultFieldIds();
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'tmpl'.DS.'event_header.php');
 ?>
+
+<div style="padding: 0px 0px 10px 0px">
+	
+	<?php echo JText::_('DT_EDIT_GROUP_BILLING_INSTRUCTIONS'); ?>
+	
+</div>
+
 <div id="price_header">
 <?php
   //include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'price_header.php');
@@ -51,7 +58,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 	 ?>
 
-   <tr><td colspan="3" align="center"><input type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" onclick="javascript:history.back();" />&nbsp;<input type="submit" name="saveuser" class="button" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
+   <tr><td colspan="3" align="center"><input type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" onclick="javascript:history.back();" />&nbsp;<input type="submit" id="next" name="saveuser" class="button" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
 
    </table>
 
@@ -77,18 +84,59 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 <script type="text/javascript">
 
+  var priceupdate= {};
+  var disabled = [];
+  DTjQuery('#next').click(function(){
+  	  if(DTjQuery(document.frmcart).valid()){
+        var disabled = DTjQuery(':disabled');
+        DTjQuery.each(disabled, function(){
+		     DTjQuery(this).removeAttr('disabled');  
+	   	})
+	  	
+	}
+  })
+  
   var updateFee = function(){
-	    
+	   
+	    DTjQuery.each(disabled, function(){
+										  DTjQuery(this).attr('disabled','disabled');  
+									   });
+	   if(priceupdate.formajax != undefined) {
+		 
+	      priceupdate.formajax.abort();
+	   }
+	   
+	   
 	   var prevtask = DTjQuery(document.frmcart.task).val();
+	   disabled = DTjQuery(':disabled');
+	   
 	   var options = {
 		               url : "<?php echo JRoute::_("index.php?no_html=1");?>",
+					   data : {task:'price_header'},
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
-					              }
-	   }
-	   DTjQuery(document.frmcart.task).val('price_header');
-	   DTjQuery(document.frmcart).ajaxSubmit(options);
-	   DTjQuery(document.frmcart.task).val(prevtask);
+									  DTjQuery.each(disabled, function(){
+										  DTjQuery(this).attr('disabled','disabled');  
+									   })
+									 ///DTjQuery(document.frmcart.task).val(prevtask);
+					              },
+					   beforeSubmit : function(){
+						                  DTjQuery.each(disabled, function(){
+		  										DTjQuery(this).removeAttr('disabled');  
+	   									  })
+										 //  DTjQuery(document.frmcart.task).val('price_header');
+										  return true;
+									  }
+	               }
+	   
+	  
+	  // DTjQuery(document.frmcart.task).val('price_header');
+	   priceupdate =  DTjQuery(document.frmcart).ajaxSubmit(options);
+	   
+	   DTjQuery.each(disabled, function(){
+		  //DTjQuery(this).attr('disabled','disabled');  
+	   })
+	   //DTjQuery(document.frmcart.task).val(prevtask);
 
   }
   

@@ -1,24 +1,23 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.0
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
-
-global $Itemid;
+global $Itemid ;
 $mfield = $this->getModel('field');
 
-$row = $this->getModel('field')->table;
+$row =  $this->getModel('field')->table;
 
 $this->assign('row',$row);
 
 $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-$id = $cid[0];
+$id =   $cid[0] ;
 
 $row->load($id);
 
@@ -26,21 +25,21 @@ if(isset($_POST['name'])){
 
 	  $row->bind( $_POST );
 
-	  $row->name = "";
+	  $row->name =  "" ;
 
 }
 
 if(isset($this->copyfield)){
 
-   unset($row->id);
+   unset($row->id) ;
 
-   $row->id = "";
+   $row->id = "" ;
 
 }
 
-$fieldtype =  $this->getModel('fieldtype');
+$fieldtype =  $this->getModel('fieldtype') ;
 
-$dateformat =  $this->getModel('dateformat');
+$dateformat =  $this->getModel('dateformat') ;
 
 if($row->type<3){
 
@@ -101,25 +100,47 @@ if($row->type<3){
 
 		  	}
 
+
+
 			if (form.type.value == 1 || form.type.value == 3 || form.type.value == 4)
+
+
 
 			{
 
+
+
 			   if(form.usagelimit.value==""){
+
+
 
 				    alert("<?php echo JText::_( 'DT_FIELD_LIMIT_REQUIRED' );?>");
 
+
+
                     return;
 
+
+
 			   }
+
+			   
 
 			   if(form.values.value == ""){
 
+			       
+
 				    alert("<?php echo JText::_( 'DT_FIELD_VALUE_REQUIRED' );?>");
+
+
 
                     return;
 
+				   
+
 			   }
+
+
 
 		  	}
 
@@ -128,8 +149,10 @@ if($row->type<3){
 			submitform( pressbutton );
 			
 		   }else{
-			  return;   
+			  return ;   
 		   }
+
+
 
 		}
 
@@ -239,7 +262,7 @@ if($row->type<3){
 
 			</tr>
 
-            <tr class="typeshow type2 ">
+            <tr class="typeshow  type2 ">
 
 				<td valign="top"><?php echo JText::_( 'DT_SHOW_CHAR_COUNT' );?>:</td>
 
@@ -253,7 +276,7 @@ if($row->type<3){
 
 			</tr>
 
-            <tr class="typeshow type5 ">  
+            <tr class="typeshow  type5 ">  
 
                 <td align="left" valign="top"><?php echo JText::_( 'DT_DATE_FORMAT' ) ?>:</td>
 
@@ -295,7 +318,7 @@ if($row->type<3){
 
                 <?php
 
-				echo $this->loadTemplate('parentlist');
+				echo  $this->loadTemplate('parentlist');
 
 				?>
 
@@ -331,7 +354,7 @@ if($row->type<3){
 
 			</tr>
 
-			<tr class="typeshow type1 type3 type4" >
+			<tr class="typeshow  type1 type3 type4" >
 
 				<td><?php echo JText::_( 'DT_VALUES' );?>:</td>
 
@@ -347,7 +370,7 @@ if($row->type<3){
 
 			</tr>
 
-            <tr class="typeshow type1 type3 type4" >
+            <tr class="typeshow  type1 type3 type4" >
 
 				<td><?php echo JText::_( 'DT_SELECTION_LIMIT' );?>:</td>
 
@@ -395,27 +418,51 @@ if($row->type<3){
 
 			</tr>
 
-			<tr class="typeshow type1 type3 type4">
+
+
+			<tr class="typeshow  type1 type3 type4">
+
+
 
 				<td><?php echo JText::_( 'DT_FEES' );?>:</td>
 
+
+
 				<td align="center">
+
+
 
 					<input class="text_area" type="text" name="fees" size="70" maxlength="" value="<?php echo implode("|",$row->fees) ;?>" <?php if((!$row->type) || ($row->type==2)) echo  "disabled"; ?> />
 
+
+
           <br />(<?php echo JText::_( 'DT_VALUE_DELIMITED' );?>)
+
+
 
 				</td>
 
+
+
 				<td valign="top" align="left"><?php  echo JHTML::tooltip((JText::_( 'DT_HELP_FIELD_FEES' )), '', 'tooltip.png', '', '');?></td>
+
+
 
 			</tr>
 
-      <tr class="typeshow type1 type3 type4">
+
+
+      <tr class="typeshow  type1 type3 type4">
+
+
 
 				<td><?php echo JText::_( 'DT_FEE_TYPE' );?>:</td>
 
+
+
 				<td align="center">
+
+
 
           <?php
 
@@ -483,7 +530,7 @@ if($row->type<3){
 
 			</tr>
 
-			<tr class="typeshow type2">
+			<tr class="typeshow  type2">
 
 
 
@@ -511,7 +558,7 @@ if($row->type<3){
 
 
 
-			<tr class="typeshow type2">
+			<tr class="typeshow  type2">
 
 
 
@@ -528,6 +575,8 @@ if($row->type<3){
 
 
 				</td>
+
+
 
 				<td valign="top" align="left"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_FIELD_COLS' )), '', 'tooltip.png', '', '');?></td>
 
@@ -591,7 +640,7 @@ if($row->type<3){
 
 			</tr>
 
-			<tr class="typeshow type6 ">
+			<tr class="typeshow  type6 ">
 
 				<td valign="top"><?php echo JText::_( 'DT_TEXTUALDISPLAY_FIELD' );?>:</td>
 
@@ -627,31 +676,55 @@ if($row->type<3){
             
             <tr class="typeshow type0 type1 type2 type3 type4 type5 type7 type8">
 
+
+
 				<td valign="top"><?php echo JText::_( 'DT_APPLY_FOR_CHANGE' );?>:</td>
+
+
 
 				<td valign="top">
 
+
+
 				<?php echo JHTMLSelect::booleanlist('applychangefee','',$row->applychangefee); ?>
+
+
 
 				</td>
 
+
+
 				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_APPLY_FOR_CHANGE' )), '', 'tooltip.png', '', '');?></td>
+
+
 
 			</tr>
 
       <tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">
 
+
+
 				<td valign="top"><?php echo JText::_( 'DT_HIDDEN' );?>:</td>
 
+
+
 				<td valign="top">
+
+
 
 				<?php echo JHTMLSelect::booleanlist('hidden',$atttribute,$row->hidden);
 
 				 ?>
 
+
+
 				</td>
 
+
+
 				<td valign="top"><?php echo JHTML::tooltip((JText::_( 'DT_HELP_FIELD_HIDDEN' )), '', 'tooltip.png', '', '');?></td>
+
+
 
 			</tr>
 			<tr class="typeshow type0 type1 type2 type3 type4 type5 type6 type7 type8">

@@ -2177,6 +2177,7 @@ Date.prototype.valid = function() {
             //var htr=[];
 
             var tdtemp = "<td class='${cssclass}' axis='${axis}' ch='${ch}' abbr='${abbr}' title='${title}' ${otherAttr}>${html}</td>";
+			
 
             for (var j = 0; j < sc && el < dMax; j++) {
 
@@ -2185,7 +2186,7 @@ Date.prototype.valid = function() {
                 //var gridtr = $(__TRTEMP);
 
                 for (var h = 0; h < l; ) {
-
+                    
                     var e = events[h] ? events[h][x[h]] : undefined;
 
                     var tempdata = { "class": "", axis: "", ch: "", title: "", abbr: "", html: "", otherAttr: "", click: "javascript:void(0);" };
@@ -2212,7 +2213,7 @@ Date.prototype.valid = function() {
 
                             el++;
 
-                            $.extend(tempdata, { "axis": h, ch: "more", "abbr": dateFormat.call(cday[h], i18n.xgcalendar.dateformat.fulldayvalue), html: i18n.xgcalendar.others + (y[h] - z[h]) + i18n.xgcalendar.item, click: "javascript:alert('more event');" });
+                            $.extend(tempdata, { "axis": h, ch: "more", "abbr": dateFormat.call(cday[h], i18n.xgcalendar.dateformat.fulldayvalue), html: i18n.xgcalendar.see +" "+ (y[h] - z[h]) +" "+i18n.xgcalendar.more + i18n.xgcalendar.item, click: "javascript:alert('more event');" });
 
                             tempCss.push("st-more st-moreul");
 
@@ -2260,7 +2261,7 @@ Date.prototype.valid = function() {
 
                         if (j == (sc - 1) && z[h] < y[h] && y[h] > 0) {
 
-                            $.extend(tempdata, { "axis": h, ch: "more", "abbr": dateFormat.call(cday[h], i18n.xgcalendar.dateformat.fulldayvalue), html: i18n.xgcalendar.others + (y[h] - z[h]) + i18n.xgcalendar.item, click: "javascript:alert('more event');" });
+                            $.extend(tempdata, { "axis": h, ch: "more", "abbr": dateFormat.call(cday[h], i18n.xgcalendar.dateformat.fulldayvalue), html: i18n.xgcalendar.see +" "+ (y[h] - z[h]) +" "+ i18n.xgcalendar.more + i18n.xgcalendar.item, click: "javascript:alert('more event');" });
 
                             tempCss.push("st-more st-moreul");
 
@@ -2405,7 +2406,10 @@ Date.prototype.valid = function() {
 
             { content.push(i2); }
             
-			
+			// image appears in event box here
+			if(e.event[13].calendar_show_image_gridview !="0"){
+			   content.push("<br /><div style='text-align:center;width:100%;' >"+e.event[21]+"</div>");
+			}
             p.content = content.join("");
 			
             if(option.wrapTitle){
@@ -2832,8 +2836,8 @@ Date.prototype.valid = function() {
 
             function zc(c, i) {
 
-                var d = "666666888888aaaaaabbbbbbdddddda32929cc3333d96666e69999f0c2c2b1365fdd4477e67399eea2bbf5c7d67a367a994499b373b3cca2cce1c7e15229a36633cc8c66d9b399e6d1c2f029527a336699668cb399b3ccc2d1e12952a33366cc668cd999b3e6c2d1f01b887a22aa9959bfb391d5ccbde6e128754e32926265ad8999c9b1c2dfd00d78131096184cb05288cb8cb8e0ba52880066aa008cbf40b3d580d1e6b388880eaaaa11bfbf4dd5d588e6e6b8ab8b00d6ae00e0c240ebd780f3e7b3be6d00ee8800f2a640f7c480fadcb3b1440edd5511e6804deeaa88f5ccb8865a5aa87070be9494d4b8b8e5d4d47057708c6d8ca992a9c6b6c6ddd3dd4e5d6c6274878997a5b1bac3d0d6db5a69867083a894a2beb8c1d4d4dae54a716c5c8d8785aaa5aec6c3cedddb6e6e41898951a7a77dc4c4a8dcdccb8d6f47b08b59c4a883d8c5ace7dcce";
-
+                var d = "666666888888aaaaaabbbbbbdddddda32929cc3333d96666e69999f0c2c2b1365fdd4477e67399eea2bbf5c7d6766242994499a78e67cca2cce1c7e15229a36633cc8c66d9b399e6d1c2f029527a336699668cb399b3ccc2d1e12952a33366cc668cd999b3e6c2d1f01b887a22aa9959bfb391d5ccbde6e128754e32926265ad8999c9b1c2dfd00d78131096184cb05288cb8cb8e0ba52880066aa008cbf40b3d580d1e6b388880eaaaa11bfbf4dd5d588e6e6b8ab8b00d6ae00e0c240ebd780f3e7b3be6d00ee8800f2a640f7c480fadcb3b1440edd5511e6804deeaa88f5ccb8865a5aa87070be9494d4b8b8e5d4d47057708c6d8ca992a9c6b6c6ddd3dd4e5d6c6274878997a5b1bac3d0d6db5a69867083a894a2beb8c1d4d4dae54a716c5c8d8785aaa5aec6c3cedddb6e6e41898951a7a77dc4c4a8dcdccb8d6f47b08b59c4a883d8c5ace7dcce";
+				
                 return "#" + d.substring(c * 30 + i * 6, c * 30 + (i + 1) * 6);
 
             }
@@ -3445,8 +3449,8 @@ Date.prototype.valid = function() {
             var daystr = this.abbr;
 
             var arrdays = daystr.split('/');
-
-            var day = new Date(arrdays[0], parseInt(arrdays[1] - 1), arrdays[2]);
+                  
+            var day = new Date(parseInt(arrdays[2]), parseInt(arrdays[0] -1), parseInt(arrdays[1]));
 
             var cc = $("#cal-month-cc");
 

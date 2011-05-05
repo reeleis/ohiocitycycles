@@ -155,7 +155,8 @@ var i18n = DTjQuery.extend({}, i18n || {}, {
         "day_plural": "<?php echo JText::_('DT_DAYS')?>",
 
         "others": "<?php echo JText::_('DT_OTHERS')?>",
-
+        "more": "<?php echo JText::_('DT_MORE')?>",
+        "see": "<?php echo JText::_('DT_SEE')?>",
         "item": ""
 
     }

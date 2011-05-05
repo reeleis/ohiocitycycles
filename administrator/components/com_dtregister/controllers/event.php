@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -37,7 +37,7 @@ class DtregisterControllerEvent extends DtrController {
 		 $this->view->setModel($this->getModel( 'user' ),false);
          
 		 $this->view->setModel($this->getModel( 'payoption' ),false);
-		 $this->registerTask( 'new',  'add' );
+		 $this->registerTask( 'new', 'add' );
 
 		 $this->registerDefaultTask("events");
 
@@ -127,97 +127,69 @@ function getarticle(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
 	  $event = $this->getModel('event')->table ;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	        $publish = 1 ;
-
+	      $publish = 1;
 		  
 		  $query = "update #__dtregister_group_event set publish = ".$publish." where parent_id=".$id." or slabId=".$id; 
 		  $event->rawquery($query);    
 
 	  }
 
-	 
-
-	  $this->events();
-
-	   
+	  $this->events();	   
 
    }
-
-   
-
-   
 
    function unpublish(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	     $publish = 0 ;
+	     $publish = 0;
 
-		  
-		  $query = "update #__dtregister_group_event set publish = ".$publish." where parent_id=".$id." or slabId=".$id; 
-		  $event->rawquery($query);    
+		 $query = "update #__dtregister_group_event set publish = ".$publish." where parent_id=".$id." or slabId=".$id; 
+		 $event->rawquery($query);    
 
 	  }
-
-	  
 
 	  $this->events();
 
    }
-
-   
 
     function archive(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	     $archive = 1 ;
+	     $archive = 1;
 
-		  
-		  $query = "update #__dtregister_group_event set archive = ".$archive." where parent_id=".$id." or slabId=".$id; 
-		  $event->rawquery($query);   
+		 $query = "update #__dtregister_group_event set archive = ".$archive." where parent_id=".$id." or slabId=".$id; 
+		 $event->rawquery($query);   
 
 	  }
 	  
-	  
-
-	 
-
 	  $this->events();
-
-	   
 
    }
 
    function remove(){
 
-      global $mainframe ;
+      global $mainframe;
 
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	  $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
-
 	 
 	  if (is_array($cid)) 
 	  foreach($cid as $id){
@@ -228,13 +200,7 @@ function getarticle(){
 
 	  }
 
-	
-
-     
-
 	 $mainframe->redirect( "index2.php?option=".DTR_COM_COMPONENT."&controller=event" );
-
-	  
 
    }
 
@@ -242,37 +208,25 @@ function getarticle(){
 
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	 
-
-	  $event = $this->getModel('event')->table ;
+	  $event = $this->getModel('event')->table;
 
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	     
-		  $archive = 0 ;
-
-		  
+		  $archive = 0;
+ 
 		  $query = "update #__dtregister_group_event set archive = ".$archive." where parent_id=".$id." or slabId=".$id; 
 		  $event->rawquery($query);   
 
 	  }
 
-	  
-
 	  $this->events();
 
    }
 
-   
-
 	function events(){
 
-	 
-
-       $archive = JRequest::getVar('archive',-1) ;
-
-	
+       $archive = JRequest::getVar('archive',-1);
 
 		if($archive==1){
 
@@ -284,71 +238,37 @@ function getarticle(){
 
 		}
 
-   
-
         JToolBarHelper::divider();
-
-
 
         JToolBarHelper::publishList('publish');
 
-
-
     	JToolBarHelper::divider();
-
-
 
 		JToolBarHelper::unpublishList('unpublish');
 
-
-
         JToolBarHelper::divider();
-
-
 
         JToolBarHelper::editList();
 
-
-
 	    JToolBarHelper::divider();
-
-
 
         JToolBarHelper::addNew();
 
-
-
         JToolBarHelper::divider();
-
-
 
 	    JToolBarHelper::editList('copy', JText::_( 'DT_COPY_EVENT') );
 
-
-
 	    JToolBarHelper::divider();
 
-             
-
-
 	    JToolBarHelper::divider();
-
-
 
         JToolBarHelper::deleteList();
-
-
-	   
 
 	    $this->view->setLayout('list');
 
 		$this->view->display();
 
-	  
-
 	}
-
-	
 
 	function edit(){
 
@@ -357,7 +277,7 @@ function getarticle(){
        JToolBarHelper::save();
        JToolBarHelper::divider();
        JToolBarHelper::cancel('cancel');
-       $row =  $this->getModel('event')->table ;
+       $row =  $this->getModel('event')->table;
        $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
        JRequest::setVar('slabId',$cid[0]); 
        $slabId = JRequest::getVar('slabId',0);
@@ -368,9 +288,6 @@ function getarticle(){
        $this->view->display();
        
 	}
-    
-	
-	
 
 	function add(){
         JToolBarHelper::apply('apply');
@@ -378,17 +295,13 @@ function getarticle(){
         JToolBarHelper::save();
 	    JToolBarHelper::divider();
         JToolBarHelper::cancel('cancel');
-        $row =  $this->getModel('event')->table ;
+        $row = $this->getModel('event')->table;
 
-	    $slabId = JRequest::getVar('slabId',0);
-
-	    
+	    $slabId = JRequest::getVar('slabId',0);  
 
 	    $row->load($slabId);
 
 		$row->slabId = "";
-
-	     
 
 	    $this->view->assign('row',$row);
 
@@ -398,31 +311,17 @@ function getarticle(){
 
 	}
 
-	
-
 	function apply(){
 
-	  
+	  global $mainframe;
 
-	  global $mainframe ;
-
-	  
-
-	  $row = $this->getModel('event')->table ;
-
-	  
+	  $row = $this->getModel('event')->table;
 
 	  if($row->save(JRequest::getVar('data'))){
 
-	     
-
 	  }else{
 
-		  
-
 		  $mainframe->redirect("index.php?option=com_dtregister&controller=event&task=edit&cid[]=".$row->slabId,$row->error);
-
-		    
 
 	  }
 
@@ -431,12 +330,12 @@ function getarticle(){
 	}
 
 	function editconfirm(){
-	    global $mainframe ;
-	   	$data =  DT_Session::get('event.data');
+	    global $mainframe;
+	   	$data = DT_Session::get('event.data');
 		$files = DT_Session::get('event.event_files');
 		JRequest::setVar('event_files', $files, 'files');
 		DT_Session::clear('event');
-		$row = $this->getModel('event')->table ;
+		$row = $this->getModel('event')->table;
 		if($row->save($data) !== false){
 			
 		}else{
@@ -453,21 +352,24 @@ function getarticle(){
 
 	function save(){
 
+	  global $mainframe;
+
+	  $row = $this->getModel('event')->table;
+
+	  $data = JRequest::getVar('data');
 	  
-
-	  global $mainframe ;
-
-		 
-
-	  $row = $this->getModel('event')->table ;
-
-	  $data =  JRequest::getVar('data');
-	  
+	  $error = false;
 	  $error = false ;
 	  if($data['event']['slabId']!=""){
 		   $row->load($data['event']['slabId']);
 		  
 		   if(!$row->validDateChange($data)){
+
+			  
+
+		   }
+		   
+		   if(!$row->comparerepeat($data) && $row->repetition !== false){
 
 			   $this->error = JText::_("DT_REPTITIONS_NOT_VALID");
 
@@ -476,6 +378,7 @@ function getarticle(){
 		   }
 		  
 	  }
+	  
 	  
 	  if($error){
 		   DT_Session::set('event.data',$data);
@@ -488,45 +391,34 @@ function getarticle(){
 
 		if($row->save($data) !== false){
 		   
-           global $eventListOrder ;
-		   $conf  = DtrModel::getInstance('config','DtregisterModel');
+           global $eventListOrder;
+		   $conf = DtrModel::getInstance('config','DtregisterModel');
 		   $conf->updateEventorder($eventListOrder);
+		   
   
 		}else{
-  
-			
-  
+
 			$mainframe->redirect("index.php?option=com_dtregister&controller=event&task=edit&cid[]=".$row->slabId,$row->error);
-  
-			  
-  
+
 		}
   
-		$mainframe->redirect("index.php?option=com_dtregister&controller=event");
+		 $mainframe->redirect("index.php?option=com_dtregister&controller=event");
 
 	  }
-
-	   
 
 	}
 
 	function getjevent(){
 
-	   
-
-	   $jevt = $this->getModel('event')->tableJevt ;
+	   $jevt = $this->getModel('event')->tableJevt;
 
 	   $data = $jevt->find(' evdet_id='.JRequest::getVar('eventId',0));
 
 	   $rep = $jevt->parserule(JRequest::getVar('eventId',0));
 
-	  
-
 	 //  prd($jevt->getObjData());
 
 	   ob_clean();
-
-	  	
 
 	//   prd(json_encode($repjson));
 
@@ -540,8 +432,6 @@ function getarticle(){
 
 	   echo json_encode($data);
 
-	   
-
 	   }else{
 
 	      $array = array('error'=>'No event');
@@ -550,27 +440,17 @@ function getarticle(){
 
 	   }
 
-	   
-
-	   die ;
+	   die;
 
 	}
 
 	  function orderup(){
-
-      
-
-	  
 
 	  $this->order(-1);
 
    }
 
      function orderdown(){
-
-      
-
-	  
 
 	  $this->order(1);
 
@@ -580,59 +460,39 @@ function getarticle(){
 
        global $mainframe;
 
-
-
-	   $row = $this->getModel('event')->table ;
+	   $row = $this->getModel('event')->table;
 
        $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	   $uid = $cid[0];
 
-	
-
 	   $row->load( (int)$uid );
-
-
 
 	   $row->reorder(' category = "'.$row->category.'" and parent_id=0');
 
-
-
 	   $row->move( $inc, ' category = "'.$row->category.'" and parent_id=0' );
-
-       
 
 	//$row->updateOrder();
 
-
-
 	  $mainframe->redirect( "index2.php?option=".DTR_COM_COMPONENT."&controller=event" );
-
-
 
    }
 
-   
-
      function saveorder(){
 
-      global $mainframe ;
+      global $mainframe;
 
-	  $row = $this->getModel('event')->table ;
+	  $row = $this->getModel('event')->table;
 
 	  $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
-	  $order	= JRequest::getVar( 'order', array(0), '', 'array' );
+	  $order = JRequest::getVar( 'order', array(0), '', 'array' );
 
-	
-
-	  $total		= count( $cid );
+	  $total = count( $cid );
       // pr($order);
 	  
 	  if (is_array($order)) 
 	  foreach( $order as $slabId => $ordering ) {
-
-
 
 		$row->load( $slabId );
 

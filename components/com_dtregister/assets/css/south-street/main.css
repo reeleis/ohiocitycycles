@@ -1,0 +1,380 @@
+/* DT Register CSS - ver. 2.7.0 */
+
+/* Frontend Event Listing */
+
+.eventListRow1 {
+ background: #EFEFEF;
+}
+
+.eventListRow2 {
+ background: #D4D0C8;
+}
+
+tr.categoryRow td {
+ color: #ffffff;
+ font-weight: bold;
+ padding: 2px 2px 2px 3px;
+ background: #474747;
+}
+
+tr.categoryRow td.subcategory {
+ color: #ffffff;
+ font-weight: bold;
+ text-indent: 0px;
+ padding: 2px 2px 2px 3px;
+ background: #6c6c6c;
+}
+
+th.coltitle {
+ text-decoration: underline;
+ font-weight: bold;
+ padding: 2px;
+}
+
+td.eventlist {
+ text-indent: 2px;
+ color: #000000;
+}
+
+tr.eventListRow1 td,
+tr.eventListRow2 td {
+ padding: 2px;
+}
+
+img.event_button {
+  border: 0px;
+  padding: 2px;
+}
+
+a.detailslink:link,
+a.detailslink:visited {
+  color: blue;
+  font-weight: bold;
+  font-style: italic;
+}
+
+a.detailslink:hover {
+}
+
+
+/* Frontend Registrant List */
+
+th.attendee_coltitle {
+  padding: 2px;
+  font-weight: bold;
+  text-align: left;
+  color: #ffffff;
+  background: #474747;
+}
+
+th.attendee_coltitle a:link,
+th.attendee_coltitle a:visited {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+th.attendee_coltitle a:hover {
+  text-decoration: underline;
+}
+
+/* Form Styling */
+
+.authorizenetformtable {
+ width:100%;
+}
+
+.authorizenetformtable td {
+ font-size:12px;
+ color:#333333;
+}
+
+.message {
+ width:100%;
+ border:0;
+}
+
+.message td {
+ font-size:12px;
+ color:#000000;
+}
+
+.authorizenetformtable th {
+ font-size:14px;
+ color:#000000;
+}
+
+td.fieldlabel {
+ font-size: 12px;
+ padding: 0px; 
+ min-width: 120px;
+}
+
+.dtrequired {
+ color: red;
+ font-size:16px;
+}
+
+#dt_pricebox {
+	border: #000000 solid 0px;
+	padding: 0px;
+	margin: 2px 0px 12px 0px;
+}
+
+#dt_price_breakdown {
+	padding: 6px 20px 0px 0px;
+}
+
+/* Lightbox Styling for Terms & Conditions */
+
+table.lbWindow {
+ width: 500px;
+ text-align: left;
+}
+
+.lbText {
+ color: #000000;
+}
+
+a.lbAction:link,
+a.lbAction:visited {
+ color: #000000;
+}
+
+a.lbAction:hover {
+}
+
+/* Lightbox Styling for Location Display */
+
+table.location_box {
+  padding: 0px 2px 0px 2px;
+  background: #aaa330;
+}
+
+td.location_name {
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 0px 2px 2px;
+}
+
+td.location_image {
+  padding-right: 10px;
+}
+
+td.location_details {
+}
+
+#map_canvas {
+  padding: 4px 6px 2px 6px;
+}
+
+label.error {
+  background:url("../images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+
+label.success {
+  background:url("../images/checked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+
+form#frmcart label.error {
+ margin-left: auto;
+ width: 250px;
+}
+
+/* Frontend Event Management */
+
+.dt_heading,
+table.adminlist .dt_heading {
+  background: #d3e8c1;
+  padding:4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid #037200;
+  border-left: 1px solid #037200;
+  border-top: 1px solid #defedd;
+  border-right: 1px solid #defedd;
+}
+
+table.adminform {
+	background-color: #f9f9f9;
+	border: solid 1px #d5d5d5;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 8px 0 10px 0;
+	margin-bottom: 15px;
+	width: 100%;
+}
+table.adminform.nospace { margin-bottom: 0; }
+table.adminform tr.row0 { background-color: #f9f9f9; }
+table.adminform tr.row1 { background-color: #eeeeee; }
+
+table.adminform th {
+	font-size: 11px;
+	padding: 6px 2px 4px 4px;
+	text-align: left;
+	height: 25px;
+	color: #000;
+	background-repeat: repeat;
+}
+table.adminform td { padding: 3px; text-align: left; }
+
+table.adminform td.filter{
+	text-align: left;
+}
+
+table.adminform td.helpMenu{
+	text-align: right;
+}
+
+fieldset.adminform { border: 1px solid #ccc; margin: 0 10px 10px 10px; }
+
+table.adminlist {
+	width: 100%;
+	border-spacing: 1px;
+	background-color: #e7e7e7;
+	color: #666;
+}
+
+table.adminlist td,
+table.adminlist th { padding: 4px; }
+
+table.adminlist thead th {
+	text-align: center;
+	background: #f0f0f0;
+	color: #666;
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #fff;
+}
+
+table.adminlist thead a:hover { text-decoration: none; }
+
+table.adminlist thead th img { vertical-align: middle; }
+
+table.adminlist tbody th { font-weight: bold; }
+
+table.adminlist tbody tr			{ background-color: #fff;  text-align: left; }
+table.adminlist tbody tr.row1 	{ background: #f9f9f9; border-top: 1px solid #fff; }
+
+table.adminlist tbody tr.row0:hover td,
+table.adminlist tbody tr.row1:hover td  { background-color: #ffd ; }
+
+table.adminlist tbody tr td 	   { height: 25px; background: #fff; border: 1px solid #fff; }
+table.adminlist tbody tr.row1 td { background: #f9f9f9; border-top: 1px solid #FFF; }
+
+table.adminlist tfoot tr { text-align: center;  color: #333; }
+table.adminlist tfoot td,
+table.adminlist tfoot th { background-color: #f3f3f3; border-top: 1px solid #999; text-align: center; }
+
+table.adminlist td.order 		{ text-align: center; white-space: nowrap; }
+table.adminlist td.order span { float: left; display: block; width: 20px; text-align: center; }
+
+table.adminlist .pagination { display:table; padding:0;  margin:0 auto;	 }
+
+.tabs {clear:both;}
+.tabs dl { float:left; width:100%;}
+.tabs dt { 
+	float:left; 
+	background: #349123;
+    padding: 3px 7px 3px 7px;
+    margin: 0px 1px 0px 1px;
+    text-align: center;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 11px;
+	text-decoration: none;
+	text-transform: uppercase;
+    border: 3px groove #000000; 
+}
+
+div.current {
+clear:both;
+padding:10px;
+}
+/* toolbar */
+.icon-32-send 			{ background-image: url(../images/toolbar/icon-32-send.png); }
+.icon-32-delete 		{ background-image: url(../images/toolbar/icon-32-delete.png); }
+.icon-32-help 			{ background-image: url(../images/toolbar/icon-32-help.png); }
+.icon-32-cancel 		{ background-image: url(../images/toolbar/icon-32-cancel.png); }
+.icon-32-config 		{ background-image: url(../images/toolbar/icon-32-config.png); }
+.icon-32-apply 		{ background-image: url(../images/toolbar/icon-32-apply.png); }
+.icon-32-back			{ background-image: url(../images/toolbar/icon-32-back.png); }
+.icon-32-forward		{ background-image: url(../images/toolbar/icon-32-forward.png); }
+.icon-32-save 			{ background-image: url(../images/toolbar/icon-32-save.png); }
+.icon-32-edit 			{ background-image: url(../images/toolbar/icon-32-edit.png); }
+.icon-32-copy 			{ background-image: url(../images/toolbar/icon-32-copy.png); }
+.icon-32-move 			{ background-image: url(../images/toolbar/icon-32-move.png); }
+.icon-32-new 			{ background-image: url(../images/toolbar/icon-32-new.png); }
+.icon-32-upload 		{ background-image: url(../images/toolbar/icon-32-upload.png); }
+.icon-32-assign 		{ background-image: url(../images/toolbar/icon-32-publish.png); }
+.icon-32-html 			{ background-image: url(../images/toolbar/icon-32-html.png); }
+.icon-32-css 			{ background-image: url(../images/toolbar/icon-32-css.png); }
+.icon-32-menus 			{ background-image: url(../images/toolbar/icon-32-menu.png); }
+.icon-32-publish 		{ background-image: url(../images/toolbar/icon-32-publish.png); }
+.icon-32-unpublish 	{ background-image: url(../images/toolbar/icon-32-unpublish.png);}
+.icon-32-restore		{ background-image: url(../images/toolbar/icon-32-revert.png); }
+.icon-32-trash 		{ background-image: url(../images/toolbar/icon-32-trash.png); }
+.icon-32-archive 		{ background-image: url(../images/toolbar/icon-32-archive.png); }
+.icon-32-unarchive 	{ background-image: url(../images/toolbar/icon-32-unarchive.png); }
+.icon-32-preview 		{ background-image: url(../images/toolbar/icon-32-preview.png); }
+.icon-32-default 		{ background-image: url(../images/toolbar/icon-32-default.png); }
+
+div.toolbar {
+float:left;
+padding:0;
+text-align:right;
+}
+
+table.toolbar {
+border-collapse:collapse;
+margin:0;
+padding:0;
+}
+table.toolbar td {
+color:#666666;
+height:48px;
+padding:1px 1px 1px 4px;
+text-align:center;
+}
+table.toolbar a {
+border:1px solid #FBFBFB;
+cursor:pointer;
+display:block;
+float:left;
+padding:1px 5px;
+white-space:nowrap;
+}
+table.toolbar span {
+display:block;
+float:none;
+height:32px;
+margin:0 auto;
+width:32px;
+}
+
+table.toolbar a {
+cursor:pointer;
+white-space:nowrap;
+}
+
+a, img {
+margin:0;
+padding:0;
+}
+div.header.icon-48-dtregister {
+
+background-repeat:no-repeat;
+line-height:48px;
+padding-left:330px !important;
+text-transform:uppercase;
+}
+
+div.header {
+background-repeat:no-repeat;
+color:#0B55C4;
+font-size:22px;
+font-weight:bold;
+line-height:48px;
+margin-left:10px;
+padding-left:55px;
+}

@@ -18,6 +18,7 @@ $events = array();
 
 $html = "";
 
+
 foreach(DT_Session::get('register.User') as $key=>$registration){
 
 	if(!isset($events[$registration['eventId']])){
@@ -33,7 +34,11 @@ foreach(DT_Session::get('register.User') as $key=>$registration){
 		continue;
 
     }
-
+    
+	if(!isset($registration['confirmed']) || $registration['confirmed'] !=1){
+	  	continue;
+	}
+	
 	$event = $events[$registration['eventId']];
 
 	$this->assign('index',$key);
@@ -73,6 +78,12 @@ global $event_show_date;
 
  <th class="dt_heading">
 
+   <?php echo JText::_('DT_DEPOSIT_AMOUNT');?>
+
+ </th>
+ 
+ <th class="dt_heading">
+
    <?php echo JText::_('DT_PRICE');?>
 
  </th>
@@ -89,13 +100,13 @@ global $event_show_date;
 
   <tr>
 
-    <td colspan="4">&nbsp;</td>
+    <td colspan="5">&nbsp;</td>
 
   </tr>
 
   <tr>
 
-    <td colspan="4">
+    <td colspan="5">
 
       <input type="button" value="<?php echo JText::_('DT_REGISTER_ANOTHER_EVENT'); ?>" id="continue" />
 

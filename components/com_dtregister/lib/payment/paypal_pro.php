@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -215,13 +215,12 @@ class paypal_pro extends Payment
         global $currency_code;
 		if($currency_code==""){$currency_code='USD';}
 		
-		$cardtype =  $this->cardtype;
-		switch($cardtype){			
-			case 0:
-				$this->cardtype = 'Visa';
+		switch($card_type){			
+			case 'AmericanExpress':
+				$this->cardtype = 'Amex';
 			break;
-			case 1:
-				$this->cardtype = 'MasterCard';
+			default:
+				$this->cardtype = $card_type;
 			break;
 		}
 		$card_expiry_array = explode("/", $this->x_exp_date);

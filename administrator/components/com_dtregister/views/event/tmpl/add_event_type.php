@@ -45,8 +45,9 @@ if(!$mevent->tableJevt->isInstall()){
                 DTjQuery("#dtendtime").timeEntry('destroy');
 			 }else{
 			   // DTjQuery('tr[id="timerow"]').css({display:display});   
-				DTjQuery('tr[id="timerow"]').find('input').removeAttr('readonly');	 
+				//DTjQuery('tr[id="timerow"]').find('input').removeAttr('readonly');	 
 				DTjQuery('.repeatType').removeAttr('readonly');
+				DTjQuery('#summary').removeAttr('readonly');
 				DTjQuery(".jeventdisable").removeAttr('disabled');
 				DTjQuery('#jeventrow').hide();
 				DTjQuery("#dtstarttime").timeEntry({spinnerImage:'<?php echo JUri::root()."components/com_dtregister/assets/images/timeEntry/spinnerOrange.png" ?>',spinnerBigImage:'<?php echo JUri::root()."components/com_dtregister/assets/images/timeEntry/spinnerOrangeBig.png" ?>'});

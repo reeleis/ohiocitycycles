@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -16,7 +16,8 @@ class DtregisterControllerExport extends DtrController {
    var $name ='export';
 
    function __construct($config = array()){
-
+		
+		 $config = array('default_task'=>'eventlist');
 		 parent::__construct($config);
 
 		 $this->view = & $this->getView( 'export', 'html' );  
@@ -27,16 +28,9 @@ class DtregisterControllerExport extends DtrController {
 		 $this->view->setModel($this->getModel('field'));
 		 $this->view->setModel($this->getModel('user'));
 
-		 
-
-		
-
 		 $this->registerDefaultTask("eventlist");
 
-		 
-
          JToolBarHelper::title(  JText::_( 'DT_CSV_EXPORT_UTILITY'), 'dtregister' );
-
 
 	}
 	
@@ -49,17 +43,14 @@ class DtregisterControllerExport extends DtrController {
 	}
 	
 	function fieldlist(){
-	   global $mainframe ;
+	   global $mainframe;
 	   $tExport = $this->getModel('export')->table;
 	   if(isset($_POST['formsubmit'])){
-		  
 		  
 		  $general_export_fields = JRequest::getVar('general_export_fields',array(),null,'array');
 		  $individual_export_fields = JRequest::getVar('individual_export_fields',array(),null,'array');
 		  $group_export_fields = JRequest::getVar('group_export_fields',array(),null,'array');
-		  
-	
-		  
+
 		  $tExport->saveFields($general_export_fields,$individual_export_fields,$group_export_fields);
 		  
 		  $tExport->doexport($_REQUEST['datefrom'],$_REQUEST['dateto'],JRequest::getVar('page',0));
@@ -80,12 +71,12 @@ class DtregisterControllerExport extends DtrController {
 	}
 	
 	function eventlist(){
-		global $mainframe ;
+		global $mainframe;
 		$tExport = $this->getModel('export')->table;
+		$my = &JFactory::getUser();
 		if(isset($_POST['formsubmit']) && isset($_POST['export_events'])){
 		   
 			$events = JRequest::getVar('export_events',array(),null,'array');
-			
 			
 			$tExport->saveEvents($events);
 			$mainframe->redirect('index.php?option=com_dtregister&controller=export&task=fieldlist');
@@ -93,9 +84,9 @@ class DtregisterControllerExport extends DtrController {
 		$tExport->loadfirstRow();
 		JToolBarHelper::addNew('eventlist',JText::_( 'DT_NEXT'));
 
-		$tEvent = $this->getModel('event')->table ;
+		$tEvent = $this->getModel('event')->table;
 		
-		$events = $tEvent->find('archive = 0');
+		$events = $tEvent->find('archive = 0 ');
 		
 		$this->view->assign('events',$events);
 		

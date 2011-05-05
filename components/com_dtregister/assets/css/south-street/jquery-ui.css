@@ -570,3 +570,16 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-progressbar { height:2em; text-align: left; }
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+
+.ui-tooltip {
+    -moz-box-shadow: 0 0 5px #AAAAAA;
+    padding: 8px;
+    position: absolute;
+    z-index: 9999;
+}
+* html .ui-tooltip {
+    background-image: none;
+}
+body .ui-tooltip {
+    border-width: 2px;
+}

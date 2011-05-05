@@ -45,7 +45,11 @@
 			<?php echo JText::_( 'DT_REGISTRATION_FEE' ); ?>:&nbsp;
 
 			<?php 
-			echo $TableUser->memtot; ?> x <?php echo DTreg::displayRate($feeObj->basefee/$TableUser->memtot,$currency_code); 
+		   if ($feeObj->slab->type == "flat") {
+				echo $TableUser->memtot ."&nbsp;".JText::_('DT_MEMBERS')."&nbsp;=&nbsp;". DTreg::displayRate($feeObj->basefee,$currency_code);
+			} else {
+				echo $TableUser->memtot ."&nbsp;x&nbsp;". DTreg::displayRate($feeObj->basefee/$TableUser->memtot,$currency_code);
+			}
 			if ($discount>0){
 				if($feeObj->memberdiscount>0)
 				  echo "<br />".JText::_( 'DT_MEMBER_DISCOUNT' ).": ".DTreg::displayRate($feeObj->memberdiscount,$currency_code); 

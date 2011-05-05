@@ -1,21 +1,25 @@
 <?php
-global $Itemid ;
+
+/**
+* @version 2.7.4
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
+global $Itemid;
 ?>
 <form name="adminForm" method="post" action="index.php" enctype="multipart/form-data">
    <table>
-      
-      
-      
 
-       
      <?php
        
-	   echo  $this->form ;
-	 
-	   
+	   echo $this->form;
+	
 	 ?>
      
-   
    </table>
    <input type="hidden" name="Member[groupUserId]" value="<?php echo $this->userId; ?>" />
    <input type="hidden" name="userId" value="<?php echo $this->userId; ?>" />
@@ -28,8 +32,7 @@ global $Itemid ;
 <div id="debug">
 </div>
 <script type="text/javascript">
- 
- 
+
  DTjQuery(function(){
    //DTjQuery.validator.messages.required = " ";
 
@@ -40,7 +43,6 @@ global $Itemid ;
 
 	});
 	
-	
  })
  
  function submitbutton(pressbutton){
@@ -48,10 +50,14 @@ global $Itemid ;
 	  submitform(pressbutton);	
 	}
 	if(DTjQuery(document.adminForm).valid()){
+		 var disabled = DTjQuery(':disabled');
+        DTjQuery.each(disabled, function(){
+		     DTjQuery(this).removeAttr('disabled');  
+	   	})
 	  	submitform(pressbutton);
 	}
 	
-	return false ;
+	return false;
 
 }
 

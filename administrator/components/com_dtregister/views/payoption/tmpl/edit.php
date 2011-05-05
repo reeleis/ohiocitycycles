@@ -11,7 +11,7 @@
 
 	$document =& JFactory::getDocument();
 
-	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validate.js');
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validationmethods.js');
@@ -46,7 +46,6 @@
 
  })
  
-
 function submitbutton(pressbutton){
     if(pressbutton != 'cancel'){
 		if(DTjQuery(document.adminForm).valid()){
@@ -147,7 +146,7 @@ function submitbutton(pressbutton){
 
 								    $options=array();
 
-								    $options[]=JHTML::_('select.option', 'test', JText::_( 'DT_TEST' ));//
+								    $options[]=JHTML::_('select.option', 'test', JText::_( 'DT_TEST' ));
 
 								    $options[]=JHTML::_('select.option', 'live', JText::_( 'DT_LIVE' ));
 
@@ -159,7 +158,7 @@ function submitbutton(pressbutton){
 
 								  <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_MODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 								
-								<td rowspan="2" valign="top"> </td>
+								<td rowspan="3" valign="top"> </td>
 
 							  </tr>
 							   <tr align="center" valign="middle">
@@ -185,7 +184,19 @@ function submitbutton(pressbutton){
 								   <td width="40"><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_METHOD_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 							   </tr>
+<tr align="center" valign="middle">  
+									
+								<td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
 
+							    <td align="left" valign="top">
+                                <?php
+								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$row->config['cardtype']);
+								?>
+                               </td>
+
+									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+							  </tr>
 							   <!-- *************** Authorize.net Options **************** -->
 
                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'AUTH_NET' ); ?></td></tr>
@@ -202,7 +213,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_MERCHANT_ID' )), '', 'tooltip.png', '', ''); ?> </td>
 										 									   
-									   <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
+									   <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
 
 								 </tr>
 
@@ -215,20 +226,7 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_TRANS_KEY' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								</tr>
-
-								<tr align="center" valign="middle">  
-									
-								<td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
-
-							    <td align="left" valign="top">
-                                <?php
-								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$row->config['cardtype']);
-								?>
-                               </td>
-
-									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-							  </tr>
+												
 							  
 							  <!-- *************** Google Checkout Options ***************	-->
 							  
@@ -261,7 +259,6 @@ function submitbutton(pressbutton){
 								 </tr>
 
 
-
   <!-- *************** Paypal Pro Options ***************	-->
 							  
 							  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PAYPAL_PRO' ); ?></td></tr>
@@ -278,7 +275,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_API_USER_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 										 
-										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_PAYPAL_PRO' ) ;?></td>
+										 <td valign="top" rowspan="4"><?php echo JText::_( 'DT_NOTES_PAYPAL_PRO' ) ;?></td>
 
 								 </tr>
                                  
@@ -350,43 +347,75 @@ function submitbutton(pressbutton){
 
 								 </tr>
                                  
-                                 <!-- *********** PSIGate Payment options ***********  -->
+                                 <!-- *********** PSiGate Payment options ***********  -->
                                  
-<!--
+
                                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PSIGATE' ); ?></td>
                                  </tr>
                                  <tr align="center" valign="middle">
                                  	<td align="left" valign="top">
-										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+										 <strong><?php echo JText::_( 'DT_PSIGATE_MERCHANT_ID' ); ?>:</strong>
 									</td>
-                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psi_merchantId]" size="30" value="<?php echo $config->getGlobal('psi_merchantId',''); ?>" />
                                     </td>
-                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_MERCHANT_ID_HELP' )), '', 'tooltip.png', '', ''); ?>
                                     </td>
-                                    <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_PSIGATE' ) ;?></td>
+                                    <td valign="top" rowspan="5"><?php echo JText::_( 'DT_NOTES_PSIGATE' ) ;?></td>
 								 </tr>
                                  <tr align="center" valign="middle">
                                  	<td align="left" valign="top">
-										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+										 <strong><?php echo JText::_( 'DT_PSIGATE_PASS_PHRASE' ); ?>:</strong>
 									</td>
-                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psi_passphrase]" size="30" value="<?php echo $config->getGlobal('psi_passphrase',''); ?>" />
                                     </td>
-                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_PASS_PHRASE_HELP' )), '', 'tooltip.png', '', ''); ?>
                                     </td>
                                     
 								 </tr>
                                  <tr align="center" valign="middle">
                                  	<td align="left" valign="top">
-										 <strong><?php echo JText::_( 'DT_PSIGATE_ACCOUNT_ID' ); ?>:</strong>
+										 <strong><?php echo JText::_( 'DT_PSIGATE_STORE_ID' ); ?>:</strong>
 									</td>
-                                    <td align="left" valign="top"> <input type="text" name="data[config][psigate_account_id]" size="30" value="<?php echo $config->getGlobal('psigate_account_id',''); ?>" />
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psi_storeid]" size="30" value="<?php echo $config->getGlobal('psi_storeid',''); ?>" />
                                     </td>
-                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_ACCOUNT_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_STORE_ID_HELP' )), '', 'tooltip.png', '', ''); ?>
+                                    </td>
+                                    
+								 </tr>
+                                 
+                                 <tr align="center" valign="middle">
+                                 	<td align="left" valign="top">
+										 <strong><?php echo JText::_( 'DT_PSIGATE_LIVE_URL' ); ?>:</strong>
+									</td>
+                                    <td align="left" valign="top"> <input type="text" name="data[config][psi_live_url]" size="30" value="<?php echo $config->getGlobal('psi_live_url',''); ?>" />
+                                    </td>
+                                    <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_LIVE_URL_HELP' )), '', 'tooltip.png', '', ''); ?>
                                     </td>
                                     
 								 </tr>
 								
-								-->
+								 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PSIGATE_TYPE' );?>:</strong></td>
+
+							    <td align="left" valign="top">
+
+							    <?php
+
+								    $options=array();
+
+								    $options[]=JHTML::_('select.option', 'hosted', JText::_( 'DT_SHARED' ));
+
+								    $options[]=JHTML::_('select.option', 'live', JText::_( 'DT_HOSTED' ));
+
+								    echo JHTML::_('select.genericlist', $options,'data[config][psitype]','','value','text',(isset($row->config['psitype']))?$row->config['psitype']:'live');
+
+							     ?>
+
+							    </td>
+
+								  <td><?php echo JHTML::tooltip((JText::_( 'DT_PSIGATE_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+							  </tr>
+
                                  
                                  <!-- *********** PSIGate Payment options ***********  -->
                                  
@@ -404,7 +433,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_CUSTOMERID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 										 
-										 <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
+										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
 
 								 </tr>
                              
@@ -416,7 +445,7 @@ function submitbutton(pressbutton){
 
 								    $options=array();
 
-								    $options[]=JHTML::_('select.option', 'hosted', JText::_( 'DT_SHARED' ));//
+								    $options[]=JHTML::_('select.option', 'hosted', JText::_( 'DT_SHARED' ));
 
 								    $options[]=JHTML::_('select.option', 'live', JText::_( 'DT_HOSTED' ));
 
@@ -429,7 +458,22 @@ function submitbutton(pressbutton){
 								  <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 							  </tr>
-							<!-- **************** iDeal Mollie Options *************	-->
+							
+                            <!-- **************** USAEPAY Options *************	-->
+                            
+                            <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_USAEPAY' ); ?></td></tr>
+                            <tr align="center" valign="middle">
+                            	<td align="left" valign="top">
+                                	<strong><?php echo JText::_( 'DT_USAEPAY_KEY' ); ?>:</strong>
+								</td>
+                                <td align="left" valign="top"> <input type="text" name="data[config][usaepay_key]" size="30" value="<?php echo (isset($row->config['usaepay_key']))?$row->config['usaepay_key']:''; ?>" /> </td>
+                                <td><?php echo JHTML::tooltip((JText::_( 'DT_USAEPAY_KEY_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+                                <td valign="top" rowspan="1"><?php echo JText::_( 'DT_NOTES_USAEPAY' ) ;?></td>
+							</tr>
+                            
+                         
+                            
+                            <!-- **************** iDeal Mollie Options *************	-->
 
                 <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PAY_IDEAL_MOLLIE' ); ?></td></tr>
 
@@ -441,7 +485,7 @@ function submitbutton(pressbutton){
 
 								  <td><?php echo JHTML::tooltip((JText::_( 'IDEAL_ID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 								  
-								  <td valign="top" rowspan="2"> </td>
+								  <td valign="top" rowspan="1"> </td>
 
 							  </tr>
 
@@ -459,7 +503,7 @@ function submitbutton(pressbutton){
 
 								  <td><?php echo JHTML::tooltip((JText::_( 'IDEAL_LITE_MERCHANT_ID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 								  
-								  <td valign="top" rowspan="3"> </td>
+								  <td valign="top" rowspan="2"> </td>
 
 							  </tr>
                               
@@ -487,7 +531,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_SAGE_M_ID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 										 
-										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_SAGE' ) ;?></td>
+										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_SAGE' ) ;?> </td>
 
 								 </tr>
                                  

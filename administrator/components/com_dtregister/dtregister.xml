@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="component" version="1.5.0">
 <name>DT Register</name>
-<creationDate>Feb. 12, 2011</creationDate>
+<creationDate>Apr. 6, 2011</creationDate>
 <author>DTH Development</author>
 <copyright>(c)2006 DTH Development. All rights reserved.</copyright>
 <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 <authorEmail>dthdev@dthdevelopment.com</authorEmail>
 <authorUrl>www.DTHDevelopment.com</authorUrl>
-<version>2.7.3a</version>
+<version>2.7.4a</version>
 
 <description>With DT Register, you can take online registrations for your event and collect a registration fee through various payment gateways. Fully integrated calendar is included.</description>
 
@@ -193,6 +193,7 @@
 <filename>assets/css/colorpicker/images/select2.png</filename>
 <filename>assets/css/south-street/index.html</filename>
 <filename>assets/css/south-street/jquery-ui.css</filename>
+<filename>assets/css/south-street/main.css</filename>
 <filename>assets/css/south-street/images/index.html</filename>
 <filename>assets/css/south-street/images/ui-bg_glass_55_fcf0ba_1x400.png</filename>
 <filename>assets/css/south-street/images/ui-bg_gloss-wave_100_ece8da_500x100.png</filename>
@@ -216,13 +217,14 @@
 <filename>assets/js/datemask.js</filename>
 <filename>assets/js/form.js</filename>
 <filename>assets/js/index.html</filename>
-<filename>assets/js/jquery.js</filename>
+<filename>assets/js/dt_jquery.js</filename>
 <filename>assets/js/jquery-ui.js</filename>
 <filename>assets/js/jquery.lightbox.js</filename>
 <filename>assets/js/jx_dataCheck.js</filename>
 <filename>assets/js/mousewheel.js</filename>
 <filename>assets/js/textareaCounter.js</filename>
 <filename>assets/js/timeEntry.js</filename>
+<filename>assets/js/tooltip.js</filename>
 <filename>assets/js/validate.js</filename>
 <filename>assets/js/validationmethods.js</filename>
 <filename>assets/js/calendar/index.html</filename>
@@ -259,6 +261,7 @@
 <filename>controllers/discountcode.php</filename>
 <filename>controllers/event.php</filename>
 <filename>controllers/eventmanage.php</filename>
+<filename>controllers/export.php</filename>
 <filename>controllers/feeorder.php</filename>
 <filename>controllers/field.php</filename>
 <filename>controllers/file.php</filename>
@@ -297,14 +300,22 @@
 <filename>lib/payment/NetDeposit.php</filename>
 <filename>lib/payment/paypal.php</filename>
 <filename>lib/payment/paypal_pro.php</filename>
+<filename>lib/payment/psigate.php</filename>
 <filename>lib/payment/saferpay.php</filename>
 <filename>lib/payment/Sage.php</filename>
+<filename>lib/payment/usaepay_credit_card.php</filename>
+<filename>lib/payment/usaepay_echeck.php</filename>
 <filename>lib/payment/index.html</filename>
 <filename>lib/payment/eway/index.html</filename>
 <filename>lib/payment/eway/EwayPaymentHosted.php</filename>
 <filename>lib/payment/eway/EwayPaymentLive.php</filename>
 <filename>lib/payment/gcheckout/gc_xmlbuilder.php</filename>
 <filename>lib/payment/gcheckout/index.html</filename>
+<filename>lib/payment/psigate/hosted.php</filename>
+<filename>lib/payment/psigate/index.html</filename>
+<filename>lib/payment/psigate/live.php</filename>
+<filename>lib/payment/psigate/_notes/dwsync.xml</filename>
+<filename>lib/payment/psigate/_notes/index.html</filename>
 <filename>lightbox/index.html</filename>
 <filename>lightbox/css/index.html</filename>
 <filename>lightbox/css/default.css</filename>
@@ -386,6 +397,11 @@
 <filename>views/eventmanage/tmpl/list_child.php</filename>
 <filename>views/eventmanage/tmpl/list_description.php</filename>
 <filename>views/eventmanage/tmpl/warning.php</filename>
+<filename>views/export/index.html</filename>
+<filename>views/export/view.html.php</filename>
+<filename>views/export/tmpl/index.html</filename>
+<filename>views/export/tmpl/eventlist.php</filename>
+<filename>views/export/tmpl/fieldlist.php</filename>
 <filename>views/feeorder/index.html</filename>
 <filename>views/feeorder/view.html.php</filename>
 <filename>views/feeorder/tmpl/index.html</filename>
@@ -474,6 +490,7 @@
 <filename>assets/images/filesave.png</filename>
 <filename>assets/images/group.jpg</filename>
 <filename>assets/images/icon-48-categories.png</filename>
+<filename>assets/images/icon-48-csv.png</filename>
 <filename>assets/images/icon-48-discounts.png</filename>
 <filename>assets/images/icon-48-events.png</filename>
 <filename>assets/images/icon-48-fields.png</filename>
@@ -488,6 +505,7 @@
 <filename>assets/images/paypal_pay.jpg</filename>
 <filename>assets/images/pay_later.jpg</filename>
 <filename>assets/images/prev.gif</filename>
+<filename>assets/images/psigate_pay.jpg</filename>
 <filename>assets/images/publish_x.png</filename>
 <filename>assets/images/saferpay_pay.jpg</filename>
 <filename>assets/images/sage_card_pay.jpg</filename>

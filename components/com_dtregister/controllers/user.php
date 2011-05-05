@@ -50,6 +50,9 @@ class DtregisterControllerUser extends DtrController {
        DT_Session::clearAll();
 		
 	   $mUser = $this->getModel( 'user' );
+	   
+	   $paymentVerified = JRequest::getVar('paymentVerified','');
+	   $keyword = JRequest::getVar('keyword','');
 
 	   $order = JRequest::getVar('filter_order','register_date');
 
@@ -62,8 +65,17 @@ class DtregisterControllerUser extends DtrController {
         $limit=JRequest::getInt('limit',$listLimit);
 
 	    $limitstart  = JRequest::getVar('limitstart', 0, '', 'int');
+		
+		$search = array();
+		$search['user_id'] = $this->user->id;
+		if (isset($paymentVerified) && $paymentVerified != "") {
+			$search['paymentVerified'] = $paymentVerified;
+		}
+		if (isset($keyword) && $keyword != "") {
+			$search['keyword'] = $keyword;
+		}
 
-		$users = $mUser->getUsers(array('user_id'=>$this->user->id),$order,$dir,$limitstart,$limit);
+		$users = $mUser->getUsers($search,$order,$dir,$limitstart,$limit);
 
 		$total = $mUser->table->getLastCount();	
 
@@ -145,7 +157,7 @@ class DtregisterControllerUser extends DtrController {
 		$user = DTrCommon::objectToArray($userObj);
 		$user['process'] = 'change';
 		
-       if(isset($_POST['formsubmit']) ){
+		if(isset($_POST['formsubmit']) ){
 
 			$data = $_POST['User'];
             $memtot = DTrCommon::cntMemtotInSession( DT_Session::get('register.User.members'));
@@ -179,6 +191,7 @@ class DtregisterControllerUser extends DtrController {
 			DT_Session::set('register.User.process','change');
 
 			//unset($_SESSION['DTregister']['register']['members']);
+			
        	$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
 
 			pr($_POST);
@@ -186,17 +199,19 @@ class DtregisterControllerUser extends DtrController {
 			prd($user);
 
 		}else{
+			
 			if(!DT_Session::get('register.User')){
 		   	   DT_Session::set('register.User',$user);
 			   DT_Session::set('register.Event.eventId',$tUser->eventId);
 			}
 		}
-       
+		
 	   $eventId = $tUser->eventId;
 
 	   $this->view->assign('header_eventId',$eventId);
 
-	 //  pr(DTrCommon::objectToArray($userObj));
+	   // pr(DTrCommon::objectToArray($userObj));
+	   // pr($user);
 
 	   $type = ($tUser->type=='I')?'I':'B' ;
        $tUser->TableEvent->duplicate_check = false ;
@@ -211,6 +226,7 @@ class DtregisterControllerUser extends DtrController {
 	function price_header(){
 	   
 	   $layout = JRequest::getVar('dttmpl','price_header');
+	   
 	   $this->getModel('field');
 	   if(isset($_REQUEST['Field'])){
 		   //$userIndex = DT_Session::get('register.Setting.current.userIndex');
@@ -226,6 +242,7 @@ class DtregisterControllerUser extends DtrController {
 			 
 		   }
 	   }
+	   // prd(DT_Session::get('register.User.fields'));
 	   $this->view->setLayout($layout );
 	   $this->view->display();	
 	   die;
@@ -337,10 +354,11 @@ class DtregisterControllerUser extends DtrController {
 	   $TableUser->create(DT_Session::get('register.User'));
 
 	   $feeObj = new DT_Fee($event,$TableUser);
-       
+
 	   $feeObj->setPaidAmount(DT_Session::get('register.User.fee.paid_amount'));
 
 	   $feeObj->getFee(false);
+	   
 
 	   $feesession = $feeObj;
 
@@ -358,7 +376,7 @@ class DtregisterControllerUser extends DtrController {
 	   $this->view->assign('eventId',$eventId);
 
 	   $event->load($eventId);
-
+	   
 	   $this->view->assign( 'viewFields' ,$event->viewFields($type,DT_Session::get('register.User'),false,'frmcart',false));
 
 	   $this->view->assign( 'viewMemFields',$viewMemFields);

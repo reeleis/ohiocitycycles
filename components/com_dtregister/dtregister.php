@@ -1,14 +1,14 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
 * @license Commercial
 */
-
+global $mainframe;
 defined( 'JPATH_BASE' ) or die( 'Direct Access to this location is not allowed.' );
 if (!defined("DT_COM_COMPONENT")){
 
@@ -60,6 +60,6 @@ $controllerObj->execute( JRequest::getVar( 'task' ) );
 $controllerObj->redirect();
 
 if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
-	  pr($_SESSION);
+	 // pr($_SESSION);
 }
 ?>

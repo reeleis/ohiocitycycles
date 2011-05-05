@@ -11,7 +11,7 @@
 
 ?>
 <?php
- global $mainframe;
+ global $mainframe , $Itemid;
 
   $database = &JFactory::getDBO();
 
@@ -30,8 +30,10 @@
   $database->setQuery('SELECT FOUND_ROWS();');
 
   $pageNav = new JPagination( $database->loadResult(), $limitstart, $limit  );
+  
 ?>
-<form action="index.php" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
+
+<form action="<?php echo 'index.php?option=com_dtregister&controller=location&Itemid='.$Itemid; ?>" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
 
 <table width="100%" class="adminlist">
 

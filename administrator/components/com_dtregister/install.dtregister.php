@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -58,6 +58,10 @@ function com_install() {
 			$database->setQuery($sql);
 			$database->query();
 		}
+		
+		$sql= "ALTER TABLE `#__dtregister_categories` CHANGE `ordering` `ordering` INT(7) UNSIGNED NULL DEFAULT '1'";
+		$database->setQuery($sql);
+		$database->query();
 
 	// End of changes to #__dtregister_categories
 
@@ -438,6 +442,17 @@ function com_install() {
 		$database->query();
 	}
 	
+	if(!in_array('prevent_duplication',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `prevent_duplication` tinyint(1) NULL default '1'";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	$sql= "ALTER TABLE `#__dtregister_group_event` CHANGE `ordering` `ordering` INT(7) UNSIGNED NULL DEFAULT '1'";
+	$database->setQuery($sql);
+	$database->query();
+	
 	// End of changes to #__dtregister_group_event
 	
 	// Start of changes to #__dtregister_group_member
@@ -650,15 +665,15 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 
-		$sql="INSERT INTO `#__dtregister_config` VALUES(14, 'paid_default_status', '1', 'paid_default_status');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(14, 'paid_default_status', '0', 'paid_default_status');";
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_config` VALUES(15, 'partial_default_status', '0', 'partial_default_status');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(15, 'partial_default_status', '2', 'partial_default_status');";
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_config` VALUES(16, 'paylater_default_status', '0', 'paylater_default_status');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(16, 'paylater_default_status', '2', 'paylater_default_status');";
 		$database->setQuery($sql);
 		$database->query();
 		
@@ -690,7 +705,7 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 
-		$sql="INSERT INTO `#__dtregister_config` VALUES(24, 'save_payment_info', '0', 'save_payment_info');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(24, 'save_payment_info', '1', 'save_payment_info');";
 		$database->setQuery($sql);
 		$database->query();
 
@@ -770,11 +785,11 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 
-		$sql="INSERT INTO `#__dtregister_config` VALUES(44, 'registrant_cb_linked', '1', 'registrant_cb_linked');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(44, 'registrant_cb_linked', '0', 'registrant_cb_linked');";
 		$database->setQuery($sql);
 		$database->query();
 
-		$sql="INSERT INTO `#__dtregister_config` VALUES(45, 'registrant_username', '1', 'registrant_username');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(45, 'registrant_username', '0', 'registrant_username');";
 		$database->setQuery($sql);
 		$database->query();
 
@@ -782,7 +797,7 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 
-		$sql="INSERT INTO `#__dtregister_config` VALUES(47, 'registrant_show_avatar', '1', 'registrant_show_avatar');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(47, 'registrant_show_avatar', '0', 'registrant_show_avatar');";
 		$database->setQuery($sql);
 		$database->query();
 
@@ -910,10 +925,11 @@ function com_install() {
 		<p>Name: [FIRSTNAME] [LASTNAME]<br />Address: [ADDRESS]<br />Address2: [ADDRESS2]<br />City: [CITY]<br />State: [STATE] <br />Zip: [ZIP]<br />Country: [COUNTRY]<br />Organization: [ORGANIZATION]<br />Phone: [PHONE]<br /> Email: [EMAIL]</p>
 		<p>[ALL_FIELDS]</p>
 		<p>Number of Members: [GROUP_NUMBER]</p>
-		<p>{GROUP_MEMBER}<br /> [TITLE] [FIRSTNAME] [LASTNAME]<br /> [ADDRESS]<br /> [ADDRESS2]<br /> [CITY], [STATE] [ZIP]<br /> [COUNTRY]<br /> Phone: [PHONE]<br /> Email: [EMAIL]<br />{/GROUP_MEMBER}</p>
+		<p>{GROUP_MEMBER}<br /> [TITLE] [FIRSTNAME] [LASTNAME]<br /> [ADDRESS]<br /> [ADDRESS2]<br /> [CITY], [STATE] [ZIP]<br /> [COUNTRY]<br /> Phone: [PHONE]<br /> Email: [EMAIL]<br />[ALL_FIELDS]<br />{/GROUP_MEMBER}</p>
 		<p>Registration Amount: [AMOUNT]<br />Amount Paid: [AMOUNT_PAID]<br />Payment Method: [PAYMENT_TYPE]</p>
 		<p>Status: [STATUS]<br />Username created: [USERNAME]</p>
-		<p>Confirmation Number: [CONFIRM_NUM]</p>', 'admin_registrationemail');";
+		<p>Confirmation Number: [CONFIRM_NUM]<br />Transaction ID: [TRANS_ID]</p>
+		<p>[BARCODE]</p>', 'admin_registrationemail');";
 		$database->setQuery($sql);
 		$database->query();
 		
@@ -966,7 +982,7 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_config` VALUES(91, 'eventModifyNotification', 'create', 'eventModifyNotification');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(91, 'eventModifyNotification', '', 'eventModifyNotification');";
 		$database->setQuery($sql);
 		$database->query();
 		
@@ -1050,18 +1066,67 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_config` VALUES(112, 'waitingemail', '<p>[TITLE] [FIRSTNAME] [LASTNAME],</p>
+		$sql="INSERT INTO `#__dtregister_config` VALUES(112, 'calendar_show_image_gridview', '0', 'calendar_show_image_gridview');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(113, 'event_image_gridview_width', '60', 'event_image_gridview_width');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(114, 'event_image_gridview_height', '60', 'event_image_gridview_height');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(115, 'calendar_show_popup', '1', 'calendar_show_popup');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(116, 'calendar_show_image', '1', 'calendar_show_image');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(117, 'calendar_show_date', '1', 'calendar_show_date');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(118, 'calendar_show_time', '1', 'calendar_show_time');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(119, 'calendar_show_price', '1', 'calendar_show_price');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(120, 'calendar_show_capacity', '1', 'calendar_show_capacity');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(121, 'calendar_show_registered', '1', 'calendar_show_registered');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(122, 'calendar_show_available_spots', '1', 'calendar_show_available_spots');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(123, 'calendar_show_location', '1', 'calendar_show_location');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(124, 'calendar_show_moderator', '1', 'calendar_show_moderator');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(125, 'waitingemail', '<p>[TITLE] [FIRSTNAME] [LASTNAME],</p>
 		<p>You have joined the Waiting List for [EVENT_NAME] on [EVENT_DATE] which is held at [LOCATION]. Location details are:</p>
 		<p>[LOCATION_DETAILS]</p>
 		<p>Your info is:</p>
 		<p>[ADDRESS]<br />[ADDRESS2]<br />[CITY], [STATE] [ZIP]<br />[COUNTRY]<br />[ORGANIZATION]<br />Phone: [PHONE]<br /> Email: [EMAIL]</p>
 		<p>[ALL_FIELDS]</p>
 		<p>There are [GROUP_NUMBER] people in your group:</p>
-		<p>{GROUP_MEMBER}<br /> [TITLE] [FIRSTNAME] [LASTNAME]<br /> [ADDRESS]<br /> [ADDRESS2]<br /> [CITY], [STATE] [ZIP]<br /> [COUNTRY]<br /> Phone: [PHONE]<br /> Email: [EMAIL]<br /> {/GROUP_MEMBER}</p>
+		<p>{GROUP_MEMBER}<br /> [TITLE] [FIRSTNAME] [LASTNAME]<br /> [ADDRESS]<br /> [ADDRESS2]<br /> [CITY], [STATE] [ZIP]<br /> [COUNTRY]<br /> Phone: [PHONE]<br /> Email: [EMAIL]<br />[ALL_FIELDS]<br /> {/GROUP_MEMBER}</p>
 		<p>Your registration price total is  [AMOUNT] and will be required if space becomes available for you.</p>
-		<p> </p>
-		<p>Your selected login info is:</p>
-		<p>Username: [USERNAME]<br />Password: [PASSWORD]</p>
 		<p>You signed up on the waiting list on [DATE_REGISTERED] and your status is [STATUS].<br />Confirmation #: [CONFIRM_NUM]</p>
 		<p>Thanks again for registering!</p>
 		<p>Sincerely,</p>
@@ -1069,7 +1134,11 @@ function com_install() {
 		$database->setQuery($sql);
 		$database->query();
 		
-		$sql="INSERT INTO `#__dtregister_config` VALUES(113, 'subwaitingemail', 'You are on the Waiting List for [EVENT_NAME]', 'subwaitingemail');";
+		$sql="INSERT INTO `#__dtregister_config` VALUES(126, 'subwaitingemail', 'You are on the Waiting List for [EVENT_NAME]', 'subwaitingemail');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(127, 'event_location_show', '0', 'event_location_show');";
 		$database->setQuery($sql);
 		$database->query();
 	}
@@ -1105,42 +1174,42 @@ function com_install() {
 	   $database->query();
 	   echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'title','Title','100','','1','1','0','	Mr|Mrs|Ms|Miss|Dr|Rev','1','','0','0','0','','0','','1','1','1','0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','1','TITLE',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'title','Title','100','','1','1','0','	Mr|Mrs|Ms|Miss|Dr|Rev','1','','0','0','0','','0','','1','1','1','0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','1','TITLE','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'firstname','First Name','30','','2','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','60','','0','','','0','1','0','memberlist|attendeelist|recordlist','0','1','FIRSTNAME',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'firstname','First Name','30','','2','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','60','','0','','','0','1','0','memberlist|attendeelist|recordlist','0','1','FIRSTNAME','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'lastname','Last Name','30','','3','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','1','0','memberlist|attendeelist|recordlist','0','1','LASTNAME',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'lastname','Last Name','30','','3','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','1','0','memberlist|attendeelist|recordlist','0','1','LASTNAME','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'address','Address','30','','5','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','memberlist','0','0','ADDRESS',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'address','Address','30','','5','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','memberlist','0','0','ADDRESS','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'address2','Address 2','30','','6','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','memberlist','0','0','ADDRESS2',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'address2','Address 2','30','','6','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','memberlist','0','0','ADDRESS2','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'city','City','30','','7','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','0','0','memberlist','0','0','CITY',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'city','City','30','','7','1','1','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','0','0','memberlist','0','0','CITY','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'state','State','150','','8','1','0','Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|District of Columbia|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming','1','','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','3','1','3','0','','0','','','0','0','0','','0','0','STATE',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'state','State','150','','8','1','0','Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|District of Columbia|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming','1','','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','3','1','3','0','','0','','','0','0','0','','0','0','STATE','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'zip','Zip','10','','9','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','1','3','10','','0','','','0','0','0','','0','0','ZIP',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'zip','Zip','10','','9','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','1','3','10','','0','','','0','0','0','','0','0','ZIP','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
@@ -1148,22 +1217,22 @@ function com_install() {
 		$text = "Afghanistan|Albania|Algeria|Andorra|Angola|Antigua & Barbuda|Argentina|Armenia|Australia|Austria|Azerbaijan|Bahamas|Bahrain|Bangladesh|Barbados|Belarus|Belgium|Belize|Benin|Bhutan|Bolivia|Bosnia & Herzegovina|Botswana|Brazil|Brunei Darussalam|Bulgaria|Burkina Faso|Burma (Myanmar)|Burundi|Cambodia|Cameroon|Canada|Cape Verde|Cayman Islands|Central African|Chad|Chile|China|Colombia|Comoros|Congo|Congo, Democratic Republic of the|Costa Rica|Côte d'Ivoire|Croatia|Cuba|Cyprus|Czech Republic|Denmark|Djibouti|Dominica|Dominican Republic|Ecuador|East Timor|Egypt|El Salvador|England|Equatorial Guinea|Eritrea|Estonia|Ethiopia|Fiji|Finland|France|Gabon|Gambia, The|Georgia|Germany|Ghana|Great Britain|Greece|Grenada|Guatemala|Guinea|Guinea-Bissau|Guyana|Haiti|Honduras|Hong Kong|Hungary|Iceland|India|Indonesia|Iran|Iraq|Ireland|Israel|Italy|Jamaica|Japan|Jordan|Kazakhstan|Kenya|Kiribati|Kuwait|Kyrgyzstan|Laos|Latvia|Lebanon|Lesotho|Liberia|Libya|Liechtenstein|Lithuania|Luxembourg|Macedonia|Madagascar|Malawi|Malaysia|Maldives|Mali|Malta|Marshall Islands|Mauritania|Mauritius|Mexico|Micronesia|Moldova|Monaco|Mongolia|Montenegro|Morocco|Mozambique|Myanmar|Namibia|Nauru|Nepal|The Netherlands|New Zealand|Nicaragua|Niger|Nigeria|North Korea|Norway|Oman|Pakistan|Palau|Palestinian State|Panama|Papua New Guinea|Paraguay|Peru|Philippines|Poland|Portugal|Qatar|Romania|Russia|Rwanda|St. Kitts & Nevis|St. Lucia|St. Vincent & The Grenadines|Samoa|San Marino|São Tomé & Príncipe|Saudi Arabia|Senegal|Serbia|Seychelles|Sierra Leone|Singapore|Slovakia|Slovenia|Solomon Islands|Somalia|South Africa|South Korea|Spain|Sri Lanka|Sudan|Suriname|Swaziland|Sweden|Switzerland|Syria|Taiwan|Tajikistan|Tanzania|Thailand|Togo|Tonga|Trinidad & Tobago|Tunisia|Turkey|Turkmenistan|Tuvalu|Uganda|Ukraine|United Arab Emirates|United Kingdom|United States|Uruguay|Uzbekistan|Vanuatu|Vatican City|Venezuela|Vietnam|Western Sahara|Yemen|Yugoslavia|Zaire|Zambia|Zimbabwe";
 		$text = $database->Quote($text);
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'country','Country','150','','10','1','0',".$text.",'1','United States','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','0','COUNTRY',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'country','Country','150','','10','1','0',".$text.",'1','United States','0','0','0','','0','','1','1','1','0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0','1','','0','0','0','2','0','3','0','','0','','','0','0','0','','0','0','COUNTRY','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'email','Email','30','','11','1','1','','8','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','0','1','memberlist|recordlist','0','0','EMAIL',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'email','Email','30','','11','1','1','','8','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','3','100','','0','','','0','0','1','memberlist|recordlist','0','0','EMAIL','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'phone','Phone','10','','12','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','1','10','','0','','','0','0','0','','0','0','PHONE',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'phone','Phone','10','','12','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','3','1','1','10','','0','','','0','0','0','','0','0','PHONE','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
 		
-		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'organization','Organization','30','','4','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','attendeelist','0','0','ORGANIZATION',0);";
+		$sql="INSERT INTO `#__dtregister_fields` VALUES(null, 'organization','Organization','30','','4','1','0','','0','','0','0','0','','0','','1','1','1','','1','','0','0','0','1','0','0','200','','0','','','0','0','0','attendeelist','0','0','ORGANIZATION','0');";
 		$database->setQuery($sql);
 		$database->query();
 		echo $database->getErrorMsg();
@@ -1313,6 +1382,14 @@ FROM `#__dtregister_group_event`
 		$database->query();
 		
 		$sql="INSERT INTO `#__dtregister_acos` VALUES(24,'location','edit','DT_EDIT_DELETE_LOCATION','action');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_acos` VALUES(25,'export','fieldlist','DT_CSV_EXPORT','action');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_acos` VALUES(26,'export','eventlist','DT_CSV_EXPORT','action');";
 		$database->setQuery($sql);
 		$database->query();
 	}
@@ -1553,6 +1630,14 @@ FROM `#__dtregister_group_event`
 		$database->query();
 		
 		$sql="INSERT INTO `#__dtregister_permissions` VALUES(45,'8','6');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_permissions` VALUES(46,'9','25');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_permissions` VALUES(47,'9','26');";
 		$database->setQuery($sql);
 		$database->query();
 	}

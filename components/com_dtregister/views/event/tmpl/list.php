@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,21 +9,25 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
- global $Itemid,$month_arr, $now, $xhtml_url, $googlekey, $amp, $show_event_image,$eventListOrder;
+ global $Itemid,$month_arr,$now,$xhtml_url,$googlekey,$amp,$show_event_image,$eventListOrder;
 
  $config = $this->getModel('config');
 
  $categoryTable = $this->getModel('category')->table;
+ 
+ $locationTable = $this->getModel('location')->table;
 
  $eventTable = $this->getModel('event')->table;
 
  $document =& JFactory::getDocument();
 
- $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.lightbox.js');
 
- $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+  if(!JModuleHelper::isEnabled('s5_box')){
+     $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+  }
  
  $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/main.css');
 
@@ -46,6 +50,7 @@ $year = JRequest::getVar('year','');//date('Y',$now->toUnix(true))
 jimport('joomla.html.pagination');
 
 $category = JRequest::getVar('category',"");
+$location = JRequest::getVar('location',"");
 $cartcontinue = JRequest::getVar('cart','');
 
 $search = JRequest::getVar('search');
@@ -75,10 +80,14 @@ if($task == "category"){
 	if(count($cats)>0){
 
 	   $where[] = "  c.categoryId in( ".implode(",",$cats)." ) ";
-
+	   
 	}
 
  }
+
+/*if (l.id) {
+	$where[] = "  c.categoryId in( ".implode(",",$cats)." ) ";
+}*/
 
  	$search = $config->getDBO()->getEscaped( trim( strtolower( $search ) ) );
 
@@ -158,6 +167,12 @@ if(!$my->id){  // not logged in view only public event
 $user =& JFactory::getUser();
 $rows1 = $categoryTable->find('published = 1 and access <= '.$user->get('aid'),'ordering');
 
+$rows2 = $locationTable->find(' 1=1 ');
+$arrLocation = array();
+foreach ($rows2 as $rows) {
+	$arrLocation[$rows->id] = $rows->name;
+}
+
  $arrCategory = array();
 
 	    for ($i=0,$n=count($rows1);$i<$n;$i++){
@@ -174,7 +189,9 @@ $rows1 = $categoryTable->find('published = 1 and access <= '.$user->get('aid'),'
 
 	    }
 
-$rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
+// $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
+
+$rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
 
 ?>
 
@@ -267,6 +284,20 @@ $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),imp
 		  $options = DtHtml::options( $categoryTable->optionslist(),JText::_( 'DT_CATEGORY_VIEW' ));
 
 		 echo JHTML::_('select.genericlist', $options,"category",'onchange="submit()"',"value","text",JRequest::getVar('category','')); ?>
+
+         <?php } ?>
+
+      </td>
+      
+      	<td align="right">
+
+         <?php if($config->getGlobal('event_filter_show',0)==1){?>
+
+        <?php
+
+		  $options = DtHtml::options( $locationTable->optionslist(),JText::_( 'DT_LOCATION_VIEW' ));
+
+		 echo JHTML::_('select.genericlist', $options,"location",'onchange="submit()"',"value","text",JRequest::getVar('location','')); ?>
 
          <?php } ?>
 

@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$showlocation,$googlekey,$amp,$xhtml_url, $front_link_type,$registrant_message;
+global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$registrant_registered_date,$showlocation,$googlekey,$amp,$xhtml_url, $front_link_type,$registrant_message;
 
 $config = $this->getModel('config');
 $mfield = $this->getModel('field');
@@ -20,8 +20,26 @@ $fieldtypes = $mfieldtype->getTypes();
 $tfield = $mfield->table;
 
 $tfield->pivotFields();
+$fieldIds =  array();
 //pr($tfield->attendeelistfields());
-$fields = $tfield->arrangeheader($tfield->attendeelistfields());
+$rowCustoms = $tfield->findall(JRequest::getVar('eventId'),'B',false,0);
+$rowCustoms2 = $tfield->findall(JRequest::getVar('eventId'),'I',false,0);
+$rowCustoms3 = $tfield->findall(JRequest::getVar('eventId'),'M',false,0);
+if($rowCustoms)
+foreach($rowCustoms as $obj){
+   $fieldIds[$obj->key2] = $obj->key2 ;
+}
+if($rowCustoms2)
+foreach($rowCustoms2 as $obj){
+   $fieldIds[$obj->key2] = $obj->key2 ;
+}
+if($rowCustoms3)
+foreach($rowCustoms3 as $obj){
+   $fieldIds[$obj->key2] = $obj->key2 ;
+}
+
+
+$fields = $tfield->arrangeheader($tfield->attendeelistfields($fieldIds));
 
 $this->assign('fields',$fields);
 
@@ -37,7 +55,7 @@ $this->assign('muser',$muser);
 
 $document =& JFactory::getDocument();
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 $Tevent = $this->getModel('event')->table;
 $locationTable = $this->getModel('location')->table;
 $Tevent->load(JRequest::getVar('eventId'));
@@ -61,11 +79,13 @@ if($showlocation){
 }
 $document	=& JFactory::getDocument();
 
- $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.lightbox.js');
 
- $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+  if(!JModuleHelper::isEnabled('s5_box')){
+     $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+  }
  
  $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/main.css');
 
@@ -175,8 +195,16 @@ $document	=& JFactory::getDocument();
 
 		}?>
 
-      <?php
+	  <?php
+	  // if(trim($field->name) == 'name' && $registrant_username == 1 && $cb_integrated > 0){
+		if($cb_integrated > 0 && $registrant_username == 1){
+			echo '<th class="attendee_coltitle">';
+			echo DtHtml::sort(JText::_( 'DT_USERNAME'), 'username', $dir,$order,'registrant');
+			echo '</th>';
+		}
+	  ?>
 
+      <?php
        foreach($fields as $field){
 
 		?>
@@ -188,24 +216,14 @@ $document	=& JFactory::getDocument();
 				echo DtHtml::sort($field->label, $field->name, $dir,$order,'registrant'); ?>
 
 		</th>
-
-        <?php
-
-		if(trim($field->name) == 'name' && $registrant_username == 1 && $cb_integrated > 0){
-
-		?>
-
-           <th class="attendee_coltitle">
-
-		     <?php  echo DtHtml::sort(JText::_( 'DT_USERNAME'), 'username', $dir,$order,'registrant');  ?>
-
-           </th>
-
 		<?php
-
-		}
-
 	   }
+	   
+		if($cb_integrated > 0 && $registrant_registered_date == 1){
+			echo '<th class="attendee_coltitle">';
+			echo DtHtml::sort(JText::_( 'DT_REGISTERED_DATE'), 'reg_date', $dir,$order,'registrant');
+			echo '</th>';
+		}
 
 	   ?>
 
@@ -220,7 +238,7 @@ $document	=& JFactory::getDocument();
    $profile = $tuser->TableJUser;
 
    foreach($this->users as $user){
-
+	   
      $tuser->load($user->userId);
 	 
 	  $rowhtml .="<tr class='eventListRow".($k+1) ." user".$user->id."' >";
@@ -243,8 +261,30 @@ $document	=& JFactory::getDocument();
 
 	  $this->assign('user',$user);
       $this->assign('tuser',$tuser);
+	  
  
 	  $rowhtml .= $this->loadtemplate("avatar");
+	  
+	  
+		if($cb_integrated > 0 && $registrant_username == 1){
+			
+			$rowhtml .= '<td>';
+		  
+			if($registrant_cb_linked == 1){
+					if($cb_integrated==2){
+					   $rowhtml .= '<a  href="'.JRoute::_('index.php?option=com_community&view=profile&userid='.$user->user_id.'&Itemid='.DTreg::getcomItemId('com_community'),$xhtml_url).'">';
+					}else{
+					   $rowhtml .= '<a  href="'.JRoute::_('index.php?option=com_comprofiler&task=userProfile&user='.$user->user_id.'&Itemid='.DTreg::getcomItemId('com_comprofiler'),$xhtml_url).'">';
+					}
+					$rowhtml .= $user->username.'</a>';
+			} else {
+				$rowhtml .= $user->username.'</a>';
+			}
+			
+			$rowhtml .= '</td>';
+		
+		}
+
 
 	   foreach($fields  as $field){
 
@@ -252,7 +292,7 @@ $document	=& JFactory::getDocument();
 
 		   if($field->name == 'name'){
 
-		      $html  = $this->loadTemplate('name');  
+		      // $html  = $this->loadTemplate('name');  
 
 			  $rowhtml .= $html;
 
@@ -271,6 +311,11 @@ $document	=& JFactory::getDocument();
 		   }
 		
 	   }
+		
+		if($cb_integrated > 0 && $registrant_registered_date == 1){
+			$rowhtml .= '<td>'. $user->register_date .'</td>';
+		}
+	   // prd($user);
 
 	  $rowhtml .= '</tr>';
 

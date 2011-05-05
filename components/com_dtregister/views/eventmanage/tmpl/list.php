@@ -494,7 +494,7 @@ $document =& JFactory::getDocument();
 
 $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js');
 

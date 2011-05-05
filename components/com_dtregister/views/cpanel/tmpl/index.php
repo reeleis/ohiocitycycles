@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -41,8 +41,8 @@ $option = "com_dtregister";
 				$link = "index.php?option=$option&controller=payoption";
 				$this->cpanelbutton( $link, "icon-48-payments.png", JText::_('DT_PAY_OPTIONS') ,"/administrator/components/com_dtregister/assets/images/");
 
-			  // $link = "index.php?option=$option&controller=export";
-			  // $this->cpanelbutton( $link, "icon-48-csv.png", JText::_('DT_CSV_EXPORT_UTILITY') ,"/administrator/components/com_dtregister/assets/images/");
+			   $link = "index.php?option=$option&controller=export";
+			   $this->cpanelbutton( $link, "icon-48-csv.png", JText::_('DT_CSV_EXPORT_UTILITY') ,"/administrator/components/com_dtregister/assets/images/");
 
 				?>
 				

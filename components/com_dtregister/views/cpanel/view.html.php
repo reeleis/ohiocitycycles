@@ -9,6 +9,7 @@ class DtregisterViewCpanel	 extends DtrView {
 				
 	}
 	function cpanelbutton( $link, $image, $text, $path='/administrator/images/', $target='', $onclick='' ) {
+		global $Itemid;
 	 	if( $target != '' ) {
 	 		$target = 'target="' .$target. '"';
 	 	}
@@ -18,6 +19,8 @@ class DtregisterViewCpanel	 extends DtrView {
 	 	if( $path === null || $path === '' ) {
 	 		$path = '/administrator/images/';
 	 	}
+		$link .= "&Itemid=".$Itemid ;
+		
 		?>
 		<div style="float:left;">
 			<div class="icon">

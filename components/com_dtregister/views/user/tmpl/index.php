@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color, $registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$userpanelmessage, $currency_code,$xhtml_url;
+global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color, $registrant_cb_linked, $xhtml,$cb_integrated, $registrant_username, $registrant_registered_date, $userpanelmessage, $currency_code,$xhtml_url;
 
 $config = $this->getModel('config');
 
@@ -35,7 +35,7 @@ $this->assign('muser',$muser);
 
 $document	=& JFactory::getDocument();
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $html = '<tr>
 
@@ -114,6 +114,10 @@ foreach($this->users as $user){
 	    $html .= '<tr class="'.$bgRow.'">
 
 	              <td style="width:200px;">'.$tuser->TableEvent->displayTitle().' </td>';
+				  
+				  /*if($config->getGlobal('registrant_username',0)){
+				  	$html .= '<td>'.$tuser->TableJUser->username.'</td>';
+				  }*/
 
 				  if($config->getGlobal('upanel_edit_show',0)){  
 					$html .= '<td align="center">'.$edit.'</td>';
@@ -124,9 +128,10 @@ foreach($this->users as $user){
 				   if($config->getGlobal('upanel_due_show',0)){  
 					$html .= '<td align="center">'.$due.'</td>';
 				   }
-					
-		$html .= '<td align="center">'.DTreg::showDate($tuser->register_date).'</td>';
-                  if($config->getGlobal('upanel_pay_show',0)){  
+				   // if($config->getGlobal('registrant_registered_date',0)){
+					$html .= '<td align="center">'.DTreg::showDate($tuser->register_date).'</td>';
+				   // }
+				  if($config->getGlobal('upanel_pay_show',0)){  
 					$html .= '<td align="center">'.$payment.'</td>';
 				   }
 				   if($config->getGlobal('upanel_cancel_show',0)){  
@@ -178,8 +183,8 @@ foreach($this->users as $user){
       </td>
 
       <td align="left">
-         <?php echo $search = JRequest::getVar('search',''); ?>
-         <input type="text" name="search" value="<?php echo $search; ?>" />&nbsp;&nbsp;
+         <?php $keyword = JRequest::getVar('keyword',''); ?>
+         <input type="text" name="keyword" value="<?php echo $keyword; ?>" />&nbsp;&nbsp;
 
          <input type="submit" name="search_submit" value="<?php echo  JText::_( 'DT_SEARCH'); ?>" />
 
@@ -200,6 +205,16 @@ foreach($this->users as $user){
         <?php echo DtHtml::sort(JText::_( 'DT_EVENT'), 'title', $dir,$order,'index'); ?>
 
       </th>
+      
+      <?php 
+
+		/*if($config->getGlobal('registrant_username',0)){
+
+			echo '<th class="coltitle" align="left">'.JText::_( 'DT_USERNAME' ). '</th>';
+
+		}*/
+		
+	  ?>
 
       <?php 
 
@@ -228,7 +243,7 @@ foreach($this->users as $user){
 			echo '<th class="coltitle" align="left">'.DtHtml::sort(JText::_( 'DT_AMOUNT_DUE'), 'amount_due', $dir,$order,'index'). '</th>';
 
 		}
-		
+		// if($config->getGlobal('registrant_registered_date',0)){
 	  ?>
 
       <th>
@@ -237,7 +252,8 @@ foreach($this->users as $user){
 
       </th>
 
-      <?php 
+      <?php
+		// }
 
 		if($config->getGlobal('upanel_pay_show',0)){
 

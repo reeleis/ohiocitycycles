@@ -30,7 +30,7 @@ class DtrView extends JView {
 		$document	=& JFactory::getDocument();
 		 //$document->addScript( JURI::root(true).'/media/system/js/mootools.js');
 		$document->addScript( JURI::root(true).'/includes/js/joomla.javascript.js');
-			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validate.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validationmethods.js');
 		if(!$mainframe->isAdmin()){
@@ -240,7 +240,9 @@ class DtrView extends JView {
 		  $tpl = file_get_contents($file);
 		  $html = str_replace($constants,$replace,$tpl);
 		  $document	=& JFactory::getDocument();
-		  $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+		  if(!JModuleHelper::isEnabled('s5_box')){
+		  	$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/jquery.lightbox.css');
+		  }
 		  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.lightbox.js');
 		   ob_start();
 		  ?>

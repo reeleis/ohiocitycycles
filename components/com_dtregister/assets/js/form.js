@@ -158,7 +158,7 @@ $.fn.ajaxSubmit = function(options) {
 		   fileUpload();
 	   }
    else
-	   $.ajax(options);
+	 this.formajax =   $.ajax(options);
 
 	// fire 'notify' event
 	this.trigger('form-submit-notify', [this, options]);

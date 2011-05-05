@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,9 +9,9 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-class DTrCommon{
+class DTrCommon {
 
-   function birdDiscountCalc($type,$discount,$amount){
+	function birdDiscountCalc($type,$discount,$amount){
 
 	   if($type == 2 || $type == 3){
 
@@ -179,7 +179,6 @@ class DTrCommon{
 	}
 
 	return $ret;
-
 }
 
 }

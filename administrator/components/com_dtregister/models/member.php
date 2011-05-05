@@ -268,7 +268,7 @@ class TableMemberfield extends DtrTable {
 
 	    }
 
-		$temp[] =  array('member_id'=>$this->member_id,'field_id'=>$key,'value'=>$value);
+		$temp[] =  array('member_id'=>$this->member_id,'field_id'=>$key,'value'=>stripslashes($value));
 
 	  }
 

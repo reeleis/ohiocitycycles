@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -27,7 +27,7 @@
 
    $publish=JRequest::getInt( 'publish',"-1");
 
-   $archive = JRequest::getVar('archive',-1) ;
+   $archive = JRequest::getVar('archive',-1);
 
    $where = array();
 
@@ -69,9 +69,7 @@
 
    $limit = $mainframe->getUserStateFromRequest( 'global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int' );
 
-   $limitstart = $mainframe->getUserStateFromRequest( "view{$option}limitstart", 'limitstart', 0 );
-
-   $limitstart = 0;
+   $limitstart = $mainframe->getUserStateFromRequest( "view.dtreg_event_list.limitstart", 'limitstart', 0 );
 
    $where =  (count($where) >0 )?implode(' and ' , $where):'';	
 
@@ -84,184 +82,83 @@
 ?>
 
 <script language="javascript">
-
-			function saveOrder(n,task)
-
-
-
-			{
-
-
-
-				for ( var j = 0; j <= n; j++ )
-
-
-
-				{
-
-
-
-					box = eval( "document.adminForm.cb" + j );
-
-
-
-					if ( box ) {
-
-
-
-						if ( box.checked == false ) {
-
-
-
-							box.checked = true;
-
-
-
-						}
-
-
-
-					} else {
-
-
-
-						alert("You cannot change the order of items, as an item in the list is `Checked Out`");
-
-
-
-						return;
-
-
-
-					}
-
-
-
-				}
-
-
-
-				submitform(task);
-
-
-
+function saveOrder(n,task)
+{
+	for ( var j = 0; j <= n; j++ )
+	{
+		box = eval( "document.adminForm.cb" + j );
+		if ( box ) {
+			if ( box.checked == false ) {
+				box.checked = true;
 			}
-
-
-
-		</script>
+		} else {
+			alert("You cannot change the order of items, as an item in the list is `Checked Out`");
+			return;
+		}
+	}
+	submitform(task);
+}
+</script>
 
    <form action="index2.php" method="post" name="adminForm">
 
   <table cellpadding="4" cellspacing="0" border="0" width="100%">
 
-
-
     <tr>
-
-
 
       <td width="50%" align="left">&nbsp;</td>
 
-
-
       <td nowrap><?php echo JText::_( 'DT_DISPLAY_NUM' ); ?> :</td>
-
-
 
       <td nowrap><?php echo $pageNav->getLimitBox(); ?> </td>
 
-
-
       <td><?php echo JText::_( 'DT_FILTER' ); ?>:</td>
-
-
 
 	  	<td>
 
-
-
 	  		<?php
-
-
-
+	
 	  			 $events = DtHtml::options($event->optionslist(),JText::_('DT_SELECT_EVENT'));
+				 // echo '<pre>';
+				 // print_r($event->optionslist());
 
 				 echo JHTML::_('select.genericlist', $events,"eventId","onchange=document.adminForm.submit()","value","text",JRequest::getVar('eventId',''));
 
-
-
 	  		?>
-
-
 
 	  	</td>
 
-
-
        <!-- <td>
-
-
 
          <?php
 
-
-
 		echo JText::_( 'DT_SHOW' );
-
-
 
 		?>
 
-
-
         </td>-->
-
-
 
          <td>
 
-
-
         <?php
 
+		  $options=array();
 
-
-		    $options=array();
-
-
-
-        $options[]=JHTML::_('select.option',"-1",JText::_( 'DT_ALL_EVENT' ));
-
-
+          $options[]=JHTML::_('select.option',"-1",JText::_( 'DT_ALL_EVENT' ));
 
 	      $options[]=JHTML::_('select.option',"1",JText::_( 'DT_PUBLISHED' ));
 
-
-
 	      $options[]=JHTML::_('select.option',"0",JText::_( 'DT_UNPUBLISHED' ));
 
-
-
-        $publish = JRequest::getVar('publish') ;
-
-
+          $publish = JRequest::getVar('publish');
 
 	      echo JHTML::_('select.genericlist', $options,"publish",' onchange="submit()" ',"value","text",$publish);
 
-
-
 			?>
 
-
-
         </td>
-
-        
-
+ 
         <td>
-
-
 
         <?php
 
@@ -273,7 +170,7 @@
 
 	      $options[]=JHTML::_('select.option',"0",JText::_( 'DT_ALL_EVENT' ));
 
-          $archive = JRequest::getVar('archive',-1) ;
+          $archive = JRequest::getVar('archive',-1);
 
 	      echo JHTML::_('select.genericlist', $options,"archive",' onchange="submit()" ',"value","text",$archive);
 
@@ -285,7 +182,7 @@
 
       <td><input type="text" name="search" value="<?php echo $search;?>" class="inputbox" onChange="document.adminForm.submit();" />
 
-      <input type="hidden" name="act" value="groups"  />
+      <input type="hidden" name="act" value="groups" />
 
       </td>
 
@@ -313,10 +210,10 @@
 
     $k = 0;
 
-	 $n=count( $rows );
+	$n=count( $rows );
 
-     $checkboxvalue = 0;
-    $prevcat = 0 ;
+    $checkboxvalue = 0;
+    $prevcat = 0;
     if ($n>0){
 
     for ($i=0, $n=count( $rows ); $i < $n; $i++,$checkboxvalue++ ) {
@@ -377,7 +274,7 @@
 
          <?php $task =  $row->publish?'unpublish':'publish'; ?>
 
-         <a href="index2.php?option=com_dtregister#publish" onclick="return listItemTask('cb<?php echo $i;?>','<?php echo $task; ?>')">
+         <a href="index2.php?option=com_dtregister#publish" onclick="return listItemTask('cb<?php echo $checkboxvalue;?>','<?php echo $task; ?>')">
 
          <img src="images/<?php echo $img;?>" width="12" height="12" border="0" alt="<?php echo $alt; ?>" /></a>
 
@@ -385,7 +282,7 @@
 
         <td align="left"><?php echo $row->categoryName; ?></td>
 
-        <td align="left"><?php echo $event->displaytimecolumn();  ?></td>
+        <td align="left"><?php echo $event->displaytimecolumn(); ?></td>
 
         <td align="left"><?php echo $row->email; ?></td>
 
@@ -406,7 +303,7 @@
             <?php 
 			 $j = $i;
 			 
-			 $showorderDown = true ;
+			 $showorderDown = true;
 			 for($j=($i+1);$j;$j++){
 				 if(!isset($rows[$j])){
 				   break;	 
@@ -414,16 +311,15 @@
 				  
 				 if($rows[$j]->event_parent == 0){
 					 
-						
 					 if($rows[$j]->categoryId != $row->categoryId){
-					    $showorderDown = false ;
+					    $showorderDown = false;
 					 }else{
 						 
-						 $showorderDown = true ;
+						 $showorderDown = true;
 					 }
-					 break ;
+					 break;
 				 }else{
-				    continue ;
+				    continue;
 				 }
 				 
 			  }
@@ -452,7 +348,7 @@
 
      </td>
 
-      <?php    $k = 1 - $k; echo  "</tr>" ; 
+      <?php $k = 1 - $k; echo "</tr>"; 
 
 	   if($event->setChilds()){
 
@@ -467,7 +363,7 @@
 		 $checkboxvalue += count($event->childs);
 
 	   }
-       $prevcat = $row->categoryId ;
+       $prevcat = $row->categoryId;
 	  }
 
     } else { ?>
@@ -502,7 +398,7 @@
 
         <th class="dt_heading" nowrap><?php echo JText::_( 'DT_EVENT_TIME' ); ?>:</th>
 
-       <th class="dt_heading" nowrap><?php echo JText::_( 'DT_ADMIN_EMAIL' ); ?>:</th>
+        <th class="dt_heading" nowrap><?php echo JText::_( 'DT_ADMIN_EMAIL' ); ?>:</th>
 
      <?php
 
@@ -512,11 +408,11 @@
 
         <th class="dt_heading" colspan="2" nowrap><?php echo JText::_( 'DT_REORDER' ); ?>:</th>
 
-		    <th class="dt_heading" nowrap><?php echo JText::_( 'DT_ORDER' ); ?>:
+		<th class="dt_heading" nowrap><?php echo JText::_( 'DT_ORDER' ); ?>:
 
 			   <a href="javascript: saveOrder( <?php echo count( $rows )-1; ?>,'saveorder')"><img src="images/filesave.png" border="0" width="16" height="16" alt="<?php echo JText::_( 'DT_SAVE_ORDER' ); ?>" /></a>
 
-		    </th>
+		</th>
 
        <?php
 
@@ -532,7 +428,7 @@
 
       </tr>
 
-      <?php echo  $html; ?>
+      <?php echo $html; ?>
 
       <tr>
 
@@ -558,25 +454,25 @@
 
 	<input type="hidden" name="boxchecked" value="0" />
 
-     <input type="hidden" name="controller" value="event" />
+    <input type="hidden" name="controller" value="event" />
 
-	 <input type="hidden" name="task" value="" />
+	<input type="hidden" name="task" value="" />
 
     </form>
 
 <?php
 
-$document	=& JFactory::getDocument();
+$document =& JFactory::getDocument();
 
 $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js');
 
 ?>
 
-<script type="text/javascript" >
+<script type="text/javascript">
 
  DTjQuery(function(){
 
@@ -622,7 +518,7 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 	   function(){
 
-			var parent = DTjQuery(this).next().find('input:checkbox').val() ; 
+			var parent = DTjQuery(this).next().find('input:checkbox').val(); 
 
 			DTjQuery('tr[id="'+parent+'"]').css('display','table-row');
             DTjQuery(this).children('img').attr('src','<?php echo  JURI::root(true); ?>/administrator/components/com_dtregister/assets/images/close.png')		 
@@ -631,7 +527,7 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 		function(){
 
-		    var parent = DTjQuery(this).next().find('input:checkbox').val() ; 
+		    var parent = DTjQuery(this).next().find('input:checkbox').val(); 
 
 			DTjQuery('tr[id="'+parent+'"]').css('display','none')
 

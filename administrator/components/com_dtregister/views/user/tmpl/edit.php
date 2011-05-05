@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $currency_code;
+global $Itemid,$currency_code;
 
 $tUser = $this->mUser->table;
 
@@ -174,7 +174,7 @@ $pMethods = $paymthd->getMergeList(true);
 
      <?php
 
-	   echo  $this->form;
+	   echo $this->form;
 
 	 ?>
 	
@@ -226,7 +226,7 @@ $pMethods = $paymthd->getMergeList(true);
 			}
 
 	});
-
+	
 	DTjQuery("#Useruser_id").change(function(){	    
 		DTjQuery.getJSON('index.php?option=com_dtregister&controller=user&task=loadprofile&no_html=1',{id:DTjQuery(this).val()},function(data){
 
@@ -253,10 +253,13 @@ $pMethods = $paymthd->getMergeList(true);
 	}
     
 	if(DTjQuery(document.adminForm).valid()){
-
+		var disabled = DTjQuery(':disabled');
+        DTjQuery.each(disabled, function(){
+		     DTjQuery(this).removeAttr('disabled');  
+	   	})
          document.adminForm.task.value = pressbutton;
 		 //document.adminForm.submit();
-	  	  submitform(pressbutton);
+	  	 submitform(pressbutton);
 
 	}
 

@@ -47,7 +47,7 @@ $color = $config->getGlobal('button_color') ;
         $eventTable->overrideGlobal($row->slabId); 
 
 		 if($config->getGlobal('event_title_link') == "jevent"){
-              $jevent_view_id = $eventTable->getJeventdetailId($row->slabId);
+              $jevent_view_id = $eventTable->getJeventdetailId($row->eventId);
 
         $jevent_href = JRoute::_("index.php?option=com_jevents&task=icalrepeat.detail&evid=".$jevent_view_id."&Itemid=".DTreg::getcomItemId('com_jevents'),$xhtml_url);
              $event_title_href = $jevent_href;

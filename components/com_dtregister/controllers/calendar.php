@@ -37,6 +37,8 @@ class DtregisterControllerCalendar extends DtrController {
 	function index(){
         global $mainframe;
 		$cat = JRequest::getVar('cat','all' );
+		
+		// echo $view = JRequest::getVar('calview','');
         
 		$this->view->assign('cat',$cat);
 	   	$this->view->setLayout('index');
@@ -60,6 +62,8 @@ class DtregisterControllerCalendar extends DtrController {
 	   $tevt = $mevt->table;
 
 	   $query = $mevt->listingQuery($daterange,$cat);
+	   
+	   // prd($query);
 
 	   $events = $tevt->query($query,null,null); 
        

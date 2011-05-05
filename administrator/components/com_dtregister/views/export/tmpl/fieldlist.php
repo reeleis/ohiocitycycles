@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -38,9 +38,9 @@
 	<div id="progressbar" style="height:100%;"></div>
 </div>
 <script>
-  var page = 0 ;
+  var page = 0;
   var file = "";
-  var totalpages = "" ;
+  var totalpages = "";
   var limit = <?php echo  DtregisterModelExport::$limit ; ?>;
   
   
@@ -55,7 +55,7 @@
 					 success : function(data){
 					 	
 						file = data.file;
-						totalpages = Math.ceil(data.total/limit) ;
+						totalpages = Math.ceil(data.total/limit);
 						totalpages -- ;
 						DTjQuery( "#progressbar" ).progressbar('option','value',page*100/totalpages);
 						
@@ -64,51 +64,41 @@
 							populate_file();
 						}else{
 							
-							document.adminForm.filename.value = file ;
+							document.adminForm.filename.value = file;
 							document.adminForm.task.value = 'downloadfile';
-							page = 0 ;
+							page = 0;
   							file = "";
-  							totalpages = "" ;
+  							totalpages = "";
 							document.adminForm.submit();
 						}
 					 }
 					 
-	 
 	                };
 					
 		DTjQuery('#adminForm').ajaxSubmit(options); 
 			
-		
   }
   
   DTjQuery(function(){
 	  DTjQuery( "#progressbar" ).progressbar({
 			value: 0
 	  });
-	  
-	  
-	  
       
   })
   
-  
   function submitbutton(task){
 	  
-	  document.adminForm.task.value = task ;
+	  document.adminForm.task.value = task;
 	  if(task == "fieldlist"){
 		  alert('<?php echo JText::_('DT_PROCESSING_WAIT'); ?>');
 	  	  if(page == 0 ){
 	  		 populate_file();
-			 return false ;
+			 return false;
 		  }else if(page == totalpages){
 		  
 		  }
 		  
-		  
 	  }
-	  
-	 
-  	  
 	  
   }
 </script>

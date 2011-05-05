@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -16,31 +16,25 @@ class DtregisterModelPaymentmethod extends DtrModel {
   function __construct($config=array()){
 
 	  $this->methods = array( "authorizenet" => JText::_( 'AUTH_NET' ),
-
 								"echeck"=>JText::_( 'ECHECK' ),
-
 								"GoogleCheckout"=>JText::_( 'DT_GOOGLE_CHECKOUT' ),
-
 								"NetDeposit"=>JText::_( 'DT_NETDEPOSIT' ),
-
 								"paypal"=>JText::_( 'PAYPAL' ),
-
-								"Eway"=>JText::_( 'Eway' ),
-
+								"Eway"=>JText::_( 'DT_EWAY' ),
+								"usaepay_credit_card"=>JText::_( 'DT_USAEPAY' ),
+								"usaepay_echeck"=>JText::_('DT_USAEPAY_ECHECK'),
 								'Sage'=>JText::_('DT_SAGE'),
-
 								"ideal" => JText::_( 'DT_PAY_IDEAL_MOLLIE' ),
-
 								"idealRabo"=>JText::_( 'DT_PAY_IDEAL_LITE' ),
 								'saferpay' => JText::_( 'DT_SAFER_PAY' ),
-
+                                'psigate'=>JText::_('DT_PSIGATE'),
 								"pay_later"=>JText::_( 'DT_PAY_LATER' ),
 								"paypal_pro"=>JText::_( 'DT_PAYPAL_PRO' )
 
 								);
 										
 		$path = JURI::root(true)."/components/com_dtregister/assets/images/";
-		global $googlemerchid ,$amp;
+		global $googlemerchid,$amp;
         $this->images = array(
 		                   'authorizenet'=> $path .'card_pay.jpg',
 						   'echeck'=> $path .'echeck_pay.jpg',
@@ -53,7 +47,10 @@ class DtregisterModelPaymentmethod extends DtrModel {
 						   'idealRabo'=> $path .'ideal_pay.jpg',
 						   'pay_later'=> $path .'pay_later.jpg',
 						   'paypal_pro'=> $path .'paypal_pay.jpg',
-						   'saferpay'=>$path.'saferpay_pay.jpg'
+						   'saferpay'=>$path.'saferpay_pay.jpg',
+						   'psigate'=> $path .'psigate_pay.jpg',
+						   'usaepay_credit_card'=>$path.'card_pay.jpg',
+						   'usaepay_echeck'=>$path.'echeck_pay.jpg'
 		               );
 		$this->paylater  =& DtrModel::getInstance('Paylater','DtregisterModel');
 
@@ -66,8 +63,8 @@ class DtregisterModelPaymentmethod extends DtrModel {
 	  global $mainframe;
 
       if($mainframe->isAdmin()){
-		  $this->methods['ideal'] =   JText::_( 'DT_PAY_IDEAL_MOLLIE' ); 
-		  $this->methods['idealRabo'] =   JText::_( 'DT_PAY_IDEAL_LITE' ); 
+		  $this->methods['ideal'] = JText::_( 'DT_PAY_IDEAL_MOLLIE' ); 
+		  $this->methods['idealRabo'] = JText::_( 'DT_PAY_IDEAL_LITE' ); 
 	  }
 
 	 return $this->methods;
@@ -85,7 +82,7 @@ class DtregisterModelPaymentmethod extends DtrModel {
 	  }else{
 	  	$plm = $paylater->getOptions();
 	  }
-	  $pm = $this->methods ;
+	  $pm = $this->methods;
 	  if (isset($pm['pay_later'])) 
 	  unset($pm['pay_later']);
 	  

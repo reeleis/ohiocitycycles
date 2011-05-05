@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -168,19 +168,21 @@ class DtregisterModelAco extends DtrModel {
 										   'type'=>'action'
 									     )
 				                      ),
+				    'DT_CSV_EXPORT' => array(
+					 
+										  array(
+									       'controller'=>'export',
+									       'task'=>'eventlist',
+										   'type'=>'action'
+									     ),
+				                         array(
+									       'controller'=>'export',
+									       'task'=>'fieldlist',
+										   'type'=>'action'
+									     )
+				                      )
 
 		  );
-
-	  /*
-	  
-- CSV Export // not created yet . 
-- Create Payment Options // no controller for it
-- Edit/Delete Payment Options // no controller for it .
-- View Records  // lots of conflict with controller on frontend/backend
-- Edit/Delete Records // lots of conflict with controller on frontend/backend
-- Manual Registrations // lots of conflict with controller on frontend/backend
-  
-	  */
 
 	   $this->table =  new TableAco($this->getDBO()) ; 
 

@@ -11,7 +11,7 @@
 
 $document =& JFactory::getDocument();
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
 $config =  $this->getModel('config');

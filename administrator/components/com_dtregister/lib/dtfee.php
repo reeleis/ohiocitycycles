@@ -87,7 +87,7 @@ class DT_Fee{
 
 		}
         
-		if(isset($this->TableUser->userId) && $this->TableUser->userId > 0){
+		if(isset($this->TableUser->userId) && $this->TableUser->userId > 0 && $this->TableUser->process =='duepayment'){
 		  	
 			foreach($this->TableUser->fee as $feepart =>$partvalue){
 			   if(!in_array($feepart , array('id','user_id'))){
@@ -99,9 +99,9 @@ class DT_Fee{
 			  	
 		}
 		
-		if(isset($this->TableUser->process)&& $this->TableUser->process=='due'){
+		if(isset($this->TableUser->process)&& ($this->TableUser->process=='due' || $this->TableUser->process=='duepayment')){
 
-			// set the fee from session;
+			return $this->currentfee;
 
 		}
 
@@ -225,8 +225,11 @@ class DT_Fee{
 	function processFee(){
 
 	   $this->currentfee = $this->basefee;
-	   if(isset($this->customfee) && $this->customfee >0 ){
+	 
+	   if(isset($this->customfee) && $this->customfee >0 && isset($this->TableUser->process) && $this->TableUser->process == "duepayment"){
 	   		$this->currentfee += $this->customfee ;
+	   }else{
+	   	  $this->customfee = 0 ;	
 	   }
 	   foreach($this->TableEvent->feeorder  as $feeorder){
 
@@ -247,7 +250,7 @@ class DT_Fee{
 		   if($feeorder->type == "changefee"){
 
 			  $amount = $this->getChangefee(); 
-
+              
 			  $this->currentfee += $amount; 
 		   }
 
@@ -272,13 +275,14 @@ class DT_Fee{
 		   }
 
 		   if($feeorder->type == "field"){
-
+               
 			  $fee = $this->getFieldFee($feeorder->reference_id);
 			  if(!isset($this->TableUser->process) || $this->TableUser->process != "duepayment"){
-			  	 
+			  	
 				 $this->currentfee += $fee;
 
 			  	 $this->customfee += $fee;
+				 
 				 
 			  }
 			  
@@ -375,7 +379,9 @@ class DT_Fee{
 
 	function getFieldFee($field_id){
          
-		 
+		 // pr($field_id);
+		 // prd($this->TableUser->fields);
+		 // pr($this->TableUser->fields[$field_id]) ;
 		 if(isset($this->fieldfee[$field_id])){
 		    
 			return ;	 

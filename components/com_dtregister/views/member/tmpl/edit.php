@@ -88,19 +88,20 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
   
  var updateFee = function(){
 	    
-	   var prevtask = DTjQuery(document.frmcart.task).val();
-	   var prevcontroller = DTjQuery(document.frmcart.controller).val();
+	  // var prevtask = DTjQuery(document.frmcart.task).val();
+	  // var prevcontroller = DTjQuery(document.frmcart.controller).val();
 	   var options = {
 		               url : "<?php echo JRoute::_("index.php?no_html=1");?>",
+					    data : {task:'price_header',controller:'user'},
 					   success : function(responseText){
 						             DTjQuery("#price_header").html(responseText);
 					              }
 		   }
-	   DTjQuery(document.frmcart.task).val('price_header');
-	   DTjQuery(document.frmcart.controller).val('user');
+	  // DTjQuery(document.frmcart.task).val('price_header');
+	  // DTjQuery(document.frmcart.controller).val('user');
 	   DTjQuery(document.frmcart).ajaxSubmit(options);
-	   DTjQuery(document.frmcart.task).val(prevtask);
-	   DTjQuery(document.frmcart.controller).val(prevcontroller);
+	  // DTjQuery(document.frmcart.task).val(prevtask);
+	  // DTjQuery(document.frmcart.controller).val(prevcontroller);
 	     
   }
   

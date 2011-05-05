@@ -21,9 +21,15 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 ?>
 </div>
 <?php
+
+
   if(DT_Session::get('register.User.process') === 'change'){
-  	 
-	 $paying_amount = $this->feeObj->changefee ;// -  $this->feeObj->paid_amount + $this->feeObj->fee;
+  	 if($this->feeObj->changefee > 0){
+	     $paying_amount = $this->feeObj->changefee  -  $this->feeObj->paid_amount + ( $this->feeObj->fee - $this->feeObj->changefee);
+	 }else{
+	     $paying_amount = 0 ;
+	 }
+	
 	 
   }elseif(DT_Session::get('register.User.process') === 'cancel'){
      $paying_amount = $this->feeObj->cancelfee -  $this->feeObj->paid_amount;
@@ -42,7 +48,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
 	   echo $this->viewMemFields;
 	   
-	   if($this->partial_payment_enable){
+	   if($this->partial_payment_enable && $paying_amount > 0){
 	    
 	 ?>
 

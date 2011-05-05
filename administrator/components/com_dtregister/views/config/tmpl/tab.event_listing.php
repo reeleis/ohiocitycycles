@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -31,25 +31,16 @@
 
 		<td align="left" valign="top">
 
-								   <?php
+				<?php
 
+					$options=array();
 
+					$options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-								   $options=array();
+					$options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
+				    echo JHTML::_('select.genericlist', $options,"config[month_filter_show]","","value","text",$config->getGlobal('month_filter_show'));
 
-
-
-								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
-
-
-
-								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
-
-								   echo JHTML::_('select.genericlist', $options,"config[month_filter_show]","","value","text",$config->getGlobal('month_filter_show'));
-
-								   ?>
+				 ?>
 
 	   </td>
 
@@ -58,212 +49,115 @@
 	</tr>      
 
     <tr align="center" valign="middle">
-	
-	  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_FILTER_SHOW');?>:</strong></td>
-
-      <td align="left" valign="top">
-
-
-
-								   <?php
-
-
-
-								   $options=array();
-
-
-
-								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
-
-
-
-								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
-
-								   echo JHTML::_('select.genericlist', $options,"config[event_filter_show]","","value","text",$config->getGlobal('event_filter_show'));
-
-
-
-								   ?>
-
-
-
-							   </td>
-
-
-
-								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_FILTER_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
-
-							   </tr>
-
-                               
+		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_FILTER_SHOW');?>:</strong></td>
+		<td align="left" valign="top">
+			<?php
+            $options=array();
+            $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
+            $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
+            echo JHTML::_('select.genericlist', $options,"config[event_filter_show]","","value","text",$config->getGlobal('event_filter_show'));
+            ?>
+		</td>
+		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_FILTER_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+	</tr>
+    
+    <tr align="center" valign="middle">
+		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_LOCATION_SHOW');?>:</strong></td>
+		<td align="left" valign="top">
+			<?php
+            $options=array();
+            $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
+            $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
+            echo JHTML::_('select.genericlist', $options,"config[event_location_show]","","value","text",$config->getGlobal('event_location_show'));
+            ?>
+		</td>
+		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_LOCATION_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+	</tr>     
 
                                  <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_SEARCH_SHOW');?>:</strong></td>
 
-
-
 							    <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
 
 								   echo JHTML::_('select.genericlist', $options,"config[event_search_show]","","value","text",$config->getGlobal('event_search_show'));
 
-
-
 								   ?>
 
-
-
 							   </td>
-
-
 
 								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_SEARCH_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
 							   <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_TITLE_LINK');?>:</strong></td>
 
-
-
 							    <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', "dtregister",JText::_( 'DT_REGISTRATION'));
 
-
-
-								   $options[]=JHTML::_('select.option', "jevent",JText::_( 'DT_JEVENT'));
-
-								   
+								   $options[]=JHTML::_('select.option', "jevent",JText::_( 'DT_JEVENT'));   
 
 								  // $options[]=JHTML::_('select.option', "article",JText::_( 'DT_ARTICLE'));
 
-
-
 								   echo JHTML::_('select.genericlist', $options,"config[event_title_link]","","value","text",$config->getGlobal('event_title_link'));
-
-
 
 								   ?>
 
-
-
 							   </td>
-
-
 
 								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_TITLE_LINK_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>   
-
-                                
 
                                <tr>
 
-
-
 							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_FIELD_WIDTH' );?>:</strong></td>
-
-
 
 							   		<td><input type="text" name="config[event_field_width]" size="9" value="<?php echo $config->getGlobal('event_field_width'); ?>" /></td>
 
-
-
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_FIELD_WIDTH_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
                                  <tr>
 
-
-
 							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_DATE_WIDTH' );?>:</strong></td>
-
-
 
 							   		<td><input type="text" name="config[event_date_width]" size="9" value="<?php echo $config->getGlobal('event_date_width'); ?>" /></td>
 
-
-
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_DATE_WIDTH_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
 
 							   </tr>
 
-                               
 <tr>
 
-
-
                                 <td align="left"><strong><?php echo JText::_( 'DT_SHOW_EVENT_IMAGE' ); ?>:</strong></td>
-
-
 
                                 <td>
 
                                 <?php
 
-								$options = array(JText::_('NO'),JText::_('YES'));
-
-							
+								$options = array(JText::_('NO'),JText::_('YES'));	
 
 							     echo JHTML::_('select.genericlist', DtHtml::options($options),'config[show_event_image]','','value','text',$config->getGlobal('show_event_image',0));
 
 								?>
 
-                              
-
                         		    <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_SHOW_EVENT_IMAGE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
 
                               </tr>
                                 <tr>
-
-
-
-
 
 							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_SHOW_DATE' );?>:</strong></td>
 
@@ -273,15 +167,9 @@
 
 								   $options=array();
 
-
-
 								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
 
 								   echo JHTML::_('select.genericlist', $options,"config[event_date_show]","","value","text",$config->getGlobal('event_date_show'));
 
@@ -298,23 +186,13 @@
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
 
-
-
 								   echo JHTML::_('select.genericlist', $options,"config[price_column]","","value","text",$config->getGlobal('price_column'));
-
-
 
 								   ?>
 
@@ -352,67 +230,35 @@
 
 								   $options=array();
 
-
-
 								   $options[]=JHTML::_('select.option', '1', JText::_( 'Show' ));
-
-
 
 								   $options[]=JHTML::_('select.option', '0', JText::_( 'Hide' ));
 
-
-
 								   echo JHTML::_('select.genericlist', $options,'config[capacity_column]','','value','text',$config->getGlobal('capacity_column'));
-
-
 
 								   ?>
 
-
-
 							   </td>
-
-
 
 								<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_CAPACITY_COLUMN_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
                                 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_DISPLAY_TIME' );?>:</strong></td>
 
-
-
 							   <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', '0', JText::_( 'DT_HIDE' ));
 
-
-
 								   $options[]=JHTML::_('select.option', '1', JText::_( 'DT_START_TIME' ));
 
-
-
-                                    $options[]=JHTML::_('select.option', '2', JText::_( 'DT_START_END_TIME' ));
-
-
+                                   $options[]=JHTML::_('select.option', '2', JText::_( 'DT_START_END_TIME' ));
 
 								   echo JHTML::_('select.genericlist', $options,'config[displaytime]','','value','text',$config->getGlobal('displaytime'));
-
-
 
 								   ?>
 
@@ -452,155 +298,79 @@
 
                            <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_SHOW_LOCATION');?>:</strong></td>
 
-
-
 							   <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
 
 								   echo JHTML::_('select.genericlist', $options,"config[showlocation]","","value","text",$config->getGlobal('showlocation'));
 
-
-
 								   ?>
 
-
-
 							   </td>
-
-
 
 								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_SHOW_LOCATION_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
                            <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_LINK_GOOGLE');?>:</strong></td>
 
-
-
 							   <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
                                    $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
 
                                    echo JHTML::_('select.genericlist', $options,"config[linktogoogle]","","value","text",$config->getGlobal('linktogoogle'));
 
-
-
 								   ?>
 
-
-
-							   </td>
-
-
+						   </td>
 
 								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_LINK_GOOGLE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
 
-
-
                            <tr>
-
-
 
 							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_GOOGLE_KEY' );?>:</strong></td>
 
-
-
 							   		<td><input type="text" name="config[googlekey]" size="50" value="<?php echo $config->getGlobal('googlekey'); ?>" />
-
-
 
                     <br />(<?php echo JText::_( 'DT_GOOGLE_KEY_URL_TIP' );?>)
 
-
-
                     </td>
-
-
 
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_GOOGLE_KEY_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
                            <tr>
 
-
-
-							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_LOCATION_IMAGE_WIDTH' );?>:</strong></td>
-
-
+						   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_LOCATION_IMAGE_WIDTH' );?>:</strong></td>
 
 							   		<td><input type="text" name="config[location_img_w]" size="9" value="<?php echo $config->getGlobal('location_img_w'); ?>" /></td>
 
-
-
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_LOCATION_IMAGE_WIDTH_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
 
 							   </tr>
 
-
-
                                    <tr>
-
-
 
 							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_LOCATION_IMAGE_HEIGHT' );?>:</strong></td>
 
-
-
 							   		<td><input type="text" name="config[location_img_h]" size="9" value="<?php echo $config->getGlobal('location_img_h'); ?>" /></td>
 
-
-
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_LOCATION_IMAGE_HEIGHT_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
 
 							   </tr>
 							
@@ -612,151 +382,77 @@
 
                                <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_SHOW_PAST_EVENT');?>:</strong></td>
 
-
-
 							   <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
 
-
-
 								   $options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
-
-
 
                                    //$show_past_event = isset($show_past_event)?$show_past_event:'0';
 
-
-
 								   echo JHTML::_('select.genericlist', $options,"config[show_past_event]","","value","text",$config->getGlobal('show_past_event',0));
-
-
 
 								   ?>
 
-
-
 							   </td>
-
-
 
 								 <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_SHOW_PAST_EVENT_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
 							   </tr>
-
-
 
 							   <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_SHOW_REGISTRATION_BUTTON' );?>:</strong></td>
 
-
-
 							   <td align="left" valign="top">
-
-
 
 								   <?php
 
-
-
 								   $options=array();
-
-
 
 								   $options[]=JHTML::_('select.option', '1', JText::_( 'Show' ));
 
-
-
 								   $options[]=JHTML::_('select.option', '0', JText::_( 'Hide' ));
-
-
 
 								   echo JHTML::_('select.genericlist', $options,'config[show_registration_button]','','value','text',$config->getGlobal('show_registration_button',0));
 
-
-
 								   ?>
-
-
 
 							   </td>
 
-
-
 								<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_SHOW_REGISTRATION_BUTTON_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
 
 							   </tr>
 
-
-
 								<tr>
-
-
 
                                 <td  align="left"><strong><?php echo JText::_( 'DT_EVENT_FRONT_LINK_TYPE' ); ?>:</strong></td>
 
-
-
                                 <td>
-
-
 
                                     <?php
 
-
-
                                                 $options=array();
 
+                                                $options[]=JHTML::_('select.option',"0",JText::_( 'DT_TEXT' ));
 
-
-                                                    $options[]=JHTML::_('select.option',"0",JText::_( 'DT_TEXT' ));
-
-
-
-                                                    $options[]=JHTML::_('select.option',"1",JText::_( 'DT_IMAGE' ));
-
-
+                                                $options[]=JHTML::_('select.option',"1",JText::_( 'DT_IMAGE' ));
 
                         						$front_link_type = isset($front_link_type)?$front_link_type:1;
 
-
-
                                           echo JHTML::_('select.genericlist', $options, 'config[front_link_type]','','value','text',$config->getGlobal('front_link_type',0));
-
-
 
                                     ?>
 
-
-
                                 </td>
-
-
 
                         		    <td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_FRONT_LINK_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-
-
                               </tr>
 
-                              
-
                               <tr>
-
-
 
                                 <td align="left"><strong><?php echo JText::_( 'DT_EVENT_LIST_ORDER' ); ?>:</strong></td>
 

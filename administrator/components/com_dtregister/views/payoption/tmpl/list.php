@@ -39,7 +39,7 @@
 
     <th width="12" class="dt_heading">
 
-     <input type="checkbox" name="toggle" size="12" value="" onclick="checkAll(<?php echo count( $locations ); ?>);" />
+     <input type="checkbox" name="toggle" size="12" value="" onclick="checkAll(<?php echo count( $payments ); ?>);" />
 
     </th>
      

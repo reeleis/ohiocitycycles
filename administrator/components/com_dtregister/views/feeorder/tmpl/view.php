@@ -1,10 +1,19 @@
 <?php
 
+/**
+* @version 2.7.4
+* @package Joomla 1.5
+* @subpackage DT Register
+* @copyright Copyright (C) 2006 DTH Development
+* @copyright contact dthdev@dthdevelopment.com
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+*/
+
 $document	=& JFactory::getDocument();
 
 $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js');
 
@@ -14,11 +23,9 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 <link href="<?php echo JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css'; ?>" rel="stylesheet"  />
 
-<script type="text/javascript" src="<?php echo JURI::root(true).'/components/com_dtregister/assets/js/jquery.js'; ?>"></script>
+<script type="text/javascript" src="<?php echo JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js'; ?>"></script>
 
 <script type="text/javascript" src="<?php echo JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js'; ?>"></script>
-
-
 
 <style type="text/css">
 
@@ -37,8 +44,6 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 		DTjQuery("#sortable").sortable({
 
 		  update : function(e,ui){
-
-			  
 
 				  var order = DTjQuery(this).sortable("serialize") ;
 
@@ -78,17 +83,10 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 	?>
 
-	
-
-	
-
 </ul>
 
 <div id="contentRight">
 
-
-
 </div>
 
 </body>
-

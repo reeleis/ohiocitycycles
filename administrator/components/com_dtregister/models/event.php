@@ -46,7 +46,8 @@ class DtregisterModelEvent extends DtrModel {
            $where[] = " b.dtstart < '".($end_date->toFormat('%Y-%m-%d'))."' ";
       }
       if($cat != 'all'){
-		  $where[] = " b.category = $cat";
+		  // $where[] = " b.category = $cat";
+		  $where[] = " c.categoryId = $cat or c.parent_id = $cat";
 	  }
 	  
 	  $where = implode(' and ',array_filter($where));
@@ -328,7 +329,9 @@ class TableEvent extends DtrTable {
 	 
 	 var $cancel_refund_status = 0;
 
-	 var $excludeoverlap;
+	 var $excludeoverlap = 0 ;
+	 
+	 var $prevent_duplication = 1;
 
 	 var $pay_later_thk_msg_set;
 
@@ -427,10 +430,12 @@ class TableEvent extends DtrTable {
 		parent::__construct( '#__dtregister_group_event', 'slabId', $db );
 
         $this->repeatFields = array('slabId','dtstart','dtstarttime','dtend','dtendtime',
-	                               'title','publish','cut_off_date','cut_off_time',
+	                               'publish','cut_off_date','cut_off_time',
 								   'startdate','starttime','topmsg','event_describe');
   }
-
+  
+  
+  
   function load($id){
 
       parent::load($id);
@@ -1022,7 +1027,9 @@ class TableEvent extends DtrTable {
 	     global $mainframe, $sign_up_redirect , $timecheck,$Itemid , $prerequisite_paid , $prerequisite_attend ,$now;
 
 		  $my = &JFactory::getUser();
-
+         if(!$this->publish){
+		 	return false ;
+		 }
 		 if($this->public != 1 && !$my->id ){ // private event requires to login
 
 		  // return false ;
@@ -1242,7 +1249,11 @@ class TableEvent extends DtrTable {
 
 	   	$my = &JFactory::getUser();
 
-		$regs = $tUser->find(" user_id={$my->id} and status<> -1");
+		if (isset($my->id)) {
+			$regs = self::find(" user_id={$my->id} and status<> -1");
+		} else {
+			$regs = self::find(" 1=1 and status<> -1");
+		}
 
 		$overlap = false;
 
@@ -1427,7 +1438,7 @@ class TableEvent extends DtrTable {
         
 		 global $event_show_date ,$date_format;     
 
-		 $data = $this->find(' 1=1 ',' dtstart desc ');
+		 $data = $this->find(' 1=1 and archive=0 ',' dtstart desc ');
 
 		 $list =  array();
 
@@ -1699,23 +1710,33 @@ return $data ;
 	 $this->convertTimeFormat($data['event']['timeformat'],$data['event']['cancel_time']);
       
 	 static $secondpass = 0;
-	
+	  $create_new_repeats = true ;
+	 $repeat_changed =  true;
 	 if($data['event']['slabId']!=""){
-
+       
 		$this->load($data['event']['slabId']);
 
 		if(isset($this->repetition) && count($this->repetition) && $this->repetition !== false){
            
 		   if(!$this->validDateChange($data)){
 
-			     $this->error = JText::_("DT_REPTITIONS_NOT_VALID");
-				 $this->error = JText::_('DT_REGISTRATION_EXISTS');
-
-			     return false;
+		         $error = JText::_("DT_REPTITIONS_NOT_VALID");
+				 $error = JText::_('DT_REGISTRATION_EXISTS');
+                 
+			     $create_new_repeats = true ;
+				 //pr($create_new_repeats);
 
 		   }else{
 
 		   }
+		   
+		   $repeat_changed =  true ;
+		   if($this->comparerepeat($data)){
+		      $repeat_changed = false ;
+		   }else{
+		   
+		   }
+		  
 
 		}
 
@@ -1728,13 +1749,16 @@ return $data ;
 	    $created = true;
 
 	 }
-
-	 //parent::bind($data['event']);
-
-	 unset($this->repetition);
+//echo "<pre>";
+//var_export($_POST);
+	//$this->bind($data['event']); 
 	
+  //prd($data['event']);
+	 unset($this->repetition);
+	unset($this->error);
 	 parent::save($data['event']);
-
+	 if(isset($error))
+     $this->error = $error ;
 	 $this->TablePrerequisitecategory->event_id = $this->slabId;
 
 	 $this->removeprequisitecategory();
@@ -1781,15 +1805,18 @@ return $data ;
 	 if(!isset($this->parent_slabId)){
 	   $this->parent_slabId = $this->slabId;
 	 }
-     
-	 if(isset($data['event']['repeatType']) && $data['event']['repeatType'] !='norepeat' && $secondpass === 0){
+     // create repeats
+	 if(!$create_new_repeats){
+	     $secondpass = 1 ;
+	 }
+	 if(isset($data['event']['repeatType']) && $data['event']['repeatType'] !='norepeat' && $secondpass === 0 && $create_new_repeats && $repeat_changed ){
 		 $data['event']['slabId'] =  "";
 		 if(!isset($this->parent_dtstart)){
            $this->parent_dtstart = $this->dtstart;
 		 }
 	     $secondpass = 1;
 
-		 $repetitions = $this->createRepetitions($data);  
+		 $repetitions = $this->createRepetitions($data);
           
 		 $data['event']['parent_id'] = $this->slabId;
 		 $repetitionGroup[] = $this->slabId;
@@ -1928,16 +1955,27 @@ return $data ;
   function validDateChange($data){
 
 	 $newrepetitions = $this->createRepetitions($data);
-
+//pr($newrepetitions);
 	 $oldrepetitions = $this->getrepetions();
-
+//pr($oldrepetitions);
 	 $checkregs = true;
 	 if($this->repetition === false){
 		 
 		 return true;
 		 
 	 }
-     
+    // pr($data['event']['dtstart']);
+	//pr($this->dtstart);
+	// pr($data['event']['dtend']);
+	// pr($this->dtend);
+	//pr($data['event']['rpinterval']);
+	//pr($this->repetition->rpinterval);
+	 
+	// pr($data['event']['countselector']);
+	// pr($this->repetition->countselector);
+	 
+	 // pr($data['event']['rpinterval']);
+	 //pr($this->repetition->rpinterval);
 	 if($data['event']['dtstart'] == $this->dtstart){
 
 	     if($data['event']['dtend'] == $this->dtend){	 
@@ -1948,9 +1986,9 @@ return $data ;
 
 					if($data['event']['countselector'] == $this->repetition->countselector){
 
-					 if($this->comparerepeat($data)){
+					 if($this->comparerepeat($data)){//  repeates are same
 
-					      $checkregs = false;
+					      $checkregs = true;
 
 					 }else{// day selection settings changed
 
@@ -1973,21 +2011,22 @@ return $data ;
 		 }
 
 	 }else{// start date does not match
-
+          
+		  return false ;
 	 }
-
+     
 	 if($checkregs){
 
 	    $regs = $this->is_anyregistration($oldrepetitions);
-
-		 if($regs){
+//pr( $regs);
+		 if($regs && count($regs)){
 
 			$this->error = JText::_('DT_REGISTRATION_EXISTS');
-
+//pr('false');
 			return false;
 
 		 }else{
-
+//pr('true');
 			return true; 	 
 
 		 }
@@ -2001,7 +2040,10 @@ return $data ;
   }
 
   function comparerepeat($data){
-
+     // pr($data['event']['repeatType']);
+	//  pr($this->repetition->repeatType);
+	 // pr($data['event']['weekdays']);
+	//  pr($this->repetition->weekdays);
 	  switch($data['event']['repeatType']){
 
 		   case 'daily':
@@ -2011,7 +2053,12 @@ return $data ;
 		   break;
 
 		   case 'weekly':
-
+pr(array_diff($this->repetition->weekdays,$data['event']['weekdays']));
+              if(count($this->repetition->weekdays) != count($data['event']['weekdays'])){
+			     return false ;
+			  }else{
+			  
+			  }
 		      return !(count(array_diff($this->repetition->weekdays,$data['event']['weekdays'])));
 
 		   break;
@@ -2021,13 +2068,27 @@ return $data ;
 		       if($this->repetition->monthdayselector == $data['event']['monthdayselector']){
 
 				     if($this->repetition->monthdayselector == "monthdays"){
-
+					   
+					   if(count($this->repetition->monthdays) != count(array_filter(explode(",",trim($data['event']['yeardays']))))){
+			     			return false ;
+			  			}else{
+			  
+			  			}
+					   
 					   return !(count(array_diff($this->repetition->monthdays,array_filter(explode(",",trim($data['event']['yeardays']))))));
 
 				     }else{
-
+						 if(count($this->repetition->weekdays) != count($data['event']['monthweeks'])){
+							 return false ;
+						  }else{
+						  
+						  }
 						if(!(count(array_diff($this->repetition->weekdays,$data['event']['monthweeks'])))){
-
+							 if(count($this->repetition->weekdays) != count($data['event']['monthweekdays'])){
+							 	return false ;
+						  	}else{
+						  
+						    }
 							return !(count(array_diff($this->repetition->weekdays,$data['event']['monthweekdays'])));
 
 					    }else{ // weeks do not match 
@@ -2119,8 +2180,9 @@ return $data ;
 		  return false;
 
 	  }
-
-	 return $repevents = $this->find(' parent_id = '.$this->slabId,'dtstart');
+     $repevents = $this->find(' parent_id = '.$this->slabId,'dtstart');
+	 
+	 return $repevents ;
 
   }
 
@@ -2358,7 +2420,7 @@ return $data ;
 		return $data;
 		
   }
-
+  
   function findAllByCategory($categories,$where="",$ordering=""){
 
      $this->events = array();
@@ -2382,6 +2444,101 @@ return $data ;
 		       foreach($categories[$pcategory->categoryId] as $childcat){ 
 
 			     	 $rows = $this->findByCategory($childcat->categoryId,$where,$ordering);
+
+					  $this->events = array_merge($this->events ,$rows);
+
+			   }
+
+		 }
+
+	}
+
+	return $this->events;
+
+  }
+  
+  function findByCategoryTree($categoryId=0,$where = "", $ordering=""){
+
+     global $now;
+
+	 $condition[] = $where;
+
+	 $condition[] = " b.publish=1 "; //  a.state=1  jevent variable
+
+	 if($categoryId==0){
+
+		$condition[] = " c.categoryId IS NULL ";
+
+	 } else {
+
+		   $condition[] = " b.category= ".$categoryId;
+		 // $condition[] = " c.categoryId = ".$categoryId." or c.parent_id = ".$categoryId;
+
+	 }
+
+	 $condition = array_filter($condition);
+
+	 $where = (count($condition)>0)?' where '.implode(' and ',$condition) :'';
+
+	 $ordering = ($ordering !="")?' order by '.$ordering : '';
+
+     $sql = "SELECT DISTINCT(b.slabId), c.*,b.*,  if(concat(b.startdate,' ',b.starttime) >= '". $now->toMySQL(true) ."' and b.startdate is not null,'y','n') as future_event ,
+
+        if(cut_off_date = 0000-00-00,'n',if('". $now->toMySQL(true)."'> concat(cut_off_date,' ',cut_off_time),'y','n')) as cut_off ,
+
+		if('".$now->toMySQL(true)."' < concat(bird_discount_date,' ',bird_discount_time) and bird_discount_type<>0 and bird_discount_type <> 3,'y','n') as bird
+
+		FROM 
+
+		#__dtregister_group_event as b 
+
+		left join #__dtregister_categories as c on c.categoryId = b.category 
+
+        left join #__dtregister_locations as l on l.id = b.location_id 
+
+		   ".$where."
+
+		".$ordering." ";
+
+		  $this->db->setQuery($sql);
+
+	      // pr($this->db->getQuery());
+
+	   $data =  $this->db->loadObjectList(); 
+
+	   foreach($data as  $key => $row){
+
+	      $data[$key]->registered = $this->getTotalregistered($row->slabId);
+
+	   }
+
+		return $data;
+		
+  }
+
+  function findAllByCategoryTree($categories,$where="",$ordering=""){
+
+     $this->events = array();
+
+	 $rows = $this->findByCategoryTree(0,$where,$ordering);
+
+	 $this->events = array_merge($this->events ,$rows);
+     if(isset($categories[0]) && is_array($categories[0]))
+	 foreach($categories[0] as $pcategory){
+
+		 $rows = array();
+
+		 $rows = $this->findByCategoryTree($pcategory->categoryId,$where,$ordering);
+
+		 $this->events = array_merge($this->events ,$rows);
+
+		 $rows = array();
+
+	     if(isset($categories[$pcategory->categoryId])){
+
+		       foreach($categories[$pcategory->categoryId] as $childcat){ 
+
+			     	 $rows = $this->findByCategoryTree($childcat->categoryId,$where,$ordering);
 
 					  $this->events = array_merge($this->events ,$rows);
 
@@ -2813,7 +2970,7 @@ echo $this->db->getErrorMsg();
 		     $this->javavalidation .= $fieldTable->requiredJs;
 
 			 $document =& JFactory::getDocument();
-       $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+       $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 	         $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validate.js");
 
 			 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validationmethods.js");
@@ -3724,7 +3881,7 @@ class TableEventfield extends DtrTable{
 	 parent::saveAll($data);
 
 	 $fields = $this->getFeeField();
-pr($fields);
+//pr($fields);
      if(is_array($fields))
 
 	 foreach($fields as $field){

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -84,8 +84,7 @@ class DtrTable extends JTable{
 
 							 $where = " where ".$condition;
 		
-				   }
-				   
+				   }   
 				   
 			  $ordering =  ($ordering !=="")?' order by '.$ordering:'';
 			  
@@ -94,14 +93,14 @@ class DtrTable extends JTable{
 			    $sql_count = " SQL_CALC_FOUND_ROWS "; 
 			}
 			  $sql = "select ".$sql_count." * from ".$this->getTableName()." ".$where ." ".$ordering ;
-			 
+			
                if($limit != 0 && $limit != ""){
 			      $this->_db->setQuery($sql,$limitstart,$limit);
 			   }else{
 			      $this->_db->setQuery($sql,$limitstart,$limit);
 			   }
 			   
-		     // pr($this->_db->getQuery());
+		    //pr($this->_db->getQuery());
 			 //  $this->_db->query();
 			
 			if(isset($queryResults[str_replace(" ","",$this->_db->getQuery())])){
@@ -163,7 +162,7 @@ class DtrTable extends JTable{
 		$this->_db->setQuery($query);
 		$fieldDesc = $this->_db->loadObject(); 
 	
-         $null = array('NO'=>'NOT NULL','YES'=>'NULL',''=>'');
+        $null = array('NO'=>'NOT NULL','YES'=>'NULL',''=>'');
 		
 		if($fieldDesc){
 		$query = "alter table ". $this->getTableName()." change $oldname $newname ". $fieldDesc->Type." ".$null[$fieldDesc->Null]." DEFAULT  '".$fieldDesc->Default."'";

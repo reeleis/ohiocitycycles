@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -108,6 +108,8 @@ class DtregisterModelUser extends DtrModel {
 	}
 	
 	function userlistquery($search = array(),$filter_order=" name ",$filter_order_Dir=" asc "){
+		
+		// prd($search);
 
 	    $fieldSelectQuery = $this->table->TableUserfield->pivotFields();
 
@@ -133,10 +135,18 @@ class DtregisterModelUser extends DtrModel {
 
 		}
 
-		 if(isset($search['user_id'])){
+		if(isset($search['user_id'])){
 
 		   	 $Andwhere[] = "u.user_id=".$search['user_id'];
 
+		}
+		
+		if(isset($search['paymentVerified'])){
+		   	 $Andwhere[] = "f.status=".$search['paymentVerified'];
+		}
+		
+		if(isset($search['keyword'])){
+		   	$search['query'] = $search['keyword'] ;
 		}
 
 		if(isset($search['status'])){
@@ -150,6 +160,11 @@ class DtregisterModelUser extends DtrModel {
 			}
 			
 		}
+		
+		if(isset($search['condition']) && $search['condition'] != ""){
+			$Andwhere[] = $search['condition'];
+		}
+		
         if (isset($search['query']) && $search['query']!="") {
 
 		if (get_magic_quotes_gpc()) {
@@ -765,7 +780,7 @@ class TableDuser extends DtrTable {
 
     function isCancelable(){
 
-	  global $now ,$paymentmethod;
+	  global $now,$paymentmethod;
 
 	  $arrPaymentMethods=$paymentmethod;
 
@@ -942,23 +957,147 @@ class TableDuser extends DtrTable {
          
    }
 
-   function changeemail(){
-
-	   $this->load($this->userId);
-
-   }
-
    function cancelemail(){
-
-	   $this->load($this->userId);
-
-   }
-
-   function duepaymentemail(){
-
 	  $this->load($this->userId);
-
+		
+	  $this->TableEvent->overrideGlobal($this->TableEvent->slabId);
+	   global $DT_mailfrom,$DT_fromname;
+	   global $currency_code,$email_cancel_confirm,$upsubcancelemail;
+      $Tagparser = new Tagparser();
+	  $msg .= '<p>[FIRSTNAME] [LASTNAME] '.JText::_('DT_ADMIN_MSG_CANCEL').' [EVENT_NAME]</p>';
+	  $msg .= '<table class="message">';
+		
+	  $msg.="<tr><td>".JText::_('DT_CONFIRMATION_NUMBER').": </td><td>[CONFIRM_NUM]</td></tr>";
+	  $msg.="<tr><td>".JText::_('DT_REGISTRATION_FEE').": </td><td>[AMOUNT]</td></tr>";
+	  $msg.="<tr><td>".JText::_('DT_AMOUNT_PAID').": </td><td>[AMOUNT_PAID] </td></tr>";
+	  $msg.="<tr><td>".JText::_('DT_PAYMENT_TYPE').": </td><td>[PAYMENT_TYPE]</td></tr>";
+	 
+      if( $this->TableFee->cancelfee > 0 ){
+     
+		$msg.="<tr><td>".JText::_('DT_CANCEL_FEE').": </td><td>[CANCEL_FEE]</td></tr>";
+		$amount_due = $this->TableFee->fee -  $this->TableFee->paid_amount;
+		if($amount_due > 0){  
+		   $label = JText::_('DT_AMOUNT_DUE');
+		}else{
+		   $label = JText::_('DT_REFUND_DUE');
+		}
+		
+		$msg.="<tr><td>".$label.": </td><td>[AMOUNT_DUE]</td></tr>";
+	   
+     }
+  
+     $msg .="</table>";
+	 
+	 $msg = $Tagparser->parsetags($msg,$this);
+  	 $adminemails=$this->TableEvent->email;
+     $adminemails = explode(";",$adminemails);
+     $conf = &JFactory::getConfig();
+     if($DT_mailfrom == ""){
+        $DT_mailfrom = $conf->_registry['config']['data']->mailfrom;
+     }
+     if($DT_fromname==""){
+        $DT_fromname =$conf->_registry['config']['data']->fromname;
+     }
+ // $mosConfig_mailfrom = $conf->_registry['config']['data']->mailfrom;
+ // $mosConfig_fromname =$conf->_registry['config']['data']->fromname;
+    foreach($adminemails as $email){
+   
+       JUTility::sendMail( $DT_mailfrom, $DT_fromname,$email,JText::_('DT_ADMIN_SUBJECT_CANCEL'),$msg,1,null,null);
+    }
+   
+   $message = $Tagparser->parsetags($email_cancel_confirm,$this);
+   $subject = $Tagparser->parsetags($upsubcancelemail,$this);
+   
+   $email = $this->getFieldByName('email');
+    
+    JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subject,$message,1);   
    }
+
+	function duepaymentemail(){
+
+		$this->load($this->userId);
+	    $this->TableEvent->overrideGlobal($this->TableEvent->slabId);
+		$Tagparser = new Tagparser();
+		global $currency_code,$payment_confirm,$upsubpaymentemail;
+		global $lang_var,$DT_mailfrom,$DT_fromname;
+ 		
+		$msg .= '<p>[FIRSTNAME] [LASTNAME] '.JText::_('DT_ADMIN_MSG_PAYMENT').' [EVENT_NAME]</p>';
+  		$msg .= '<table class="message">';
+		$msg .= "<tr><td>".JText::_('DT_CONFIRMATION_NUMBER').": </td><td>[CONFIRM_NUM]</td></tr>";
+		$msg .= "<tr><td>".JText::_('DT_REGISTRATION_FEE').": </td><td>[AMOUNT]</td></tr>";
+ 		$msg .= "<tr><td>".JText::_('DT_AMOUNT_PAID').": </td><td>[AMOUNT_PAID] </td></tr>";
+		$msg .= "<tr><td>".JText::_('DT_AMOUNT_DUE').": </td><td>[AMOUNT_DUE]</td></tr>";
+		$msg .= "<tr><td>".JText::_('DT_PAYMENT_TYPE').": </td><td>[PAYMENT_TYPE]</td></tr>";
+		$msg .= "</table>";
+		
+		$msg = $Tagparser->parsetags($msg,$this);
+		
+		$adminemails = $this->TableEvent->email;
+		$adminemails = explode(";",$adminemails);
+		$conf = &JFactory::getConfig();
+		if($DT_mailfrom == ""){
+			$DT_mailfrom = $conf->_registry['config']['data']->mailfrom;
+		}
+		if($DT_fromname==""){
+			$DT_fromname =$conf->_registry['config']['data']->fromname;
+		}
+		// $mosConfig_mailfrom = $conf->_registry['config']['data']->mailfrom;
+		// $mosConfig_fromname =$conf->_registry['config']['data']->fromname;
+		
+		foreach($adminemails as $email){
+			JUTility::sendMail( $DT_mailfrom, $DT_fromname,$email,JText::_('DT_ADMIN_SUBJECT_PAYMENT'),$msg,1,null,null);
+		}
+		
+		$message = $Tagparser->parsetags($payment_confirm,$this);
+		$subject = $Tagparser->parsetags($upsubpaymentemail,$this);
+		$email = $this->getFieldByName('email');
+		
+		JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subject,$message,1);
+
+	}
+
+	function changeemail(){
+
+		$this->load($this->userId);
+		$this->TableEvent->overrideGlobal($this->TableEvent->slabId);
+		$Tagparser = new Tagparser();
+		global $DT_mailfrom,$DT_fromname;
+		global $currency_code,$email_change_confirm,$subchangestatusemail,$lang_var;
+		$msg = "";
+		$msg .= '<p>[FIRSTNAME] [LASTNAME] '.JText::_('DT_ADMIN_MSG_CHANGE').' [EVENT_NAME]</p>';
+		$msg .= '<table class="message">';
+		$msg.="<tr><td>".JText::_('DT_ORIGINAL_FEE').": </td><td>[ORIGINAL_FEE]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_NEW_FEE').": </td><td>[NEW_FEE]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_CONFIRMATION_NUMBER').": </td><td>[CONFIRM_NUM]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_TRANSACTION_ID').": </td><td>[TRANSACTION_ID]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_PAYMENT_TYPE').": </td><td>[PAYMENT_TYPE]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_AMOUNT_PAID').": </td><td>[AMOUNT_PAID]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_CANCEL_FEE').": </td><td>[CANCEL_FEE]</td></tr>";
+		$msg.="<tr><td>".JText::_('DT_AMOUNT_DUE').": </td><td>[AMOUNT_DUE]</td></tr>";
+		$msg .="</table>";
+		
+		$msg = $Tagparser->parsetags($msg,$this);
+		
+		$adminemails = $this->TableEvent->email;
+		$adminemails = explode(";",$adminemails);
+		$conf = &JFactory::getConfig();
+		if($DT_mailfrom == ""){
+			$DT_mailfrom = $conf->_registry['config']['data']->mailfrom;
+		}
+		if($DT_fromname==""){
+			$DT_fromname =$conf->_registry['config']['data']->fromname;
+		}
+		
+		foreach($adminemails as $email){
+			JUTility::sendMail( $DT_mailfrom, $DT_fromname,$email,JText::_('DT_ADMIN_SUBJECT_CHANGE'),$msg,1,null,null);
+		}
+				
+		$message = $Tagparser->parsetags($email_change_confirm,$this);
+		$subject = $Tagparser->parsetags($subchangestatusemail,$this);
+		$email = $this->getFieldByName('email');
+		
+		JUTility::sendMail( $DT_mailfrom, $DT_fromname,$email,$subchangestatusemail,$message,1,null,null);
+	}
    
    function fee_status_change_email(){
 	  global $subpaidstatusemail, $paid_status_change_msg_send, $paid_status_change_msg,$DT_mailfrom,$DT_fromname;
@@ -997,7 +1136,7 @@ class TableDuser extends DtrTable {
    }
    
    function status_change_email(){
-	  global $subchangestatusemail, $status_change_msg_send, $status_change_msg,$DT_mailfrom,$DT_fromname;
+	  global $subchangestatusemail,$status_change_msg_send,$status_change_msg,$DT_mailfrom,$DT_fromname;
 	  $Tagparser = new Tagparser();
 	  if($status_change_msg_send){
 		  $groupmsg = $Tagparser->getTagcontent('GROUP_MEMBER',$status_change_msg);
@@ -1026,7 +1165,7 @@ class TableDuser extends DtrTable {
    
    function registrantemail(){
 	   
-	  global $subthanksemail,$thanksemail,$DT_mailfrom,$DT_fromname, $waitingemail, $subwaitingemail;
+	  global $subthanksemail,$thanksemail,$DT_mailfrom,$DT_fromname,$waitingemail,$subwaitingemail,$sendEmailToGroup;
 
 	  $this->load($this->userId);
 	  $this->TableEvent->load($this->eventId);
@@ -1054,22 +1193,42 @@ class TableDuser extends DtrTable {
 	 
 	 $memberdata = "";
       
-	  if($this->type == 'G'){ 
-	  
+	  if($this->type == 'G'){
+	      $memeber_msg = array();
 		  foreach($this->members as $member){
 
-			    $messge = $Tagparser->parsetags($groupmsg,$member);
-				$memberdata .= $messge;
-				 $subject_mem = $Tagparser->parsetags($subject,$member);
-				 if(!isset($member->email) || $member->email == ""){
-
-				   JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject_mem,$messge,1,null,null,$attachments);
+			    $message = $Tagparser->parsetags($groupmsg,$member);
+				$memeber_msg[] = $message;
+				$memberdata .= $message;
+				$subject_mem = $Tagparser->parsetags($subject,$member);
+	
+		  }
+		  
+		  if($sendEmailToGroup ==1){
+			$i = 0;
+		  	foreach($this->members as $member){
+		  	  $Tagparser->parse_password = true;
+			  $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memeber_msg[$i]);
+			  $message = $Tagparser->parsetags($usermsg,$member); 
+			  $subject = $Tagparser->parsetags($subject,$this);
+			  $attachments = array();
+			  if(is_array($this->TableEvent->file) && $this->status != -2){
+				  foreach($this->TableEvent->file as $attach){
+					  $attachments[] = $attach->path;
+				  }
+			  }
+			   
+			   if(isset($member->email) && $member->email != ""  && $sendEmailToGroup ==1 ){
+					 
+				     JUTility::sendMail( $DT_mailfrom, $DT_fromname,$member->email,$subject,$message,1,null,null,$attachments);
 
 			   }
-			
+			  $i++;
+		  	}
 		  }
 		
 	  }
+	  
 	  $Tagparser->parse_password = true;
 	  $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$thkmsg,$memberdata);
 	  $message = $Tagparser->parsetags($usermsg,$this); 
@@ -1079,7 +1238,7 @@ class TableDuser extends DtrTable {
 	  $email = $this->getFieldByName('email');
        
       $attachments = array();
-	  if(is_array($this->TableEvent->file)){
+	  if(is_array($this->TableEvent->file) && $this->status != -2 ){
 		  foreach($this->TableEvent->file as $attach){
 			  $attachments[] = $attach->path;
 		  }
@@ -1091,8 +1250,7 @@ class TableDuser extends DtrTable {
 
    function registrationemail(){
 
-	  global $DT_mailfrom,$DT_fromname,$thanksmsg, $admin_registrationemail, $admin_notification, $subject_admin_registrationemail;
-
+	  global $DT_mailfrom,$DT_fromname,$thanksmsg,$admin_registrationemail,$admin_notification,$subject_admin_registrationemail;
 
       if(isset($this->sendemail)){
 		  
@@ -1110,7 +1268,7 @@ class TableDuser extends DtrTable {
 			  $admin_notification = $this->TableEvent->admin_notification;   
 			  
 	  }else{
-		      $admin_notification =  $admin_registrationemail;
+		      $admin_notification = $admin_registrationemail;
 	  }
 
 	  // prd($admin_notification);
@@ -1127,8 +1285,8 @@ class TableDuser extends DtrTable {
 
 	  }
 
-	   $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$admin_notification,$memberdata);
-	   $adminmsg = $Tagparser->parsetags($usermsg,$this);
+	  $usermsg = $Tagparser->replaceTagContent('GROUP_MEMBER',$admin_notification,$memberdata);
+	  $adminmsg = $Tagparser->parsetags($usermsg,$this);
 	  
       $adminemails=$this->TableEvent->email;
       $adminemails = explode(";",$adminemails);
@@ -1137,7 +1295,7 @@ class TableDuser extends DtrTable {
      
 	  foreach( $adminemails as $email){
 
-		   JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subadmin,$adminmsg,1,null,null,$admin_attachments);
+		   JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subadmin,$adminmsg,1,null,null,$admin_attachments);
 
 	  }
 
@@ -1239,7 +1397,7 @@ class TableDuser extends DtrTable {
 		     return;
 		  }
 		  $joomlaUser = false;
-		  $joomlaUser = $this->createJoomlaUser($username,$password) ;
+		  $joomlaUser = $this->createJoomlaUser($username,$password);
 		  
 		   if($cb_integrated ==2){
 		      if($joomlaUser){
@@ -1303,7 +1461,7 @@ class TableDuser extends DtrTable {
    function createCbUser(){
 	    global $map_jomsocial_fields, $map_cb_fields;
 		$obj = new stdClass(); 
-		$obj->id = $this->user_id ; $obj->user_id = $this->user_id;
+		$obj->id = $this->user_id; $obj->user_id = $this->user_id;
 
 		$profile = new DtregisterModelCbprofiler();
 		// pr($profile);
@@ -1386,11 +1544,11 @@ class TableDuser extends DtrTable {
    
    function saveJomsocialFields(){
 
-		global $map_jomsocial_fields, $map_cb_fields, $cb_integrated;
+	  global $map_jomsocial_fields,$map_cb_fields,$cb_integrated;
 		
 	  $fieldTable = DtrTable::getInstance('field','Table');
 	  $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
-	  $fieldTypes =  $fieldType->getTypes();
+	  $fieldTypes = $fieldType->getTypes();
 
 		foreach($map_jomsocial_fields  as $DTfield_id=>$jomfield_id){
 		   $obj = new stdClass();
@@ -1428,7 +1586,7 @@ class TableDuser extends DtrTable {
 
          $this->register_date = $now->toMySQL(true); 
 		 $data['register_date'] = $now->toMySQL(true); 
-		 
+
 		 if(isset($data['status']) && $data['status'] == -2){
 			 $data['fee']['status'] = 0; 
 			 
@@ -1436,18 +1594,20 @@ class TableDuser extends DtrTable {
 			
 		   if($data['fee']['fee'] > 0){ // not free
 		     
+			  // pr($data['fee']['fee']);
+			  // pr($data['fee']['paid_amount']);
+			  // pr(Comp($data['fee']['fee'],$data['fee']['paid_amount'],10)); 
 			  
-			   if(Comp($data['fee']['fee'],$data['fee']['paid_amount'],10) < 0 && $data['fee']['paid_amount'] > 0 && $data['fee']['paid_amount'] !== $data['fee']['fee']){ // partial paid
+			   if(Comp($data['fee']['fee'],$data['fee']['paid_amount']) > 0 && $data['fee']['paid_amount'] > 0){ // partial paid
 			  
 				  $data['status'] = $partial_default_status;
 				  $data['fee']['status'] = 0;
-			   }else{// paid
+			   } else { // paid
 				  $data['status'] = $paid_default_status;
 				  $data['fee']['status'] = 1;
 				   
 			   }
 			   if($data['fee']['paid_amount'] < $data['fee']['fee'] && $data['fee']['paid_amount'] == 0){ // paylater 
-			     
 				  $data['status'] = $paylater_default_status;
 				  $data['fee']['status'] = 0;
 			   }
@@ -1460,6 +1620,8 @@ class TableDuser extends DtrTable {
 
 	  }
 	  
+	  // prd($data);
+	  
       if((!isset($data['user_id']) || $data['user_id'] == "") && !$mainframe->isAdmin()){
 	    $data['user_id'] = $my->id;
 	  }
@@ -1469,7 +1631,7 @@ class TableDuser extends DtrTable {
 		  $sendemail = $this->sendemail;
 		  unset($this->sendemail);
 	   }
-	
+	 
 	 parent::save($data);
 	  if(isset($sendemail)){
 		  $this->sendemail = $sendemail;
@@ -1697,7 +1859,7 @@ class TableUserfield extends DtrTable {
 
 	    }
 
-		$temp[] = array('user_id'=>$this->user_id,'field_id'=>$key,'value'=>$value);  
+		$temp[] = array('user_id'=>$this->user_id,'field_id'=>$key,'value'=> stripslashes($value));  
 
 	  }
 

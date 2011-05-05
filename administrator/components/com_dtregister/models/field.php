@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.3
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -23,8 +23,10 @@ class DtregisterModelField extends DtrModel {
 //'recordlist'=>JText::_('DT_RECORD_LIST')
 	   
 	   $this->combinedFields =  array('name'=>array('firstname','lastname'));
-
-	   $this->table =  new TableField($this->getDBO()) ;
+	   
+	   $this->combinedFields = array();
+	   
+	   $this->table =  new TableField($this->getDBO());
 
 	   $this->table->setCombineFields($this->combinedFields );
        
@@ -68,47 +70,25 @@ class TableField extends DtrTable {
 
   var $fee_type=1;
 
-
-
   var $new_line=0;
-
-
 
    var $textual='';
 
-
-
    var $usagelimit = ""; 
 
-
-
-    var $filetypes = ""; 
-
-   
+   var $filetypes = ""; 
 
    var $upload = ""; 
 
-
-
    var $filesize = ""; 
-
-   
 
    var $hidden = "";
 
-   
-
    var $allevent = "";
-
-   
 
    var $group_behave = 0;
 
-   
-
    var $showed = 0;
-
-   
 
    var $maxlength = "";
 
@@ -134,7 +114,7 @@ class TableField extends DtrTable {
    
    var $tag = '';
    
-   var $all_tag_enable = 0 ;
+   var $all_tag_enable = 0;
 
     function __construct( &$db = null ) {
 
@@ -147,7 +127,8 @@ class TableField extends DtrTable {
 		$this->virFieldsLabels = array('name'=>JText::_('DT_NAME'));
 
 		$this->combinedFields =  array('name'=>array('firstname','lastname'));
-
+        
+		$this->combinedFields = array();
 		$this->_defaultFields =  array('firstname','lastname','email','country','state','zip','phone','address1','address2','organization','title');
 
 	     $this->mfieldType = &DtrModel::getInstance('fieldtype','dtregisterModel');
@@ -160,11 +141,7 @@ class TableField extends DtrTable {
 
   function fingbyName($name=""){
 
-	  
-
 	  $data = $this->find(" name = '$name' ");  
-
-	  
 
 	  return ($data)?$data[0]:false;
 
@@ -177,7 +154,6 @@ class TableField extends DtrTable {
 	  
   }
   
-
   function enableALLEvents(){
      $query = "delete  from #__dtregister_field_event where showed = 0 and field_id = ".$this->id ;
 	 $this->db->setQuery($query);	
@@ -186,7 +162,7 @@ class TableField extends DtrTable {
 	  $error =  $this->db->getErrorMsg();
 		 
 		 if($error != ""){
-			 echo $error ; die ;
+			 echo $error; die;
 		 }
      $query = " SELECT DISTINCT e.slabId
 
@@ -225,7 +201,6 @@ class TableField extends DtrTable {
 	   }
 
   }
-
 
   function setCombineFields($combinefields =  array()){
 
@@ -266,11 +241,13 @@ class TableField extends DtrTable {
 	    $this->listing = implode('|',$this->listing);
 
 	 }
-	 if(in_array($this->name,$this->defaultListing)){
+	/* if(in_array($this->name,$this->defaultListing)){
 		 $this->listing = array('memberlist','attendeelist','recordlist');
+		 $this->listing = array('memberlist','recordlist');
 		 $this->listing = implode('|',$this->listing);
-	  }
+	  }*/
 
+      
 	// $this->label = 
 
 	return parent::store();
@@ -287,25 +264,25 @@ class TableField extends DtrTable {
 
 	}
 
-	function attendeelistfields(){
+	function attendeelistfields($fields = array()){
 
 	  	 $listingtype = $this->db->Quote("%|attendeelist|%" );
-
-		 
-
-		 $fields = $this->find(" CONCAT('|',listing,'|') like  $listingtype ",' ordering asc');
-
+        
 		
+		 if($fields && count($fields)){
+			 $fields = $this->find(" CONCAT('|',listing,'|') like  $listingtype  and (id in(".implode(",",$fields).") or parent_id in (".implode(",",$fields)."))",' ordering asc');
+			// $fields = $this->find(" CONCAT('|',listing,'|') like  $listingtype ",' ordering asc');
+		 }else{
+		   
+		   $fields = $this->find(" CONCAT('|',listing,'|') like  $listingtype ",' ordering asc');
+		   
+		 }
 
 		 return $fields;
 
 	}
 
-	
-
 	function arrangeheader($fields=array()){
-
-	   	
 
 		$combinefields = array();
 
@@ -351,8 +328,6 @@ class TableField extends DtrTable {
 
 	function mapIdtoName(){
 
-	   
-
 	   $fields = $this->find();
 
 	   $temp =  array();
@@ -367,17 +342,11 @@ class TableField extends DtrTable {
 
 	}
 
-	
-
 	function mapNametoId(){
-
-	   
 
 	   $fields = $this->find();
 
-	   
-
-	   $temp =  array();
+	   $temp = array();
 
 	   if (count($fields) > 0) {
 		   foreach($fields as $field){
@@ -389,11 +358,7 @@ class TableField extends DtrTable {
 
 	}
 
-	
-
-    function pivotFields($prefix="uf"){
-
-	  
+    function pivotFields($prefix="uf"){  
 
 	 $fields =  $this->find("");
 
@@ -425,7 +390,7 @@ class TableField extends DtrTable {
 
 	 if (count($combinefields) > 0) {
 		 foreach($combinefields as $name=>$cfield){
-			 $query = "" ;
+			 $query = "";
 			foreach($cfield as $field){
 			}
 			//$pivots[$name] = $query;
@@ -437,11 +402,7 @@ class TableField extends DtrTable {
 
   }
 
-  
-
   function searchCombineFields($fieldname=""){
-
-	 
 
 	  $return = false;
 
@@ -483,6 +444,11 @@ class TableField extends DtrTable {
 	
 	 parent::load($id);
 
+     $this->label = stripslashes($this->label);
+	 
+	 if(!is_array($this->selected)){
+	   $this->selected = stripslashes($this->selected);
+	 }
 
 	 if(!is_array($this->selection_values) && $this->selection_values !== "0" ){
        
@@ -516,10 +482,11 @@ class TableField extends DtrTable {
 	    $this->listing =  array("0");
 	 }
 	 
-	 if(in_array($this->name,$this->defaultListing)){
+	/* if(in_array($this->name,$this->defaultListing)){
 	   $this->listing =  array('memberlist','attendeelist','recordlist');
+	   $this->listing =  array('memberlist','recordlist');
 	 }
-
+    */
   }
 
   function getfeeByKey($key){
@@ -532,19 +499,11 @@ class TableField extends DtrTable {
 
   }
 
-  
-
   function delete(){
-
-      
 
 	  echo "<br />".$sql="Delete From #__dtregister_field_event Where field_id=".$this->id;
 
-
-
 	  //$database->setQuery($sql);
-
-
 
 	  //$database->query();
 	  $arrNotDelete = array('firstname','lastname','email');
@@ -555,11 +514,8 @@ class TableField extends DtrTable {
 		  parent::delete();
 	  }
 	  return true;
-	  
 
   }
-
-  
 
    function findall($eventId,$type,$hidden,$parent_id){
 
@@ -595,9 +551,7 @@ class TableField extends DtrTable {
 
 			}
 
-		}
-
-		
+		}	
 
 	 }else if($type=='I'){
 
@@ -629,9 +583,7 @@ class TableField extends DtrTable {
 
 	   $query = "Select df.* , df.id as key2 From #__dtregister_fields as df  where df.published=1 and ( df.showed $showed_sql) $hidden_sql $group_behave_sql and df.parent_id = $parent_id  order by df.ordering "  ;
 
-	   
-
-	   $query = "Select df.* , df.id as key2 From #__dtregister_fields as df  where df.published=1  $hidden_sql  and df.parent_id = $parent_id  order by df.ordering "  ;
+	   $query = "Select df.* , df.id as key2 From #__dtregister_fields as df  where df.published=1  $hidden_sql  and df.parent_id = $parent_id  order by df.ordering ";
 
 	 }else{
 
@@ -644,8 +596,6 @@ class TableField extends DtrTable {
 	 $this->db->setQuery($query);
 
 	 //echo "<br />".$this->db->getQuery();
-
-	 
 
 	 if(isset($queryResults[str_replace(" ","",$this->db->getQuery())])){
 
@@ -667,14 +617,9 @@ class TableField extends DtrTable {
 
   }
 
-  
-
   function getAllFields($event,$type='I',$hidden=false,$parent_id=0,&$fields){
 
-     
-
 	 $flds = $this->findall($event->slabId,$type,$hidden,$parent_id);
-
 	
 	 if (count($flds) > 0) {
 		 foreach($flds as $data){
@@ -721,8 +666,6 @@ class TableField extends DtrTable {
 	  if (count($flds) > 0) {
 	  foreach($flds as $data){
 
-	    
-
 		  $fields[$data->id] = $data;
 
 		  $this->id = $data->id;
@@ -746,11 +689,7 @@ class TableField extends DtrTable {
 	   }
 	  }
 
-	  
-
   }
-
-  
 
    function findtreeByEvent($eventid,$parent_id=0,&$fields=array()){
 
@@ -768,26 +707,18 @@ class TableField extends DtrTable {
 
 	 }
 
-     
-
 	 $this->db->setQuery($query);
 
 	 $flds = $this->db->loadObjectList();
 
-	 
-
 	  if (count($flds) > 0) {
 	  foreach($flds as $data){
-
-	    
 
 		  $fields[$data->id] = $data;
 
 		  $this->id = $data->id;
 
 		  $childs = $this->getchild();
-
-		  
 
 		  if(count($childs) > 0){
 
@@ -806,11 +737,7 @@ class TableField extends DtrTable {
 	   }
 	  }
 
-	  
-
   }
-
-  
 
   function hasChild(){
 
@@ -826,25 +753,19 @@ class TableField extends DtrTable {
 
   function getchild($published=0){
 
-	 
-
     // $query = "Select * from #__dtregister_fields where parent_id=".$this->id." order by ordering";
 
 	  global $mainframe;
 	  
-	  
 	 $condition = "";
 	 if($mainframe->isAdmin()){
-		
-		
-		
+
 	 }else{
 		
 		$condition = " and hidden = 0 ";
 		if ($published == 1) $condition = " and hidden = 0 and published = 1 ";
 			 
 	 }
-
 
 	 $data = $this->find(" parent_id=".$this->id." $condition ", ' ordering ');
 
@@ -872,131 +793,70 @@ class Field extends TableField{
 
 	function __construct(){
 
-	   
-
-	   parent::__construct();
-
-	   
+    parent::__construct();
 
 	}
 
 	function getOptionLimit(){
 
-	    
-
 		if(in_array($this->type,array(1,3,4))){
-
-
 
 		  $usagelimit = $this->usagelimit;
 
-
-
 		  $usagelimit = explode("|",$usagelimit);
-
-
 
 		  return $usagelimit;
 
-
-
 	  }
-
-		
 
 	}
 
 	function individualOptionUsage($eventId = 0){
 
-
-
 	  $type = $this->type;
-
-
 
 	  if(in_array($type,array(1,3,4))){
 
-
-
 		  $usagelimit = $this->usagelimit;
-
-
 
 		  $values = $this->values;
 
-
-
 		  $name = $this->name;
 
-
-
-		  $values =  explode("|",$values);
-
-
+		  $values = explode("|",$values);
 
 		  if (count($values) > 0) {
 		  foreach($values as  $key=>$value){
-
-
 
 			 $used_individual[$key] = $this->optionUsedByIndividual($key,$eventId );
 
-
-
 		  }
 		  }
-
-
 
 		  return $used_individual;
 
-
-
 	  }
-
-
 
 	}
 
-	
-
-	
-
-	function groupOptionUsage($eventId=0){
-
-	   
+	function groupOptionUsage($eventId=0){ 
 
 	     $type = $this->type;
 
-
-
 	  if(in_array($type,array(1,3,4))){
-
-
 
 		  $usagelimit = $this->usagelimit;
 
-
-
 		  $values = $this->values;
-
-
 
 		  $name = $this->name;
 
-
-
-		  $values =  explode("|",$values);
-
-
+		  $values = explode("|",$values);
 
 		  if (count($values) > 0) {
 		  foreach($values as  $key=>$value){
 
-
-
 			 $used_group[$key] = $this->optionUsedByGroup($key,$eventId );
-
 
 		  }
 		  }
@@ -1015,8 +875,6 @@ class Field extends TableField{
 
 		$query = "select * from #__dtregister_group_member as gm inner join #__dtregister_group as g on g.groupId= gm.groupUserId  inner join #__dtregister_user as u on u.userId = g.useid inner join #__dtregister_member_field_values v on v.member_id = gm.groupMemberId where v.field_id=".$this->id." and  CONCAT('|',v.`value`,'|') like ".$option." and u.payment_verified = 1  and u.eventId = ".$eventId." ";
 
-
-
 		$this->db->setQuery($query);
 
        if(isset($queryResults[str_replace(" ","",$this->db->getQuery())])){
@@ -1029,7 +887,7 @@ class Field extends TableField{
 
 		 $data = $this->db->getNumRows(); 
 
-		 echo  $this->db->getErrorMsg();
+		 echo $this->db->getErrorMsg();
 
 		 $queryResults[str_replace(" ","",$this->db->getQuery())] = $data;
 
@@ -1059,56 +917,36 @@ class Field extends TableField{
 
 		 $data = $this->db->getNumRows(); 
 
-		 echo  $this->db->getErrorMsg();
+		 echo $this->db->getErrorMsg();
 
 		 $queryResults[str_replace(" ","",$this->db->getQuery())] = $data;
 
 	  }
 
-
-
-		
-
-		return $data; 	
-
-
+		return $data;
 
 	}
 
 	function optionUsageByEvent($eventId=0){
 
-	  
-
-	  $individual = $this->individualOptionUsage($eventId );
-
-	  
+	  $individual = $this->individualOptionUsage($eventId );  
 
 	  $group = $this->groupOptionUsage($eventId );
-
-	  
 
       $usage = array();
 
 	  if(is_array($group )){
 
-
-
 	      foreach($group as $key=>$value){
-
-
 
 			$usage[$key] = $value + $individual[$key];
 
 		}
 
-	
-
 	   }else{
 
 			   if (count($individual) > 0) {
 			   foreach($individual as $key=>$value){
-
-	
 
 				  $usage[$key] = $individual[$key];
 
@@ -1116,47 +954,30 @@ class Field extends TableField{
 			   }
 
 		}
-	   
 		
 		if(isset($_SESSION['__dtregister']['option_used'][$this->id]) && count($_SESSION['__dtregister']['option_used'][$this->id]) > 0  ){
 			foreach($_SESSION['__dtregister']['option_used'][$this->id] as $key=>$used){
-				
-				
-				
-			
+
 					if(isset($usage[$key])){
 					 
-						   $usage[$key] += $used ;
-					   
-					   
-					  
+						   $usage[$key] += $used;
+		  
 					}else{
 						 $usage[$key] = $used; 
-					}
-				
-				
+					}		
 				
 			}
 		}
 	
-        
 		return $usage;
 
      }
 
-	
-
-	
-
-	
-
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-	  global $cbviewonly ;
+	  global $cbviewonly;
 
 	  $serialobj = base64_encode(serialize($obj));
-
-	 
 
 	  $this->javascript_valid_data = " ";
 
@@ -1166,7 +987,7 @@ class Field extends TableField{
 
 	  $document =& JFactory::getDocument();
 
-	  $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/jquery.js");
+	  $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/dt_jquery.js");
 	  $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/form.js"); 
 
 	  $document->addScript("includes/js/joomla.javascript.js");
@@ -1176,20 +997,14 @@ class Field extends TableField{
 	   if($this->hasChild()){
 
 	    // trigger the ajax;
-
-		
-
-		 
-
+	
 		  ob_start();
 
 		  if(!isset($_REQUEST['obj'])){
 
 		   ?>
 
-            var not_remove = [];
-
-              
+            var not_remove = [];     
 
             DTjQuery(function(){
 
@@ -1199,17 +1014,13 @@ class Field extends TableField{
 
 		?>
 
-          
-
           <?php
 
           if($this->type == '1'){
 
 		    $field_js_event = "change";
 
-		    ?>
-
-              
+		    ?> 
 
               DTjQuery("#Field<?php echo $this->id; ?>").live('change',function(){
 
@@ -1227,9 +1038,7 @@ class Field extends TableField{
 
 			 }
 
-		    ?>
-
-            
+		    ?>     
 
 			 DTjQuery("#Field<?php echo $this->id; ?>").live('<?php echo $field_js_event; ?>',function(){
 
@@ -1244,8 +1053,6 @@ class Field extends TableField{
                }
 
                 DTjQuery.each(DTjQuery('input[id="Field<?php echo $this->id;?>"]'),function(i){
-
-                   
 
                    if(this.checked){
 
@@ -1287,55 +1094,31 @@ class Field extends TableField{
 
                            }else{
 
-                              scriptdata +=data.charAt(i) ;
+                              scriptdata +=data.charAt(i);
 
                            }
 
                         }else{
 
-                           
-
                            scriptdata +=data.charAt(i);
 
                         }
 
-                        
-
                         }
-
-                     
-
-                   
 
                    eval(scriptdata);
 
-			
+                     var DT_field = this;         
 
-                    
+                     DTjQuery.each(elements,function(t,j){               
 
-                     var DT_field = this;
-
-                    
-
-                     DTjQuery.each(elements,function(t,j){
-
-                        
-
-                      
-
-                         
-
-                         if(DTjQuery("#Field"+t).size()==0){
-
-                           
+                         if(DTjQuery("#Field"+t).size()==0){           
 
                            parentf = insertorder(DTjQuery(DT_field).parent().parent(),t);
 
                            parentf.after(j);
 
-                           JTooltips = new Tips($$('.FieldTip'+t), { maxTitleChars: 50, fixed: false});
-
-                           
+                           JTooltips = new Tips($$('.FieldTip'+t), { maxTitleChars: 50, fixed: false});      
 
                            if(DTjQuery("#Field"+t).attr('type')=='radio' || DTjQuery("#Field"+t).attr('type')=='checkbox'){
 
@@ -1345,19 +1128,11 @@ class Field extends TableField{
 
                                  });
 
-                                 
-
                            }else{
-
-                               
 
                                DTjQuery("#Field"+t).trigger('change');
 
-                               
-
                            }
-
-                           
 
                           }
 
@@ -1381,9 +1156,7 @@ class Field extends TableField{
 
                        var reversefields = beforefield.reverse();
 
-                        DTjQuery.each(reversefields,function(k,v){
-
-                            
+                        DTjQuery.each(reversefields,function(k,v){               
 
                             if(DTjQuery("#Field"+v).size()>0){
 
@@ -1395,35 +1168,23 @@ class Field extends TableField{
 
                         });
 
-                        
-
                         return parentf;
 
                      }
 
                       DTjQuery(remove_elements).each(function(i,j){
 
-                        
-
                         for(var t in j){
-
-                         
 
                           if(DTjQuery("#Field"+t).size() > 0){
 
-                            DTjQuery("#Field"+t).parent().parent().remove();
-
-                           
+                            DTjQuery("#Field"+t).parent().parent().remove();                
 
                           }
 
-                        }
-
-                        
+                        }                
 
                      });
-
-                     
 
                      not_remove = [];
 
@@ -1433,27 +1194,15 @@ class Field extends TableField{
 
                   }
 
-                  
-
                });
 
-                
-
-                 
-
-			  });
-
-			   
+			  });	   
 
 		  <?php
 
 		  if(!isset($_REQUEST['obj'])){
 
-		    
-
 		   ?>
-
-            
 
              <?php
 
@@ -1461,11 +1210,7 @@ class Field extends TableField{
 
 			  ?>
 
-              
-
                DTjQuery.each(DTjQuery('input[id="Field<?php echo $this->id;?>"]:checked'),function(k,v){
-
-               
 
                   DTjQuery(v).trigger('<?php echo $field_js_event; ?>');
 
@@ -1473,19 +1218,17 @@ class Field extends TableField{
 
 					  if($this->type == 3){
 
-					  				 
-
 					?>
 
                     if(DTjQuery(v).attr('checked')){
 
                  
 
-                       DTjQuery(v).removeAttr('checked');	
+                      DTjQuery(v).removeAttr('checked');	
 
                     }else{
 
-                       DTjQuery(v).attr('checked',true);
+                      DTjQuery(v).attr('checked',true); 
 
                     }
 
@@ -1493,13 +1236,9 @@ class Field extends TableField{
 
 					}
 
-					?>
-
-                     
+					?>           
 
                });
-
-               
 
               <?php  
 
@@ -1516,8 +1255,6 @@ class Field extends TableField{
              ?>
 
              })
-
-           
 
            <?php } ?>
 
@@ -1539,16 +1276,16 @@ class Field extends TableField{
 
 	   $this->ChildValidationJs = "";
 
-	   $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
+	   $fieldType = DtrModel::getInstance('Fieldtype','DtregisterModel');
 
-	   $fieldTypes =  $fieldType->getTypes();
+	   $fieldTypes = $fieldType->getTypes();
 
 	   if (count($childs) > 0) {
 	   foreach($childs as $child){
 
 	       $class = "Field_".$fieldTypes[$child->type];
 
-		   $childTable =  new $class();
+		   $childTable = new $class();
 
 		   $childTable->load($child->id);
 
@@ -1557,8 +1294,6 @@ class Field extends TableField{
 		        $childTable->formhtml($user,$event,$form,$overlimitdisable);
                 if(isset($child->requiredJs))
 		        $this->ChildValidationJs .= $child->requiredJs;
-
-				
 
 		   }
 
@@ -1573,8 +1308,6 @@ class Field extends TableField{
 
    }
 
-   
-
    function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
 	  return $obj['fields'][$this->id];
@@ -1585,37 +1318,23 @@ class Field extends TableField{
 
 class Field_Text extends Field{
 
-    
-
 	var $label = "";
-
-	
 
 	var $fieldhtml = "";
 
-	
-
 	function __construct(){
-
-	   
 
 	   parent::__construct();
 
-	   
-
 	}
 
-	
-
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
-
-	    
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){  
 
 	    parent::formhtml($obj,$event,$form,$overlimitdisable);
 
 	     //Text box
 
-			 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
+			 $value = isset($obj['fields'][$this->id])?stripslashes($obj['fields'][$this->id]):'';
 
 			 $this->requiredJs = "if ( typeof(document.frmcart.elements['Field[".$this->id."]']) != 'undefined' && document.frmcart.elements['Field[".$this->id."]'].value == ''){
 
@@ -1627,7 +1346,7 @@ class Field_Text extends Field{
 
                                     }";
 
-			 $maxlength = ($this->maxlength !=0 && $this->maxlength=="")?"maxlength='".$this->maxlength."'":'';
+			 $maxlength = ($this->maxlength !=0 && $this->maxlength != "")?"maxlength='".$this->maxlength."'":'';
 
 			 $requiredClass = ($this->required)?'required':'';
 			 $readonly = "";
@@ -1636,60 +1355,39 @@ class Field_Text extends Field{
 			 $my = &JFactory::getUser();
              if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 				 $readonly = "readonly='readonly'";
-			
-			  
+			 
 			 }
 			 if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
 			    $readonly = "";
 			 }
 			
-             return "<input type='text' id='Field".$this->id."'$readonly  class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='Field[".$this->id."]' value='$value' />";
+             return "<input type='text' id='Field".$this->id."'$readonly  class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='Field[".$this->id."]' value=\"".htmlentities($value,null,'UTF-8')."\" />";
 
 	}
 
-	
-
 	 function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-	
-
-	  return isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
-
-	     
+	  return isset($obj['fields'][$this->id])?stripslashes($obj['fields'][$this->id]):'';
 
    }
 
-	
-
 }
-
-
 
 class Field_Dropdown extends Field{
 
-     
-
 	var $label = "";
-
-	
 
 	var $fieldhtml = "";
 
-	 
-
 	function __construct(){
-
-	   
 
 	   parent::__construct();
 
 	}
 
-    
-
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-       $overlimitdisable = true ;
+       $overlimitdisable = true;
 	   
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -1709,9 +1407,7 @@ class Field_Dropdown extends Field{
 
 	   for($i=0,$n=count($dropDownDatas);$i<$n;$i++){
 
-		 if(!is_array($this->optionlimit) ||(isset($this->optionlimit[$i]) && $this->optionlimit[$i]==0 ) ){
-
-			  
+		 if(!is_array($this->optionlimit) ||(isset($this->optionlimit[$i]) && $this->optionlimit[$i]==0 ) ){	  
 
 			 $options[]=JHTML::_('select.option',$i,trim($dropDownDatas[$i]));
 
@@ -1791,8 +1487,7 @@ EOH;
      $disabled = "";
      if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 		   $disabled = "disabled='disabled'";
-	       
-		
+
 	   }
 	   return JHTML::_('select.genericlist', $options,'Field['.$this->id.']',$disabled."style='width:".$fieldSize."px' class='inputbox ".$requiredClass."' ","value","text",$value,"Field".$this->id).$code;
 
@@ -1819,39 +1514,24 @@ EOH;
          $value = array_pop($value);
       }
       return array_search($value,$this->values);
-             
-  
+            
     }
-
-	
 
 }
 
-
-
 class Field_Textarea extends Field{
 
-    
-
 	var $label = "";
-
-	
 
 	var $fieldhtml = "";
 
 	function __construct(){
 
-	   
-
 	   parent::__construct();
 
 	}
 
-	
-
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
-
-	    
 
 		parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -1859,13 +1539,11 @@ class Field_Textarea extends Field{
 
 		  $document =& JFactory::getDocument();
 
-	  $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/textareaCounter.js");
-      
-     
+	     $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/textareaCounter.js");
 
 		 $requiredClass = ($this->required)?'required':'';
 
-			 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
+			 $value = isset($obj['fields'][$this->id])?stripslashes($obj['fields'][$this->id]):'';
 
 			 $this->requiredJs = "if ( typeof(document.frmcart.elements['Field[".$this->id."]']) != 'undefined' && document.frmcart.elements['Field[".$this->id."]'].value == ''){
 
@@ -1877,7 +1555,7 @@ class Field_Textarea extends Field{
 
                                     }";
 
-			 $maxlength = ($this->maxlength !=0 && $this->maxlength=="")?"maxlength='".$this->maxlength."'":'';
+			 $maxlength = ($this->maxlength != 0 && $this->maxlength != "")?"maxlength='".$this->maxlength."'":'';
 
 			 $requiredClass = ($this->required)?'required':'';
 
@@ -1887,10 +1565,7 @@ class Field_Textarea extends Field{
 
 				     if($this->showcharcnt){
 
-						  
-
 						  $displayFormat = " , displayFormat : '#input ".JText::_('DT_CHARACTERS')."' ";
-
 
 					  }else{
 
@@ -1916,21 +1591,18 @@ class Field_Textarea extends Field{
 
 					$counter = $js;
 
-				 }
-
-			 return "<textarea name='Field[".$this->id."]' class='inputbox ".$requiredClass."' id='Field".$this->id."' rows=$this->rows cols=$this->cols>$value</textarea>\n".$counter ;
-
-             
+				 }else{
+				    $counter = "";	 
+			     }
+			 
+			 if( isset($this->id)) 
+			 return "<textarea name='Field[".$this->id."]' class='inputbox ".$requiredClass."' id='Field".$this->id."' rows=$this->rows cols=$this->cols>$value</textarea>\n".$counter;
 
 	}
 
-	
-
 	 function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-	
-
-	  return $obj['fields'][$this->id];
+	  return isset($obj['fields'][$this->id])?stripslashes($obj['fields'][$this->id]):'';
 
    }
 
@@ -1964,25 +1636,15 @@ class Field_Textarea extends Field{
 
   }
 
-	
-
 }
-
-
 
 class Field_Checkbox extends Field{
 
-    
-
 	var $label = "";
-
-	
 
 	var $fieldhtml = "";
 
 	function __construct(){
-
-	   
 
 	   parent::__construct();
 
@@ -1990,14 +1652,11 @@ class Field_Checkbox extends Field{
 
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-	   
-
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
 	     //Checkbox
-
-			  
-             $overlimitdisable = true ;
+		  
+             $overlimitdisable = true;
 			 $this->optionlimit = $this->getOptionLimit($event->slabId);
 
              $this->optionused = $this->optionUsageByEvent($event->slabId);
@@ -2012,25 +1671,20 @@ class Field_Checkbox extends Field{
 				 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
 			  }
 			 
-
 			if($value !='')
              $value = array_filter($this->getkeyByValue($value),'my_array_filter_fn');
-			 
-			
 
              $outPut="";
 
 			 $new_line=$this->new_line;
-
-              
-
+			             
              for($i=0,$n=count($dropDownDatas);$i<$n;$i++){
 
 			      $disabled = "";
 
                   if(isset($this->optionlimit[$i]) && $this->optionlimit[$i]!=0 && $this->optionlimit[$i] <= $this->optionused[$i]){
 
-                       //continue ;
+                       //continue;
 
 					   if($overlimitdisable){
 
@@ -2046,9 +1700,7 @@ class Field_Checkbox extends Field{
     
                   $data=trim($dropDownDatas[$i]);
 
-				   $requiredClass = ($i==0 && $this->required)?'required':'';
-
-				 
+				   $requiredClass = ($i==0 && $this->required)?'required':'';			 
 
 				   $value = ($value=="")?array():$value;
 				   global $cbviewonly , $cb_integrated , $map_cb_fields;
@@ -2059,9 +1711,7 @@ class Field_Checkbox extends Field{
                      
                  if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
                            
-                   $disabled = "disabled='disabled'";
-                           
-                        
+                   $disabled = "disabled='disabled'";              
                       
                  }
 				  if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
@@ -2100,10 +1750,7 @@ class Field_Checkbox extends Field{
 				$values = explode("|",$this->values);
 			}
 			 
-
              $totalValues=count($values);
-
-			
 
 			$this->requiredJs ="var success=false;
 
@@ -2130,13 +1777,20 @@ class Field_Checkbox extends Field{
   $code = "";
 	   global $mainframe;
 	  if($this->fee_field && !$mainframe->isAdmin()){
-		  
 	  
        $code = $html = <<<EOH
 <script type="text/javascript">
 DTjQuery(function(){
 DTjQuery('input[id="Field$this->id"]').live('click',function(){
-			
+	 if(DTjQuery(this).attr('checked')){    
+
+                     /*  DTjQuery(this).removeAttr('checked');	*/
+
+                    }else{
+
+                      /* DTjQuery(this).attr('checked',true); */
+
+                    }
 	if(DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
@@ -2204,7 +1858,7 @@ EOH;
 	  if (count($value) > 0) {
       foreach($value as $val){
 		 if(is_numeric($val)){
-			$temp[] = $val ; 
+			$temp[] = $val; 
 		}else{
 			$temp[] = array_search($val,$this->values);
 		}
@@ -2214,25 +1868,26 @@ EOH;
       return $temp;
 
     }
+    
+    function getfeeByKey($key){
+    
+    if(isset($this->fees[$key])){
+	   	return $this->fees[$key];
+	}else{
+	    return "";	
+	}
+
+  }
 	
-
 }
-
-
 
 class Field_Radio extends Field{
 
-    
-
 	var $label = "";
-
-	
 
 	var $fieldhtml = "";
 
 	function __construct(){
-
-	   
 
 	   parent::__construct();
 
@@ -2240,7 +1895,7 @@ class Field_Radio extends Field{
 
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
    
-	   $overlimitdisable = true ;   
+	   $overlimitdisable = true;   
 
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2249,10 +1904,8 @@ class Field_Radio extends Field{
 		$this->optionlimit = $this->getOptionLimit($event->slabId);
 
 	    $this->optionused = $this->optionUsageByEvent($event->slabId);
-
+     
              $dropDownDatas=explode("|",$this->values);
-
-			 
 
 			 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
 
@@ -2263,8 +1916,7 @@ class Field_Radio extends Field{
              $outPut="";
 
 			 $new_line=$this->new_line;
-
-               
+                
              for($i=0,$n=count($dropDownDatas);$i<$n;$i++){
 
                      $disabled = "";
@@ -2273,11 +1925,9 @@ class Field_Radio extends Field{
 
                     if($overlimitdisable){
 
-					 
-
 					 }else{
 
-					      continue ;
+					      continue;
 
 					  }
 
@@ -2296,22 +1946,21 @@ class Field_Radio extends Field{
                  if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
                            
                    $disabled = "disabled='disabled'";
-                           
-                        
-                      
+      
                  }
-                 
-                 
+                        
                   if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
 			         $disabled = "";
 			      }
+                     
                    if(isset($this->optionlimit[$i]) && $this->optionlimit[$i]!=0 && $this->optionlimit[$i] <= $this->optionused[$i]){
-                  if($overlimitdisable){
-                    
-                    $disabled = "disabled='disabled'";         
-                    
+                      if($overlimitdisable){
+                        
+                        $disabled = "disabled='disabled'";         
+                        
+                     }
                  }
-                 }
+                 
                  if($value !== false && (int)$i === (int)$value ){ 
 
                       if($new_line) 
@@ -2369,15 +2018,23 @@ class Field_Radio extends Field{
                                    }";
 
   $code = "";
-	   global $mainframe ;
+	   global $mainframe;
 	  if($this->fee_field && !$mainframe->isAdmin()){
-		  
 	  
        $code = $html = <<<EOH
 <script type="text/javascript">
 DTjQuery(function(){
 DTjQuery('input[id="Field$this->id"]').live('change',function(){
-	
+     
+	 /* if(DTjQuery(this).attr('checked')){
+
+                       DTjQuery(this).removeAttr('checked');	
+
+                    }else{
+
+                       DTjQuery(this).attr('checked',true);
+
+                    }*/
      if(DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
@@ -2390,7 +2047,6 @@ DTjQuery('input[id="Field$this->id"]').live('change',function(){
 EOH;
  }  
 			 
-
              return $outPut.$code.'<label for="Field['.$this->id.']" style="display:none" generated="true" class="error"></label>';
 
 	}
@@ -2432,9 +2088,7 @@ EOH;
 class Field_Date extends Field{
 
 	var $label = "";
-
 	
-
 	var $fieldhtml = "";
 
 	function __construct(){
@@ -2585,11 +2239,7 @@ class Field_Textual extends Field{
 
 	}
 
-	
-
 }
-
-
 
 class Field_Upload extends Field{
 
@@ -2621,11 +2271,7 @@ class Field_Upload extends Field{
 
 							   return;
 
-							}";
-
-		 
-
-		  
+							}";	  
 
 		  $document =& JFactory::getDocument();
           
@@ -2635,51 +2281,39 @@ class Field_Upload extends Field{
 
           DTjQuery(document).ready(function(){
 
-
-
-            DTjQuery('#uploadField<?php echo $this->id; ?>').click(function(){
+            DTjQuery('#uploadField<?php echo $this->id; ?>').live('click',function(){
 
                 var frm = this.form;
 
-                var prevtask = DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val();
+              /*  var prevtask = DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val(); */
 
-                var prevcontroller = DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val();
+               /* var prevcontroller = DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val(); */
 
-                DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val("upload");
+              /*  DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val("upload"); */
 
-                DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val("file");
+               /* DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val("file"); */
 
                  var options = { 
 
-            
-
                 type :'POST',
 
-            
+                target : '#debug',
 
-               // target : '#debug',
-
-                data : {name:'<?php echo $name ;?>',filetypes<?php echo $name ?>:'<?php echo $this->filetypes ; ?>',filesize<?php echo $name ?>:<?php echo $this->filesize; ?>,field_id:<?php echo $this->id ?>},
+                data : {name:'<?php echo $name ;?>',filetypes<?php echo $name ?>:'<?php echo $this->filetypes ; ?>',filesize<?php echo $name ?>:<?php echo $this->filesize; ?>,field_id:<?php echo $this->id ?>,controller:'file',task:'upload'},
 
                 url:        'index.php?no_html=1', 
 
-            
-
-              //  iframe : true ,
-
-            
+               /* iframe : true , */
 
                 dataType : 'script',
 
-            
-
                 success :function(response){
-
-                  
-
+			
                     var $out = DTjQuery('#debug');
-
-           // $out.html('Form success handler received: <strong>' + typeof response + '</strong>');
+                    if(typeof response =="string"){
+                    	eval(response);
+                    }
+            /* $out.html('Form success handler received: <strong>' + typeof response + '</strong>'); */
 
             if (typeof response == 'object' && data.nodeType)
 
@@ -2689,13 +2323,9 @@ class Field_Upload extends Field{
 
                 response = objToString(response);
 
-           // $out.append('<div><pre>'+ response +'</pre></div>');
+                /* $out.append('<div><pre>'+ response +'</pre></div>'); */
 
-
-
-                 ///  DTjQuery("#debug").html(data.Error);
-
-                   
+                 /* DTjQuery("#debug").html(data.Error); */
 
                   if(data.Error==""){
 
@@ -2705,11 +2335,9 @@ class Field_Upload extends Field{
 
                      DTjQuery('#Field<?php echo $this->id;?>').next().addClass('success');
 
-                     DTjQuery('#Field<?php echo $this->id;?>').next().hide();
+                     DTjQuery('#Field<?php echo $this->id;?>').next().hide();           
 
-                     
-
-                     //DTjQuery('#Field<?php echo $this->id;?>').parent().append("<br />"+data.message);
+                    DTjQuery('#Field<?php echo $this->id;?>').parent().append("<br />"+data.message);
 
                    }else{
 
@@ -2717,11 +2345,11 @@ class Field_Upload extends Field{
 
                    }
 
-                   DTjQuery('form[name="'+frm.name+'"] input[name="task"]').val(prevtask);
+                  /* DTjQuery('form[name="'+frm.name+'"] input[name="task"]').val(prevtask); */
 
                 
 
-                   DTjQuery('form[name="'+frm.name+'"] input[name="controller"]').val(prevcontroller);
+                  /* DTjQuery('form[name="'+frm.name+'"] input[name="controller"]').val(prevcontroller); */
 
                    DTjQuery(frm).validate().element('#Field<?php echo $this->id;?>' );
 
@@ -2729,15 +2357,11 @@ class Field_Upload extends Field{
 
                }; 
 
-            // pass options to ajaxForm 
-
                DTjQuery(frm).ajaxSubmit(options);
 
                return false;
 
             });
-
-        
 
          });
 
@@ -2745,36 +2369,23 @@ class Field_Upload extends Field{
 
 		  $uploadJs = ob_get_clean();
 
-		  
+		  /// $document->addScriptDeclaration($uploadJs );
 
-		  $document->addScriptDeclaration($uploadJs );
-
-		  
-
-		   return "<input id='FileField".$this->id."' class='inputbox' name='file_$name' value='' type='file' /> <button id='uploadField".$this->id."'>".JText::_( 'DT_UPLOAD' )."</button><input type='hidden' class='".$requiredClass."' name='Field[".$this->id."]' id='Field".$this->id."' value='".$value."' />&nbsp;<span id='filename".$this->id."'>".$value.'</span><label for="Field'.$this->id.'" style="display:none" generated="true" class="error"></label>';
-
-		  
+		   return "<input id='FileField".$this->id."' class='inputbox' name='file_$name' value='' type='file' /> <button id='uploadField".$this->id."'>".JText::_( 'DT_UPLOAD' )."</button><input type='hidden' class='".$requiredClass."' name='Field[".$this->id."]' id='Field".$this->id."' value='".$value."' />&nbsp;<span id='filename".$this->id."'>".$value.'</span><label for="Field'.$this->id.'" style="display:none" generated="true" class="error"></label><script> '.$uploadJs.' </script>';
 
 	}
 
 	 function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
-
 	
       if(isset($obj['fields'][$this->id])){
 	    return $obj['fields'][$this->id];
 	  }else{
 		 return "";  
-		}
-
-	     
+		}  
 
    }
 
-	
-
 }
-
-
 
 class Field_Email extends Field{
 
@@ -2790,7 +2401,7 @@ class Field_Email extends Field{
 
 	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
 
-	   global $amp , $xhtml;
+	   global $amp, $xhtml;
        
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2836,7 +2447,7 @@ class Field_Email extends Field{
 
 	   $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
 
-	   $maxlength = ($this->maxlength !=0 && $this->maxlength=="")?"maxlength='".$this->maxlength."'":'';
+	   $maxlength = ($this->maxlength !=0 && $this->maxlength !="" )?"maxlength='".$this->maxlength."'":'';
 
 	   $requiredClass = ($this->required)?'required email':'email';
 	   $readonly = "";
@@ -2845,7 +2456,6 @@ class Field_Email extends Field{
 	   if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 		   $readonly = "readonly='readonly'";
 	  
-		
 	   }
 	    if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
 			         $readonly = "";
@@ -2853,7 +2463,7 @@ class Field_Email extends Field{
 	   
        $fieldhtml = "<input type='text' id='Field".$this->id."' class='inputbox ".$requiredClass."' ".$readonly." size='$this->field_size' $maxlength name='Field[".$this->id."]' value='$value' />";
 
-	   $replace  = array($this->label,$fieldhtml,$description);
+	   $replace = array($this->label,$fieldhtml,$description);
 
 	   $html = "";
 
@@ -2874,7 +2484,7 @@ class Field_Email extends Field{
 	   		ob_start();
            $dup_check = "";
 		   if(isset($this->duplicate_check) && !$this->duplicate_check ){
-			  $dup_check = "&dup_check=true" ;
+			  $dup_check = "&dup_check=true";
 		    }
 			?>
 
@@ -2897,8 +2507,6 @@ class Field_Email extends Field{
 });
 
              <?php } ?>  
-
-              
 
           })
 
@@ -2944,7 +2552,7 @@ class Field_Email extends Field{
 
 	   $constants = array('[label]','[value]','[description]');
 
-	   $replace  = array($this->label,$obj['fields'][$this->id],'');
+	   $replace = array($this->label,$obj['fields'][$this->id],'');
 
 	   $html = str_replace($constants,$replace,$tpl);
 

@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.1
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -33,10 +33,13 @@ class Tagparser {
 
 	 function getTagcontent($tag,$msg){
 		 
-		 $tagstart = "\{".$tag."\}";
-		 $tagend   = "\{\/".$tag."\}";
+		 $tagstart = preg_quote("{".$tag."}","%");
+		 $tagend   = preg_quote("{/".$tag."}","5");
 		 $expression = "/(?<=".$tagstart.")(.*)*(?=".$tagend.")/msU";
-		 preg_match_all($expression,$msg,$matches);
+		 $expression = "(?<=".$tagstart.")(.*)(?=".$tagend.")";
+		
+		 preg_match_all("%".$expression."%msU",$msg,$matches);
+		 
 		 if(isset($matches[0]) && isset($matches[0][0])){
 		   return $matches[0][0];
 		 }else{
@@ -46,10 +49,13 @@ class Tagparser {
 	 }
      
 	 function replaceTagContent($tag,$msg,$replace=""){
-	   $tagstart = "\{".$tag."\}";
-		 $tagend   = "\{\/".$tag."\}";
+	   $tagstart = preg_quote("{".$tag."}",'%');
+		 $tagend   = preg_quote("{/".$tag."}","%");
 		 $expression = "/".$tagstart."(.*)*".$tagend."/msU";
-		 $data = preg_replace($expression,$replace,$msg);
+		$expression = $tagstart."(.*)".$tagend;
+		
+		$data = preg_replace("%".$expression."%msU",$replace,$msg);
+		 // $data = preg_quote($expression);
 		 return $data;
 		
      }
@@ -60,12 +66,11 @@ class Tagparser {
 		  //$msg = $this->testRegmsg;   
 	   }
 	     //
-		
+		 // die('here');
 		 preg_match_all('/\[[^\]]*\]/',$msg,$matches);
-         
+         // die('here too');
 		 $tfield = $this->mfield->table;
 		 
-
 		 $tags = array();
 
 		 $tagvals = array();
@@ -81,9 +86,7 @@ class Tagparser {
 		      }
 			  $field = $tfield->findByTag($str_replace_key);
               
-			  $tags[] = $value;
-             
-			 
+			  $tags[] = $value; 
 			 
 			  if($field){
 				  
@@ -101,8 +104,7 @@ class Tagparser {
 					  }
 					  
 					  $tagvalues = $fieldTable->$function((array)$recipient,null,'',false);//$this->tfield->load($field->id);
-					  $tagvals[] = $tagvalues;
-					 
+					  $tagvals[] = $tagvalues;	 
 					 
 				  }else{
 
@@ -116,9 +118,9 @@ class Tagparser {
 			  
             if(is_callable(array($this,$function)))
 				 {
-				    $tagvals[] =  $this->{$function}($recipient);
+				    $tagvals[] = $this->{$function}($recipient);
 				 }else{
-				       $tagvals[] = "" ;
+				       $tagvals[] = "";
 				}
 
 			  }
@@ -138,8 +140,9 @@ class Tagparser {
 		  // pr($tags_new);
 		  // pr($tagvals_new);
 		  // return str_replace($tags,$tagvals,$msg);
-		  $msg = str_replace($tags,$tagvals,$msg);
-		  $msg =  nl2br($msg);
+		  
+		  $msg = str_replace($tags,$tagvals,$msg);		  
+		  $msg = nl2br($msg);
 		  $msg = preg_replace("/<p>([\s])*<\/p>/",'',$msg);
 		  $msg = preg_replace("/<br \/>[\s]*<br \/>/",'null_space',$msg);
 		  $msg = preg_replace("/<p>([\s])*<\/p>/",'',$msg);
@@ -147,7 +150,7 @@ class Tagparser {
 		  $msg = preg_replace("/null_space/",'<br />',$msg);
 		  $msg = preg_replace("/<\/p>([\s])*<br \/>/",'</p>',$msg);
 		 
-		  return $msg ;
+		  return $msg;
 
 	 }
 
@@ -186,15 +189,13 @@ class Tagparser {
 				$value = $fieldTable->{$function}((array)$user);
 				
 				//$txt .= $fieldTable->label.': '.$value.'<br />' ;
-				$txt_parts[] = $fieldTable->label.': '.$value ;
+				$txt_parts[] = stripslashes($fieldTable->label).': '.$value;
 			}
 			
-			
-			
 		}
-		$txt_parts = array_reverse($txt_parts);
+		// $txt_parts = array_reverse($txt_parts);
 		$txt =  implode("<br />",$txt_parts);
-		return $txt ;
+		return $txt;
 		
 	 }
 	 
@@ -232,7 +233,7 @@ class Tagparser {
 	 function amount_due($recipient ){
          global $currency_code;
 	     $user = $this->getuser($recipient);
-         return  DTreg::displayRate(($user->TableFee->fee - $user->TableFee->paid_amount),$currency_code); 
+         return DTreg::displayRate(($user->TableFee->fee - $user->TableFee->paid_amount),$currency_code); 
 		 
      }
 
@@ -400,7 +401,7 @@ class Tagparser {
 
 		return "";
 
-		$user  = $this->getuser($recipient);
+		$user = $this->getuser($recipient);
 
 		$user->getFieldByName('address');
 
@@ -451,6 +452,14 @@ class Tagparser {
 		$user = $this->getuser($recipient);
 
 		return DTreg::displayRate($user->TableFee->formatamount($user->TableFee->paid_amount),$currency_code); 
+
+	}
+	
+	 function cancel_fee($recipient ){
+        global $currency_code;
+		$user = $this->getuser($recipient);
+
+		return DTreg::displayRate($user->TableFee->formatamount($user->TableFee->cancelfee),$currency_code); 
 
 	}
 
@@ -537,7 +546,7 @@ class Tagparser {
 		return $user->showRegDate();
 
 	} 
-     function registered_date(){
+     function registered_date($recipient){
 	    $user = $this->getuser($recipient);
 
 		return $user->showRegDate();
@@ -600,7 +609,16 @@ class Tagparser {
 
 		 return $fieldshtml;
 
-	 }    
+	 }
+	 
+	 function code($recipient){
+     	$user = $this->getuser($recipient);
+		if($user->discount_code_id){
+		  return $user->TableDiscountcode->code ;
+		}else{
+		   return '';
+		}
+	 }
 
 }
 

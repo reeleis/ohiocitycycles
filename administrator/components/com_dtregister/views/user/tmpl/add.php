@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -190,7 +190,10 @@ $pMethods = $paymthd->getMergeList(true);
 	}	
 
 	if(DTjQuery(document.adminForm).valid()){
-
+        var disabled = DTjQuery(':disabled');
+        DTjQuery.each(disabled, function(){
+		     DTjQuery(this).removeAttr('disabled');  
+	   	})
 	  	submitform(pressbutton);
 
 	}

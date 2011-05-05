@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid , $xhtml_url , $currency_code;
+global $Itemid,$xhtml_url,$currency_code;
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 
 ?>
@@ -92,7 +92,6 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
                  <input type="" readonly="readonly" value="<?php echo $minimum_amount; ?>" name="paying_amount" />
 
                   ( <?php  echo JText::_( 'DT_DEPOSIT_AMOUNT'); ?> = 
-
 
                <?php echo DTreg::displayRate($this->event->partial_amount,$currency_code); ?> )
 

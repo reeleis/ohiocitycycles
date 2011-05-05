@@ -232,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_group_event` (
   `terms_conditions_msg` text default NULL,
   `category` int(11) default NULL,
   `max_group_size` smallint(5) UNSIGNED NULL,
-  `ordering` tinyint(3) unsigned default '1',
+  `ordering` int(7) unsigned default '1',
   `waiting_list` tinyint(1) NULL,
   `public` tinyint(1) NOT NULL default '1',
   `export` int(2) NOT NULL default '1',
@@ -289,6 +289,7 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_group_event` (
   `admin_notification_set` tinyint(2) default '0',
   `admin_notification` text default NULL,
   `partial_payment_enable` int(1) default '0',
+  `prevent_duplication` tinyint(1) NULL default '1',
   PRIMARY KEY  (`slabId`)
 ) TYPE=MyISAM;
 

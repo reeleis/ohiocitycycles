@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -12,6 +12,8 @@ $type = array('I'=>JText::_('DT_INDIVIDUAL'),'G'=>JText::_('DT_GROUP'));
 global $currency_code;
 $config = $this->getModel('config');
 $this->event->overrideGlobal($this->event->slabId);
+
+// pr($this->registration['fee']['slab']['amount']);
 
 ?>
 
@@ -34,6 +36,13 @@ $this->event->overrideGlobal($this->event->slabId);
    <?php echo DTreg::displayRate($this->registration['fee']['paid_amount'],$config->getGlobal('currency_code','USD'));?>
 
  </td>
+ 
+ <td>
+
+   <?php echo DTreg::displayRate($this->registration['fee']['fee'],$config->getGlobal('currency_code','USD'));?>
+
+ </td>
+
 
  <td>
 

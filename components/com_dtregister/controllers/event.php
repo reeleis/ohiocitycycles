@@ -104,6 +104,8 @@ class DtregisterControllerEvent extends DtrController {
 	function options(){
 	  
 	  global $mainframe ,$Itemid , $xhtml;
+	  
+	  
 	  $eventId = JRequest::getVar('eventId',0);
 	  DT_Session::set('register.Event.eventId', $eventId);
 	  
@@ -191,17 +193,19 @@ class DtregisterControllerEvent extends DtrController {
 	   $this->view->setModel($this->getModel( 'field' ));
 	   $this->view->setModel($this->getModel( 'fieldtype' ));
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
-	  
+
 	  
 	   $step = JRequest::getVar('step',0);
 	   $my = &JFactory::getUser();
 	   if($step ==="confirm"){
 	      
 		   $paying_amount = JRequest::getVar('paying_amount',0);
-		   
+		   DT_Session::clear('register.User.process');
 		   DT_Session::set('register.User.'.$userIndex.'.fee.paid_amount',$paying_amount);
 		   DT_Session::set('register.User.'.$userIndex.'.fee.paying_amount',$paying_amount);
-
+           
+		   DT_Session::set('register.User.'.$userIndex.'.confirmed',1);
+		   
 		   if($my->id){
 			    DT_Session::set('register.User.'.$userIndex.'.user_id', $my->id);
 		     
@@ -310,6 +314,7 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	
 	function viewCart(){
+		DT_Session::clear('register.User.process');
 		global $mainframe, $Itemid, $disable_cart;
 		global $xhtml;
 		if(false === DT_Session::get('register.Event.eventId') || DT_Session::get('register.Event.eventId') == 0){
@@ -495,6 +500,10 @@ class DtregisterControllerEvent extends DtrController {
 	}
 	function individualRegister(){
 	   global $mainframe ,$Itemid , $xhtml;
+	   
+	   $eventId = JRequest::getVar('eventId');
+	   if (isset($eventId) && $eventId > 0) DT_Session::set('register.Event.eventId', $eventId);
+	   
 		if(false === DT_Session::get('register.Event.eventId')){
 		   
 		   $mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid);
@@ -530,7 +539,8 @@ class DtregisterControllerEvent extends DtrController {
 	  $this->view->display();
 	   
 	}
-function price_header(){
+	
+	function price_header(){
 	$layout = JRequest::getVar('dttmpl','price_header');
 	   if(isset($_REQUEST['Field'])){
 		   $userIndex = DT_Session::get('register.Setting.current.userIndex');

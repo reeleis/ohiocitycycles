@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -74,7 +74,7 @@ class Payment {
 	        }
 			
 			$zip = $fieldTable->fingbyName('zip');
-		    if($zip){
+		    if($zip && isset($user['fields'][$zip->id])){
 			   $this->zip = $user['fields'][$zip->id];
 	        }
 			$email = $fieldTable->fingbyName('email');
@@ -98,12 +98,16 @@ class Payment {
 	function billingform(){
 
 	     ob_start();
+		 
+		 $paymentMethod = DT_Session::get('register.payment.method');
 
 				?>
 
 		        <tr><td colspan="2" ><strong><?php echo JText::_( 'DT_PAYMENT_INFORMATION' );?></strong></td></tr>
 
-                <tr><td colspan="2" >&nbsp;</td></tr>
+                <tr><td colspan="2" >&nbsp;
+                	<input type="hidden" name="paymentmethod" value="<?php echo $paymentMethod ?>" />
+                </td></tr>
 
 			<?php
 			if (count(DT_Session::get('register.User')) == 1) {
@@ -136,7 +140,7 @@ class Payment {
 
                 	<td width="31%"  ><?php echo JText::_( 'DT_BILLING_ADDRESS' ); ?>:<span class="required">  *  </span></td>
 
-                    <td width="69%" align="left" > <input id="billingAddress" class="inputbox required" type="text" name="billing[address]" value="<?php echo isset($dt_user->address)?$dt_user->address:'' ?>" /> </td>
+                    <td width="69%" align="left" > <input id="billingAddress" class="inputbox required" type="text" name="billing[address]" value="<?php echo isset($this->address)?$this->address:'' ?>" /> </td>
 
                  </tr>
 
@@ -248,7 +252,7 @@ class Payment {
 							<?php
 							  $field = $countylist->fingbyName('zip');
 							?>
-							var billing_zipcode = "<?php echo ($field)?$user['fields'][$field->id]:'' ; ?>";
+							var billing_zipcode = "<?php echo ($field && isset($user['fields'][$field->id]))?$user['fields'][$field->id]:'' ; ?>";
 							<?php
 							  $field = $countylist->fingbyName('email');
 							?>

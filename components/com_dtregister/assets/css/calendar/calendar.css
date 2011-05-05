@@ -693,3 +693,13 @@ border-bottom:2px solid #c3d9ff;
 {
     text-decoration:underline;
 }
+
+/* Calendar Popup */
+.event_title {
+    font-weight: bold;
+    margin: 0px 0px 5px 0px;
+    padding: 3px 4px 3px 4px;
+    background: #774f09;
+    color: #ffffff;
+}
+}

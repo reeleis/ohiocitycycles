@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -16,6 +16,7 @@ class DtregisterModelExport extends DtrModel {
 	   parent::__construct($config);
 	   $this->table = new TableExport($this->getDBO());
 	   $this->generalFields =  array(
+	   							   'event_date'=> JText::_('DT_EVENT_DATE'),
 	                               'type'=> JText::_('DT_USER_TYPE'),
 								   'amount'=> JText::_('DT_AMOUNT'),
 								   'payment_type'=> JText::_('DT_PAYMENT_TYPE'),
@@ -34,7 +35,7 @@ class DtregisterModelExport extends DtrModel {
 	}
 	
 	function prepareEventoptions($events=array()){
-	   	$tevt  =& DtrTable::getInstance('Event','Table');
+	   	$tevt =& DtrTable::getInstance('Event','Table');
 		$options = array();
 		
 		if (count($events) > 0) {
@@ -63,8 +64,9 @@ class TableExport extends DtrTable{
 		 $this->UserModel =& DtrModel::getInstance('User','DtregisterModel');
 		 $this->pmethod =& DtrModel::getInstance('paymentmethod','DtregisterModel');
 		 $this->feeModel =& DtrModel::getInstance('fee','DtregisterModel');
-		 $this->Tablefield  =& DtrTable::getInstance('Field','Table') ;
-		 $this->generalFields =  array(
+		 $this->Tablefield  =& DtrTable::getInstance('Field','Table');
+		 $this->generalFields = array(
+		 						   'event_date'=> JText::_('DT_EVENT_DATE'),
 	                               'type'=> JText::_('DT_USER_TYPE'),
 								   'amount'=> JText::_('DT_AMOUNT'),
 								   'payment_type'=> JText::_('DT_PAYMENT_TYPE'),
@@ -79,6 +81,7 @@ class TableExport extends DtrTable{
 								   'status'=>  JText::_('DT_STATUS'),
 								   'transaction_id'=>  JText::_('DT_TRANSACTION_ID')
 	                             );
+		
 		$fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
         $this->fieldTypes =  $fieldType->getTypes();
 		
@@ -94,9 +97,7 @@ class TableExport extends DtrTable{
 	}
 	
 	function saveFields($general=array(),$individual=array(),$group=array()){
-	   	print_r($general);
-		print_r($individual);
-		print_r($group);
+	   	
 		$sgeneral = json_encode($general);
 		$sindividual = json_encode($individual);
 		$sgroup = json_encode($group);
@@ -104,9 +105,7 @@ class TableExport extends DtrTable{
 		$this->general_export_fields = $sgeneral;
 		$this->group_export_fields = $sgroup;
 		$this->loadfirstRow();
-		print_r($sgeneral);
-		print_r($sindividual);
-		print_r($sgroup);
+		
 		if($this->id){
 		   	$this->save_field('general_export_fields' , $this->_db->Quote($sgeneral));
 			echo $this->_db->getErrorMsg();
@@ -122,8 +121,7 @@ class TableExport extends DtrTable{
 		$this->individual_export_fields = $individual;
 		$this->general_export_fields = $general;
 		$this->group_export_fields = $group;
-		
-		
+	
 	}
 	function saveEvents($events = array()){
 	    $sevents = json_encode($events);
@@ -147,6 +145,9 @@ class TableExport extends DtrTable{
 	   }
 	}
 	function mergeCustomFieldHeader(){
+	  
+	  global $csv_separator;
+		
 	  $group_export_fields = array();
 	  $individual_export_fields =  array();
 	  if (count($this->individual_export_fields) > 0) {
@@ -155,12 +156,12 @@ class TableExport extends DtrTable{
 	  if (count($this->group_export_fields) > 0) {
 	  		$group_export_fields =  array_combine($this->group_export_fields,$this->group_export_fields);
 	  }
-	  $merge =  array();
+	  $merge = array();
 	
 	   if (count($individual_export_fields) > 0) {
 		   foreach($individual_export_fields as $key=>$id){
 			   
-			   $merge[] =  $id ;
+			   $merge[] = $id;
 			   $this->field_settings[$id][] = 'individual';
 			   if(isset($group_export_fields[$key])){
 				   unset($group_export_fields[$key]);
@@ -173,7 +174,7 @@ class TableExport extends DtrTable{
 	   
 	   if (count($group_export_fields) > 0) {
 		   foreach($group_export_fields as $field){
-			   $this->field_settings[$field][]   = 'group';
+			   $this->field_settings[$field][] = 'group';
 		   }
 	   }
 	
@@ -184,7 +185,7 @@ class TableExport extends DtrTable{
 		 
 	       $fields = $this->Tablefield->find( 'id in('.implode(",",$merge).')','ordering ');
 		   
-		   $temp =  array();
+		   $temp = array();
 		   
 		   if (count($fields) > 0) {
 			   foreach($fields as $field){
@@ -233,7 +234,7 @@ class TableExport extends DtrTable{
 		
 		$users = $this->UserModel->table->find($condition,'register_date',$limitstart,DtregisterModelExport::$limit);
 		$this->totalcount = $this->UserModel->table->getLastCount();
-		pr($this->totalcount);
+		//pr($this->totalcount);
 		return $users;
 	}
 	
@@ -250,11 +251,12 @@ class TableExport extends DtrTable{
 		
 	}
 	function makeheader(){
+		
+		global $csv_separator;
+		
 	    $header =  array();
 		$header['register_date'] = JText::_('DT_REGISTER_DATE');
 		$header['eventname'] = JText::_('DT_EVENT_NAME');
-		
-		
 		
 		if (count($this->general_export_fields) > 0) {
 			foreach($this->general_export_fields as $field){
@@ -272,11 +274,9 @@ class TableExport extends DtrTable{
 		$this->header = $header;
 		
 		if($_REQUEST['page']==0){
-		   $this->csvoutput .= implode(",",$header)."\n";
+		   $this->csvoutput .= implode("$csv_separator",$header)."\n";
 		}
-		
-		
-			
+	
 	}
 
 	function type($user){
@@ -303,6 +303,8 @@ class TableExport extends DtrTable{
 	  return $user->TableEvent->TableCategory->categoryName;
 	}
 	function location($user){
+		//pr($user->TableEvent->location_id);
+		//pr($user->TableEvent->TableLocation);
 	  return $user->TableEvent->TableLocation->name;
 	}
 	function amount($user){
@@ -312,6 +314,10 @@ class TableExport extends DtrTable{
 		$methods = $this->pmethod->getMergeList();
 		return isset($methods[$user->fee->payment_method])?$methods[$user->fee->payment_method]:'';	
 	}
+	
+	function event_date($user){
+		return $user->TableEvent->displaydatecolumn_no_html();
+			}
 	
 	function paid($user){
 	    
@@ -334,9 +340,9 @@ class TableExport extends DtrTable{
 	  	if(in_array($field,$this->general_export_fields)){
 		    return $this->{$field}($user);
 		}else{
-			$class = "Field_".$this->fieldTypes[$this->customFields[$field]->type] ;
+			$class = "Field_".$this->fieldTypes[$this->customFields[$field]->type];
 
-		    $fieldTable =  new $class();
+		    $fieldTable = new $class();
             
 		    $fieldTable->load($field);
 			$function = "viewHtml";
@@ -367,20 +373,26 @@ class TableExport extends DtrTable{
 	}
 	
 	function addCsvRow($data=array()){
-	   $this->csvoutput .= '"'.implode('","',$data).'"'."\n";
+		global $csv_separator;
+		//pr($data);
+		$this->csvoutput .= '"'.implode('"'.$csv_separator.'"',$data).'"'."\n";
 	}
+	
 	function addUsersdata($users=array()){
 	   	//$users = $this->getUsers();
 		
 		if (count($users) > 0) {
 			foreach($users as $user){
-				
-				$tUser = $this->UserModel->table;
+				//pr($user);
+				$tUser = new TableDuser();
+				//unset($tUser->TableEvent->location_id);
 				$tUser->load($user->userId);
+				
 				$data = array();
 				
 				if (count($this->header) > 0) {
 					foreach($this->header as $field => $value){
+						
 						$data[$field] = "";
 						if(isset($this->field_settings[$field]) && in_array('general',$this->field_settings[$field])){
 						   $data[$field] = 	$this->getUserColumndata($tUser,$field);
@@ -395,13 +407,14 @@ class TableExport extends DtrTable{
 						}
 						
 					}
+					// prd($data);
 				}
 				
 				$this->addCsvRow($data);
 				if($tUser->type=='G'){
 						$this->addmembers($tUser);
 				}
-				
+				unset($tUser);
 			}
 		}
 	}
@@ -416,9 +429,9 @@ class TableExport extends DtrTable{
 					foreach($this->header as $field => $value){
 						$data[$field] = "";
 						if(isset($this->field_settings[$field]) && in_array('general',$this->field_settings[$field])){
-						   $data[$field] = 	$this->getUserColumndata($tUser,$field);
+						   $data[$field] = $this->getUserColumndata($user,$field);
 						}elseif(isset($this->field_settings[$field]) && in_array('group',$this->field_settings[$field])){
-						   $data[$field] =   $this->getMemberColumndata($user->TableMember,$field);
+						   $data[$field] = $this->getMemberColumndata($user->TableMember,$field);
 						}else{
 							 $data[$field] = "";
 						}
@@ -431,17 +444,17 @@ class TableExport extends DtrTable{
 		
 	}
 	function doexport($from=null,$to=null,$page=0){
+		global $csv_separator;
+		
 		$this->csvoutput = "";
 		$this->field_settings = array();
-		$this->getgeneralHeader() ;
+		$this->getgeneralHeader();
 		$this->mergeCustomFieldHeader();
 		//if($page == 0){
 			$this->makeheader();	
 		//}
 		
-		
 		$users = $this->getUsers($from, $to,$page);
-		
 		$this->addUsersdata($users);
 		
 		$this->writeTofile($page);
@@ -451,16 +464,22 @@ class TableExport extends DtrTable{
 	function writeTofile($page){
 		
 		if(!isset($_REQUEST['file']) || $_REQUEST['file']=='' ){
-			pr(sys_get_temp_dir());
+			
 			$this->filename = tempnam(sys_get_temp_dir(),null);
-			pr('enter');
+			
 		}else{
-			$this->filename = $_REQUEST['file'] ;
+			$this->filename = $_REQUEST['file'];
 		}
 		file_put_contents($this->filename, trim($this->csvoutput)."\n",FILE_APPEND);
 		ob_clean();
-		echo json_encode(array('total'=>$this->totalcount,'file'=>$this->filename,'limit'=> DtregisterModelExport::$limit, 'page'=>$page, 'csv'=>file_get_contents($this->filename), 'current'=>$this->csvoutput));
-		die ;
+		echo json_encode(array('total'=>$this->totalcount,
+							   'file'=>$this->filename,
+							   'limit'=> DtregisterModelExport::$limit,
+							   'page'=>$page,
+							   'csv'=>file_get_contents($this->filename),
+							   'current'=>$this->csvoutput)
+						 );
+		die;
 		prd($this->filename);
 	}
 	
@@ -505,7 +524,7 @@ class TableExport extends DtrTable{
 				header('Pragma: no-cache');
 
 			}
-           echo   file_get_contents($this->filename);
+           echo file_get_contents($this->filename);
 		   unlink($this->filename);
 			//echo $this->csvoutput;
 

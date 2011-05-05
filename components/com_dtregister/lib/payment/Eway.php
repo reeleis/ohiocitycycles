@@ -104,7 +104,7 @@ class Eway extends Payment{
 
 	    if(!method_exists($this->payEway,'setCurlPreferences')){
 
-		   $this->payEway->message = JText::_('DT_EWAY_REDIRECT');
+		   $this->payEway->message = JText::_('DT_EWAY_REDIRECT_MSG');
 
 		   $this->setfields();
 
@@ -132,12 +132,15 @@ class Eway extends Payment{
 
 	  function setfields(){
 
-	   $expiry =  explode('/',$this->x_exp_date);
+	   // echo '<pre>'; print_r($this->cart); print_r($this); exit;
 
 	   $this->fields['TotalAmount'] = $this->cart->getAmount();
 
 	   if(method_exists($this->payEway,'setCurlPreferences')){
+          $expiry =  explode('/',$this->x_exp_date);
 
+		  $this->fields['CustomerPostcode'] = $this->zip;
+		
 	      $this->fields['CardNumber'] = $this->x_card_num;
 
 	      $this->fields['CardHoldersName'] = $this->firstname.' '.$this->lastname;
@@ -156,7 +159,7 @@ class Eway extends Payment{
 
 	   $this->fields['CustomerFirstName'] = $this->firstname;
 
-	   $this->fields['CustomerInvoiceDescription'] = JText::_('DT_INVOICE_DESCRIPTION_EWAY');
+	   $this->fields['CustomerInvoiceDescription'] = $this->description;
 
 	   $this->fields['CustomerLastName'] = $this->lastname;
 
@@ -172,7 +175,7 @@ class Eway extends Payment{
 
 	   $this->fields['Option3'] = '';
 
-	   $this->fields['CustomerPostcode'] = $this->zipcode;
+	   
 
 	  // $this->fields['Phone'] = $this->phone;
 
@@ -242,9 +245,7 @@ class Eway extends Payment{
 
 	$ewayResponseFields = $this->payEway->doPayment();
 
-    //echo "<pre>";
 
-	echo($ewayResponseFields);
 
 	if($ewayResponseFields["EWAYTRXNSTATUS"]=="False"){
 

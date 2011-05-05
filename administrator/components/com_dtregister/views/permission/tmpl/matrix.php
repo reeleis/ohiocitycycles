@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -135,7 +135,8 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 ?>
 
-<script type="text/javascript" />
+<script type="text/javascript" language="javascript" >
+
    DTjQuery(function(){
 	   
 	   DTjQuery(".colorbox").live('click',function(e){
@@ -146,7 +147,7 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 
 		var verticalPadding = 10;
 
-		DTjQuery('<iframe id="externalSite" class="externalSite" src="'+DTjQuery(this).attr('href')+'" />').dialog({
+		DTjQuery('<iframe id="externalSite" style="display:none;" class="externalSite" src="'+DTjQuery(this).attr('href')+'" />').dialog({
 
 			title:  '<?php echo JText::_('DT_ADD_USER')?>',
 
@@ -175,5 +176,5 @@ $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jqu
 			     });
 	      
    })
-  
+ 
 </script>

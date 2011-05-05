@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license Commercial
 */
 
-global $Itemid,$calendar_startDay,$calendar_showCat,$calendar_eventTitle_wrap,$calendar_showTime,$now, $xhtml_url;
+global $Itemid,$calendar_startDay,$calendar_showCat,$calendar_eventTitle_wrap,$calendar_showTime,$now,$xhtml_url ,$calendar_show_popup;
 $lang =& JFactory::getLanguage();
 $document =& JFactory::getDocument();
 
@@ -23,7 +23,9 @@ $document->addStyleSheet('components/com_dtregister/assets/css/calendar/alert.cs
 
 $document->addStyleSheet('components/com_dtregister/assets/css/calendar/main.css');
 
-$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/jquery.js");
+$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
+
+$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/dt_jquery.js");
 
 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/calendar/Common.js");
 
@@ -39,6 +41,23 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/calendar/jquery.calendar.js");
 
+$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/jquery-ui.js");
+
+$document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/tooltip.js");
+
+$fcurrentmonth = "";
+$fcurrentweek = "";
+$fcurrentday = "";
+$calview = JRequest::getVar('calview','month');
+${"fcurrent".$calview} = "fcurrent";
+
+?>
+
+<?php
+	if($calendar_showCat == '1' || $calendar_showCat == '3'){
+		echo $this->loadTemplate('category');
+		echo '<br /><br />';
+	}
 ?>
 
  <div>
@@ -55,16 +74,6 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
             <div id="caltoolbar" class="ctoolbar">
 
-             <!-- <div id="faddbtn" class="fbutton">
-
-                <div><span title='Click to Create New Event' class="addcal">
-
-                New Event                
-
-                </span></div>
-
-            </div> -->
-
             <div class="btnseparator"></div>
 
              <div id="showtodaybtn" class="fbutton">
@@ -77,19 +86,19 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
               <div class="btnseparator"></div>
 
-            <div id="showdaybtn" class="fbutton">
+            <div id="showdaybtn" class="fbutton <?php echo  $fcurrentday; ?>">
 
                 <div><span title='Day' class="showdayview"><?php echo  JText::_('DT_DAY')?></span></div>
 
             </div>
 
-              <div  id="showweekbtn" class="fbutton">
+              <div id="showweekbtn" class="fbutton <?php echo  $fcurrentweek; ?>">
 
                 <div><span title='Week' class="showweekview"><?php echo  JText::_('DT_WEEK')?></span></div>
 
             </div>
 
-              <div  id="showmonthbtn" class="fbutton fcurrent">
+              <div id="showmonthbtn" class="fbutton <?php echo  $fcurrentmonth; ?>">
 
                 <div><span title='Month' class="showmonthview"><?php echo  JText::_('DT_MONTH')?></span></div>
 
@@ -167,11 +176,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 
   </div>
 
-<br />
 <?php
-  if($calendar_showCat){
-	  echo $this->loadTemplate('category');
-  }
+	if($calendar_showCat == '2' || $calendar_showCat == '3'){
+		echo '<br />';
+		echo $this->loadTemplate('category');
+	}
   $datafeedurl = JRoute::_('index.php?option=com_dtregister&Itemid='.$Itemid.'&controller=calendar&format=raw&cat='.$this->cat,$xhtml_url)."&";
   
   if($calendar_eventTitle_wrap){
@@ -190,10 +199,10 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
 	  switch($_REQUEST['showby']){
 		  case 0:
 		     $showday = Jrequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
-		  break ;
+		  break;
 		  case 1:
-		     $showday = $now->toFormat('%m/%d/%Y') ;
-		  break ;
+		     $showday = $now->toFormat('%m/%d/%Y');
+		  break;
 	 }
 	  
   }else{
@@ -201,11 +210,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
   }
   
 ?>
-<script type="text/javascript" >
+<script type="text/javascript">
 
  DTjQuery(document).ready(function() {     
 
-           var view="<?php echo JRequest::getVar('calview','month');  ?>";          
+            var view="<?php echo JRequest::getVar('calview','month'); ?>";          
 
             var DATA_FEED_URL = "<?php echo $datafeedurl; ?>";
 
@@ -252,6 +261,11 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
             var dvH = $dv.height() + 2;
 
             op.height = _MH - dvH;
+
+            // To add height to the boxes inside of the month view, comment the line above, then uncomment the line below. 
+            // Modify the +20 number to add pixels to the height calculation.
+
+            // op.height = _MH - dvH +20;
 
             op.eventItems =[];
 
@@ -320,7 +334,47 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
             {
                 
 			   DTjQuery.each(this.eventItems,function(k,v){		
-					DTjQuery('#gridcontainer').find('span:contains("'+v[1]+'")').parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5])
+					DTjQuery('#gridcontainer').find('span:contains("'+v[1]+'")').parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5])<?php if($calendar_show_popup) { ?>.tooltip({content:function(){
+						
+						var str = '<div class="event_title">'+v[1]+'</div>';
+					
+			   // Display of tooltip options start here //
+						
+						var config = v[13];
+						if(config.calendar_show_image != "0" && v[12] != ""){
+							 str += '<center><img border="0" alt="" style="padding:0px" src="<?php echo  JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w=120&h=120&filename=images%2Fdtregister%2Feventpics%2F') ;?>'+v[12]+' /></center>';
+						}
+						
+						if(config.calendar_show_date != "0" && v[14] != ""){
+							 str += '<br /><?php echo JText::_('DT_DATE')?>:&nbsp;'+v[14]+'';
+						}
+						if(config.calendar_show_time != "0" && v[22] != ""){
+							 str += '<br /><?php echo JText::_('DT_TIME')?>:&nbsp;'+v[22]+'';
+						}
+						if(config.calendar_show_location != "0" && v[18] != ""){
+							 str += '<br /><?php echo JText::_('DT_LOCATION')?>:&nbsp;'+v[18]+'';
+						}
+						if(config.calendar_show_moderator != "0" && v[20] != ""){
+							 str += '<br /><?php echo JText::_('DT_MODERATOR')?>:&nbsp;'+v[20]+'';
+						}
+						if(config.calendar_show_price != "0" && v[15] != ""){
+							 str += '<br /><?php echo JText::_('DT_PRICE')?>:&nbsp;'+v[15]+'';
+						}
+						if(config.calendar_show_capacity != "0" && v[16] != ""){
+							 str += '<br /><?php echo JText::_('DT_CAPACITY')?>:&nbsp;'+v[16]+'';
+						}
+						if(config.calendar_show_registered != "0" && v[17] != ""){
+							 str += '<br /><?php echo JText::_('DT_REGISTERED')?>:&nbsp;'+v[17]+'';
+						}
+						if((config.calendar_show_available_spots == "1" ) && v[19] != ""){
+							 str += '<br /><?php echo JText::_('DT_AVAILABLE_SPOTS')?>:&nbsp;'+v[19]+'';
+						}
+			  // Display of tooltip options end here //
+			
+						 return str;
+						 
+						 }})
+						 <?php }?>
 					   
 			   })
                 switch(type)
@@ -452,7 +506,13 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 DTjQuery(this).addClass("fcurrent");
 
                 var p = DTjQuery("#gridcontainer").swtichView("day").BcalGetOp();
-
+                 DTjQuery(".add_date").each(function(k,v){
+						
+						
+						DTjQuery.data(this,'calview','day');
+						
+						
+				})
                 if (p && p.datestrshow) {
 
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
@@ -476,7 +536,14 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 DTjQuery(this).addClass("fcurrent");
 
                 var p = DTjQuery("#gridcontainer").swtichView("week").BcalGetOp();
-
+                DTjQuery(".add_date").each(function(k,v){
+						
+						
+						DTjQuery.data(this,'calview','week');
+						
+						
+						
+				})
                 if (p && p.datestrshow) {
 
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
@@ -500,7 +567,13 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 DTjQuery(this).addClass("fcurrent");
 
                 var p = DTjQuery("#gridcontainer").swtichView("month").BcalGetOp();
-
+                 DTjQuery(".add_date").each(function(k,v){
+						
+						
+						DTjQuery.data(this,'calview','month');
+						
+						
+				})
                 if (p && p.datestrshow) {
 
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
@@ -532,7 +605,7 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 var p = DTjQuery("#gridcontainer").gotoDate().BcalGetOp();
 
                 if (p && p.datestrshow) {
-
+                    
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
 
                 }
@@ -546,7 +619,19 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 var p = DTjQuery("#gridcontainer").previousRange().BcalGetOp();
 
                 if (p && p.datestrshow) {
-
+                     
+					DTjQuery(".add_date").each(function(k,v){
+						
+						var link = DTjQuery(this).attr('attr');
+						
+						link += "&showday="+p.showday.format("m/d/yyyy");
+						
+						DTjQuery(this).attr('href',link);
+						
+						DTjQuery.data(this,'showday',p.showday.format("m/d/yyyy"));
+						
+					})
+					
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
 
                 }
@@ -560,12 +645,39 @@ $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/cal
                 var p = DTjQuery("#gridcontainer").nextRange().BcalGetOp();
 
                 if (p && p.datestrshow) {
-
+                    
+					DTjQuery(".add_date").each(function(k,v){
+						
+						var link = DTjQuery(this).attr('attr');
+						
+						link += "&showday="+p.showday.format("m/d/yyyy");
+						DTjQuery.data(this,'showday',p.showday.format("m/d/yyyy"));
+						DTjQuery(this).attr('href',link);
+						
+					})
                     DTjQuery("#txtdatetimeshow").text(p.datestrshow);
 
                 }
 
             });
+			
+			DTjQuery(".add_date").click(function(){
+				
+				var showday = DTjQuery.data(this, "showday");
+				var calview = DTjQuery.data(this, "calview");
+				//console.log(calview);
+				var link = DTjQuery(this).attr('attr');
+				
+				if(showday != undefined){
+					link += "&showday="+showday;
+				}
+				if(calview != undefined){
+					link += "&calview="+calview;
+				}
+				DTjQuery(this).attr('href',link);
+				return true;
+				
+			});
 
         });
 
