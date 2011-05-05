@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<install type="module" version="1.5.0">
+	<name>Extended Menu</name>
+	<author>Daniel Ecer</author>
+	<creationDate>February 2009</creationDate>
+	<copyright>(C) 2005-2009 Daniel Ecer</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail></authorEmail>
+	<authorUrl>de.siteof.de</authorUrl>
+	<version>1.0.6 (build 70)</version>
+	<description>
+	<![CDATA[
+	This Extended Menu module displays a menu in a flexible way.
+	Please visit <a href="http://de.siteof.de/extended-menu.html">de.siteof.de</a> for more details.<br />
+	To use this module don't forget to publish it (and probably unpublish the default mainmenu module).<br />
+	<br />
+	(If you like this module please consider a <a href="http://de.siteof.de/donate.html">donation</a>.)
+	]]>
+	</description>
+	<files>
+		<filename module="mod_exmenu-j15">mod_exmenu-j15.php</filename>
+		<filename>mod_exmenu.php</filename>
+		<filename>exmenu/exmenu.class.php</filename>
+		<filename>exmenu/loader/autoexpandedmenu.menuloader.class.php</filename>
+		<filename>exmenu/loader/category.menuloader.class.php</filename>
+		<filename>exmenu/loader/contentitem.menuloader.class.php</filename>
+		<filename>exmenu/loader/factory.menuloader.class.php</filename>
+		<filename>exmenu/loader/menu.menuloader.class.php</filename>
+		<filename>exmenu/loader/menucache.class.php</filename>
+		<filename>exmenu/loader/menuloader.class.php</filename>
+		<filename>exmenu/loader/plugin.menuloader.class.php</filename>
+		<filename>exmenu/loader/section.menuloader.class.php</filename>
+		<filename>exmenu/model/menunode.class.php</filename>
+		<filename>exmenu/util/databasehelper.class.php</filename>
+		<filename>exmenu/util/sitehelper.class.php</filename>
+		<filename>exmenu/view/csstree.menuview.class.php</filename>
+		<filename>exmenu/view/factory.menuview.class.php</filename>
+		<filename>exmenu/view/horizontal.menuview.class.php</filename>
+		<filename>exmenu/view/htmltree.menuview.class.php</filename>
+		<filename>exmenu/view/list.menuview.class.php</filename>
+		<filename>exmenu/view/menuview.class.php</filename>
+		<filename>exmenu/view/pattemplate.menuview.class.php</filename>
+		<filename>exmenu/view/plugin.menuview.class.php</filename>
+		<filename>exmenu/view/selectlist.menuview.class.php</filename>
+		<filename>exmenu/view/verticaltable.menuview.class.php</filename>
+	</files>
+	<params>
+		<param name="class_sfx" type="text" default="" label="Menu Class Suffix" description="A suffix to be applied to the css class of the menu items" />
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="A suffix to be applied to the css class of the module (table.moduletable), this allows individual module styling" />
+		<param name="cache" type="radio" default="0" label="Enable Cache" description="Select whether to cache the content of this module">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="...[ source ]..." description="Parameters where to load menu items from." />
+		<param name="menutype" type="mos_menu" default="" label="Menu Name" description="The name of the menu (default is 'mainmenu')" />
+		<param name="menu_source_type" type="list" default="menu" label="Source Type" description="Source type to use.">
+			<option value="menu">Menu</option>
+			<option value="menu_auto_expanded">Menu (Auto Expand Sections/Categories)</option>
+			<option value="section">Sections</option>
+			<option value="category">Categories</option>
+			<option value="content_item">Content Items</option>
+			<option value="plugin">Plugin</option>
+		</param>
+		<param name="menu_source_value" type="text" default="" label="Source Value" size="40" description="Ids depending on Source Type (section ids, category ids or content item ids - it is also possible to specify the name/alias instead)." />
+		<param name="menu_source_show_section" type="list" default="default" label="Show Section" description="Define which elements to should be linkable (if visible).">
+			<option value="default">Default</option>
+			<option value="hide">Hide</option>
+			<option value="label">Label (Not Linked)</option>
+			<option value="content_section">Table Section Link</option>
+			<option value="content_blog_section">Blog - Section Link</option>
+			<option value="content_archive_section">Blog - Content Section Archive Link</option>
+		</param>
+		<param name="menu_source_show_category" type="list" default="default" label="Show Category" description="Define which elements to should be linkable (if visible).">
+			<option value="default">Default</option>
+			<option value="hide">Hide</option>
+			<option value="label">Label (Not Linked)</option>
+			<option value="content_category">Table Category Link</option>
+			<option value="content_blog_category">Blog - Category Link</option>
+			<option value="content_archive_category">Blog - Category Archive Link</option>
+		</param>
+		<param name="menu_source_show_content_item" type="list" default="default" label="Show Content Item" description="Define which elements to should be linkable (if visible).">
+			<option value="default">Default</option>
+			<option value="hide">Hide</option>
+			<option value="label">Label (Not Linked)</option>
+			<option value="content_item_link">Content Item Link</option>
+		</param>
+		<param name="menu_source_order" type="list" default="ordering" label="Order" description="Define which elements to should be linkable (if visible).">
+			<option value="ordering">Ordering (Asc.)</option>
+			<option value="ordering_desc">Ordering (Desc.)</option>
+			<option value="title">Title (Asc.)</option>
+			<option value="title_desc">Title (Desc.)</option>
+			<option value="time">Time (Asc.)</option>
+			<option value="time_desc">Time (Desc.)</option>
+		</param>
+		<param name="default_content_itemid" type="text" default="" label="Default Itemid" description="Defines a default menu item which is used for the content items to reduce duplicate URLs. (see also Resolve Itemid)" />
+		<param name="@spacer" type="spacer" default="" label="...[ style ]..." description="Parameters defining what kind of information to show (see also output)." />
+		<param name="menu_style" type="list" default="vert_indent" label="Menu Style" description="The menu style">
+			<option value="list_flat">Flat List</option>
+			<option value="list_tree">Tree List</option>
+			<option value="css_tree">CSS Tree</option>
+			<option value="select_tree">Select List</option>
+			<option value="plugin">Plugin</option>
+			<option value="">---</option>
+			<option value="vert_indent">Vertical (not recommended)</option>
+			<option value="horiz_flat">Horizontal (not recommended)</option>
+			<option value="html_tree">HTML Tree (not recommended)</option>
+		</param>
+		<param name="menu_view_plugin_name" type="text" default="" label="Menu View Plugin Name" description="The name of the menu view plugin you want to show." />
+		<param name="menu_images" type="list" default="0" label="Show Menu Icons" description="Show the Menu Icons you have selected for your menu items">
+			<option value="0">No</option>
+			<option value="left">Left Aligned</option>
+			<option value="left_linked">Left Aligned (Linked)</option>
+			<option value="right">Right Aligned</option>
+			<option value="right_linked">Right Aligned (Linked)</option>
+			<option value="image_only">Image Only</option>
+			<option value="image_only_linked">Image Only (Linked)</option>
+		</param>
+		<param name="expand_menu" type="radio" default="0" label="Expand Menu" description="Expand the menu and make its sub-menus items always visible">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="expand_min" type="text" default="" label="Expand Until Level" description="All menu items until the given level will always be expanded." />
+		<param name="max_depth" type="text" default="10" label="Maximum Depth" description="Levels with a level higher than the maximum depth will never be expanded." />
+		<param name="hide_first" type="radio" default="0" label="Hide First Entry" description="The first menu item will not be rendered. (This is useful when setting the first entry to what your home page should be, but you dont want it to show.)">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="show_parent" type="radio" default="0" label="Show Parent" description="Shows the parent of the menu.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="...[ split ]..." description="Parameters allowing to split a menu and display a menu partally." />
+		<param name="parent_item" type="text" default="" label="Parent Menu Item" description="The parent menu item (Itemid/Name) to use as the parent." />
+		<param name="current_level_begin" type="radio" default="0" label="Begin With Current Item Level" description="Begins with the level of the currently selected item.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="level_begin" type="text" default="" label="Begin With Level" description="Begins with a certain level/level - useful to split menu into different modules." />
+		<param name="split_menu" type="text" default="" label="Split Menu" description="The amount of levels/depth until a new menu within this module will be rendered." />
+		<param name="menu_count" type="text" default="1" label="Menu Count" description="The amount of menus to render within this module." />
+		<param name="query_cache" type="radio" default="0" label="Enable Query Cache" description="Select whether to cache the query of this module (may be useful for menus splitted into modules)">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="...[ output ]..." description="Additional parameters to control the output." />
+		<param name="parse_access_key" type="list" default="3" label="Parse Access Key" description="Defines how to parse/strip the access key markup.">
+			<option value="0">None</option>
+			<option value="1">Parse</option>
+			<option value="2">Strip</option>
+			<option value="3">Strip Markup</option>
+			<option value="4">Strip And Emphase</option>
+		</param>
+		<param name="title_attribute" type="radio" default="0" label="Link Title" description="A title attribute may be added to links (useful in combination to show the access key).">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="level_class" type="list" default="0" label="Level Class" description="Defines which level class should be applied (mainlevel/sublevel).">
+			<option value="0">Default</option>
+			<option value="3">Mainlevel and Sublevel</option>
+		</param>
+		<param name="active_menu_class" type="list" default="0" label="Active Menu Class" description="Active menus may get the style class mainlevel_active/sublevel_active.">
+			<option value="0">No</option>
+			<option value="1">to a-Element</option>
+			<option value="2">to li/td/div-Element</option>
+			<option value="3">Both</option>
+		</param>
+		<param name="element_id" type="radio" default="0" label="Element Id" description="Each element may get an id based on the hierarchy... for example menuitem_2_5 for the 5th sub menu item of the 2nd menu item. (Note: this conflicts with the active_menu id which will removed... use the above setting instead)">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="menu_template" type="radio" default="1" label="Enable Menu Template" description="Enable Menu Template (patTemplate).">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="menu_template_name" type="text" default="menu.html" label="Template Name" description="The patTemplate template to use (need to be in the current site templates directory)." />
+		<param name="@spacer" type="spacer" default="" label="...[ images ]..." description="Images to use for the Vertical menu style." />
+		<param name="indent_image" type="list" default="0" label="Indent Image" description="Choose which indent image system to utilise">
+			<option value="0">Template</option>
+			<option value="1">Mambo default images</option>
+			<option value="2">Use params below</option>
+			<option value="3">None</option>
+		</param>
+		<param name="indent_image1" type="imagelist" directory="/images/M_images" default="" label="Indent Image 1" description="Image for the first sub-level" />
+		<param name="indent_image2" type="imagelist" directory="/images/M_images" default="" label="Indent Image 2" description="Image for the second sub-level" />
+		<param name="indent_image3" type="imagelist" directory="/images/M_images" default="" label="Indent Image 3" description="Image for the third sub-level" />
+		<param name="indent_image4" type="imagelist" directory="/images/M_images" default="" label="Indent Image 4" description="Image for the fourth sub-level" />
+		<param name="indent_image5" type="imagelist" directory="/images/M_images" default="" label="Indent Image 5" description="Image for the fifth sub-level" />
+		<param name="indent_image6" type="imagelist" directory="/images/M_images" default="" label="Indent Image 6" description="Image for the sixth sub-level" />
+		<param name="@spacer" type="spacer" default="" label="...[ horizontal spacer ]..." description="Spacer to use for the Horizontal menu style." />
+		<param name="spacer" type="text" default="" size="5" label="Spacer" description="Spacer for Horizontal menu" />
+		<param name="end_spacer" type="text" default="" size="5" label="End Spacer" description="End Spacer for Horizontal menu" />
+		<param name="@spacer" type="spacer" default="" label="...[ select list ]..." description="Select List options." />
+		<param name="select_list_submit_text" type="text" default="Go" size="20" label="Select List Submit Text" description="Text for the submit button" />
+		<param name="select_list_submit_hide" type="list" default="0" label="Hide Submit Button" description="Defines whether the submit button should be hidden.">
+			<option value="0">Never</option>
+			<option value="autohide">When JavaScript is enabled</option>
+		</param>
+		<param name="@spacer" type="spacer" default="" label="...[ misc ]..." description="Misc. options." />
+		<param name="call_getitemid" type="radio" default="1" label="Resolve Itemid By Content Item" description="Resolve Itemid by content item (calls getItemid)... set this to No if you want to link multiple times to the same content item.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+		<param name="current_item" type="list" default="smart" label="Current/Active Item Highlighting" description="Define which item should be the current/active one - using the fastest but may not lead to the desired result.">
+			<option value="itemid">Use The Itemid Only</option>
+			<option value="smart">Smart - Itemid Or Other</option>
+			<option value="ignore_itemid">Ignore Itemid</option>
+		</param>
+		<param name="current_item_duplicates" type="list" default="convert_active" label="Current Item Duplicates" description="Defines what to do when duplicate items were found which would otherwise produce invalid HTML.">
+			<option value="leave">Leave Duplicates</option>
+			<option value="convert_active">Convert To Active</option>
+			<option value="convert_normal">Convert To Normal</option>
+		</param>
+		<param name="access_keys" type="text" default="" size="50" label="Access Keys" description="Additional access key mapping (comma separated association of Itemid/Name=AK - without a left side the position is assumed, e.g. 1=1,exmenu=m,3)." />
+		<param name="exact_access_level" type="radio" default="0" label="Exact Access Level" description="If set to yes, public menu items will be shown to when not logged in only.">
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</param>
+	</params>
+</install>

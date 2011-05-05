@@ -1,0 +1,85 @@
+/********************************************
+   AUTHOR:  			Lee Reis
+   Code for tem_highergrounds to add drop-down menus at top
+
+ *******************************************/
+ 
+#menu {
+	 /*Added section for dropdown*/
+	position:relative;
+	z-index:100;
+	margin:0;
+	padding:0;
+	float:left;
+	list-style:none;
+	line-height:1em;
+	background:transparent;
+	margin:0;
+}
+
+#menu ul {
+	line-height:1em;
+}
+
+#menu li {
+  float:left;
+  padding:0;
+}
+
+#menu li ul  {
+  position:absolute;
+  left:-999em;
+  height:auto;
+  width:12em;
+  font-weight:700;
+  background:#97AE04;
+  border:#899D00 1px solid;
+  margin:3em 0 0 -10em;
+  
+  line-height:30px;
+  text-transform:none;
+}
+
+#menu ul li a {
+	width: 7.5em;
+	text-align:center;
+}
+
+menu ul ul li,#menu ul ul li a {
+	width:10em;
+	padding: 0 5px;
+	color: #000;
+	font: bold 12px/2.8em "Century Gothic", "Trebuchet MS", Helvetica, Arial, Geneva, sans-serif;
+	border:none;
+	text-transform: none;
+	text-align:left;
+	letter-spacing: auto;
+}
+
+#menu li li {
+  width:12em;
+  border-bottom: 1px solid #899D00;
+}
+
+#menu li li ul{
+	margin: 0 0 0 9.5em;
+}
+
+#menu li:hover ul ul,#menu li:hover ul ul ul,#menu li.sfhover ul ul,#menu li.sfhover ul ul ul{
+  left:-999em;
+}
+#menu li:hover ul,#menu li li:hover ul,#menu li li li:hover ul,#menu li.sfhover
+  ul,#menu li li.sfhover ul,#menu li li li.sfhover ul {
+  left:auto;
+  z-index:6000;
+}
+#menu li li:hover,#menu ul li ul a:hover,#menu li li.sfhover {
+  background:#8C9F0D;
+}
+
+
+/* No second-level dropdowns */
+/*
+#menu ul ul ul {
+display:none;
+}*/

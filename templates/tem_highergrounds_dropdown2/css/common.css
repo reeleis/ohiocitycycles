@@ -1,0 +1,82 @@
+/* by CMS Lounge - www.cmslounge.com */
+
+/* styles here generally don't need updating */
+/* but if you do update, make sure you backup */
+
+/* alignment classes */
+.float-left  { float: left; }
+.float-right { float: right; }
+.align-left  { text-align: left; }
+.align-right { text-align: right; }
+
+/* overrides classes */
+.floatleft {float:left;}
+.floatright {float:right;}
+.widleft {width:130px; clear:both; text-align:right;padding-bottom:5px;}
+.widright {width:350px;margin-right:10px;padding-bottom:5px;}
+.clear { clear: both; }
+form#adminForm img {padding:0;margin:0;}
+fieldset {padding-bottom:1em;}
+.editor {margin-top:1em;margin-bottom:1em;}
+table.mceEditor td {	white-space:normal;}
+
+/* category table styles */
+span.author {display:none;}
+div.item {padding-top:0.6em;}
+.paginate {padding-top:1em; text-align:center;}
+.pagecounter {padding-bottom:1em;padding-top:0.6em;text-align:center;}
+
+/* buttons */
+
+.buttons {
+float:right;
+width:85px;
+}
+
+.buttons .buttonheading {
+float:left;
+}
+
+/* poll module styles */
+/* poll module styles */
+.poll-radio {
+width:15%;
+text-align:center;
+float:left;
+clear:both;
+}
+
+.poll-option {
+width:80%;
+}
+
+.poll h3 {
+border:none !important;
+}
+
+/* cbodb styles */
+table.cbodbTrans {
+width: 100%;
+padding: 10px;
+}
+table th {
+color: black;
+}
+/*table.cbodbTrans td { 
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 4px;
+padding-right: 4px;
+}*/
+tr.cbodbRow0 {
+background: #f0f0f0;
+}
+tr.cbodbRow1 {
+background: #ffffff;
+}
+tr.cbodbRow0 td {
+/*background: #fff0f0;*/
+}
+tr.cbodbRow1 td {
+background: #ffffff;
+}
