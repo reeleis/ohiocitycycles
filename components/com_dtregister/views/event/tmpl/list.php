@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.5
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -154,7 +154,7 @@ if($month =="" && $year !="" ){
 
    $start_date = $year."-01-01";
 
-   $end_year =  $year + 1;
+   $end_year = $year + 1;
 
    $end_date = $end_year."-01-01";
 
@@ -190,11 +190,9 @@ for ($i=0,$n=count($rows1);$i<$n;$i++){
 
 }
 
-// $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
-
 $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
 
-/// pr($rows);
+// pr($rows);
 
 ?>
 
@@ -234,7 +232,7 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
     <td align="left">
 
-    <?php  if($config->getGlobal('event_search_show',0)==1){ ?>
+    <?php if($config->getGlobal('event_search_show',0)==1){ ?>
 
     <b><?php echo JText::_( 'DT_SEARCH' ); ?>:</b> 
 
@@ -297,7 +295,7 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
         <?php
 
-		  $options = DtHtml::options( $locationTable->optionslist(),JText::_( 'DT_LOCATION_VIEW' ));
+		 $options = DtHtml::options( $locationTable->optionslist(),JText::_( 'DT_LOCATION_VIEW' ));
 
 		 echo JHTML::_('select.genericlist', $options,"location",'onchange="submit()"',"value","text",JRequest::getVar('location','')); ?>
 
@@ -447,7 +445,7 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
 	  $link="index.php?option=".DTR_COM_COMPONENT."&Itemid=$Itemid";
 
-	  echo $pageNav->getPagesLinks($link);
+	  echo "<div class='pagination'  >".$pageNav->getPagesLinks($link)."</div>";
 
 	}else if (!$rows && $search){
 

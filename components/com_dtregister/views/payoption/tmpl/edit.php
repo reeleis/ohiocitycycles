@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -157,7 +157,7 @@ function submitbutton(pressbutton){
 
 								  <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_MODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 								
-								<td rowspan="2" valign="top">&nbsp;</td>
+								<td rowspan="3" valign="top"> </td>
 
 							  </tr>
 							   <tr align="center" valign="middle">
@@ -183,6 +183,21 @@ function submitbutton(pressbutton){
 								   <td width="40"><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_METHOD_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 							   </tr>
+							
+								<tr align="center" valign="middle">  
+
+								<td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
+
+							    <td align="left" valign="top">
+                                <?php
+								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$row->config['cardtype']);
+								?>
+                               </td>
+
+									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+							  </tr>
+							
 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CURL_SWITCH' ) ?>:</strong></td>
 
 							   <td align="left" valign="top">
@@ -191,9 +206,9 @@ function submitbutton(pressbutton){
 
 								   $options=array();
 
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'NO' ));
+								   $options[]=JHTML::_('select.option', '0', JText::_( 'DT_CURL_METHOD1' ));
 
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'YES' ));
+								   $options[]=JHTML::_('select.option', '1', JText::_( 'DT_CURL_METHOD2' ));
 
   if(!isset($row->config['godaddy_hosting']) || $row->config['godaddy_hosting']==""){
 						 $godaddy_hosting=0;
@@ -228,7 +243,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_MERCHANT_ID' )), '', 'tooltip.png', '', ''); ?> </td>
 										 									   
-									   <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
+									   <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
 
 								 </tr>
 
@@ -241,20 +256,6 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_TRANS_KEY' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								</tr>
-
-								<tr align="center" valign="middle">  
-									
-								<td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
-
-							    <td align="left" valign="top">
-                                <?php
-								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$row->config['cardtype']);
-								?>
-                               </td>
-
-									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-							  </tr>
 							  
 							  <!-- *************** Google Checkout Options ***************	-->
 							  
@@ -372,7 +373,7 @@ function submitbutton(pressbutton){
 								 </tr>
                                  
                                  
-                                  <!-- *********** PSIGate Payment options ***********  -->
+                                  <!-- *********** PSiGate Payment options ***********  -->
 
                                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PSIGATE' ); ?></td>
                                  </tr>
@@ -457,7 +458,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_CUSTOMERID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 										 
-										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
+										 <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
 
 								 </tr>
                                  <tr align="center" valign="middle">

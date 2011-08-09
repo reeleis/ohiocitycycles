@@ -395,31 +395,31 @@ class TableEvent extends DtrTable {
 
 		$this->db =&$db;
 
-	    $this->TableGroup  =& DtrTable::getInstance('Group','Dtable');
+	    $this->TableGroup =& DtrTable::getInstance('Group','Dtable');
 		
-		$this->TableCategory  =& DtrTable::getInstance('Category','Table');
+		$this->TableCategory =& DtrTable::getInstance('Category','Table');
 
-		//$this->TableEventconfig  =& DtrTable::getInstance('Eventconfig','Table');
+		//$this->TableEventconfig =& DtrTable::getInstance('Eventconfig','Table');
 
-		$this->TableEventdiscountcode  =& DtrTable::getInstance('Eventdiscountcode','Table');
+		$this->TableEventdiscountcode =& DtrTable::getInstance('Eventdiscountcode','Table');
 
-		$this->TablePrerequisitecategory  =& DtrTable::getInstance('Prerequisitecategory','Table');
+		$this->TablePrerequisitecategory =& DtrTable::getInstance('Prerequisitecategory','Table');
 
-		$this->TablePrerequisite  =& DtrTable::getInstance('Prerequisite','Table');
+		$this->TablePrerequisite =& DtrTable::getInstance('Prerequisite','Table');
 
-		$this->TableEventfield  =& DtrTable::getInstance('Eventfield','Table');
+		$this->TableEventfield =& DtrTable::getInstance('Eventfield','Table');
 
-		$this->TableEventfile  =& DtrTable::getInstance('File','Table');
+		$this->TableEventfile =& DtrTable::getInstance('File','Table');
 
-		$this->TableEventfeeorder  =& DtrTable::getInstance('Feeorder','Table');
+		$this->TableEventfeeorder =& DtrTable::getInstance('Feeorder','Table');
 
-		$this->TableField  =& DtrTable::getInstance('Field','Table');
+		$this->TableField =& DtrTable::getInstance('Field','Table');
 
-		$this->TablePayoption  =& DtrTable::getInstance('Payoption','Table');
+		$this->TablePayoption =& DtrTable::getInstance('Payoption','Table');
 
-		$this->TableLocation  =& DtrTable::getInstance('location','Table');
+		$this->TableLocation =& DtrTable::getInstance('location','Table');
 
-		$this->TableRepetition  =& DtrTable::getInstance('repetition','Table');
+		$this->TableRepetition =& DtrTable::getInstance('repetition','Table');
 
 		parent::__construct( '#__dtregister_group_event', 'slabId', $db );
 
@@ -862,10 +862,8 @@ class TableEvent extends DtrTable {
 				 if(!$this->is_reg_prequisite($tUser)){
                       $url="index.php?option=com_dtregister&Itemid=$Itemid&task=prequisite&controller=message&eventId=".$this->slabId;
 
-					 $mainframe->redirect($url);					 
-
-					// $mainframe->redirect($sign_up_redirect , JText::_('DT_ERROR_PREQUISITE_EVENT_REGISTRATION'));	  
-
+					 $mainframe->redirect($url);
+					
 				 }
 
 			  }
@@ -891,15 +889,13 @@ class TableEvent extends DtrTable {
 
 					 $mainframe->redirect($url);
                      
-					 //$mainframe->redirect($sign_up_redirect , JText::_('DT_ERROR_PREQUISITE_EVENT_REGISTRATION'));
-
 				 }	   
 
 			  }
 
 		 }
 
-        $registered =  $this->getTotalregistered($this->slabId);
+        $registered = $this->getTotalregistered($this->slabId);
 		
 		if($this->max_registrations <= $registered && $this->max_registrations != 0 && $this->max_registrations !=""){
 		   	if(!($this->waiting_list)){
@@ -1129,7 +1125,7 @@ class TableEvent extends DtrTable {
 
 	   $prerequisite_id = array();
 
-	$prerequisites = $this->prerequisitecategory;
+	 $prerequisites = $this->prerequisitecategory;
 
      if(is_array($prerequisites))
 
@@ -1240,9 +1236,9 @@ class TableEvent extends DtrTable {
 				
 				$testEvt->load($user['eventId']);
 				if(isset($user['fields'])) {
-				  $rstart1 = strtotime($testEvt->dtstart.' '.$testEvt->dtstarttime) ;
+				  $rstart1 = strtotime($testEvt->dtstart.' '.$testEvt->dtstarttime);
 				  $rend1   = strtotime( $testEvt->dtend.' '.$testEvt->dtendtime);
-				  $rstart2 = strtotime($this->dtstart.' '.$this->dtstarttime) ;
+				  $rstart2 = strtotime($this->dtstart.' '.$this->dtstarttime);
 				  $rend2   = strtotime( $this->dtend.' '.$this->dtendtime);
 				  
 				  if(intersects($rstart1,$rend1,$rstart2,$rend2)) {
@@ -1325,7 +1321,7 @@ class TableEvent extends DtrTable {
 
 			if($this->db->getNumRows()>0){
 
-				$menu =  $this->db->loadObject();
+				$menu = $this->db->loadObject();
 
 				return $menu->id; 
 
@@ -1662,7 +1658,7 @@ return $data;
 
 	  $feefields = array();
 
-	  foreach($fields as  $field){
+	  foreach($fields as $field){
 
 		   if($field->fee_field){
 
@@ -1680,7 +1676,7 @@ return $data;
 
      $temp = array();
 
-	 $data =  $this->TableEventfield->find(' event_id = "'.$this->slabId.'"');
+	 $data = $this->TableEventfield->find(' event_id = "'.$this->slabId.'"');
      if(is_array($data))
 	 foreach($data as $row){
 
@@ -1720,7 +1716,7 @@ return $data;
 	 $this->convertTimeFormat($data['event']['timeformat'],$data['event']['cancel_time']);
       
 	 static $secondpass = 0;
-	  $create_new_repeats = true;
+	 $create_new_repeats = true;
 	 $repeat_changed =  true;
 	 if($data['event']['slabId']!=""){
        
@@ -1865,7 +1861,7 @@ return $data;
 			 foreach($this->childs as $child){
 				  
 				  $repeatupdate = new TableEvent($this->_db);
-				  $repeatupdate->slabId = $child->slabId ;
+				  $repeatupdate->slabId = $child->slabId;
 				  foreach($this->repeatFields as $field){
 					 
 					 $data['event'][$field] = $child->$field;
@@ -1895,7 +1891,7 @@ return $data;
 		   if(isset($data[$name]) && $data[$name] !="" && $data[$name] !="0000-00-00"){
 			    $diff_offset = (strtotime($data[$name]) - $startdate->toUnix(false) + $startdate_offset)/3600;
 				$startdate->setoffset($diff_offset);
-                $data[$name] =  $startdate->toFormat('%Y-%m-%d');
+                $data[$name] = $startdate->toFormat('%Y-%m-%d');
 
 		   }else{
 		       $data[$name] = "";
@@ -1923,7 +1919,7 @@ return $data;
   function delete($id){
 
 	 parent::delete($id);
-     
+     $this->slabId = $id;
 	 $this->setChilds();
 	 
 	 if($this->childs){
@@ -2343,7 +2339,7 @@ return $data;
 	 $this->db->query();
   }
 
-  function findalldetail($condition , $ordering , $limitstart, $limit){
+  function findalldetail($condition, $ordering, $limitstart, $limit){
      
 	 /*  to show own events 
 	  $aro = $this->getModel( 'aro' );
@@ -2375,9 +2371,9 @@ return $data;
 
 	   $this->db->setQuery($sql,$limitstart,$limit);   
 
-	   $data =  $this->db->loadObjectList(); 
+	   $data = $this->db->loadObjectList(); 
 
-		return $data;
+	   return $data;
 
   }
 
@@ -2568,7 +2564,7 @@ return $data;
 
 			     	 $rows = $this->findByCategoryTree($childcat->categoryId,$where,$ordering);
 
-					  $this->events = array_merge($this->events ,$rows);
+					 $this->events = array_merge($this->events ,$rows);
 
 			   }
 
@@ -2714,7 +2710,7 @@ return $data;
 
 		if($this->db->getNumRows()>0){
 
-			$menu =  $this->db->loadObject();
+			$menu = $this->db->loadObject();
 
 			return $menu->id; 
 
@@ -2850,7 +2846,7 @@ return $data;
 
   function get_individual_custom_field($showHidden=false){
 
-    $hidden_sql =  ($showHidden)?'':' and df.hidden=0 ';
+    $hidden_sql = ($showHidden)?'':' and df.hidden=0 ';
 
     $sql="Select fe.id as key1,   fe.* , df.id as key2 , df.* , if(fe.showed =-1, fe.showed,fe.showed) as showed , if(fe.showed =-1, fe.required,fe.required) as required ,if(fe.showed =-1, fe.group_behave ,fe.group_behave ) as group_behave From #__dtregister_fields as df inner join #__dtregister_field_event as fe on fe.field_id = df.id
 
@@ -2992,12 +2988,10 @@ echo $this->db->getErrorMsg();
 		     $this->javavalidation .= $fieldTable->requiredJs;
 
 			 $document =& JFactory::getDocument();
-       $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
+             $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 	         $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validate.js");
 
-			 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validationmethods.js");
-
-			 //$this->javavalidation .= "AddListener(document.frmcart,'submit', '".addslashes($fieldTable->requiredJs)."' )\n"; 	 
+			 $document->addScript( JURI::root(true)."/components/com_dtregister/assets/js/validationmethods.js"); 	 
 
 		  }
 
@@ -3112,7 +3106,7 @@ echo $this->db->getErrorMsg();
 		 
 		  if($value){
 
-			   $replace  = array($field->label,$value,''); 
+			   $replace = array($field->label,$value,''); 
 
 		       $html .= str_replace($constants,$replace,$tpl);
 
@@ -3183,7 +3177,7 @@ echo $this->db->getErrorMsg();
 	
 				 for($i=$prevweek;$i<$week;$i++){
 				   
-					 $addedoffeset  += $dayseconds * (7);
+					 $addedoffeset += $dayseconds * (7);
                      $currentdate->setOffset($addedoffeset); // go to next week 
                      
 					 $prevweek = $week;
@@ -3221,7 +3215,7 @@ echo $this->db->getErrorMsg();
 				 
 			 }
 			 // reset month 
-			 $nextmonthoffset =  strtotime("+1 month",strtotime($year."-".$month."-01")) - $currentdate->toUnix(true);
+			 $nextmonthoffset = strtotime("+1 month",strtotime($year."-".$month."-01")) - $currentdate->toUnix(true);
 			 $nextmonthoffset /= 3600;
 			 $addedoffeset += ($nextmonthoffset);
 			 $currentdate->setOffset($addedoffeset);
@@ -3310,7 +3304,7 @@ echo $this->db->getErrorMsg();
       $addedoffeset -= $weekstart*$dayseconds;
 
 	  $currentdate->setoffset($addedoffeset);
-      $count = 1 ; ;
+      $count = 1; ;
 
 	  $interval = $event['rpinterval'];
       
@@ -3321,7 +3315,7 @@ echo $this->db->getErrorMsg();
 			   $totaltime = $currentdate->toUnix(true) + ($dayseconds*$weekday*3600) ;
 			   if(strftime('%H',$totaltime) == '23') {
 			   		
-					$totaltime += 3600 ;
+					$totaltime += 3600;
 					
 			   }
               

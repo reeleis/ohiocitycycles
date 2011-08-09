@@ -515,13 +515,13 @@ class DtregisterControllerUser extends DtrController {
 
 	  $tUser = $mUser->table;
       foreach($_POST['cid'] as $userId){
-	  	 $tUser->load($userId);
-
-	 	 $tUser->attend = 1;
-		 pr($tUser);
-	  	 $tUser->store();
+		  
+		  $query = "update #__dtregister_user set attend = 1 where userId=".$userId; 
+		  $tUser->rawquery($query);    
+	  	  
 	  }
-
+     
+	  
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
    }

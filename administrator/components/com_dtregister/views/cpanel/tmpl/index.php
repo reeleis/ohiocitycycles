@@ -77,7 +77,7 @@ $rollbackthere = in_array($table_name,$tables);
 				    <tr><td><div><strong><?php echo JText::_('DT_CPANEL_DTH_NEWS'); ?>:</strong>  </td><td><a href="http://www.dthdevelopment.com/dth-news/" target="_blank">[<?php echo JText::_('DT_CPANEL_CLICK_HERE'); ?>]</a><br /></div></td></tr>
 				    <tr><td><div><strong><?php echo JText::_('DT_CPANEL_DTH_WEBSITE'); ?>:</strong>  </td><td><a href="http://www.dthdevelopment.com" target="_blank">[<?php echo JText::_('DT_CPANEL_CLICK_HERE'); ?>]</a><br /></div></p></td></tr>
 				</table>
-				<p><div><strong><?php echo JText::_('DT_CPANEL_INSTALLED_VERSION'); ?>:</strong>  2.7.7a</div></p>
+				<p><div><strong><?php echo JText::_('DT_CPANEL_INSTALLED_VERSION'); ?>:</strong>  2.7.7b</div></p>
 				<p><div>©2006 DTH Development. All rights reserved.</div></p>
 			</td>
 		</tr>

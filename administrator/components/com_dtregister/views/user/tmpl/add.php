@@ -91,7 +91,7 @@ $pMethods = $paymthd->getMergeList(true);
 
          <td>
 
-         <?php  echo JHTMLSelect::booleanlist("User[Fee][status]","",(isset($tUser->fee))?$tUser->fee->status:0); ?>
+         <?php echo JHTMLSelect::booleanlist("User[Fee][status]","",(isset($tUser->fee))?$tUser->fee->status:0); ?>
 
          </td>
 
@@ -140,7 +140,7 @@ $pMethods = $paymthd->getMergeList(true);
 
                 	<td><?php echo JText::_( 'DT_CARD_HOLDER_FIRSTNAME' ); ?>:<span class="dtrequired">  *  </span></td>
 
-                    <td align="left"> <input id="billingFirstname"  class="inputbox required" type="text" name="billing[firstname]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->firstname:'' ?>" /> </td><td> </td> 
+                    <td align="left"> <input id="billingFirstname" class="inputbox required" type="text" name="billing[firstname]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->firstname:'' ?>" /> </td><td> </td> 
 
                  </tr>
 
@@ -329,10 +329,12 @@ $pMethods = $paymthd->getMergeList(true);
 				}
 			
 			DTjQuery(".billinginfo").css({display:display});
+			DTjQuery("input[name^='billing']").addClass('required');
 			
 			
 		} else {
 			DTjQuery(".billinginfo").css({display:'none'});
+			DTjQuery("input[name^='billing']").removeClass('required');
 		}
 		
    });

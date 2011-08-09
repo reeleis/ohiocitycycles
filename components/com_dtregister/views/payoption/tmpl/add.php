@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -150,7 +150,7 @@ function submitbutton(pressbutton){
 
 								  <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_MODE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 								
-								<td valign="top" rowspan="2">&nbsp;</td>
+								<td valign="top" rowspan="3"> </td>
 
 							  </tr>
 							   <tr align="center" valign="middle">
@@ -183,9 +183,9 @@ function submitbutton(pressbutton){
 
 								   $options=array();
 
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'NO' ));
+								   $options[]=JHTML::_('select.option', '0', JText::_( 'DT_CURL_METHOD1' ));
 
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'YES' ));
+								   $options[]=JHTML::_('select.option', '1', JText::_( 'DT_CURL_METHOD2' ));
 
   if(!isset($row->config['godaddy_hosting']) || $row->config['godaddy_hosting']==""){
 						 $godaddy_hosting=0;
@@ -203,7 +203,22 @@ function submitbutton(pressbutton){
 
 								<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_CURL_SWITCH_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-							   </tr> 
+							   </tr>
+							
+								<tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
+
+							    <td align="left" valign="top">
+                                <?php
+
+								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$config->getGlobal('cardtype',array()));
+								?>
+                               </td>
+
+									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+							  </tr>
+							
+							
 							   <!-- *************** Authorize.net Options **************** -->
 
                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'AUTH_NET' ); ?></td></tr>
@@ -220,7 +235,7 @@ function submitbutton(pressbutton){
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_MERCHANT_ID' )), '', 'tooltip.png', '', ''); ?> </td>
 										 									   
-									   <td valign="top" rowspan="3"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
+									   <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_AUTHNET' ) ;?></td>
 
 								 </tr>
 
@@ -233,19 +248,6 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_TRANS_KEY' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								</tr>
-
-								<tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CARD_TYPE' ); ?>:</strong></td>
-
-							    <td align="left" valign="top">
-                                <?php
-								 
-								 echo DtHtml::checkboxList('data[config][cardtype]',$cardtype->gettypes(),$config->getGlobal('cardtype',array()));
-								?>
-                               </td>
-
-									<td><?php echo JHTML::tooltip((JText::_( 'DT_CARD_TYPE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-							  </tr>
 							  
 							  <!-- *************** Google Checkout Options ***************	-->
 							  
@@ -650,13 +652,11 @@ function submitbutton(pressbutton){
 	   DTjQuery("#addmore").click(function(){
 		   DTjQuery('.container').append(DTjQuery("#newelement").html());
 		   arrangeAddmoreValues();
-		   return false ;
+		   return false;
 	   });
 		 
 	   DTjQuery('.remove').live('click',function(){
-		  
-		   
-         
+ 
 		    if(DTjQuery(this).prev().val() != 'new'){
 				   DTjQuery(this).prev().prev().rules("remove", "uniquevalue");
 				   var ajaxcontext = this;

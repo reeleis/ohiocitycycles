@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.6
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -169,7 +169,7 @@
 
                             <?php
 
-                            $model = & JModel::getInstance('Model','Jomsocial');
+                         //   $model = & JModel::getInstance('Model','Jomsocial');
 
 							$options = array();
 
