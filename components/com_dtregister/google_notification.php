@@ -62,7 +62,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 		//$debug = ob_get_clean();
 	  $path = JPATH_BASE."/components/com_dtregister/lib/payment/ipnlog.html";
 	  //if($log)
-	  //file_put_contents($path,$debug,FILE_APPEND);
+	 //file_put_contents($path,$debug,FILE_APPEND);
      
     return true;
 }

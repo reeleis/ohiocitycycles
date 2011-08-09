@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-   global $Itemid ;
+   global $Itemid;
    jimport('joomla.html.pagination');
 
    $mosConfig_live_site = JURI::base( true );
@@ -18,7 +18,7 @@
 
    $config = $this->getModel('config');
 
-   global $mainframe, $Itemid;
+   global $mainframe,$Itemid;
 
    $search = $mainframe->getUserStateFromRequest( "search{$option}", 'search', '' );
 
@@ -69,7 +69,7 @@
    $aro = $this->getModel( 'aro' );
    $user = &JFactory::getUser();
    $aro = $this->getModel( 'aro' )->table->findaroByUser($user);
-   $aro_id = $aro->id ;
+   $aro_id = $aro->id;
    $aco_id = $this->getModel( 'aco' )->table->getAcoIdbyTypeControllerTask('sessionUser','event','edit','DT_EDIT_OWN_EVENT');
    $permission = $this->getModel( 'permission' )->table->find('aro_id='.$aro_id.' and aco_id = '.$aco_id);
    if($permission){
@@ -211,7 +211,7 @@
 
       <td><input type="text" name="search" value="<?php echo $search;?>" class="inputbox" onChange="document.adminForm.submit();" />
 
-      <input type="hidden" name="act" value="groups"  />
+      <input type="hidden" name="act" value="groups" />
 
       </td>
 
@@ -291,9 +291,9 @@
 
        <td align="left">
 
-         <?php $task =  $row->publish?'unpublish':'publish';
-		 $row->published = $row->publish ;
-		  echo DtHtml::published( $row, $i);
+         <?php $task = $row->publish?'unpublish':'publish';
+		 $row->published = $row->publish;
+		  echo DtHtml::published( $row, $checkboxvalue);
 		  ?>
 
        </td>

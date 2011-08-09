@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -22,11 +22,11 @@ class DtregisterModelField extends DtrModel {
 	   $this->listingTypes = array('memberlist'=>JText::_('DT_MEMBER_LIST'),'attendeelist'=>JText::_('DT_ATTENDEE_LIST'));
 //'recordlist'=>JText::_('DT_RECORD_LIST')
 	   
-	   $this->combinedFields =  array('name'=>array('firstname','lastname'));
+	   $this->combinedFields = array('name'=>array('firstname','lastname'));
 	   
 	   $this->combinedFields = array();
 	   
-	   $this->table =  new TableField($this->getDBO());
+	   $this->table = new TableField($this->getDBO());
 
 	   $this->table->setCombineFields($this->combinedFields );
        
@@ -126,7 +126,7 @@ class TableField extends DtrTable {
 
 		$this->virFieldsLabels = array('name'=>JText::_('DT_NAME'));
 
-		$this->combinedFields =  array('name'=>array('firstname','lastname'));
+		$this->combinedFields = array('name'=>array('firstname','lastname'));
         
 		$this->combinedFields = array();
 		$this->_defaultFields =  array('firstname','lastname','email','country','state','zip','phone','address1','address2','organization','title');
@@ -155,11 +155,12 @@ class TableField extends DtrTable {
   }
   
   function enableALLEvents(){
-     $query = "delete  from #__dtregister_field_event where showed = 0 and field_id = ".$this->id ;
+     // $query = "delete  from #__dtregister_field_event where showed = 0 and field_id = ".$this->id ;
+	 $query = "delete  from #__dtregister_field_event where field_id = ".$this->id ;
 	 $this->db->setQuery($query);	
 	// pr ($this->db->getQuery());
 	 $this->db->query(); 
-	  $error =  $this->db->getErrorMsg();
+	  $error = $this->db->getErrorMsg();
 		 
 		 if($error != ""){
 			 echo $error; die;
@@ -180,9 +181,11 @@ class TableField extends DtrTable {
 
 	   $this->db->setQuery($query);		
 
-	   $this->db->getQuery();
+	   // pr($this->db->getQuery());
 
 	   $data = $this->db->loadRowList();
+	   
+	   // prd($data);
 
 	   if (count($data) > 0) {
 		   foreach($data as $evtid){
@@ -214,7 +217,7 @@ class TableField extends DtrTable {
 
 	    $fields = $this->find(' name in ('.$condition .') ');
 
-		$temp =  array();
+		$temp = array();
 
 		if (count($fields) > 0) {
 			foreach($fields as $field){
@@ -241,14 +244,6 @@ class TableField extends DtrTable {
 	    $this->listing = implode('|',$this->listing);
 
 	 }
-	/* if(in_array($this->name,$this->defaultListing)){
-		 $this->listing = array('memberlist','attendeelist','recordlist');
-		 $this->listing = array('memberlist','recordlist');
-		 $this->listing = implode('|',$this->listing);
-	  }*/
-
-      
-	// $this->label = 
 
 	return parent::store();
 
@@ -286,7 +281,7 @@ class TableField extends DtrTable {
 
 		$combinefields = array();
 
-		$temp =  array();
+		$temp = array();
         
 		if (count($fields) > 0) {
 			foreach($fields as $field){
@@ -330,7 +325,7 @@ class TableField extends DtrTable {
 
 	   $fields = $this->find();
 
-	   $temp =  array();
+	   $temp = array();
 
 	   if (count($fields) > 0) {
 		   foreach($fields as $field){
@@ -360,7 +355,7 @@ class TableField extends DtrTable {
 
     function pivotFields($prefix="uf"){  
 
-	 $fields =  $this->find("");
+	 $fields = $this->find("");
 
 	 // Case uf.field_id when 13 then uf.value end as testpivot 
 
@@ -455,7 +450,7 @@ class TableField extends DtrTable {
 	   $this->selection_values = array_filter(explode('|',$this->selection_values),array($this, 'filter'));
 
 	 }elseif(!is_array($this->selection_values) && $this->selection_values == 0){
-	    $this->selection_values =  array("0");
+	    $this->selection_values = array("0");
 	 }
 
 	 if(!is_array($this->selected) && $this->selected !== "0"){
@@ -463,7 +458,7 @@ class TableField extends DtrTable {
 	   $this->selected = array_filter(explode('|', stripslashes($this->selected)),array('TableField', 'filter'));
 
 	 }elseif(!is_array($this->selected) && $this->selected == 0){
-	    $this->selected =  array("0");
+	    $this->selected = array("0");
 	 }
 
 	 if(!is_array($this->fees) && $this->fees !== "0"){
@@ -471,7 +466,7 @@ class TableField extends DtrTable {
 	   $this->fees = array_filter(explode('|', stripslashes($this->fees)),array('TableField', 'filter'));
 
 	 }elseif(!is_array($this->fees) && $this->fees == 0){
-	    $this->fees =  array("0");
+	    $this->fees = array("0");
 	 }
 
 	 if(!is_array($this->listing) && $this->listing !== "0"){
@@ -479,14 +474,9 @@ class TableField extends DtrTable {
 	   $this->listing = array_filter(explode('|', stripslashes($this->listing)),array($this, 'filter'));
 
 	 }elseif(!is_array($this->listing) && $this->listing == 0){
-	    $this->listing =  array("0");
+	    $this->listing = array("0");
 	 }
-	 
-	/* if(in_array($this->name,$this->defaultListing)){
-	   $this->listing =  array('memberlist','attendeelist','recordlist');
-	   $this->listing =  array('memberlist','recordlist');
-	 }
-    */
+	
   }
 
   function getfeeByKey($key){
@@ -523,7 +513,7 @@ class TableField extends DtrTable {
 
      if($type=='B' ||  $type=='M'){
 
-	    $showed_sql  = " in(2,3) ";
+	    $showed_sql = " in(2,3) ";
 
 		if($type=='B'){
 
@@ -555,7 +545,7 @@ class TableField extends DtrTable {
 
 	 }else if($type=='I'){
 
-	    $showed_sql  = " in(1,3) ";
+	    $showed_sql = " in(1,3) ";
 
 		$group_behave_sql = "";
 
@@ -581,9 +571,9 @@ class TableField extends DtrTable {
 
 	 if($parent_id >0){
 
-	   $query = "Select df.* , df.id as key2 From #__dtregister_fields as df  where df.published=1 and ( df.showed $showed_sql) $hidden_sql $group_behave_sql and df.parent_id = $parent_id  order by df.ordering "  ;
+	   $query = "Select df.*  From #__dtregister_fields as df  where df.published=1 and ( df.showed $showed_sql) $hidden_sql $group_behave_sql and df.parent_id = $parent_id  order by df.ordering "  ;
 
-	   $query = "Select df.* , df.id as key2 From #__dtregister_fields as df  where df.published=1  $hidden_sql  and df.parent_id = $parent_id  order by df.ordering ";
+	   $query = "Select df.*  From #__dtregister_fields as df  where df.published=1  $hidden_sql  and df.parent_id = $parent_id  order by df.ordering ";
 
 	 }else{
 
@@ -597,17 +587,17 @@ class TableField extends DtrTable {
 
 	 //echo "<br />".$this->db->getQuery();
 
-	 if(isset($queryResults[str_replace(" ","",$this->db->getQuery())])){
+	// if(isset($queryResults[str_replace(" ","",$this->db->getQuery())])){
 
-		  $data = $queryResults[str_replace(" ","",$this->db->getQuery())];
+		//  $data = $queryResults[str_replace(" ","",$this->db->getQuery())];
 
-	  }else{
+	 // }else{
 
 		 $data = $this->db->loadObjectList(); 
 
-		 $queryResults[str_replace(" ","",$this->db->getQuery())] = $data;
+		// $queryResults[str_replace(" ","",$this->db->getQuery())] = $data;
 
-	  }
+	  //}
 
 	 //echo "<br />".$this->db->getErrorMsg();
 
@@ -629,9 +619,11 @@ class TableField extends DtrTable {
 			  //$this->dependentReschedule($data['parent']);
 	
 			  $fields[] = $data;
-	
-			  $this->id = $data->key2;
-	
+	          if(isset($data->key2)) {
+			  	$this->id = $data->key2;
+			  } else {
+			    $this->id = $data->id;
+			  }
 			  $childs = $this->getchild();
 	
 			  if(count($childs) > 0){
@@ -771,7 +763,7 @@ class TableField extends DtrTable {
 
 	 //$this->db->setQuery($query);
 
-	// echo "<br />".$this->db->getQuery();
+	 // echo "<br />".$this->db->getQuery();
 
 	 //$data =  $this->db->loadObjectList();
 
@@ -785,7 +777,7 @@ class TableField extends DtrTable {
 
 class Field extends TableField{
 
-	var $requiredJs  = "";
+	var $requiredJs = "";
 
 	var $javascript_valid_data = "";
 
@@ -873,7 +865,7 @@ class Field extends TableField{
 
 	    $option = $this->db->Quote("%|".$option."|%");
 
-		$query = "select * from #__dtregister_group_member as gm inner join #__dtregister_group as g on g.groupId= gm.groupUserId  inner join #__dtregister_user as u on u.userId = g.useid inner join #__dtregister_member_field_values v on v.member_id = gm.groupMemberId where v.field_id=".$this->id." and  CONCAT('|',v.`value`,'|') like ".$option." and u.payment_verified = 1  and u.eventId = ".$eventId." ";
+		$query = "select * from #__dtregister_group_member as gm    inner join #__dtregister_user as u on u.userId = gm.groupUserId inner join #__dtregister_member_field_values v on v.member_id = gm.groupMemberId where v.field_id=".$this->id." and  CONCAT('|',v.`value`,'|') like ".$option." and u.payment_verified = 1  and u.eventId = ".$eventId." ";
 
 		$this->db->setQuery($query);
 
@@ -973,7 +965,7 @@ class Field extends TableField{
 
      }
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
 	  global $cbviewonly;
 
@@ -1030,7 +1022,7 @@ class Field extends TableField{
 
 		     if($this->type==3){
 
-			     $field_js_event = "click";
+			     $field_js_event = "change";
 
 			 }else{
 
@@ -1188,10 +1180,13 @@ class Field extends TableField{
 
                      not_remove = [];
 
-                     if(DTjQuery.isFunction(updateFee)){
+                     if(typeof updateFee !== "undefined" && DTjQuery.isFunction(updateFee)){
                         updateFee();
                     }
-
+                     <?php global $form_field_style; 
+					     if($form_field_style) { ?>
+								DTjQuery('input').checkBox();
+                    <?php } ?>
                   }
 
                });
@@ -1221,8 +1216,6 @@ class Field extends TableField{
 					?>
 
                     if(DTjQuery(v).attr('checked')){
-
-                 
 
                       DTjQuery(v).removeAttr('checked');	
 
@@ -1328,7 +1321,7 @@ class Field_Text extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){  
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){  
 
 	    parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -1361,7 +1354,7 @@ class Field_Text extends Field{
 			    $readonly = "";
 			 }
 			
-             return "<input type='text' id='Field".$this->id."'$readonly  class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='Field[".$this->id."]' value=\"".htmlentities($value,null,'UTF-8')."\" />";
+             return "<input type='text' id='Field".$this->id."'$readonly  class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='Field[".$this->id."]' value=\"".htmlentities($value,ENT_QUOTES,'UTF-8')."\" />";
 
 	}
 
@@ -1385,7 +1378,7 @@ class Field_Dropdown extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
        $overlimitdisable = true;
 	   
@@ -1401,7 +1394,15 @@ class Field_Dropdown extends Field{
 
        $options=array();
 
-	   $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
+	   $value = isset($obj['fields'][$this->id] )?$obj['fields'][$this->id]:$this->selected;
+	   if($value === false){
+		   if(is_array($this->selected)) {
+		        $value = $this->selected[0];
+		   } else {
+		       $value = $this->selected;
+		   }
+	   	
+	   }
 
 	   $options[]=JHTML::_('select.option',null,JText::_( 'DT_SELECT_ONE' ));
 
@@ -1457,18 +1458,16 @@ class Field_Dropdown extends Field{
 
 	   $requiredClass = ($this->required)?'required':'';
 	   $code = "";
-	  
 	   
-	   global $mainframe ;
+	   global $mainframe;
 	  if($this->fee_field && !$mainframe->isAdmin()){
-		  
-	  
+		 
        $code = $html = <<<EOH
 <script type="text/javascript">
 DTjQuery(function(){
 DTjQuery("#Field$this->id").live('change',function(){
 		
-	 if(DTjQuery.isFunction(updateFee)){
+	 if(typeof updateFee !== "undefined" && DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
 	
@@ -1479,16 +1478,22 @@ DTjQuery('input[id="Field$this->id"]').trigger('change');
 EOH;
  }  
  
-    if(!is_numeric($value)){
-        $value =  $this->getkeyByValue($value);
+    if(!is_numeric($value)){	
+        $value = $this->getkeyByValue($value);
      }
-      global $cbviewonly , $cb_integrated , $map_cb_fields ;
+    
+      global $cbviewonly,$cb_integrated,$map_cb_fields;
 	  $my = &JFactory::getUser();
      $disabled = "";
-     if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
+     
+     if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id]) && $map_cb_fields[$this->id] != null){
+          
 		   $disabled = "disabled='disabled'";
 
-	   }
+	   } else {
+           $disabled = "";	
+       }
+       
 	   return JHTML::_('select.genericlist', $options,'Field['.$this->id.']',$disabled."style='width:".$fieldSize."px' class='inputbox ".$requiredClass."' ","value","text",$value,"Field".$this->id).$code;
 
 	}
@@ -1531,7 +1536,7 @@ class Field_Textarea extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false ,$type ='I'){
 
 		parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -1560,40 +1565,43 @@ class Field_Textarea extends Field{
 			 $requiredClass = ($this->required)?'required':'';
 
 			 $maxlength = ($this->maxlength=="")?-1:$this->maxlength;
-
-			  if($this->fee_field){
+ 			  $counter = "";	 
+			 // if($this->fee_field){
 
 				     if($this->showcharcnt){
 
 						  $displayFormat = " , displayFormat : '#input ".JText::_('DT_CHARACTERS')."' ";
 
-					  }else{
+					 }else{
 
 						  $displayFormat = " , displayFormat:''";
 
-					  }
+					 }
+					 
+                         ob_start();
+        
+                         ?>
+        
+                         <script type="text/javascript">
+        
+                        var options = {   'originalStyle': 'originalDisplayInfo' ,'maxCharacterSize':<?php echo $maxlength ?> <?php echo $displayFormat; ?>};  
+        
+                            DTjQuery('#Field<?php echo $this->id; ?>').textareaCount(options);  
+        
+                        </script>
+        
+                         <?php
+        
+                        $js = ob_get_clean();
+        
+                        $counter = $js;
+						if(!$this->showcharcnt) {
+							//$counter = "";
+						}
 
-					 ob_start();
-
-					 ?>
-
-                     <script type="text/javascript">
-
-				    var options = {   'originalStyle': 'originalDisplayInfo' ,'maxCharacterSize':<?php echo $maxlength ?> };  
-
-                        DTjQuery('#Field<?php echo $this->id; ?>').textareaCount(options);  
-
-					</script>
-
-                     <?php
-
-					$js = ob_get_clean();
-
-					$counter = $js;
-
-				 }else{
-				    $counter = "";	 
-			     }
+				// }else{
+				   // $counter = "";	 
+			    // }
 			 
 			 if( isset($this->id)) 
 			 return "<textarea name='Field[".$this->id."]' class='inputbox ".$requiredClass."' id='Field".$this->id."' rows=$this->rows cols=$this->cols>$value</textarea>\n".$counter;
@@ -1650,7 +1658,7 @@ class Field_Checkbox extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -1664,13 +1672,18 @@ class Field_Checkbox extends Field{
              $dropDownDatas=explode("|",$this->values);
 
 			// pr($this->selected);
-
+			// pr($obj['fields'][$this->id]);
              if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0 ){
 			    $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
 			 }else{
 				 $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:$this->selected;
 			  }
-			 
+			if(is_string($value) && strpos($value,"|") !== false){
+				
+				$value = explode('|',$value);
+								
+			}
+			//pr($value);
 			if($value !='')
              $value = array_filter($this->getkeyByValue($value),'my_array_filter_fn');
 
@@ -1688,8 +1701,6 @@ class Field_Checkbox extends Field{
 
 					   if($overlimitdisable){
 
-					      $disabled = "disabled";
-
 					   }else{
 
 					      continue;
@@ -1698,12 +1709,12 @@ class Field_Checkbox extends Field{
 
                   }
     
-                  $data=trim($dropDownDatas[$i]);
+                 $data=trim($dropDownDatas[$i]);
 
-				   $requiredClass = ($i==0 && $this->required)?'required':'';			 
+				 $requiredClass = ($i==0 && $this->required)?'required':'';			 
 
-				   $value = ($value=="")?array():$value;
-				   global $cbviewonly , $cb_integrated , $map_cb_fields;
+				 $value = ($value=="")?array():$value;
+				 global $cbviewonly,$cb_integrated,$map_cb_fields;
 	 
                  $my = &JFactory::getUser();
                      
@@ -1718,28 +1729,41 @@ class Field_Checkbox extends Field{
 			         $disabled = "";
 			      }
 				   $value = (!is_array($value))?array($value):$value;
-                  
+                 // pr($i);
+				 // pr($value);
+				  if(isset($obj['groupMemberId']) && $obj['groupMemberId'] > 0){
+			         $disabled = "";
+			      }
+                     
+                   if(isset($this->optionlimit[$i]) && $this->optionlimit[$i]!=0 && $this->optionlimit[$i] <= $this->optionused[$i]){
+                      if($overlimitdisable){
+                        
+                        $disabled = "disabled='disabled'";         
+                        
+                     }
+                 }
+				  $disabledStyle = empty( $disabled)?'':'disabledStyle';
                   if(in_array($i,$value)){
 				    
 				     //$disabled = "";
 
                      if($new_line)
 
-                         $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass."' value='".$i."' checked type='checkbox' id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
+                         $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='".$i."' checked type='checkbox' id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
 
                      else
 
-                          $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass."' value='".$i."' checked type='checkbox' id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;";
+                          $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='".$i."' checked type='checkbox' id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;";
 
                    }else{
 
                         if($new_line)
 
-                           $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass."' value='".$i."' type='checkbox' />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
+                           $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='".$i."' type='checkbox' />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
 
                         else
 
-                           $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass."' value='".$i."' type='checkbox'  />&nbsp;&nbsp;$data&nbsp;&nbsp;";
+                           $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."][]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='".$i."' type='checkbox'  />&nbsp;&nbsp;$data&nbsp;&nbsp;";
 
                     }
 
@@ -1782,20 +1806,23 @@ class Field_Checkbox extends Field{
 <script type="text/javascript">
 DTjQuery(function(){
 DTjQuery('input[id="Field$this->id"]').live('click',function(){
-	 if(DTjQuery(this).attr('checked')){    
+	
+	if(typeof updateFee !== "undefined" && DTjQuery.isFunction(updateFee)){
+		
+	   	updateFee();
+    }
 
-                     /*  DTjQuery(this).removeAttr('checked');	*/
+})
+/* if(DTjQuery('input[id="Field$this->id"]').attr('checked')){    
+
+                      DTjQuery('input[id="Field$this->id"]').removeAttr('checked');	
 
                     }else{
 
-                      /* DTjQuery(this).attr('checked',true); */
+                       DTjQuery('input[id="Field$this->id"]').attr('checked',true); 
 
                     }
-	if(DTjQuery.isFunction(updateFee)){
-	   	updateFee();
-    }
-})
-DTjQuery('input[id="Field$this->id"]:checked').trigger('click');
+DTjQuery('input[id="Field$this->id"]:checked').trigger('click');*/
 })
 </script>
 EOH;
@@ -1893,7 +1920,7 @@ class Field_Radio extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
    
 	   $overlimitdisable = true;   
 
@@ -1937,7 +1964,7 @@ class Field_Radio extends Field{
 
 				 $requiredClass = ($i==0 && $this->required)?'required':'';
 				 
-                 global $cbviewonly , $cb_integrated , $map_cb_fields;
+                 global $cbviewonly,$cb_integrated,$map_cb_fields;
 	 
                  $my = &JFactory::getUser();
                      
@@ -1960,26 +1987,26 @@ class Field_Radio extends Field{
                         
                      }
                  }
-                 
+                  $disabledStyle = empty( $disabled)?'':'disabledStyle';
                  if($value !== false && (int)$i === (int)$value ){ 
 
                       if($new_line) 
 
-                         $outPut.="<input id='Field".$this->id."'  name='Field[".$this->id."]' ".$disabled."  class='inputbox ".$requiredClass."'  value='$i' type='radio' checked id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
+                         $outPut.="<input id='Field".$this->id."'  name='Field[".$this->id."]' ".$disabled."  class='inputbox ".$requiredClass." ".$disabledStyle."'  value='$i' type='radio' checked  />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
 
                       else
 
-                         $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled."  class='inputbox ".$requiredClass."' value='$i' type='radio' checked id='".$this->name.$i."' />&nbsp;&nbsp;$data&nbsp;&nbsp;";
+                         $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled."  class='inputbox ".$requiredClass." ".$disabledStyle."' value='$i' type='radio' checked  />&nbsp;&nbsp;$data&nbsp;&nbsp;";
 
                  }else{
 
                      if($new_line)
 
-                        $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled." class='inputbox ".$requiredClass."' value='$i' type='radio'  />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
+                        $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='$i' type='radio'  />&nbsp;&nbsp;$data&nbsp;&nbsp;<br />";
 
                      else
 
-                        $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled." class='inputbox ".$requiredClass."' value='$i' type='radio'  />&nbsp;&nbsp;$data&nbsp;&nbsp;";
+                        $outPut.="<input id='Field".$this->id."' name='Field[".$this->id."]' ".$disabled." class='inputbox ".$requiredClass." ".$disabledStyle."' value='$i' type='radio'  />&nbsp;&nbsp;$data&nbsp;&nbsp;";
 
                  }
 
@@ -2005,9 +2032,7 @@ class Field_Radio extends Field{
 
 									   }
 
-								   }); 
-
-                                   
+								   });
 
                                    if(DTjQuery('input[id=\"Field".$this->id."\"]').size() > 0 && !success){
 
@@ -2035,13 +2060,13 @@ DTjQuery('input[id="Field$this->id"]').live('change',function(){
                        DTjQuery(this).attr('checked',true);
 
                     }*/
-     if(DTjQuery.isFunction(updateFee)){
+     if(typeof updateFee !== "undefined" && DTjQuery.isFunction(updateFee)){
 	   	updateFee();
     }
 	
 })
 
-//DTjQuery('input[id="Field$this->id"]:checked').trigger('change');
+//DTjQuery('input[id="Field$this->id."]:checked').trigger('change');
 })
 </script>
 EOH;
@@ -2058,7 +2083,6 @@ EOH;
 		    $this->values = explode('|',$this->values);
 
 		 }
-
 	  
 	 if(isset($obj['fields'][$this->id]) && isset($this->values[$obj['fields'][$this->id]])){
         	return $this->values[$obj['fields'][$this->id]] ;
@@ -2097,7 +2121,7 @@ class Field_Date extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2113,7 +2137,7 @@ class Field_Date extends Field{
 
             $format = ($this->date_format !='')?$this->date_format:'%Y-%m-%d';
 
-			$outPut = '<input id="Field'.$this->id.'" class="inputbox '.$requiredClass.'" type="text" name="Field['.$this->id.']"
+			$outPut = '<input id="Field'.$this->id.'" class="inputbox '.$requiredClass.' dateDTval" type="text" name="Field['.$this->id.']"
 
  size="25" maxlength="25"
 
@@ -2133,7 +2157,7 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 
                                     }";
 
-			$this->date_val  = str_replace("-","\-",$this->date_format);
+			$this->date_val = str_replace("-","\-",$this->date_format);
 
 			$this->date_val = str_replace('%d','dd',$this->date_val);
 
@@ -2155,7 +2179,7 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 
 			?>
 
-          DTjQuery(function(){
+         DTjQuery(function(){
 
                 DTjQuery(document.<?php echo $form; ?>).validate({
 
@@ -2167,15 +2191,9 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 
                 });
 
-              DTjQuery('#Field<?php echo $this->id ; ?>').rules('add','dateDT');
+             /*DTjQuery('input[id="Field<?php echo $this->id ; ?>"]').rules('add','dateDT');*/
 
-              DTjQuery('#Field<?php echo $this->id ; ?>').change(function(){
-
-                alert('good');
-
-              })
-
-          })
+         }); 
 
             <?php
 
@@ -2185,9 +2203,9 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 
 			$this->date_format;
 
-			$this->date_regex  = str_replace(".","\.",$this->date_format);
+			$this->date_regex = str_replace(".","\.",$this->date_format);
 
-			$this->date_regex  = str_replace("-","\-",$this->date_regex);
+			$this->date_regex = str_replace("-","\-",$this->date_regex);
 
 			$this->date_regex = str_replace('%d','[0-3]?[0-9]',$this->date_regex);
 
@@ -2199,8 +2217,8 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 
 			$document =& JFactory::getDocument();
 
-			$document->addScriptDeclaration(" var dateregexField".$this->id."= /^".$this->date_regex."$/ ;" );
-
+			$document->addScriptDeclaration(" window.dateregexField".$this->id."= /^".$this->date_regex."$/ ;" );
+			
 			$document->addScript("includes/js/joomla.javascript.js");
 
 			return $outPut;
@@ -2208,8 +2226,10 @@ onclick="return DTshowCalendar(\'Field'.$this->id.'\',\''.$format.'\');" /><labe
 	}
 
 	 function viewHtml($obj=null,$event=null,$form='',$overlimitdisable=false){
-
+	  if(isset($obj['fields'][$this->id]))
 	  return $obj['fields'][$this->id];
+	  else
+	  return "";
 
    }
 
@@ -2227,7 +2247,7 @@ class Field_Textual extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
 	   return '<span id="Field'.$this->id.'">'.stripslashes($this->textual)."</span>";
 
@@ -2253,7 +2273,7 @@ class Field_Upload extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
 	     parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2399,9 +2419,9 @@ class Field_Email extends Field{
 
 	}
 
-	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false){
+	function formhtml($obj=null,$event=null,$form='',$overlimitdisable=false,$type ='I'){
 
-	   global $amp, $xhtml;
+	   global $amp,$xhtml;
        
 	   parent::formhtml($obj,$event,$form,$overlimitdisable);
 
@@ -2443,7 +2463,7 @@ class Field_Email extends Field{
 
 	   $constants = array('[label]','[value]','[description]');
 
-	   $description =  (trim($this->description)!="")?JDTHTML::tooltip($this->description, '', 'tooltip.png', '', ''):'';
+	   $description = (trim($this->description)!="")?JDTHTML::tooltip($this->description, '', 'tooltip.png', '', ''):'';
 
 	   $value = isset($obj['fields'][$this->id])?$obj['fields'][$this->id]:'';
 
@@ -2451,7 +2471,7 @@ class Field_Email extends Field{
 
 	   $requiredClass = ($this->required)?'required email':'email';
 	   $readonly = "";
-        global $cbviewonly , $cb_integrated , $map_cb_fields;
+        global $cbviewonly,$cb_integrated,$map_cb_fields;
 	   $my = &JFactory::getUser();
 	   if($value != "" &&  $cb_integrated > 0 && $cbviewonly==1 && $my->id && isset($map_cb_fields[$this->id])){
 		   $readonly = "readonly='readonly'";
@@ -2471,10 +2491,10 @@ class Field_Email extends Field{
 
 	   $replace  = array(JText::_("DT_CONFIRM_EMAIL").$this->requiredHtml,"<input type='text' id='ConfirmField".$this->id."' class='inputbox ".$requiredClass."' size='$this->field_size' $maxlength name='ConfirmField[".$this->id."]' value='' />",'');
        global $mainframe;
-	   $this->emailConfirmation =  false;
+	   $this->emailConfirmation = false;
 		if(!$mainframe->isAdmin() && $this->confirmation_field){
 	     $html .= str_replace($constants,$replace,$tpl);
-		 $this->emailConfirmation =  true;
+		 $this->emailConfirmation = true;
 		}
 
 	   // confirmemail
@@ -2486,6 +2506,12 @@ class Field_Email extends Field{
 		   if(isset($this->duplicate_check) && !$this->duplicate_check ){
 			  $dup_check = "&dup_check=true";
 		    }
+			
+			$member_check = "";
+		   if($type == 'M' ){
+			  $member_check = "&member_check=true";
+		    }
+			
 			?>
 
           DTjQuery(function(){
@@ -2500,7 +2526,7 @@ class Field_Email extends Field{
 
                 });
               
-             DTjQuery('#Field<?php echo $this->id ; ?>').rules('add',{remote: "<?php echo JRoute::_('index.php?option=com_dtregister&controller=validate&task=email&no_html=1&eventId='.$event->slabId.$dup_check ,$xhtml); ?>" }); 
+             DTjQuery('#Field<?php echo $this->id ; ?>').rules('add',{remote: "<?php echo JRoute::_('index.php?option=com_dtregister&controller=validate&task=email&no_html=1&eventId='.$event->slabId.$dup_check.$member_check ,$xhtml); ?>" });
       <?php if($this->emailConfirmation && $form !='adminForm') { ?>
               DTjQuery('#ConfirmField<?php echo $this->id ; ?>').rules('add',{equalTo: "#Field<?php echo $this->id ; ?>"
      
@@ -2548,7 +2574,7 @@ class Field_Email extends Field{
 
 	   $file = $basepath."default.php";
 
-	    $tpl = file_get_contents($file);
+	   $tpl = file_get_contents($file);
 
 	   $constants = array('[label]','[value]','[description]');
 

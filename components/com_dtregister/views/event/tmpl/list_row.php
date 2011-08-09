@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid ,  $xhtml_url ,$now ,$event_title_link ,$button_color , $googlekey , $amp , $show_event_image;
+global $Itemid,$xhtml_url,$now,$event_title_link,$button_color,$googlekey,$amp,$show_event_image;
 
 $eventTable = $this->getModel('event')->table;
 
@@ -19,11 +19,11 @@ $locationTable = $this->getModel('location')->table;
 
 $config = $this->getModel('config');
 
-$row = $this->row ;
+$row = $this->row;
 
-$bgRow = $this->bgRow ;
+$bgRow = $this->bgRow;
 
-$class = 'class="detailslink"' ;
+$class = 'class="detailslink"';
 
 $eventTable->load($row->slabId);
 
@@ -32,7 +32,7 @@ $eventTable->formatTimeproperty($row->dtendtime);
 
 $j=2; if($config->getGlobal('price_column')){$j++;}if($config->getGlobal('capacity_column')){$j++;}if($config->getGlobal('registered_column')){$j++;}
 
-$color = $config->getGlobal('button_color') ;
+$color = $config->getGlobal('button_color');
 
         $task = $eventTable->getTask($row);	
 
@@ -41,20 +41,24 @@ $color = $config->getGlobal('button_color') ;
 		$article = $eventTable->getArticle($row->article_id);
 
 		$article_ItemId = $eventTable->getArticleItemid($article);
-		
-       
 
         $eventTable->overrideGlobal($row->slabId); 
 
 		 if($config->getGlobal('event_title_link') == "jevent"){
               $jevent_view_id = $eventTable->getJeventdetailId($row->eventId);
 
-        $jevent_href = JRoute::_("index.php?option=com_jevents&task=icalrepeat.detail&evid=".$jevent_view_id."&Itemid=".DTreg::getcomItemId('com_jevents'),$xhtml_url);
-             $event_title_href = $jevent_href;
+        	$jevent_href = JRoute::_("index.php?option=com_jevents&task=icalrepeat.detail&evid=".$jevent_view_id."&Itemid=".DTreg::getcomItemId('com_jevents'),$xhtml_url);
+            $event_title_href = $jevent_href;
 
-		 }else{
+		 } elseif($config->getGlobal('event_title_link') == "article"){
+			if (isset($article_ItemId) && isset($article->id)) {
+				$event_title_href = JRoute::_('index.php?option=com_content&view=article&id='.$article->id.'&Itemid='.$article_ItemId,$xhtml_url);
+			}else{
+				$event_title_href = DTreg::register_href($row,$task);
+			}
+		 } else {
 
-		    $event_title_href = DTreg::register_href($row,$task );
+			$event_title_href = DTreg::register_href($row,$task);
 
 		 }
 
@@ -74,11 +78,11 @@ $color = $config->getGlobal('button_color') ;
           <?php }?>
         <?php if((strtotime($row->dtend." ".$row->dtendtime) > $now->toUnix(true) || $row->dtend=="" || $row->dtend=="0000-00-00" ) && $row->future_event=='n'  ){  ; ?> 
 
-		  	<td align="left" class="eventlist"><a href="<?php echo $event_title_href;?>"><?php echo $row->title;?></a>
+		  	<td align="left" class="eventlist"><a class="event_title" href="<?php echo $event_title_href;?>"><?php echo $row->title;?></a>
 
 		<?php }else { ?>
 
-		<td align="left" class="eventlist"><?php echo $row->title;?>
+		<td align="left" class="eventlist"><span class="event_title"><?php echo $row->title;?></span>
 
           <?php } ?>
 
@@ -90,9 +94,7 @@ $color = $config->getGlobal('button_color') ;
 
 			  if($locationTable->name !=""){
 
-		 
-
-		   echo "<br />&nbsp;".JText::_( 'DT_LOCATION')  ; ?>:&nbsp;<a class="colorbox" href="<?php echo JRoute::_("index.php?option=com_dtregister&controller=location&task=show&id=".$row->location_id."&tmpl=component",$xhtml_url,false) ?>"   ><?php echo stripslashes($locationTable->name);?></a>
+		   echo "<br />&nbsp;".JText::_('DT_LOCATION'); ?>:&nbsp;<a class="colorbox" href="<?php echo JRoute::_("index.php?option=com_dtregister&controller=location&task=show&id=".$row->location_id."&tmpl=component",$xhtml_url,false) ?>"   ><?php echo stripslashes($locationTable->name);?></a>
 
          <?php
 
@@ -112,7 +114,7 @@ $color = $config->getGlobal('button_color') ;
 
           $br = false;
 
-          $start_brace = "" ;
+          $start_brace = "";
 
 		  $end_brace = "" ;
 
@@ -124,7 +126,7 @@ $color = $config->getGlobal('button_color') ;
 
 				$title = '<img src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/view_details_62x14.png" class="event_button" alt="'.JText::_('DT_VIEW_DETAIL').'" />';
 
-				$class = 'class="detailslink"' ;
+				$class = 'class="detailslink"';
 
 				$start_brace = '';
 
@@ -136,13 +138,13 @@ $color = $config->getGlobal('button_color') ;
 
 				$end_brace = ']';
 
-				$title = JText::_( 'DT_VIEW_DETAILS');
+				$title = JText::_('DT_VIEW_DETAILS');
 
-				$class = 'class="detailslink"' ;
+				$class = 'class="detailslink"';
 
 			}
 
-            $br = true ;
+            $br = true;
 
           echo '<br />'.$start_brace.'<a '.$class.' href="'.JRoute::_('index.php?option=com_content&view=article&id='.$article->id.'&Itemid='.$article_ItemId,$xhtml_url).'">'.$title.'</a>'.$end_brace;
 
@@ -154,7 +156,7 @@ $color = $config->getGlobal('button_color') ;
 
 				$title = '<img src="'.JURI::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/attendees_62x14.png" class="event_button" alt="'.JText::_('DT_VIEW_REGISTRANTS').'" />';
 
-				$class = 'class="detailslink"' ;
+				$class = 'class="detailslink"';
 
 				$start_brace = '';
 
@@ -166,9 +168,9 @@ $color = $config->getGlobal('button_color') ;
 
 				$end_brace = ']';
 
-				$title = JText::_( 'DT_VIEW_REGISTRANTS');
+				$title = JText::_('DT_VIEW_REGISTRANTS');
 
-				$class = 'class="detailslink"' ;
+				$class = 'class="detailslink"';
 
 			}
 
@@ -178,51 +180,27 @@ $color = $config->getGlobal('button_color') ;
 
 			  }
 
-
-
-			   $br = true ;
-
-                 
+			   $br = true;
 
 				echo $start_brace.'<a '.$class.' href="'.JRoute::_('index.php?option=com_dtregister&eventId='.$row->slabId.'&task=registrant&controller=event&Itemid='.$Itemid,$xhtml_url).'">'.$title.'</a>'.$end_brace;
 
-
-
 		  }
 
- 
 		  if ($config->getGlobal('show_registration_button',0) == 1 && (strtotime($row->dtend." ".$row->dtendtime) > $now->toUnix(true) || $row->dtend=="" || $row->dtend=="0000-00-00" ) && $row->future_event == 'n' ){
-
-
 
                if(!$br){
 
-
-
 			     echo '<br />';
-
-
 
 			  }
 
-
-
-			   $br = true ;
-
-
-           
+			   $br = true;
+       
 		  	echo $start_brace.DTreg::register_link_small($row,$task,$class,$color,$config->getGlobal('front_link_type')).$end_brace;
 
-
-
 		  }
-          
-		  
-
 
 		?>
-
-
 
         </td>
 
@@ -230,11 +208,7 @@ $color = $config->getGlobal('button_color') ;
 
 		<td align="left" class="eventlist">
 
-
-
 			<?php echo $eventTable->displaydatecolumn() 
-
-
 
 			?> </td>
 
@@ -242,26 +216,16 @@ $color = $config->getGlobal('button_color') ;
 
 	<?php if($config->getGlobal('price_column')){?>
 
-
-
 				<td align="left" class="eventlist"><nobr>
-
-
 
 				<?php
 
-                 
-
-					
-
-                       
-
 						if($eventTable->getIndividualRate($row) > 0){  
 
-						   $price = $eventTable->getIndividualRate($row) ;
+						   $price = $eventTable->getIndividualRate($row);
 
                            echo DTreg::displayRate($price,$config->getGlobal('currency_code','USD'));
-						   global $show_price_tax ;
+						   global $show_price_tax;
 						   if($show_price_tax && $eventTable->tax_enable){
 							     $price += ($price*$eventTable->tax_amount)/100;
 							     echo " (".JText::_("DT_WITHOUT_TAX").")"."<br />" . DTreg::displayRate($price,$config->getGlobal('currency_code','USD'))." (".JText::_("DT_WITH_TAX").")";
@@ -269,124 +233,62 @@ $color = $config->getGlobal('button_color') ;
 
 						}else{
 
-
-
 						   echo JText::_( 'DT_FREE' );
-
-
 
 						}
 
-
-
 					?>
-
-
 
 				</nobr></td>
 
-
-
 			<?php }
-
-
 
 			if($config->getGlobal('capacity_column')){
 
-
-
 			?>
 
-
-
-
-
 				<td align="left" class="eventlist">
-
-
 
 				<?php
 
-
-
 				if($row->max_registrations>0){
-
-
 
 					echo $row->max_registrations;
 
-
-
 				} else {
-
-
 
 					echo JText::_( 'DT_UNLIMITED' );
 
-
-
 				}
-
-
 
 				?>
 
-
-
 				</td>
-
-
 
 			<?php
 
-
-
 			}
-
-
 
 			?>
 
-
-
 			<?php if($config->getGlobal('registered_column')){?>
-
-
 
 				<td align="left" class="eventlist">
 
-                 
-
 				<?php  echo $row->registered;?>
-
-
 
 				</td>
 
-
-
 			<?php } ?>
-
-
 
 		</tr>
 
-
-
 		<?php if($row->event_describe_set){ ?>
-
-
 
 		<tr <?php echo 'class="'.$bgRow.'"'; ?>><td colspan="<?php echo ++$j; ?>"><?php echo stripslashes($row->event_describe); ?></td></tr>
 
-
-
 	<?php }
 
-	      
-
-           $eventTable->resumeGlobal();
-
-		
+           $eventTable->resumeGlobal();	
 
 ?>

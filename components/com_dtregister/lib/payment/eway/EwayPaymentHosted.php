@@ -50,6 +50,7 @@ class EwayPaymentHosted {
 	var $myGatewayURL;
 
     var $myCustomerID;
+	var $username ;
 
     var $myTransactionData = array();
 
@@ -58,42 +59,148 @@ class EwayPaymentHosted {
 	//Class Constructor
 
 	function EwayPaymentHosted($customerID = EWAY_DEFAULT_CUSTOMER_ID, $method = EWAY_DEFAULT_PAYMENT_METHOD ,$liveGateway = EWAY_DEFAULT_LIVE_GATEWAY) {
-
-	    $this->myCustomerID = $customerID;
-       
+		global $eway_username , $currency_code ;
+        if($liveGateway){
+			$this->myCustomerID = $customerID;	
+			$this->username = $eway_username ;
+			$this->currency = $currency_code ;
+		}else{
+			$this->myCustomerID = 87654321;
+			$this->username = 'TestAccount';
+			$this->currency = 'AUD' ;
+		}
+	    
+        $this->myGatewayURL = 'https://au.ewaygateway.com/Request/';
 	    switch($method){
 
 		    case "REAL_TIME";
 
-		    		if($liveGateway)
+		    	$this->myGatewayURL = 'https://au.ewaygateway.com/Request/';
+    		break;
 
-		    			$this->myGatewayURL = EWAY_PAYMENT_HOSTED_REAL_TIME;
+	    	case "REAL-TIME-CVN";
 
-		    		else
 
-	    				$this->myGatewayURL = EWAY_PAYMENT_HOSTED_REAL_TIME_TESTING_MODE;
+		    	$this->myGatewayURL = 'https://au.ewaygateway.com/Request/';
 
-	    		break;
-
-	    	 case "REAL-TIME-CVN";
-
-		    		if($liveGateway)
-
-		    			$this->myGatewayURL = EWAY_PAYMENT_HOSTED_REAL_TIME_CVN;
-
-		    		else
-
-	    				$this->myGatewayURL = EWAY_PAYMENT_HOSTED_REAL_TIME_CVN_TESTING_MODE;
-
-	    		break;	    	
+	    	break;	    	
 
     	}
 		
 	}
-
+	
+	
+	
+	
+	function get_transaction_detail(){
+		
+		global $godaddy_hosting ;
+		$ewayurl ="?CustomerID=".$this->myCustomerID;
+		$ewayurl.="&UserName=".$this->username;
+		$ewayurl.="&AccessPaymentCode=".$_REQUEST['AccessPaymentCode'];
+		
+		 $spacereplace = str_replace(" ", "%20", $ewayurl);	
+	    $posturl="https://au.ewaygateway.com/Result/$spacereplace";
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $posturl);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		
+		if ($godaddy_hosting) 
+		{
+			$proxy_tunnel_flag = (defined('CURL_PROXY_TUNNEL_FLAG') && strtoupper(CURL_PROXY_TUNNEL_FLAG) == 'FALSE') ? false : true;
+			curl_setopt ($ch, CURLOPT_HTTPPROXYTUNNEL, $proxy_tunnel_flag);
+			curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+			curl_setopt ($ch, CURLOPT_PROXY, "http://proxy.shr.secureserver.net:3128");
+		}
+		
+		$response = curl_exec($ch);
+		
+		if(curl_errno( $ch )){
+			echo 'Curl error: ' . curl_error($ch);
+			die ;
+			return false ;
+		}else{
+		   $status = Eway::fetch_data($response,'<TrxnStatus>','</TrxnStatus>');
+		   
+		   if(strtolower($status) == 'false'){
+		   	   return false ;
+		   }else{
+		   }
+		  $transaction_id = Eway::fetch_data($response, '<TrxnNumber>', '</TrxnNumber>');
+		  return $transaction_id ;
+		}
+		echo "<pre>";
+		echo  htmlentities($response);
+		prd($response);
+		
+		die ;
+		
+	}
+	function doPayment() {
+		global $godaddy_hosting , $currency_code ;
+		$ewayurl ="?CustomerID=".$this->myCustomerID;
+		$ewayurl.="&UserName=".$this->username;
+		$ewayurl.="&Currency=".$this->currency;
+		
+		foreach($this->myTransactionData as $key=>$value){
+			 $ewayurl.="&".$key."=".$value;
+		}
+		
+			
+	    $spacereplace = str_replace(" ", "%20", $ewayurl);	
+	    $posturl="https://au.ewaygateway.com/Request/$spacereplace";
+		
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $posturl);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		
+		if ($godaddy_hosting) 
+		{
+			$proxy_tunnel_flag = (defined('CURL_PROXY_TUNNEL_FLAG') && strtoupper(CURL_PROXY_TUNNEL_FLAG) == 'FALSE') ? false : true;
+			curl_setopt ($ch, CURLOPT_HTTPPROXYTUNNEL, $proxy_tunnel_flag);
+			curl_setopt ($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+			curl_setopt ($ch, CURLOPT_PROXY, "http://proxy.shr.secureserver.net:3128");
+		}
+		
+		$response = curl_exec($ch);
+		
+		if(curl_errno( $ch )){
+			
+			echo 'Curl error: ' . curl_error($ch);
+			return false ;
+			
+		}else{
+			
+			$responsemode = Eway::fetch_data($response, '<result>', '</result>');
+	   		$responseurl = Eway::fetch_data($response, '<uri>', '</uri>');
+		   
+			if($responsemode=="True")
+			{ 			  	  	
+			  header("location: ".$responseurl);
+			  exit;
+			}
+			else
+			{
+			 
+			 echo  Eway::fetch_data($response, '<error>', '</error>');
+			  
+			  return false;
+			}
+			
+		}
+		
+	}
+	
+	
+	
 	//Payment Function
 
-	function doPayment() {
+	function doPayment_old() {
 
 	ob_start();
 
@@ -143,11 +250,11 @@ return ob_get_clean();
 
 	function setTransactionData($field, $value) {
 
-		if($field=="TotalAmount")
+		//if($field=="TotalAmount")
 
-			$value = round($value*100);
+			//$value = round($value*100);
 
-		$this->myTransactionData["eway" . $field] = htmlentities(trim($value));
+		$this->myTransactionData[$field] = htmlentities(trim($value));
 
 	}
 

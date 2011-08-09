@@ -6,7 +6,7 @@
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
-* @license Commercial
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
   global $Itemid;

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -35,7 +35,7 @@ class JomUser extends DtrTable {
 
   var $avatar =null;
 
-  var $status  = null;
+  var $status = null;
 
   function __construct( &$db ) {
 
@@ -47,14 +47,11 @@ class JomUser extends DtrTable {
 	
 	$this->fields = $this->JOMField->find(" published=1 and type <> 'group' ");
 	
-	
 	$temp = array();
 	
 	if (is_array($this->fields))
 	foreach($this->fields as $field){
 		$temp[$field->id] = $field;
-		
-		
 		
 	 }
 	 $this->fields = $temp;
@@ -70,9 +67,10 @@ class JomUser extends DtrTable {
 	
 	 if (is_array($data)) 
 	 foreach($data as $row){
+		 if(isset($this->fields[$row->field_id]))
 	   	 $field = $this->fields[$row->field_id];
 		 
-		 if(isset($field->fieldcode))
+		 if(isset($field->fieldcode) && isset($row->value) && $row->value != "")
 		   $this->{$field->fieldcode} = $row->value;
      }
  
@@ -102,7 +100,7 @@ class JomUser extends DtrTable {
 		//$this->User->avatar ="images/comprofiler/".$this->User->avatar ;
 		$juser->load($id);
 
-		$return =  array();
+		$return = array();
 		
 		if (is_array($this->User->fields)) 
 		foreach($this->User->fields as $field){
@@ -117,7 +115,6 @@ class JomUser extends DtrTable {
      }
 	 function jomsocialInstall(){
 	    
-		
 		$tables = $this->_db->getTableList();
 		$table_name = $this->_db->getPrefix()."community_fields";
 	
@@ -130,7 +127,7 @@ class JomUser extends DtrTable {
 		if(!$this->jomsocialInstall()){
 		   return array();
 		}
-	  $query = "Select * from #__community_fields where published=1 and type <> 'group' order by ordering " ;
+	  $query = "Select * from #__community_fields where published=1 and type <> 'group' order by ordering ";
 		
 		$this->_db->setQuery($query);
 		return $this->_db->loadObjectList();

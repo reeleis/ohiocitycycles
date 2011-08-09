@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -39,7 +39,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
  <?php
 
-       echo  $this->form;
+       echo $this->form;
 
 	 ?>
 
@@ -47,7 +47,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
     <input type="button" class="button" onclick="window.location='<?php echo $this->back; ?>'" value="<?php echo JText::_('DT_BACK'); ?>" id="next" name="billingInfo"/>
 
-  <input type="submit" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
+  <input type="submit" id="next" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button"  /></td></tr>
 
   </table>
 
@@ -79,4 +79,27 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
   }
   
   updateFee();
+  
+  DTjQuery(function(){
+  	
+	DTjQuery('#next').live('click',function(){
+		 
+		 if(DTjQuery(document.frmcart).valid()){
+		   DTjQuery('select').removeAttr('disabled');
+		   DTjQuery('input').removeAttr('disabled');
+		   DTjQuery('textarea').removeAttr('disabled');
+		   
+		 }
+	  });
+
+    DTjQuery.validator.messages.required = " ";
+    DTjQuery.validator.messages.remote = " ";
+    DTjQuery(document.frmcart).validate({
+	        success: function(label) {
+				label.addClass("success");
+			}
+
+	});
+	
+  })
 </script>

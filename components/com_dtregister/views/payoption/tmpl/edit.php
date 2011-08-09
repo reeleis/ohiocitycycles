@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.4
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -183,7 +183,35 @@ function submitbutton(pressbutton){
 								   <td width="40"><?php echo JHTML::tooltip((JText::_( 'DT_PAYMENT_METHOD_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 							   </tr>
+<tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CURL_SWITCH' ) ?>:</strong></td>
 
+							   <td align="left" valign="top">
+
+								   <?php
+
+								   $options=array();
+
+								   $options[]=JHTML::_('select.option', '0', JText::_( 'NO' ));
+
+								   $options[]=JHTML::_('select.option', '1', JText::_( 'YES' ));
+
+  if(!isset($row->config['godaddy_hosting']) || $row->config['godaddy_hosting']==""){
+						 $godaddy_hosting=0;
+					}else{
+
+			             $godaddy_hosting = $row->config['godaddy_hosting'];
+
+			         }
+
+								   echo JHTML::_('select.genericlist', $options,'data[config][godaddy_hosting]','','value','text',$godaddy_hosting);
+
+								   ?>
+
+							   </td>
+
+								<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_CURL_SWITCH_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+							   </tr> 
 							   <!-- *************** Authorize.net Options **************** -->
 
                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'AUTH_NET' ); ?></td></tr>
@@ -257,7 +285,6 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_GOOGLE_TRANS_KEY_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								 </tr>
-
                       
           <!-- *************** Paypal Pro Options ***************	-->
 							  
@@ -298,7 +325,6 @@ function submitbutton(pressbutton){
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_PAYPAL_API_SIGNATURE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 								 </tr>
-
 
 <tr align="center" valign="middle">
 
@@ -347,7 +373,6 @@ function submitbutton(pressbutton){
                                  
                                  
                                   <!-- *********** PSIGate Payment options ***********  -->
-                                 
 
                                  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_PSIGATE' ); ?></td>
                                  </tr>
@@ -418,7 +443,6 @@ function submitbutton(pressbutton){
                                  
                                  <!-- *********** PSIGate Payment options ***********  -->
                                  
-                                 
  <tr valign="middle"><td align="left" class="dt_heading" colspan="4"><?php echo JText::_( 'DT_EWAY' ); ?></td></tr>
                                  
                 <tr align="center" valign="middle">
@@ -436,6 +460,19 @@ function submitbutton(pressbutton){
 										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_EWAY' ) ;?></td>
 
 								 </tr>
+                                 <tr align="center" valign="middle">
+
+                     <td align="left" valign="top">
+
+										 <strong><?php echo JText::_( 'DT_EWAY_USERNAME' ); ?>:</strong>
+
+										 </td>
+
+									   <td align="left" valign="top"> <input type="text" name="data[config][eway_username]" size="30" value="<?php echo (isset($row->config['eway_username']))?$row->config['eway_username']:''; ?>" /> </td>
+
+										 <td><?php echo JHTML::tooltip((JText::_( 'DT_EWAY_USERNAME_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+								 </tr>       
                              
                 <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EWAY_TYPE' );?>:</strong></td>
 
@@ -556,7 +593,7 @@ function submitbutton(pressbutton){
 									   <td align="left" valign="top"> <input type="text" name="data[config][netdeposit_clientid]" size="30" value="<?php echo $row->config['netdeposit_clientid']; ?>" /> </td>
 
 										 <td><?php echo JHTML::tooltip((JText::_( 'DT_NETDEPOSIT_CLIENTID_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-										 
+								 
 										 <td valign="top" rowspan="2"><?php echo JText::_( 'DT_NOTES_NETDEPOSIT' ) ;?></td>
 
 								 </tr>

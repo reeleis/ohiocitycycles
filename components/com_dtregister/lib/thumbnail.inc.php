@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -231,7 +231,7 @@ class Thumbnail {
 
             $this->showErrorImage();
 
-            break;
+           
 
         }
 

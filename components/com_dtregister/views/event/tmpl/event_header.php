@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -19,7 +19,7 @@ $HeventTable->overrideGlobal($HeventTable->slabId);
 
 		<?php
 
-			echo $HeventTable->title." " ;
+			echo $HeventTable->title." ";
 
             if($event_show_date){
                echo "(".$HeventTable->displaydateheader(' ').")";

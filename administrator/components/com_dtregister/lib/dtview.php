@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -24,15 +24,17 @@ class DtrView extends JView {
 	 
 	 function display($tpl){
 	    //$this->getModel('config')->setGlobal();
-	//	http://www.joomlaeventregistration.com/dtreg27/media/system/js/mootools.js
-		global $mainframe;
+
+		global $mainframe,$form_field_style;
 		$bar = & JToolBar::getInstance('toolbar');
-		$document	=& JFactory::getDocument();
+		$document =& JFactory::getDocument();
 		 //$document->addScript( JURI::root(true).'/media/system/js/mootools.js');
 		$document->addScript( JURI::root(true).'/includes/js/joomla.javascript.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validate.js');
 			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validationmethods.js');
+			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js');
+			 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/ui.jquery.checkbox.js');
 		if(!$mainframe->isAdmin()){
 		   	if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || (isset($_REQUEST['format']) && $_REQUEST['format']!='html' ))){
 				if(!isset($mainframe->JComponentTitle)){
@@ -42,7 +44,8 @@ class DtrView extends JView {
 				
 			}
 			$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/main.css');
-			
+			$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
+			$document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/ui-checkbox.css');
 			
 			ob_start();
 			?>
@@ -53,7 +56,11 @@ class DtrView extends JView {
                   event.preventDefault();
                
                })
-                
+                DTjQuery('body').bind('change', function() { return true; });
+                <?php if($form_field_style) { ?>
+                	DTjQuery('input').checkBox();
+                <?php } ?>
+
             })
             <?php
 			 $js = ob_get_clean();
@@ -80,12 +87,142 @@ class DtrView extends JView {
 			 $js = ob_get_clean();
 			 $document->addScriptDeclaration( $js );
 			 
-			 
 		}
 		
 	   	parent::display($tpl);
 		
 	 }
+	 
+	 function sessionUserCheck($aco,$aro){
+	 
+	 $user = &JFactory::getUser();
+	  
+	  if($aro !== false){
+		 $permission = $this->getModel( 'permission' )->table->find('aro_id='.$aro->id.' and aco_id = '.$aco->id);
+		
+	     if($permission){
+		    $cid = JRequest::getVar( 'cid', array(), 'request', 'array' );
+			
+		    if($cid){
+		        $rowKey = $cid[0];
+				$model = $this->getModel( $aco->controller );
+				$table = $model->table;
+				
+				$data = $table->find(' user_id = '.$user->id.' and '.$table->_tbl_key.' = '.$rowKey);
+				
+				if($data){
+					$return = true;
+				}else{
+					$return = false;
+				}
+				//$return = ($data)?true:false;
+				
+				return ($return);
+				
+	         }else{
+			    return true;	 
+			 }
+	      }else{
+			  
+			 return true;  
+		  }
+		  return true;
+	  }
+	  
+	 return false;
+		
+        //return ($permission);
+
+  }
+  
+     function actionCheck($aco,$aro){
+
+	  if($aro !== false){
+
+			$permission = $this->getModel( 'permission' )->table->find('aro_id='.$aro->id.' and aco_id = '.$aco->id);
+
+			 return ((boolean)$permission);
+
+		}
+		return true;
+	  
+  }
+	 
+	 function checkpermission(){
+     $user = &JFactory::getUser();
+	 $aro = $this->getModel( 'aro' )->table->findaroByUser($user);
+	 //$acoController = JRequest::getWord('controller');
+	
+	 $acoController = str_replace("dtregistercontroller",'',strtolower(get_class($this)));
+	 $acoController =  'event' ;
+	 $map = array('eventmanage' => 'event');
+	 if(isset($map[$acoController])){
+		$acoController =  $map[$acoController];
+	 }
+	
+	/* if(in_array(JRequest::getVar('task',$this->_taskMap['__default']),$this->_taskMap)){
+		$task = JRequest::getVar('task',$this->_taskMap['__default']);
+	 }else{
+	 	$task = $this->_taskMap['__default'];
+	 } */
+	 $task = 'publish' ;
+	// if($task == $this->_taskMap['__default'] && $task != 'eventlist' && $task !="index"){
+	 if(0){
+	 	 $editaco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="edit" ');
+		 $addaco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="add" ');
+		 if(isset($editaco[0]) && isset($addaco[0])){
+			 $editaco = $editaco[0];
+			 $addaco = $addaco[0];
+			 
+			 $function = $editaco->type."Check";
+			 
+		     $edit_permission = $this->{$function}($editaco,$aro);
+			 $function = $addaco->type."Check";
+			 
+		     $add_permission = $this->{$function}($addaco,$aro);
+			
+			 if($add_permission && $edit_permission){
+				 return true;
+			 }else{
+				 return false;
+			 }
+			 
+		 }
+		 
+	 }else{
+	   
+	   
+	   $aco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="'.$task.'" ');
+	   $index  = 0;
+	   if($acoController == 'event' || $acoController == 'eventmanage' ) {
+	   		if($task == 'publish' || $task == 'unpublish') {
+				foreach($aco as $acodata) {
+					if($acodata->type == "action") {
+						$actionaco = $acodata;
+					} else{
+					    $sessionaco = $acodata;
+					}
+				}
+				if($this->actionCheck($actionaco,$aro)) {
+					return $this->sessionUserCheck($sessionaco,$aro);
+				} else {
+					return false;
+				}
+			}
+	   }
+	 
+	   if(isset($aco[$index])){
+		  
+		   $aco = $aco[$index];
+		   $function = $aco->type."Check";
+		   return $this->{$function}($aco,$aro);
+  
+	   }
+	 }
+	 //die ;
+	 return true;
+
+  }
 	 
 	 function viewUserField(){
 	    require_once(JPATH_SITE."/components/com_dtregister/views/field/view.html.php");
@@ -110,7 +247,7 @@ class DtrView extends JView {
 		  return $html = str_replace($constants,$replace,$tpl); 
     }
 	function userFields($usercreation=0){
-	     global $amp, $xhtml;
+	     global $amp,$xhtml;
 		 $my = &JFactory::getUser();
 		
 		 if($my->id || $usercreation==0){
@@ -171,7 +308,7 @@ class DtrView extends JView {
 	 }
 	 
 	 function capthaField(){
-	     global $amp , $xhtml ;
+	     global $amp, $xhtml;
 		 require_once(JPATH_SITE."/components/com_dtregister/views/field/view.html.php");
 	     $fieldView = new DtregisterViewField(array());
 	  
@@ -219,7 +356,7 @@ class DtrView extends JView {
 	 }
    
   function termsField($eventId){
-	    global $amp , $xhtml ;
+	    global $amp, $xhtml;
 	     require_once(JPATH_SITE."/components/com_dtregister/views/field/view.html.php");
 	     $fieldView = new DtregisterViewField(array());
 	  
@@ -234,7 +371,6 @@ class DtrView extends JView {
 	      $value = '<input type="checkbox" name="terms_conditions" id="terms_conditionscheck" value="terms" class="required" />';
 		  	$value .= '<a href="'.JRoute::_('index.php?option=com_dtregister&controller=event&task=terms&no_html=1&eventId='.$eventId).'" id="terms_conditions_popup"  class="lbOn">'. htmlspecialchars  (JText::_( 'DT_TERMS_CONDITIONS_READ' )).'</a> <label for="terms_conditions" style="display:none" generated="true" class="error"></label> ';
 
-              
 	      $constants = array('[label]','[value]','[description]');
 		  $replace = array($label,$value,'');
 		  $tpl = file_get_contents($file);

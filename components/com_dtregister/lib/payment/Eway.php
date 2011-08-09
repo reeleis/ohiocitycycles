@@ -115,10 +115,14 @@ class Eway extends Payment{
 	   JURI::root( false );
 
 	    $this->continue_url = JURI::root( false )."components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=restore";
+		
+		$this->cancel_url = JURI::root( false )."components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=cancel";
 
-		$this->payEway->setTransactionData("URL",$this->continue_url);
+		$this->payEway->setTransactionData("ReturnUrl",urlencode($this->continue_url));
+		
+		$this->payEway->setTransactionData("CancelURL",urlencode($this->cancel_url));
 
-		$this->payEway->setTransactionData("AutoRedirect",1);
+		
 
 		$this->formatPostfields();
 
@@ -134,7 +138,7 @@ class Eway extends Payment{
 
 	   // echo '<pre>'; print_r($this->cart); print_r($this); exit;
 
-	   $this->fields['TotalAmount'] = $this->cart->getAmount();
+	   
 
 	   if(method_exists($this->payEway,'setCurlPreferences')){
           $expiry =  explode('/',$this->x_exp_date);
@@ -150,30 +154,33 @@ class Eway extends Payment{
 	      $this->fields['CardExpiryYear'] = $expiry[1];
 
 		  $this->fields['CVN'] = $this->x_card_code;
+		  $this->fields['TotalAmount'] = $this->cart->getAmount();
 
 	  }
 
-	   $this->fields['CustomerInvoiceRef'] = $this->confirmNum;
+	   $this->fields['MerchantReference'] = $this->confirmNum; 
 
 	  // $this->fields['CompanyName'] = $this->organization;
 
 	   $this->fields['CustomerFirstName'] = $this->firstname;
 
-	   $this->fields['CustomerInvoiceDescription'] = $this->description;
+	   $this->fields['InvoiceDescription'] = $this->description;
 
 	   $this->fields['CustomerLastName'] = $this->lastname;
 
 	   $this->fields['CustomerAddress'] = $this->address;
 
 	   $this->fields['CustomerEmail'] = ($this->email!="")?$this->email:'';
+	   
+	   $this->fields['Amount'] = DTreg::numberFormat($this->cart->getAmount(),2);
 
-	   $this->fields['TrxnNumber'] = '';
+	  // $this->fields['TrxnNumber'] = '';
 
-	   $this->fields['Option1'] = '';
+	 //  $this->fields['Option1'] = '';
 
-	   $this->fields['Option2'] = '';
+	  /// $this->fields['Option2'] = '';
 
-	   $this->fields['Option3'] = '';
+	   //$this->fields['Option3'] = '';
 
 	   
 
@@ -278,18 +285,29 @@ class Eway extends Payment{
 
 	 }
 
-	  function afterpayment(){
-
-		  $this->transactionId = $_REQUEST['ewayTrxnReference'];
-		  
-		  DT_Session::set('register.payment.transactionId',$this->transactionId);
-
-		   $this->confirmNum = $_SESSION['register']['billingInfo']['confirmNum'];
-
-		   unset($_SESSION['register']['billingInfo']['confirmNum']);
+	  function success(){
+          
+		  $this->transactionId = $this->payEway->get_transaction_detail();
+		  if($this->transactionId === false){
+		  	 return false ;
+		  }
+		   DT_Session::set('register.payment.transactionId', $this->transactionId);
+		   return true;
+		 
 
 	 }
-
+	 
+	 function fetch_data($string, $start_tag, $end_tag){
+			$position = stripos($string, $start_tag);  
+			$str = substr($string, $position);  		
+			$str_second = substr($str, strlen($start_tag));  		
+			$second_positon = stripos($str_second, $end_tag);  		
+			$str_third = substr($str_second, 0, $second_positon);  		
+			$fetch_data = trim($str_third);		
+			return $fetch_data; 
+	}
+	 
+	 
 }
 
 ?>

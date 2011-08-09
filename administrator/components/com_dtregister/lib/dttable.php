@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -35,8 +35,8 @@ class DtrTable extends JTable{
 	} 
 	 
 	function load($id){
-	   global $tableInstances, $memcache;
-	   $signature =  get_class($this).$id;
+	   global $tableInstances,$memcache;
+	   $signature = get_class($this).$id;
 	   
 	  if(0){
 		    $vars  = get_object_vars($tableInstances[$signature]);
@@ -67,13 +67,17 @@ class DtrTable extends JTable{
 	    //pr($this->_db->getQuery());
 	   
 	   $data = $this->_db->loadObjectList();
-
+	//   pr($this->getLastCount());
 	   return $data;
 	   	
 	}
-	function getLastCount(){
+	function getLastCount($count_query = null){
        
-	   $this->_db->setQuery('SELECT FOUND_ROWS();');
+	   if($count_query !="") {
+       		$this->_db->setQuery($count_query);
+	   } else {
+	   		$this->_db->setQuery('SELECT FOUND_ROWS();');
+	   }
 	   return    $this->_db->loadResult();
 	   
      }
@@ -104,11 +108,11 @@ class DtrTable extends JTable{
 			 //  $this->_db->query();
 			
 			if(isset($queryResults[str_replace(" ","",$this->_db->getQuery())])){
-				$data = $queryResults[str_replace(" ","",$this->_db->getQuery())] ;
+				$data = $queryResults[str_replace(" ","",$this->_db->getQuery())];
 		    }else{
                $data = $this->_db->loadObjectList();
-			   if($data && count($data)){
-			      $queryResults[str_replace(" ","",$this->_db->getQuery())] = $data ;
+			   if($data && count($data) && count($data) > 1){
+			      $queryResults[str_replace(" ","",$this->_db->getQuery())] = $data;
 			   } 
 			   
 			}

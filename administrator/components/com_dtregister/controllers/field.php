@@ -519,7 +519,12 @@ class DtregisterControllerField extends DtrController {
 	} else {
 		$_POST['listing'] = "";
 	}
-		
+	
+	
+	if (!isset($_POST['fee_field'])) {
+		$_POST['fee_field'] = 0 ;
+		$_POST['fees']  = '';
+	}
 
 	if (!$row->bind( $_POST )) {
 
@@ -540,6 +545,7 @@ class DtregisterControllerField extends DtrController {
 	//Store record
 
     $row->values = stripslashes($row->values);
+
 
 	if ($row->store() !== null) {
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -38,7 +38,7 @@ class DtregisterControllerUser extends DtrController {
    function delete(){
 	   
 	   global $mainframe;
-	   $cid  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
+	   $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 	   
 	    $mUser =$this->getModel( 'user' );
 		
@@ -57,7 +57,7 @@ class DtregisterControllerUser extends DtrController {
 	    $mUser =$this->getModel( 'user' );
 		
 		if (is_array($cid)) 
-		foreach($cid  as $userId){
+		foreach($cid as $userId){
 			$mUser->table->load($userId);
 			$mUser->table->registrantemail();
 		}
@@ -125,7 +125,7 @@ class DtregisterControllerUser extends DtrController {
 
 	$limitstart = intval( $mainframe->getUserStateFromRequest( "viewuser{$option}limitstart", 'limitstart', 0 ) );
 
-	$search  =  $mainframe->getUserStateFromRequest( 'dtreg_user_search.search', 'search', array(),'array'  );
+	$search = $mainframe->getUserStateFromRequest( 'dtreg_user_search.search', 'search', array(),'array'  );
 	$filter_order = $mainframe->getUserStateFromRequest( 'dtreg_user_order.filter_order', 'filter_order', 'date'  );
 	
 	$filter_order_Dir = $mainframe->getUserStateFromRequest( 'dtreg_user_dir.filter_order_Dir', 'filter_order_Dir', 'desc'  );
@@ -205,7 +205,7 @@ class DtregisterControllerUser extends DtrController {
 
 		$query .= $searchJoinSql;
 
-        $Orwhere =  array();
+        $Orwhere = array();
 
 		if (get_magic_quotes_gpc()) {
 
@@ -258,7 +258,7 @@ class DtregisterControllerUser extends DtrController {
 
    function add(){
 
-		global $mainframe, $now;
+		global $mainframe,$now;
 
 		if(isset($_POST['formsubmit'])){
 
@@ -324,7 +324,15 @@ class DtregisterControllerUser extends DtrController {
 			} else {
 				$TableUser->sendemail = false;
 			}
+			if($data['Fee']['payment_method'] == 'offline_payment') {
+				
+				DT_Session::set('register.payment.offline_process',true);
+				DT_Session::set('register.payment.billing', $_POST['billing']);
+				
+			}
 			$TableUser->register($data);
+			DT_Session::clear('register.payment.offline_process');
+			DT_Session::clear('register.payment.billing');
 			
 			$mainframe->redirect("index.php?option=com_dtregister&controller=user&task=index");
 
@@ -371,7 +379,7 @@ class DtregisterControllerUser extends DtrController {
    }
    
    function event_full() {
-		global  $mainframe, $now;
+		global $mainframe,$now;
 						
 		$this->view->setLayout('event_full');		
 		$this->display();
@@ -392,7 +400,7 @@ class DtregisterControllerUser extends DtrController {
 
 			$data = $_POST['User'];
 
-			$data['memtot'] = $tUser->memtot;
+			// $data['memtot'] = $tUser->memtot;
 
 			$data['fields'] = JRequest::getVar('Field',array(),null,'array');
 
@@ -450,7 +458,15 @@ class DtregisterControllerUser extends DtrController {
 			if($tUser->status != $data['status']){
 				$status_change = true;
 			}
+			if($data['Fee']['payment_method'] == 'offline_payment') {
+				
+				DT_Session::set('register.payment.offline_process',true);
+				DT_Session::set('register.payment.billing', $_POST['billing']);
+				
+			}
 			$TableUser->save($data);
+			DT_Session::clear('register.payment.offline_process');
+			DT_Session::clear('register.payment.billing');
 			$tUser->load($_POST['User']['userId']);
 			
 			if($status_change){
@@ -459,7 +475,7 @@ class DtregisterControllerUser extends DtrController {
 			}
 
 			if($paid_status_change){
-     			$tUser->TableFee->status = $data['Fee']['status'] ;
+     			$tUser->TableFee->status = $data['Fee']['status'];
      			$tUser->fee_status_change_email();
    			}
 			
@@ -484,7 +500,7 @@ class DtregisterControllerUser extends DtrController {
 	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'adminForm',true));
 
 	   $this->view->assign('mUser',$mUser);
-
+	   
 	   $this->view->setLayout('edit');
 
 	   $this->view->display();
@@ -553,7 +569,6 @@ class DtregisterControllerUser extends DtrController {
 	  $mainframe->redirect("index.php?option=com_dtregister&controller=user");
 
    }
-
 
    function unattend(){
 

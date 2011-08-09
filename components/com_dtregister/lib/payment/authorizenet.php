@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -139,7 +139,8 @@ class authorizenet extends Payment{
    }
 
    function setFields(){
-
+       
+	   global $currency_code ;
 	   $cc_num = "";
 
 	   $num = strlen($this->x_card_num);
@@ -188,6 +189,8 @@ class authorizenet extends Payment{
 	"x_description"			=> $this->description,
 
     "x_card_code"           => $this->x_card_code,
+	
+	"x_currency_code"      => $currency_code,
 
 	"x_amount"				=>  $this->cart->getAmount(),
 

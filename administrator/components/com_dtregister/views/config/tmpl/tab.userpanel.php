@@ -14,18 +14,44 @@ $config = $this->getModel('config');
 
 <table class="adminlist">
 	
-	 <tr>
+<tr>
 
                      <td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_USER_PANEL_MESSAGE' ); ?>:</strong></td>
 
                      <td align="left" style="width:620px">
 
-                      <?php echo $editor->display("config[userpanelmessage]",stripslashes($config->getGlobal('userpanelmessage','')),'','','70','20','0'); ?>
+                      <?php echo $editor->display("config[userpanelmessage]",stripslashes($config->getGlobal('userpanelmessage','')),'','340','70','20','0'); ?>
 
                      </td>
 
                      <td><?php echo JHTML::tooltip((JText::_( 'DT_USER_PANEL_MESSAGE_HELP' )), '', 'tooltip.png', '', '');?></td>
 
+</tr>
+
+<tr>
+	<td align="left" valign="top"><strong><?php echo JText::_( 'DT_UPANEL_SEARCH_SHOW' );?>:</strong></td>
+	<td>
+		  <?php
+				$options=array();
+                $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
+				$options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
+				echo JHTML::_('select.genericlist', $options,"config[upanel_search_show]","","value","text",$config->getGlobal('upanel_search_show'));
+		  ?>
+    </td>
+	<td><?php echo JHTML::tooltip((JText::_( 'DT_UPANEL_SEARCH_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+</tr>
+
+<tr>
+	<td align="left" valign="top"><strong><?php echo JText::_( 'DT_UPANEL_PAID_STATUS_SHOW' );?>:</strong></td>
+	<td>
+		  <?php
+				$options=array();
+                $options[]=JHTML::_('select.option', "1",JText::_( 'DT_SHOW'));
+				$options[]=JHTML::_('select.option', "0",JText::_( 'DT_HIDE'));
+				echo JHTML::_('select.genericlist', $options,"config[upanel_paid_status_show]","","value","text",$config->getGlobal('upanel_paid_status_show'));
+		  ?>
+    </td>
+	<td><?php echo JHTML::tooltip((JText::_( 'DT_UPANEL_PAID_STATUS_SHOW_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 </tr>
 
 <tr>

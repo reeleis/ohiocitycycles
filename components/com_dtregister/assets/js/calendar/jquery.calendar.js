@@ -2919,7 +2919,7 @@ Date.prototype.valid = function() {
 
             }
 
-            a.push(showweek ? " (W)" : "", showtime ? " HH:mm" : "");
+            a.push(showweek ? " (W)" : "", showtime ? " hh:MM" : "");
 
             return a.join("");
 

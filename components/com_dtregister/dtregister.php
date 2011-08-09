@@ -1,14 +1,15 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
-* @license Commercial
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 global $mainframe;
+
 defined( 'JPATH_BASE' ) or die( 'Direct Access to this location is not allowed.' );
 if (!defined("DT_COM_COMPONENT")){
 
@@ -46,7 +47,7 @@ if($controller = JRequest::getWord('controller','event')) {
 
 }
 
-$classname	= ucfirst(DT_COMPONENT)."Controller".ucfirst($controller);
+$classname = ucfirst(DT_COMPONENT)."Controller".ucfirst($controller);
 $task = JRequest::getVar( 'task' );
 $cart = JRequest::getVar('cart','');
 $controllerObj	= new $classname();
@@ -60,6 +61,7 @@ $controllerObj->execute( JRequest::getVar( 'task' ) );
 $controllerObj->redirect();
 
 if(!(isset($_REQUEST['tmpl']) || isset($_REQUEST['no_html']) || isset($_REQUEST['format']))){
-	 // pr($_SESSION);
+	//pr($_SESSION);
 }
+
 ?>

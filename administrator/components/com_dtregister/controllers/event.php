@@ -339,9 +339,10 @@ function getarticle(){
 		if($row->save($data) !== false){
 			
 		}else{
-			 $mainframe->redirect("index.php?option=com_dtregister&controller=event&task=edit&cid[]=".$row->slabId,$row->error);
+			$mainframe->redirect("index.php?option=com_dtregister&controller=event&task=edit&cid[]=".$row->slabId,$row->error);
 		}
-		$mainframe->redirect("index.php?option=com_dtregister&controller=event");
+		
+		 $mainframe->redirect("index.php?option=com_dtregister&controller=event");
 	}
 	
 	function editcancel(){
@@ -374,6 +375,7 @@ function getarticle(){
 			   $this->error = JText::_("DT_REPTITIONS_NOT_VALID");
 
 			   $error = true ;
+			   //$error  = false ;
 
 		   }
 		  

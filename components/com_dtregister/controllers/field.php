@@ -38,6 +38,7 @@ class DtregisterControllerField extends DtrController {
 	  $field->load(JRequest::getVar('field_id',0));
 	  
 	  $childs = $field->getchild($published=1);
+	  //pr($childs);
 	  $selectionindex = JRequest::getVar('selection','');
 	  $not_remove =  JRequest::getVar('not_remove',array());
 	  if(!is_array($not_remove)){
@@ -95,7 +96,7 @@ class DtregisterControllerField extends DtrController {
 			  $tpl = file_get_contents($file);
 			  $constants = array('[label]','[value]','[description]');
 			  $description =  (trim($child->description)!="")?JHTML::tooltip($child->description, '', 'tooltip.png', '', ''):'';
-			  $replace  = array($child->label,$childObj->formhtml($user,$event,'adminForm',true),$description);
+			  $replace  = array($child->label,$childObj->formhtml($user,$event,'frmcart',true),$description);
 			  $childjs .= $childObj->childJs;
 			  $elements[$child->id] = str_replace($constants,$replace,$tpl);
 			

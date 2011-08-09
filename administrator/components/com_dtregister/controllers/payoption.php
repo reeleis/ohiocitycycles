@@ -77,11 +77,14 @@ class DtregisterControllerPayoption extends DtrController {
 	   $row = $this->getModel('payoption')->table;
 	   $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 	 
-	   JRequest::setVar('id',$cid[0]); 
+	    
+	   foreach($cid  as $id){
+	   		   
+	   		$row->load($id);
 	   
-	   $row->load(JRequest::getVar('id',0));
-	   
-	   $row->delete();
+	   		$row->delete();
+	   }
+	  
 	   $mainframe->redirect("index.php?option=com_dtregister&controller=payoption");
 	}
 	

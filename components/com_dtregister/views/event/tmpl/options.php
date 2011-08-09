@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,14 +9,14 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $xhtml_url;
+global $Itemid,$xhtml_url;
 $eventId = JRequest::getVar('eventId',0);
 include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.'tmpl'.DS.'event_header.php');
 ?>
 
-<form name="frmcart" method="post" />
+<form name="frmcart" method="post" >
 
-  <table style="margin-left: auto; margin-right: auto; text-align: center;">
+  <table style="float:left;margin-left: auto; margin-right: auto; text-align: center;">
 	
 	<tr> <td colspan="2"><span ><strong><?php echo JText::_( 'SELECT_OPTION' );?> </strong></span><br /></td></tr>
 

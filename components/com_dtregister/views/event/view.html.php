@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
-* @license Commercial
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
-class DtregisterViewEvent	 extends DtrView {
+class DtregisterViewEvent extends DtrView {
    
    	function display($tpl = null){
 	
@@ -69,23 +69,23 @@ class DtregisterViewEvent	 extends DtrView {
 		  }
 	      $label = JText::_('DT_USERNAME').$requiredlabel;
 		 
-	      $value = '<input type="text" name="username" id="username" value="" class="'.$requireclass.'" />';
+	      $value = '<input type="text" name="username" id="username" value="" class="inputbox '.$requireclass.'" />';
 	      $constants = array('[label]','[value]','[description]');
-		  $description =  JHTML::tooltip(JText::_('DT_USERNAME_TIP'), '', 'tooltip.png', '', '');
+		  $description = JHTML::tooltip(JText::_('DT_USERNAME_TIP'), '', 'tooltip.png', '', '');
 		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html = str_replace($constants,$replace,$tpl);
 		  
 		  $label = JText::_('DT_PASSWORD').$requiredlabel;
-	      $value = '<input type="password" name="password" id="password"  value="" class="'.$requireclass.'" />';
+	      $value = '<input type="password" name="password" id="password" value="" class="inputbox '.$requireclass.'" />';
 		  $description = JHTML::tooltip(JText::_('DT_PASSWORD_TIP'), '', 'tooltip.png', '', '');
 		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html .= str_replace($constants,$replace,$tpl); 
 		  
 		  $label = JText::_('DT_CONFIRM_PASSWORD').$requiredlabel;
-	      $value = '<input type="password" id="confirmpassword" name="confirmpassword" value="" class="'.$requireclass.'" />';
-		  $description =  JHTML::tooltip(JText::_('DT_CONFIRM_PASSWORD_TIP'), '', 'tooltip.png', '', '');
+	      $value = '<input type="password" id="confirmpassword" name="confirmpassword" value="" class="inputbox '.$requireclass.'" /><br /><br />';
+		  $description = JHTML::tooltip(JText::_('DT_CONFIRM_PASSWORD_TIP'), '', 'tooltip.png', '', '').'<br /><br />';
 		  $replace = array($label,$value,$description);
 		  $tpl = file_get_contents($file);
 		  $html .= str_replace($constants,$replace,$tpl);
@@ -99,12 +99,12 @@ class DtregisterViewEvent	 extends DtrView {
                         }
               
                 });
-                    DTjQuery('#username').val('');
-                    DTjQuery('#password').val('');
-                    DTjQuery('#confirmpassword').val('');
+                   DTjQuery('#username').val('');
+                   DTjQuery('#password').val('');
+                   DTjQuery('#confirmpassword').val('');
                    DTjQuery('#username').rules('add',{remote: "<?php echo JRoute::_('index.php?option=com_dtregister&controller=validate&task=uniqueUser&no_html=1',$xhtml); ?>",
                    messages : {
-                      remote : "<?php echo  JText::_('DT_USER_ALREADY_EXISTS')?>"
+                      remote : "<?php echo JText::_('DT_USER_ALREADY_EXISTS')?>"
                    }
                  
              }) 
@@ -137,7 +137,7 @@ class DtregisterViewEvent	 extends DtrView {
 	      $file = $basepath."default.php";
 		  
 		  $label = JText::_('DT_ENTER_SECURITY_CODE')." <span class='dtrequired'>&nbsp;&nbsp;*&nbsp;&nbsp;</span> ";
-	      $value = '<input type="text" id="captchaField" name="captcha" value="" class="required" /> <img src="'. JURI::root(true).'/components/com_dtregister/CaptchaSecurityImages.php?width=100'. $amp.'height=40'.$amp.'characters=5" id="captchaelement" align="middle" alt="" /><a href="#" id="captchreload"><img border="" src="'.JUri::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/reload_20x20.png'.'" /></a><label for="captchaField" style="display:none" generated="true" class="error"></label>
+	      $value = '<input type="text" id="captchaField" name="captcha" value="" class="inputbox required" /> <img src="'. JURI::root(true).'/components/com_dtregister/CaptchaSecurityImages.php?width=100'. $amp.'height=40'.$amp.'characters=5" id="captchaelement" align="middle" alt="" /><a href="#" id="captchreload"><img border="" src="'.JUri::root(true).'/components/com_dtregister/assets/images/'.$button_color.'/reload_20x20.png'.'" /></a><label for="captchaField" style="display:none" generated="true" class="error"></label>
 ';
           $document = &JFactory::getDocument();
 		  ob_start();

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -57,19 +57,20 @@ class Payment {
 			
 			$state = $fieldTable->fingbyName('state');
 		    if($state){
-			   $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
-               $fieldTypes =  $fieldType->getTypes();
+			   $fieldType = DtrModel::getInstance('Fieldtype','DtregisterModel');
+               $fieldTypes = $fieldType->getTypes();
 			   $class = "Field_".$fieldTypes[$state->type];
 			  
                $stateTable = new $class();
 			   $stateTable->load($state->id);
 			   
-			   $this->state = $stateTable->viewHtml($user) ;
+			   $this->state = $stateTable->viewHtml($user);
 			   
 	        }
 			
 			$city = $fieldTable->fingbyName('city');
-		    if($city){
+			
+		    if($city && isset($user['fields'][$city->id])){
 			   $this->city = $user['fields'][$city->id];
 	        }
 			
@@ -122,7 +123,7 @@ class Payment {
 
 		        <tr>
 
-                	<td width="31%"  ><?php echo JText::_( 'DT_CARD_HOLDER_FIRSTNAME' ); ?>:<span class="required">  *  </span></td>
+                	<td width="31%"><?php echo JText::_( 'DT_CARD_HOLDER_FIRSTNAME' ); ?>:<span class="dtrequired">  *  </span></td>
 
                     <td width="69%" align="left" > <input id="billingFirstname"  class="inputbox required" type="text" name="billing[firstname]" value="<?php echo isset($this->firstname)?$this->firstname:'' ?>" /> </td>
 
@@ -130,7 +131,7 @@ class Payment {
 
                    <tr>
 
-                	<td width="31%"  ><?php echo JText::_( 'DT_CARD_HOLDER_LASTNAME' ); ?>:<span class="required">  *  </span></td>
+                	<td width="31%"  ><?php echo JText::_( 'DT_CARD_HOLDER_LASTNAME' ); ?>:<span class="dtrequired">  *  </span></td>
 
                     <td width="69%" align="left" > <input id="billingLastname" class="inputbox required" type="text" name="billing[lastname]" value="<?php echo isset($this->lastname)?$this->lastname:'' ?>" /> </td>
 
@@ -138,7 +139,7 @@ class Payment {
 
                    <tr>
 
-                	<td width="31%"  ><?php echo JText::_( 'DT_BILLING_ADDRESS' ); ?>:<span class="required">  *  </span></td>
+                	<td width="31%"  ><?php echo JText::_( 'DT_BILLING_ADDRESS' ); ?>:<span class="dtrequired">  *  </span></td>
 
                     <td width="69%" align="left" > <input id="billingAddress" class="inputbox required" type="text" name="billing[address]" value="<?php echo isset($this->address)?$this->address:'' ?>" /> </td>
 
@@ -146,7 +147,7 @@ class Payment {
 
                    <tr>
 
-                	<td width="31%"  ><?php echo JText::_( 'DT_CITY' ); ?>:<span class="required">  *  </span></td>
+                	<td width="31%"  ><?php echo JText::_( 'DT_CITY' ); ?>:<span class="dtrequired">  *  </span></td>
 
                     <td width="69%" align="left" ><input id="billingCity" class="inputbox required" type="text" name="billing[city]" value="<?php echo isset($this->city)?$this->city:'' ?>" />  </td>
 
@@ -154,7 +155,7 @@ class Payment {
 
                    <tr>
 
-                	<td width="31%"  ><?php echo JText::_( 'DT_STATE' ); ?>:<span class="required">  *  </span></td>
+                	<td width="31%"  ><?php echo JText::_( 'DT_STATE' ); ?>:<span class="dtrequired">  *  </span></td>
 
                     <td width="69%" align="left" > <input  id="billingState" class="inputbox required" type="text" name="billing[state]" value="<?php echo isset($this->state)?$this->state:'' ?>" /> </td>
 
@@ -198,31 +199,30 @@ class Payment {
 				 <?php echo $countrydropdown; ?>
 			   </td>
 		</tr>
-                  <tr>
-
-                	<td width="31%"><?php echo JText::_( 'DT_ZIPCODE' ); ?>:<span class="required">  *  </span></td>
-
+       
+                 <tr>
+                	<td width="31%"><?php echo JText::_( 'DT_ZIPCODE' ); ?>:<span class="dtrequired">  *  </span></td>
                     <td width="69%" align="left"> <input id="billingZipcode" class="inputbox required" type="text" name="billing[zipcode]" value="<?php echo isset($this->zipcode)?$this->zipcode:'' ?>" /> </td>
-
                  </tr>
-
-                   <tr>
-
-                	<td width="31%"><?php echo JText::_( 'DT_EMAIL' ); ?>:<span class="required">  *  </span></td>
-
+  
+                 <tr>
+                	<td width="31%"><?php echo JText::_( 'DT_PHONE' ); ?>:<span class="dtrequired">  *  </span></td>
+                    <td width="69%" align="left"> <input id="billingPhone" class="inputbox required" type="text" name="billing[phone]" value="<?php echo isset($this->phone)?$this->phone:'' ?>" /> </td>
+                 </tr>
+  <?php if(get_class($this) != 'offline_payment'){ ?>
+                 <tr>
+                	<td width="31%"><?php echo JText::_( 'DT_EMAIL' ); ?>:<span class="dtrequired">  *  </span></td>
                     <td width="69%" align="left"> <input id="billingEmail" class="inputbox required" type="text" name="billing[email]" value="<?php echo isset($this->email)?$this->email:'' ?>" /> </td>
-
                  </tr>
+   <?php } ?>
                  <?php
 							   foreach(DT_Session::get('register.User') as $key => $user){
 							      		if(!intval($key)){
-											continue;
-											
+											continue;	
 											
 										}
 										break;						
 							   }
-							   
 							   
 							?>
 
@@ -257,6 +257,10 @@ class Payment {
 							  $field = $countylist->fingbyName('email');
 							?>
 							var billing_email = "<?php echo ($field)?$user['fields'][$field->id]:'' ; ?>";
+							<?php
+							  $field = $countylist->fingbyName('country');
+							?>
+							var billing_country = "<?php echo ($field)?$user['fields'][$field->id]:'' ; ?>";
 		
 							DTjQuery(function(){
 								DTjQuery("#same").click(function(){
@@ -269,6 +273,7 @@ class Payment {
 										DTjQuery("#billingState").val(billing_state);
 										DTjQuery("#billingZipcode").val(billing_zipcode);
 										DTjQuery("#billingEmail").val(billing_email);
+										DTjQuery("#billingcountry").val(billing_country);
 									} else {
 										DTjQuery("#billingFirstname").val('');
 										DTjQuery("#billingLastname").val('');
@@ -277,6 +282,7 @@ class Payment {
 										DTjQuery("#billingState").val('');
 										DTjQuery("#billingZipcode").val('');
 										DTjQuery("#billingEmail").val('');
+										DTjQuery("#billingcountry").val('');
 									}
 		
 								});
@@ -288,7 +294,7 @@ class Payment {
 
                 <?php 
 
-	    $data =  ob_get_clean();
+	    $data = ob_get_clean();
 
 		return $data;
 
@@ -376,7 +382,7 @@ class Payment {
 
 	function generateconfirmNum(){
 
-	   global $confirm_number_type , $confirm_number_prefix , $confirm_number_start ;
+	   global $confirm_number_type,$confirm_number_prefix,$confirm_number_start;
 
 	   $x_invoice_num1 = "";
 
@@ -536,7 +542,10 @@ $data = $_SESSION;
 	    $database->query();
 	   
 	}
-
+    
+	function after_user_save($user) {
+		return;
+	}
 }
 
 ?>

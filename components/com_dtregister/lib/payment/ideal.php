@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -33,7 +33,7 @@ class ideal extends Payment{
 
 	protected $amount          = 0;
 
-	protected $description     = null;
+	public $description        = null;
 
 	protected $return_url      = null;
 
@@ -55,13 +55,13 @@ class ideal extends Payment{
 
 	protected $api_port = 443;
 
-	var $bywebservice = true;
+	var $bywebservice = false;
 
 	public function __construct ()
 
 	{
 
-		global $partner_id, $api_host, $api_port; 
+		global $partner_id,$api_host,$api_port; 
 
 		parent::__construct();
 
@@ -196,22 +196,48 @@ class ideal extends Payment{
 			return false;
 
 		$this->transaction_id = $create_object->order->transaction_id;
-
-		$this->bank_url       = $create_object->order->URL;
+     //   DT_Session::set('register.payment.transactionId', $this->transaction_id);
+		$this->bank_url = $create_object->order->URL;
 
 		return true;
 
 	}
 
+	function success() {	
+		$id = JRequest::getVar('transaction_id', 0);
+		$this->checkPayment($id) ;
+		if(!$this->paid_status ){
+		   return false ;
+		}
+		if($id) {
+			$this->transactionId = JRequest::getVar('transaction_id');
+   			DT_Session::set('register.payment.transactionId', $this->transactionId);
+   			$database = &JFactory::getDBO();
+	        $data = $_SESSION;
+	        $sql = "update #__dtregister_session set `data`= ".$database->Quote(serialize($data))." where id=".$id;
+	        $database->setQuery($sql);
+	        $database->query();
+		    
+			$database->getErrorMsg();
+			
+   			return true;	
+		}else {
+			return false;
+		}	
+		
+	}
+
 	function process(){
 
-	    global $mainframe, $Itemid;
+	    global $mainframe,$Itemid;
 
 		$mosConfig_live_site = JURI::root( false );
+		
+		$session_id = $this->saveSession();
+		
+		$return_url = "{$mosConfig_live_site}components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=restore";
 
-		$return_url = "{$mosConfig_live_site}index.php?option=com_dtregister&task=success&controller=payment&Itemid=$Itemid";
-
-		$report_url = "{$mosConfig_live_site}index.php?option=com_dtregister&task=cancel&controller=payment&Itemid=$Itemid";
+		$report_url = "{$mosConfig_live_site}components/com_dtregister/success.php?return=$session_id&Itemid=$Itemid&task=cancel";
 
 	   $data = $this->createPayment($this->bank_id, ($this->cart->getAmount()*100), $this->description, $return_url, $report_url);
 
@@ -224,8 +250,6 @@ class ideal extends Payment{
 	   $mainframe->redirect( $this->getBankURL());
 
 	}
-
-	// Kijk of er daadwerkelijk betaald is
 
 	public function checkPayment ($transaction_id) 
 
@@ -249,7 +273,7 @@ class ideal extends Payment{
 
 			'a=check' .
 
-			  '&partnerid=' .      urlencode($this->getPartnerId()) .
+			  '&partnerid=' . urlencode($this->getPartnerId()) .
 
 			  '&transaction_id=' . urlencode($this->getTransactionId()) .
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -21,6 +21,7 @@ class DtregisterModelExport extends DtrModel {
 								   'amount'=> JText::_('DT_AMOUNT'),
 								   'payment_type'=> JText::_('DT_PAYMENT_TYPE'),
 								   'paid'=>JText::_('DT_PAYMENT_STATUS') ,
+								   'paid_amount'=>JText::_('DT_AMOUNT_PAID') ,
 								   'memtot'=> JText::_('DT_NUMBER_MEMBERS'),
 								   'confirmNum'=> JText::_('DT_CONFIRMATION_NUMBER'),
 								   'code'=> JText::_('DT_DISCOUNT_CODE'),
@@ -29,7 +30,8 @@ class DtregisterModelExport extends DtrModel {
 								   'user_id'=>JText::_('DT_JOOMLA_USERID'),
 								    'attend' =>JText::_('DT_ATTENDED'),
 								   'status'=>  JText::_('DT_STATUS'),
-								   'transaction_id'=>  JText::_('DT_TRANSACTION_ID')
+								   'transaction_id'=>  JText::_('DT_TRANSACTION_ID'),
+								   'userId'=>  JText::_('DT_USER_ID')
 	                             );
 
 	}
@@ -71,6 +73,7 @@ class TableExport extends DtrTable{
 								   'amount'=> JText::_('DT_AMOUNT'),
 								   'payment_type'=> JText::_('DT_PAYMENT_TYPE'),
 								   'paid'=>JText::_('DT_PAYMENT_STATUS') ,
+								   'paid_amount'=>JText::_('DT_AMOUNT_PAID') ,
 								   'memtot'=> JText::_('DT_NUMBER_MEMBERS'),
 								   'confirmNum'=> JText::_('DT_CONFIRMATION_NUMBER'),
 								   'code'=> JText::_('DT_DISCOUNT_CODE'),
@@ -79,7 +82,8 @@ class TableExport extends DtrTable{
 								   'user_id'=>JText::_('DT_JOOMLA_USERID'), 
 								   'attend' =>JText::_('DT_ATTENDED'),
 								   'status'=>  JText::_('DT_STATUS'),
-								   'transaction_id'=>  JText::_('DT_TRANSACTION_ID')
+								   'transaction_id'=>  JText::_('DT_TRANSACTION_ID'),
+								   'userId'=>  JText::_('DT_USER_ID')
 	                             );
 		
 		$fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
@@ -128,7 +132,7 @@ class TableExport extends DtrTable{
 		$this->events = $sevents;
 		$this->loadfirstRow();
 		if($this->id){
-		   	$this->save_field('events' , $this->_db->Quote($sevents));
+		   	$this->save_field('events', $this->_db->Quote($sevents));
 		}else{
 		   $this->save(array('events'=> $sevents));	
 		}
@@ -254,7 +258,7 @@ class TableExport extends DtrTable{
 		
 		global $csv_separator;
 		
-	    $header =  array();
+	    $header = array();
 		$header['register_date'] = JText::_('DT_REGISTER_DATE');
 		$header['eventname'] = JText::_('DT_EVENT_NAME');
 		
@@ -299,6 +303,10 @@ class TableExport extends DtrTable{
 	function user_id($user){
 	  return ($user->user_id)?$user->user_id:''; 
 	}
+	
+	function userId($user){
+	  return ($user->userId)?$user->userId:''; 
+	}
 	function category($user){
 	  return $user->TableEvent->TableCategory->categoryName;
 	}
@@ -322,6 +330,11 @@ class TableExport extends DtrTable{
 	function paid($user){
 	    
 		return isset($this->feeModel->table->statustxt[$user->fee->status])?$this->feeModel->table->statustxt[$user->fee->status]:'';	
+	}
+	
+	function paid_amount($user){
+	    
+		return  DTreg::showprice($user->fee->paid_amount);	
 	}
 	
 	function attend($user){
@@ -358,7 +371,7 @@ class TableExport extends DtrTable{
 		if(in_array($field,$this->general_export_fields)){
 		    return $this->{$field}($user);
 		}else{
-		    $class = "Field_".$this->fieldTypes[$this->customFields[$field]->type] ;
+		    $class = "Field_".$this->fieldTypes[$this->customFields[$field]->type];
 
 		    $fieldTable =  new $class();
             
@@ -465,7 +478,10 @@ class TableExport extends DtrTable{
 		
 		if(!isset($_REQUEST['file']) || $_REQUEST['file']=='' ){
 			
-			$this->filename = tempnam(sys_get_temp_dir(),null);
+			$confObject = JFactory::getApplication();
+            $tmpPath = $confObject->getCfg('tmp_path');
+			//$this->filename = tempnam(sys_get_temp_dir(),null);
+			$this->filename = tempnam($tmpPath ,null);
 			
 		}else{
 			$this->filename = $_REQUEST['file'];
@@ -476,7 +492,7 @@ class TableExport extends DtrTable{
 							   'file'=>$this->filename,
 							   'limit'=> DtregisterModelExport::$limit,
 							   'page'=>$page,
-							   'csv'=>file_get_contents($this->filename),
+							   'csv'=>@file_get_contents($this->filename),
 							   'current'=>$this->csvoutput)
 						 );
 		die;
@@ -524,7 +540,7 @@ class TableExport extends DtrTable{
 				header('Pragma: no-cache');
 
 			}
-           echo file_get_contents($this->filename);
+           echo @file_get_contents($this->filename);
 		   unlink($this->filename);
 			//echo $this->csvoutput;
 

@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.1
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$registrant_registered_date,$showlocation,$googlekey,$amp,$xhtml_url, $front_link_type,$registrant_message;
+global $Itemid,$show_group_members,$cb_integrated,$registrant_name,$registrant_show_avatar, $button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$registrant_registered_date,$showlocation,$googlekey,$amp,$xhtml_url, $front_link_type,$registrant_message;
 
 $config = $this->getModel('config');
 $mfield = $this->getModel('field');
@@ -27,17 +27,16 @@ $rowCustoms2 = $tfield->findall(JRequest::getVar('eventId'),'I',false,0);
 $rowCustoms3 = $tfield->findall(JRequest::getVar('eventId'),'M',false,0);
 if($rowCustoms)
 foreach($rowCustoms as $obj){
-   $fieldIds[$obj->key2] = $obj->key2 ;
+   $fieldIds[$obj->key2] = $obj->key2;
 }
 if($rowCustoms2)
 foreach($rowCustoms2 as $obj){
-   $fieldIds[$obj->key2] = $obj->key2 ;
+   $fieldIds[$obj->key2] = $obj->key2;
 }
 if($rowCustoms3)
 foreach($rowCustoms3 as $obj){
-   $fieldIds[$obj->key2] = $obj->key2 ;
+   $fieldIds[$obj->key2] = $obj->key2;
 }
-
 
 $fields = $tfield->arrangeheader($tfield->attendeelistfields($fieldIds));
 
@@ -77,7 +76,7 @@ if($showlocation){
    }
    
 }
-$document	=& JFactory::getDocument();
+$document =& JFactory::getDocument();
 
  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
@@ -107,10 +106,6 @@ $document	=& JFactory::getDocument();
 	  DTjQuery(".colorbox").colorbox({width:550, height:550,iframe:true});
 
 	  DTjQuery().bind('cbox_complete', function(){
-
-		 // initialize();
-
-        //setTimeout($.fn.colorbox.next, 1500);
 
        });
 
@@ -161,7 +156,7 @@ $document	=& JFactory::getDocument();
     </table>
 
     <br />
-<table cellpadding="4" cellspacing="1" border="1" width="100%" class="adminform adminlist">
+<table cellpadding="4" cellspacing="1"  width="100%" >
 
   <tr>
 
@@ -221,7 +216,7 @@ $document	=& JFactory::getDocument();
 	   
 		if($cb_integrated > 0 && $registrant_registered_date == 1){
 			echo '<th class="attendee_coltitle">';
-			echo DtHtml::sort(JText::_( 'DT_REGISTERED_DATE'), 'reg_date', $dir,$order,'registrant');
+			echo DtHtml::sort(JText::_( 'DT_REGISTERED_DATE'), 'register_date', $dir,$order,'registrant');
 			echo '</th>';
 		}
 
@@ -231,7 +226,7 @@ $document	=& JFactory::getDocument();
 
   <?php
 
-  $rowhtml = "" ;
+  $rowhtml = "";
 
   $k = 0;
 
@@ -241,7 +236,7 @@ $document	=& JFactory::getDocument();
 	   
      $tuser->load($user->userId);
 	 
-	  $rowhtml .="<tr class='eventListRow".($k+1) ." user".$user->id."' >";
+	  $rowhtml .="<tr class='eventListRow".($k+1) ." user".$user->id."'>";
 
 	  if( $show_group_members == 1 ){
 
@@ -303,7 +298,7 @@ $document	=& JFactory::getDocument();
 			  $fieldTable->load($field->id);
 			  $function = 'viewHtml';
 			  if(is_callable(array($fieldTable,'exportView'))){
-				  $function = 'exportView' ;
+				  $function = 'exportView';
 			  }
               
 			  $rowhtml .='<td>'.$fieldTable->$function((array)$tuser).'</td>';
@@ -333,7 +328,10 @@ $document	=& JFactory::getDocument();
 
 </table>
 
-  <?php echo $this->pageNav->getListFooter() ;?>
+  <?php echo $this->pageNav->getListFooter();
+  
+ 
+  ?>
 
 <input type="hidden" name="option" value="<?php echo DTR_COM_COMPONENT;?>" />
 
@@ -343,7 +341,7 @@ $document	=& JFactory::getDocument();
 
 <input type="hidden" name="Itemid" value="<?php echo $Itemid ; ?>" />
 
-<input type="hidden" name="limitstart" value="" />
+
 
 <input type="hidden" name="filter_order" value="<?php echo Jrequest::getVar('filter_order','name');?>" />
 
@@ -359,7 +357,7 @@ $document	=& JFactory::getDocument();
 
 	var form = document.frmcart;
 
-	form.filter_order.value 	= order;
+	form.filter_order.value = order;
 
 	form.filter_order_Dir.value	= dir;
 
@@ -407,7 +405,7 @@ function submitform(pressbutton){
 			var parent = DTjQuery(this).attr('id'); 
 
 			DTjQuery('tr[id="'+parent+'"]').css('display','table-row');
-			var path = new String(DTjQuery(this).children(':first').attr('src')) ; 
+			var path = new String(DTjQuery(this).children(':first').attr('src')); 
 			DTjQuery(this).children(':first').attr('src',path.replace("expand","close"));	 
 
 	   },
@@ -417,7 +415,7 @@ function submitform(pressbutton){
 		    var parent = DTjQuery(this).attr('id');
 
 			DTjQuery('tr[id="'+parent+'"]').css('display','none')
-            var path = new String(DTjQuery(this).children(':first').attr('src')) ;
+            var path = new String(DTjQuery(this).children(':first').attr('src'));
 			DTjQuery(this).children(':first').attr('src',path.replace("close","expand"));
 
 		});

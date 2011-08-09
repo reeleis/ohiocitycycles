@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -166,7 +166,7 @@
 
 		   <td colspan="2"><?php echo JHTML::tooltip((JText::_( 'DT_TAX_AMOUNT_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
-	    </tr>
+	  </tr>
 
       <tr align="center" valign="middle">
 
@@ -431,8 +431,9 @@
         <?php
 
 	  }
+	  
       if(isset($row->group) && is_array($row->group))
-	  $i = 0 ;
+	  $i = 0;
       foreach($row->group as $key=>$group){
         
 		

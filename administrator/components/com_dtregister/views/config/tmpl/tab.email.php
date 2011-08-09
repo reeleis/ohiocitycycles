@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -17,19 +17,29 @@
 
 					<td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_FROM_NAME' );?>:</strong></td>
 
-					<td style="width:620px"><input type="text" class="required" name="config[DT_fromname]" size="40" value="<?php echo $config->getGlobal('DT_fromname','') ; ?>" /></td>
+					<td style="width:620px"><input type="text" class="required" name="config[DT_fromname]" size="40" value="<?php echo $config->getGlobal('DT_fromname',''); ?>" /></td>
 
 					<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_FROM_NAME_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
 
-				</tr>
+				</tr> 
 
                 <tr>
 
 					<td align="left" valign="top"><strong><?php echo JText::_( 'DT_FROM_EMAIL' );?>:</strong></td>
 
-					<td><input type="text" class="required" name="config[DT_mailfrom]" size="40" value="<?php echo $config->getGlobal('DT_mailfrom','') ; ?>" /></td>
+					<td><input type="text" class="required" name="config[DT_mailfrom]" size="40" value="<?php echo $config->getGlobal('DT_mailfrom',''); ?>" /></td>
 
 					<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_FROM_EMAIL_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+				</tr>
+				
+				<tr>
+
+					<td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_ADMIN_EMAIL_FROM_USER' );?>:</strong></td>
+
+					<td style="width:620px"><?php echo JHTML::_('select.booleanlist', "config[admin_email_from_user]","",$config->getGlobal('admin_email_from_user',0)); ?></td>
+
+					<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_ADMIN_EMAIL_FROM_USER_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 				</tr>
 				
@@ -254,6 +264,8 @@
 	                 <br />[TAX] - <?php echo JText::_( 'DT_TAG_TAX' );?>
 
 	                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
+	
+		             <br />[OFFLINE_PAYMENT] - <?php echo JText::_( 'DT_TAG_OFFLINE_PAYMENT' );?>
 	 
 	                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
 

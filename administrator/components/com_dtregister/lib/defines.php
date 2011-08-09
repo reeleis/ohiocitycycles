@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -60,7 +60,7 @@ function set_tz_by_offset($offset) {
 $conf =& JFactory::getConfig();
 //set_tz_by_offset($conf->getValue('config.offset')); 
 
-global $DT_config , $month_arr , $now , $xhtml_url , $amp , $sign_up_redirect;
+global $DT_config, $month_arr, $now, $xhtml_url, $amp, $sign_up_redirect;
 jimport( 'joomla.application.module.helper' );
 
 jimport('joomla.utilities.date');
@@ -231,7 +231,6 @@ function db(){
 //pr($now->toMySQL(true));
 //pr(strftime('%Y-%m-%d %H:%M:%S %Z%n'));
 
-
 function my_array_filter_fn($val) {
   $val = trim($val);
   $allowed_vals = array("0"); // Add here your valid values
@@ -258,5 +257,8 @@ if (!function_exists('sys_get_temp_dir')) {
         return null;
     }
 }
-
+function intersects($r1start, $r1end, $r2start, $r2end)
+{
+    return ($r1start == $r2start) || ($r1start > $r2start ? $r1start <= $r2end : $r2start <= $r1end);
+}
 ?>

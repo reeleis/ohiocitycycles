@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -15,6 +15,34 @@ $row = $this->row;
 
 <table class="adminform" width="100%" cellpadding="10" cellspacing="10">
 	
+    <tr align="center" valign="middle">
+      <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_ADMIN_EMAIL' ); ?>:</strong>
+      	<br /><br />
+		<?php echo JText::_( 'DT_EVENT_ADMIN_EMAIL_FEATURE' );?>: <?php echo JHTMLSelect::booleanlist("data[event][event_admin_email_set]","",$row->event_admin_email_set); ?>
+      </td>
+      <td align="left" valign="top">
+      		<br />
+            <table cellpadding="2" cellspacing="0" border="0">
+	        <tr><td align="left">
+			<?php echo JText::_( 'DT_FROM_NAME' ); ?>: 
+			</td>
+			<td align="left">
+			<input type="text" name="data[event][event_admin_email_from_name]" value="<?php echo $row->event_admin_email_from_name; ?>" size="50" />
+            </td></tr>
+            <tr><td align="left">
+            <?php echo JText::_( 'DT_FROM_EMAIL' ); ?>: 
+            </td>
+            <td align="left">
+            <input type="text" name="data[event][event_admin_email_from_email]" value="<?php echo $row->event_admin_email_from_email; ?>" size="50" />
+            </td></tr>
+            </table>
+      </td>
+      <td colspan="2" align="left" valign="top">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_ADMIN_EMAIL_HELP' )), '', 'tooltip.png', '', ''); ?>
+      </td>
+	</tr>
+	
+	<tr><td colspan="3"><hr></td></tr>
+    
     <tr align="center" valign="middle">
 
      <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CUSTOM_THANKS' ); ?>:</strong>
@@ -117,6 +145,8 @@ $row = $this->row;
 	                 <br />[TAX] - <?php echo JText::_( 'DT_TAG_TAX' );?>
 
 	                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
+	
+		             <br />[OFFLINE_PAYMENT] - <?php echo JText::_( 'DT_TAG_OFFLINE_PAYMENT' );?>
 	
 	                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
 

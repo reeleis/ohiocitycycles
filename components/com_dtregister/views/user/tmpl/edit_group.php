@@ -35,40 +35,13 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
        <tr>
 
         <td colspan="2">
-
-			<?php 
-
-			if($tUser->type=="G"){
-			   
-               if(count($tUser->TableMember->findByUserId($tUser->userId)))
-			   {
-			  // if($this->tEvent->group_registration_type =="detail")
-			   //{
-			?>
-
-				<a class="up_button" href="<?php echo JRoute::_('index.php?option=com_dtregister&controller=member&Itemid='.$Itemid.'&userId='.$tUser->userId,$xhtml ); ?>"><?php echo  JText::_( 'DT_EDIT_MEMBERS' ); ?></a>&nbsp;&nbsp;
-             
-             <?php
-			} else {
-			 ?>
-                <a class="up_button" href="<?php echo JRoute::_('index.php?option=com_dtregister&controller=user&task=edit_group&Itemid='.$Itemid.'&userId='.$tUser->userId,$xhtml ); ?>"><?php echo  JText::_( 'DT_EDIT_GROUP_NO' ); ?></a>
-
-			<?php
-			}
-			}
-
-			?>
+				<?php echo JText::_( 'DT_EDIT_MEMBERS' ); ?>:
+                <input type="text" name="memtot" value="" size="6" />
 		</td>
 
       </tr>
 
-     <?php
-
-	   echo $this->form;
-
-	 ?>
-
-   <tr><td colspan="3" align="center"><input type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" onclick="javascript:history.back();" />&nbsp;<input type="submit" id="next" name="saveuser" class="button" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>"   /></td></tr>
+   <tr><td colspan="3" align="center"><input type="button" class="button" value="<?php echo JText::_( 'DT_BACK' ); ?>" onclick="javascript:history.back();" />&nbsp;<input type="submit" id="next" name="saveuser" class="button" value="<?php echo JText::_( 'DT_NEXT_BUTTON' );?>" class="button" /></td></tr>
 
    </table>
 
@@ -82,7 +55,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 
    <input type="hidden" name="Itemid" value="<?php echo $Itemid; ?>" />
 
-   <input type="hidden" name="task" value="edit" />
+   <input type="hidden" name="task" value="edit_group" />
 
    <input type="hidden" name="User[userId]" value="<?php echo $tUser->userId; ?>" />
    
@@ -109,13 +82,12 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
   var updateFee = function(){
 	   
 	    DTjQuery.each(disabled, function(){
-										  DTjQuery(this).attr('disabled','disabled');  
-									   });
+			DTjQuery(this).attr('disabled','disabled');  
+			 });
 	   if(priceupdate.formajax != undefined) {
 		 
 	      priceupdate.formajax.abort();
 	   }
-	   
 	   
 	   var prevtask = DTjQuery(document.frmcart.task).val();
 	   disabled = DTjQuery(':disabled');
@@ -138,7 +110,6 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'
 										  return true;
 									  }
 	               }
-	   
 	  
 	  // DTjQuery(document.frmcart.task).val('price_header');
 	   priceupdate =  DTjQuery(document.frmcart).ajaxSubmit(options);

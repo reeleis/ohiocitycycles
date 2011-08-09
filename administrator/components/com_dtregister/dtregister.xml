@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="component" version="1.5.0">
 <name>DT Register</name>
-<creationDate>Apr. 6, 2011</creationDate>
+<creationDate>July 26, 2011</creationDate>
 <author>DTH Development</author>
 <copyright>(c)2006 DTH Development. All rights reserved.</copyright>
 <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 <authorEmail>dthdev@dthdevelopment.com</authorEmail>
 <authorUrl>www.DTHDevelopment.com</authorUrl>
-<version>2.7.4a</version>
+<version>2.7.7a</version>
 
 <description>With DT Register, you can take online registrations for your event and collect a registration fee through various payment gateways. Fully integrated calendar is included.</description>
 
@@ -194,7 +194,9 @@
 <filename>assets/css/south-street/index.html</filename>
 <filename>assets/css/south-street/jquery-ui.css</filename>
 <filename>assets/css/south-street/main.css</filename>
+<filename>assets/css/south-street/ui-checkbox.css</filename>
 <filename>assets/css/south-street/images/index.html</filename>
+<filename>assets/css/south-street/images/icon_checkbox.png</filename>
 <filename>assets/css/south-street/images/ui-bg_glass_55_fcf0ba_1x400.png</filename>
 <filename>assets/css/south-street/images/ui-bg_gloss-wave_100_ece8da_500x100.png</filename>
 <filename>assets/css/south-street/images/ui-bg_highlight-hard_15_459e00_1x100.png</filename>
@@ -225,6 +227,7 @@
 <filename>assets/js/textareaCounter.js</filename>
 <filename>assets/js/timeEntry.js</filename>
 <filename>assets/js/tooltip.js</filename>
+<filename>assets/js/ui.jquery.checkbox.js</filename>
 <filename>assets/js/validate.js</filename>
 <filename>assets/js/validationmethods.js</filename>
 <filename>assets/js/calendar/index.html</filename>
@@ -298,6 +301,7 @@
 <filename>lib/payment/ideal.php</filename>
 <filename>lib/payment/idealRabo.php</filename>
 <filename>lib/payment/NetDeposit.php</filename>
+<filename>lib/payment/offline_payment.php</filename>
 <filename>lib/payment/paypal.php</filename>
 <filename>lib/payment/paypal_pro.php</filename>
 <filename>lib/payment/psigate.php</filename>
@@ -455,6 +459,7 @@
 <filename>views/user/tmpl/confirm.php</filename>
 <filename>views/user/tmpl/confirm_price_header.php</filename>
 <filename>views/user/tmpl/edit.php</filename>
+<filename>views/user/tmpl/edit_group.php</filename>
 <filename>views/user/tmpl/event_header.php</filename>
 <filename>views/user/tmpl/index.php</filename>
 <filename>views/user/tmpl/price_header.php</filename>
@@ -745,6 +750,7 @@
 	<filename>models/aro.php</filename>
 	<filename>models/barcode.php</filename>
 	<filename>models/buttoncolor.php</filename>
+	<filename>models/card.php</filename>
 	<filename>models/cardtype.php</filename>
 	<filename>models/category.php</filename>
 	<filename>models/cbprofiler.php</filename>

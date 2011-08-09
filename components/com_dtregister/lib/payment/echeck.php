@@ -124,7 +124,7 @@ class echeck extends Payment{
 
 	"x_state"				=>$this->state,
 
-	//"x_phone"				=>$this->phone,
+	"x_phone"				=>$this->phone,
 
 	"x_zip"					=>$this->zipcode,
 
@@ -148,7 +148,7 @@ class echeck extends Payment{
 
 	"x_ship_to_zip" 		=> $this->zipcode,
 
-	//"x_ship_to_phone" 		=> $this->phone,
+	"x_ship_to_phone" 		=> $this->phone,
 
 	"x_ship_to_email" 		=> $this->email,
 

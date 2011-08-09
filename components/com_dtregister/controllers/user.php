@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -14,7 +14,7 @@ class DtregisterControllerUser extends DtrController {
    var $name = "User";
 
     function __construct($config = array()){
-          global $mainframe ;
+          global $mainframe;
 		  parent::__construct($config);
           
 		  $user =  JFactory::getUser();
@@ -64,7 +64,7 @@ class DtregisterControllerUser extends DtrController {
 
         $limit=JRequest::getInt('limit',$listLimit);
 
-	    $limitstart  = JRequest::getVar('limitstart', 0, '', 'int');
+	    $limitstart = JRequest::getVar('limitstart', 0, '', 'int');
 		
 		$search = array();
 		$search['user_id'] = $this->user->id;
@@ -110,7 +110,6 @@ class DtregisterControllerUser extends DtrController {
 		DT_Session::set('register.User',$user);
 
 		DT_Session::set('register.User.process','duepayment');
-		
 		$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
 
 	}
@@ -137,30 +136,35 @@ class DtregisterControllerUser extends DtrController {
 
 		DT_Session::set('register.User.process','cancel');
 
-		$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
+	$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
 
 	}
 
 	function edit(){
 
-	    global $mainframe,$Itemid;
+	   global $mainframe,$Itemid;
 
-	    $mUser = $this->getModel('user');
+	   $mUser = $this->getModel('user');
 
-	    $tUser = $mUser->table;
+	   $tUser = $mUser->table;
 
-	    $userId=JRequest::getVar('userId',0);
+	   $userId=JRequest::getVar('userId',0);
 
-	    $tUser->load($userId);
-        DT_Session::set('register.Event.eventId',$tUser->eventId);
-	    $userObj = $tUser->getObjData();
-		$user = DTrCommon::objectToArray($userObj);
-		$user['process'] = 'change';
+	   $tUser->load($userId);
+       DT_Session::set('register.Event.eventId',$tUser->eventId);
+	   $userObj = $tUser->getObjData();
+	   $user = DTrCommon::objectToArray($userObj);
+	   $user['process'] = 'change';
 		
-		if(isset($_POST['formsubmit']) ){
-
+	   if(isset($_POST['formsubmit']) ){
+		   
 			$data = $_POST['User'];
-            $memtot = DTrCommon::cntMemtotInSession( DT_Session::get('register.User.members'));
+            
+			 if(DT_Session::get('register.User.members')) {
+				$memtot = DTrCommon::cntMemtotInSession( DT_Session::get('register.User.members'));
+			 } else {
+			  	$memtot = DT_Session::get('register.User.memtot');
+			  }
 
 			$user['fields'] = $_POST['Field'];
 
@@ -192,7 +196,7 @@ class DtregisterControllerUser extends DtrController {
 
 			//unset($_SESSION['DTregister']['register']['members']);
 			
-       	$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
+	$mainframe->redirect("index.php?option=com_dtregister&Itemid=".$Itemid."&controller=user&task=confirm");
 
 			pr($_POST);
 
@@ -212,15 +216,56 @@ class DtregisterControllerUser extends DtrController {
 
 	   // pr(DTrCommon::objectToArray($userObj));
 	   // pr($user);
-
-	   $type = ($tUser->type=='I')?'I':'B' ;
-       $tUser->TableEvent->duplicate_check = false ;
+        
+	   $type = ($tUser->type=='I')?'I':'B';
+       $tUser->TableEvent->duplicate_check = false;
 	   $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'frmcart',true));
-       $tUser->TableEvent->load($eventId) ;
+       $tUser->TableEvent->load($eventId);
        $this->view->assign('tEvent',$tUser->TableEvent);
 	   $this->view->assign('mUser',$mUser);
 	   $this->display();
 
+	}
+	
+	function edit_group() {
+
+	   global $mainframe,$Itemid;
+
+	   $mUser = $this->getModel('user');
+
+	   $tUser = $mUser->table;
+
+	   $userId=JRequest::getVar('userId',0);
+       if(isset($_POST['formsubmit']) ){ 
+	       if (isset($_POST['memtot']) && $_POST['memtot'] != "") {
+				 
+				 DT_Session::set('register.User.memtot',$_POST['memtot']);
+			}
+			$userId  = $_POST['User']['userId'];
+	   	 $link =   JRoute::_("index.php?option=com_dtregister&controller=user&task=edit&userId=".$userId."&Itemid=".$Itemid,$xhtml_url);
+		 $mainframe->redirect($link);
+	   }
+	   $tUser->load($userId);
+       DT_Session::set('register.Event.eventId',$tUser->eventId);
+	   $userObj = $tUser->getObjData();
+	   $user = DTrCommon::objectToArray($userObj);
+	   $user['process'] = 'change';
+	   
+	   $eventId = $tUser->eventId;
+
+	   $this->view->assign('header_eventId',$eventId);
+
+	   // pr(DTrCommon::objectToArray($userObj));
+	   // pr($user);
+
+	   $type = ($tUser->type=='I')?'I':'B';
+       $tUser->TableEvent->duplicate_check = false;
+	   // $this->view->assign( 'form' ,$tUser->TableEvent->form($type,(array)$tUser,false,'frmcart',true));
+       $tUser->TableEvent->load($eventId);
+       $this->view->assign('tEvent',$tUser->TableEvent);
+	   $this->view->assign('mUser',$mUser);
+	   $this->display();
+	
 	}
     
 	function price_header(){
@@ -282,7 +327,7 @@ class DtregisterControllerUser extends DtrController {
 		       DT_Session::set('register.User.fee.paid_amount',$paid_amount);
 			   $user = DT_Session::get('register.User');
 		       DT_Session::clear('register.User');
-			    DT_Session::set('register.User.process',$user['process']);
+			   DT_Session::set('register.User.process',$user['process']);
 		       unset($user['process']);
 		  
 		       DT_Session::set('register.User.0',$user);
@@ -294,18 +339,16 @@ class DtregisterControllerUser extends DtrController {
 		   $paymethod = DT_Session::get('register.payment.method');
 		   
 		   if($paying_amount <= 0){
-			  $function =  DT_Session::get('register.User.process');
-			 
-			  $tableUser = $this->getModel('user')->table;
-			 
-			  $tableUser->{$function}(DT_Session::get('register'));
-			  
-			  $messageTask = $function;
-
- $mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask);
-		    }else{
+			   
+				$function =  DT_Session::get('register.User.process');
+				$tableUser = $this->getModel('user')->table;
+				$tableUser->{$function}(DT_Session::get('register'));
+				$messageTask = $function;
+				$mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask);
+		    
+			} else {
+			   $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=payment&task=methods",$xhtml_url));
 			
-               $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=payment&task=methods",$xhtml_url));
 			}
 
 	   }
@@ -348,7 +391,7 @@ class DtregisterControllerUser extends DtrController {
 		  $type = 'I';
 
 	   }
-
+ 
 	   $TableUser =& DtrTable::getInstance('Duser','Table');
 
 	   $TableUser->create(DT_Session::get('register.User'));
@@ -358,14 +401,12 @@ class DtregisterControllerUser extends DtrController {
 	   $feeObj->setPaidAmount(DT_Session::get('register.User.fee.paid_amount'));
 
 	   $feeObj->getFee(false);
-	   
 
 	   $feesession = $feeObj;
 
 	   unset($feesession->TableEvent);
 
 	   unset($feesession->TableUser);
-       
 
 	   DT_Session::set('register.User.fee',(array)$feesession);
        
@@ -376,7 +417,7 @@ class DtregisterControllerUser extends DtrController {
 	   $this->view->assign('eventId',$eventId);
 
 	   $event->load($eventId);
-	   
+	  
 	   $this->view->assign( 'viewFields' ,$event->viewFields($type,DT_Session::get('register.User'),false,'frmcart',false));
 
 	   $this->view->assign( 'viewMemFields',$viewMemFields);

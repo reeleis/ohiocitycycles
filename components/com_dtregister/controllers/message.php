@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -42,7 +42,7 @@ class DtregisterControllerMessage extends DtrController {
 	  }
 	  
 	  $prerequisite_event_msg =  str_replace("[PREREQ_CATEGORY]",'',$prerequisite_event_msg); 
-	  echo str_replace("[PREREQ_EVENTS]",$prerequisite,$prerequisite_event_msg);   
+	  echo stripslashes(str_replace("[PREREQ_EVENTS]",$prerequisite,$prerequisite_event_msg)); 
    }
    
    function prequisitecat(){
@@ -79,7 +79,7 @@ class DtregisterControllerMessage extends DtrController {
 	      $prerequisite = "";
 	  }
 	  $prerequisite_event_msg = str_replace("[PREREQ_EVENTS]",$prerequisiteEvt,$prerequisite_event_msg);
-	  echo str_replace("[PREREQ_CATEGORY]",$prerequisite,$prerequisite_event_msg);   
+	  echo stripslashes(str_replace("[PREREQ_CATEGORY]",$prerequisite,$prerequisite_event_msg));   
    }
    
    function privatevent(){
@@ -116,14 +116,15 @@ class DtregisterControllerMessage extends DtrController {
 	   // payment thanks 
 	   // prd("index");
 	   DT_Session::clearAll();
-	   global $mainframe ;
+	   global $mainframe;
 	   
    }
+   
    function waiting(){
 	   
 	   global $full_message;
 	   
-	   echo $full_message;
+	   echo stripslashes($full_message);
    }
    
    function waiting_msg(){
@@ -133,79 +134,133 @@ class DtregisterControllerMessage extends DtrController {
    }
    
    function paylater(){
-	   global $pay_later_thk_msg;
+	   global $mainframe,$pay_later_thk_msg,$pay_later_redirection,$pay_later_redirect_url;
 	  
 	   $userTable = $this->getModel('user')->table;
-	   $TableEvent = $this->getMOdel('event')->table;
+	   $TableEvent = $this->getModel('event')->table;
 	   $messages = array();
 	  
 	   $Tagparser = new Tagparser();
 	   // prd(DT_Session::get('register.User'));
 	   
-	   if(is_array(DT_Session::get('register.User')))
+	   if(DT_Session::get('register.User') && is_array(DT_Session::get('register.User'))) {
 	
-	   foreach(DT_Session::get('register.User') as $key => $user){
+	   		foreach(DT_Session::get('register.User') as $key => $user){
 		    
-		    if (isset($user)) {
+				if (isset($user)) {
+					
+					$userTable->load($user['userId']);
+					$TableEvent->load($user['eventId']);
+					if(!isset($first_event)) {
+					   $first_event = $TableEvent;
+					}
+					
+					$tokenmessage = ($TableEvent->pay_later_thk_msg_set)?$TableEvent->pay_later_thk_msg:$pay_later_thk_msg;
+					
+					$messages[] = stripslashes($Tagparser->parsetags($tokenmessage,$userTable));
 				
-				$userTable->load($user['userId']);
-				$TableEvent->load($user['eventId']);
-				$tokenmessage = ($TableEvent->pay_later_thk_msg_set)?$TableEvent->pay_later_thk_msg:$pay_later_thk_msg;
-				
-				$messages[] = $Tagparser->parsetags($tokenmessage,$userTable);
-			
-			}
+				}
 			 
+	   		}
+	   
 	   }
 	   
+	   if($first_event->pay_later_thk_msg_set) {
+	   		$pay_later_redirection = $first_event->pay_later_redirection;
+			$pay_later_redirect_url = $first_event->pay_later_redirect_url;
+			
+	   }
+	   
+	   if ( $first_event->pay_later_thk_msg_set && isset($pay_later_redirection) && $pay_later_redirection == 0 && isset($pay_later_redirect_url)) {
+			DT_Session::clearAll();
+			$mainframe->redirect($pay_later_redirect_url);
+			exit;
+		}else if(isset($pay_later_redirection) && $pay_later_redirection == 0 && isset($pay_later_redirect_url)) {
+			DT_Session::clearAll();
+			$mainframe->redirect($pay_later_redirect_url);
+			exit;
+		}
 	   $this->view->assign('messages',$messages);
 	   $this->view->display();
-	   
+	 
 	  DT_Session::clearAll();
    }
+   
    function thanks(){
-	   global $thanksmsg;
-	   //thanksmsg_set
+	   global $mainframe,$thanksmsg,$thanks_redirection,$thanks_redirect_url;
 	   
 	   $userTable = $this->getModel('user')->table;
 	   $TableEvent = $this->getMOdel('event')->table;
 	   $Tagparser = new Tagparser();
 	   $messages = array();
-	   foreach(DT_Session::get('register.User') as $key => $user){
-		    
-		    $userTable->load($user['userId']);
-			$TableEvent->load($user['eventId']);
-			$tokenmessage = ($TableEvent->thanksmsg_set)?$TableEvent->thanksmsg:$thanksmsg;
-			$messages[] = $Tagparser->parsetags($tokenmessage,$userTable);
-			 
-	   }
 	   
+	   if(DT_Session::get('register.User') && is_array(DT_Session::get('register.User'))) {
+			foreach(DT_Session::get('register.User') as $key => $user){
+				
+				$userTable->load($user['userId']);
+				$TableEvent->load($user['eventId']);
+				if(!isset($first_event)) {
+					   $first_event = $TableEvent;
+					}
+				$tokenmessage = ($TableEvent->thanksmsg_set)?$TableEvent->thanksmsg:$thanksmsg;
+				$messages[] = stripslashes($Tagparser->parsetags($tokenmessage,$userTable));
+				 
+		    }
+	   }
+	   //thanksmsg_set
+	  
+	    if($first_event->thanksmsg_set) {
+			$thanks_redirection = $first_event->thanks_redirection ;
+	   		$thanks_redirect_url = $first_event->thanks_redirect_url;
+			
+	   }
+	    if ($first_event->thanksmsg_set && isset($thanks_redirection) && $thanks_redirection == 0 && isset($thanks_redirect_url)) {
+			DT_Session::clearAll();
+			$mainframe->redirect($thanks_redirect_url);
+			exit;
+		} else if(isset($thanks_redirection) && $thanks_redirection == 0 && isset($thanks_redirect_url)) {
+			DT_Session::clearAll();
+			$mainframe->redirect($thanks_redirect_url);
+			exit;
+		}
 	   $this->view->assign('messages',$messages);
 	   $this->view->display();
+	  
 	   DT_Session::clearAll();
 		
    }
    
    function freethanks(){
-	   global $thanksmsg;
+	   global $mainframe,$thanksmsg,$thanks_redirection,$thanks_redirect_url;
+
+	    if (isset($thanks_redirection) && $thanks_redirection == 0 && isset($thanks_redirect_url)) {
+			DT_Session::clearAll();
+			$mainframe->redirect($thanks_redirect_url);
+			exit;
+		}
 	   
 	   $userIndex = DT_Session::get('register.Setting.current.userIndex');
 	   $user = DT_Session::get('register.User.'.$userIndex);
 	   $userTable = $this->getModel('user')->table;
-	   $TableEvent = $this->getMOdel('event')->table;
+	   $TableEvent = $this->getModel('event')->table;
 	   $Tagparser = new Tagparser();
 	   $messages = array();
-	   
+	   if(DT_Session::get('register.User')){
 		    $userTable->load($user['userId']);
 			$TableEvent->load($user['eventId']);
 			$tokenmessage = ($TableEvent->thanksmsg_set)?$TableEvent->thanksmsg:$thanksmsg;
-			$messages[] = $Tagparser->parsetags($tokenmessage,$userTable);
-			 
+			$messages[] = stripslashes($Tagparser->parsetags($tokenmessage,$userTable));
+	   }
 	    $this->view->setLayout('freethanks');
 	    $this->view->assign('messages',$messages);
 		$this->view->display();
 		
 	  DT_Session::clearAll();
+   }
+   
+   function overlap(){
+   		global $overlap_event_msg;
+		echo $overlap_event_msg;
    }
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -15,7 +15,35 @@ $row = $this->row;
 
 <table class="adminform" width="100%" cellpadding="10" cellspacing="10">
 	
-   <tr align="center" valign="middle">
+    <tr align="center" valign="middle">
+      <td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_ADMIN_EMAIL' ); ?>:</strong>
+      	<br /><br />
+		<?php echo JText::_( 'DT_EVENT_ADMIN_EMAIL_FEATURE' );?>: <br /><?php echo JHTMLSelect::booleanlist("data[event][event_admin_email_set]","",$row->event_admin_email_set); ?>
+      </td>
+      <td align="left" valign="top">
+      		<br />
+            <table cellpadding="2" cellspacing="0" border="0">
+	        <tr><td align="left">
+			<?php echo JText::_( 'DT_FROM_NAME' ); ?>: 
+			</td>
+			<td align="left">
+			<input type="text" name="data[event][event_admin_email_from_name]" value="<?php echo $row->event_admin_email_from_name; ?>" size="50" />
+            </td></tr>
+            <tr><td align="left">
+            <?php echo JText::_( 'DT_FROM_EMAIL' ); ?>: 
+            </td>
+            <td align="left">
+            <input type="text" name="data[event][event_admin_email_from_email]" value="<?php echo $row->event_admin_email_from_email; ?>" size="50" />
+            </td></tr>
+            </table>
+      </td>
+      <td colspan="2" align="left" valign="top">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_ADMIN_EMAIL_HELP' )), '', 'tooltip.png', '', ''); ?>
+      </td>
+	</tr>
+	
+	<tr><td colspan="3"><hr></td></tr>
+    
+    <tr align="center" valign="middle">
 
      <td align="left" valign="top"><strong><?php echo JText::_( 'DT_CUSTOM_THANKS' ); ?>:</strong>
 
@@ -76,7 +104,7 @@ $row = $this->row;
      </td>
 
       <td align="left" valign="top">
-       <?php echo $editor->display("data[event][thksmsg]",stripslashes($row->thksmsg),'','340','50','20','0'); ?>
+       <?php echo $editor->display("data[event][thksmsg]",stripslashes($row->thksmsg),'','340','70','20','0'); ?>
      </td>
 
 		 <td colspan="2" align="left" valign="top">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_CUSTOM_THANKS_HELP' )), '', 'tooltip.png', '', ''); ?>
@@ -84,7 +112,8 @@ $row = $this->row;
      </td>
 
 	  </tr>
-<tr align="center" valign="middle">
+    
+    <tr align="center" valign="middle">
 
       	<td align="left" valign="top"><strong><?php echo JText::_( 'DT_EVENT_ADMIN_NOTIFICATION' ); ?>:</strong>
              		<br /><br /><?php echo JText::_( 'DT_ENABLE_FEATURE' );?>: <?php echo JHTMLSelect::booleanlist("data[event][admin_notification_set]","",$row->admin_notification_set); ?>
@@ -117,6 +146,8 @@ $row = $this->row;
 
 	                 <br />[PAYMENT_TYPE] - <?php echo JText::_( 'DT_TAG_PAYMENT_TYPE' );?>
 	
+	                 <br />[OFFLINE_PAYMENT] - <?php echo JText::_( 'DT_TAG_OFFLINE_PAYMENT' );?>
+	
 	                 <br />[TRANS_ID] - <?php echo JText::_( 'DT_TAG_TRANS_ID' );?>
 
 	                 <br />[CONFIRM_NUM] - <?php echo JText::_( 'DT_TAG_CONFIRM_NUM' );?>
@@ -144,13 +175,14 @@ $row = $this->row;
       	</td>
 
      	<td align="left" valign="top">
-		      <?php echo $editor->display("data[event][admin_notification]",stripslashes($row->admin_notification),'','340','50','20','0'); ?>
+		      <?php echo $editor->display("data[event][admin_notification]",stripslashes($row->admin_notification),'','340','70','20','0'); ?>
       </td>
 
 		<td colspan="2" align="left" valign="top">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_ADMIN_NOTIFICATION_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
 	  </tr>
-      	<tr>
+      
+    <tr>
 
 		      <th colspan="4" style="background: #d3e8c1; padding:5px;"><?php echo JText::_( 'DT_EMAIL_FILE_ATTACHMENT' ); ?></th>
 
@@ -165,7 +197,7 @@ $row = $this->row;
              	<script type="text/javascript">
 
                 DTjQuery(function(){
-						
+                        
 						//jQuery('.fields').trigger('click');
 						
 				        DTjQuery(".remove_file").click(function(event){

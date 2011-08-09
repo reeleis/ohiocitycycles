@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -74,7 +74,16 @@ $pMethods = $paymthd->getMergeList(true);
          </td><td>&nbsp;</td>
 
       </tr>
-       
+      <?php if(!count($this->mUser->table->TableMember->findByUserId($tUser->userId)) && $tUser->type == 'G'){?>
+      <tr>
+         <td>
+           <?php echo JText::_( 'DT_GROUP_MEMBERS'); ?>
+         </td>
+         <td>
+           <input type="text" name="User[memtot]" value="<?php echo $tUser->memtot; ?>" class="inputbox" />
+         </td><td>&nbsp;</td>
+      </tr>
+       <?php } ?>
        <tr>
 
          <td>
@@ -101,7 +110,7 @@ $pMethods = $paymthd->getMergeList(true);
 
          <td>
 
-         <?php  echo JHTML::_('select.genericlist', DtHtml::options($tUser->statustxt,JText::_("DT_SELECT_STATUS")),'User[status]',' ','value','text',$tUser->status)?>
+         <?php echo JHTML::_('select.genericlist', DtHtml::options($tUser->statustxt,JText::_("DT_SELECT_STATUS")),'User[status]',' ','value','text',$tUser->status)?>
 
          </td><td>&nbsp;</td>
 
@@ -117,7 +126,7 @@ $pMethods = $paymthd->getMergeList(true);
 
          <td>
 
-         <?php  echo JHTMLSelect::booleanlist("User[attend]","",$tUser->attend); ?>
+         <?php echo JHTMLSelect::booleanlist("User[attend]","",$tUser->attend); ?>
 
          </td><td>&nbsp;</td>
 
@@ -133,7 +142,7 @@ $pMethods = $paymthd->getMergeList(true);
 
          <td>     
 
-         <?php  echo JHTMLSelect::booleanlist("User[Fee][status]","",isset($tUser->fee->status)?$tUser->fee->status:0); ?>
+         <?php echo JHTMLSelect::booleanlist("User[Fee][status]","",isset($tUser->fee->status)?$tUser->fee->status:0); ?>
 
          </td><td>&nbsp;</td>
 
@@ -192,9 +201,138 @@ $pMethods = $paymthd->getMergeList(true);
   	   }
 
 	 ?>
+   <!-----------billing ------------ -->
+   
+      <tr class="billinginfo">
+	
+	      <td colspan="3" class="dt_heading"><?php echo JText::_( 'DT_OFFLINE_PAYMENT_DETAILS' ); ?></td>
+	
+	  </tr>
 
+      <tr class="billinginfo">
+
+                	<td><?php echo JText::_( 'DT_CARD_HOLDER_FIRSTNAME' ); ?>:<span class="dtrequired">  *  </span></td>
+
+                    <td align="left"> <input id="billingFirstname"  class="inputbox required" type="text" name="billing[firstname]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->firstname:'' ?>" /> </td>
+
+                    <td> </td>
+
+                 </tr>
+
+                   <tr class="billinginfo">
+
+                	<td><?php echo JText::_( 'DT_CARD_HOLDER_LASTNAME' ); ?>:<span class="dtrequired">  *  </span></td>
+
+                    <td align="left"> <input id="billingLastname" class="inputbox required" type="text" name="billing[lastname]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->lastname:'' ?>" /> </td>
+
+                    <td> </td>
+
+                 </tr>
+        <tr class="billinginfo">
+
+                	<td><?php echo JText::_( 'DT_BILLING_ADDRESS' ); ?>:<span class="dtrequired">  *  </span></td>
+
+                    <td align="left" > <input id="billingAddress" class="inputbox required" type="text" name="billing[address]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->address:'' ?>" /> </td>
+
+                    <td> </td>
+
+                 </tr>
+
+                   <tr class="billinginfo">
+
+                	<td><?php echo JText::_( 'DT_CITY' ); ?>:<span class="dtrequired">  *  </span></td>
+
+                    <td align="left"><input id="billingCity" class="inputbox required" type="text" name="billing[city]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->city:'' ?>" />  </td>
+
+                    <td> </td>
+
+                 </tr>
+
+                   <tr class="billinginfo">
+
+                	<td><?php echo JText::_( 'DT_STATE' ); ?>:<span class="dtrequired">  *  </span></td>
+
+                    <td align="left" > <input id="billingState" class="inputbox required" type="text" name="billing[state]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->state:'' ?>" /> </td>
+
+                    <td> </td>
+
+                 </tr>
+
+		         <tr class="billinginfo">
+		             <td><?php echo JText::_( 'DT_ZIPCODE' ); ?>:<span class="dtrequired">  *  </span></td>
+		             <td align="left"> <input id="billingZipcode" class="inputbox required" type="text" name="billing[zipcode]" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->zipcode:'' ?>" /> </td>
+		             <td> </td>
+		         </tr>
+		
+    <?php 
+		$countylist = & DtrTable::getInstance('Field','Table');
+		
+		$field = $countylist->fingbyName('country');
+		
+		 if($field){
+			 
+			 $dropDownDatas=explode("|",$field->values);
+			 $value = (isset($tUser->card) && ($tUser->card))?$tUser->card->country:$field->selected;
+			 $countrydropdown = JHTML::_('select.genericlist', DtHtml::options($dropDownDatas, JText::_("DT_SELECT_COUNTRY")),'billing[country]',' ','value','text',$value);			 
+		 }
+	?>
+     <tr class="billinginfo">
+			   <td>
+				 <?php echo JText::_('DT_COUNTRY');?>
+			   </td>
+			   <td>
+				 <?php echo $countrydropdown; ?>
+			   </td><td> </td>
+		</tr>
+
+                 <tr class="billinginfo">
+                	<td><?php echo JText::_( 'DT_PHONE' ); ?>:<span class="dtrequired">  *  </span></td>
+                    <td align="left"> <input id="billingPhone" class="inputbox required" type="text" name="billing[phone]" value="<?php echo (isset($tUser->card) &&  $tUser->card)?$tUser->card->phone:'' ?>" /> </td>
+                    <td> </td>
+                 </tr>
+    <tr class="billinginfo">
+
+          <td><?php echo JText::_( 'DT_CARD_TYPE' );?>:<span class='dtrequired'>&nbsp;&nbsp;*&nbsp;&nbsp;</span></td>
+
+          <td>
+
+            <?php
+            $cardtype = array('Visa'=>'Visa','MasterCard'=>'MasterCard','Discover'=>'Discover','American'=>'American');
+			$options=DtHtml::options($cardtype);
+
+			echo JHTML::_('select.genericlist', $options,'billing[cardtype]','','value','text',(isset($tUser->card) &&  $tUser->card)?$tUser->card->cardtype:'');
+
+			?>
+
+          </td><td> </td>
+
+        </tr>
+        
+         <tr class="billinginfo">
+
+		          <td><?php echo JText::_( 'DT_CARD_NUMBER' );?>:<span class='dtrequired'>&nbsp;&nbsp;*&nbsp;&nbsp;</span></td>
+
+		         <td align="left" ><input type="text" name="billing[x_card_num]"  class="inputbox" value="<?php echo (isset($tUser->card) && $tUser->card)?$tUser->card->x_card_num:''?>" />
+
+		              <br />
+
+		            <?php echo JText::_( 'DT_CARD_NUMBER_EXPLANATION' );?></td><td> </td>
+
+		        </tr>
+
+           <tr class="billinginfo">
+
+		          <td><?php echo JText::_( 'DT_CARD_EXPIRY_DATE' );?>:<span class='dtrequired'>&nbsp;&nbsp;*&nbsp;&nbsp;</span></td>
+
+		          <td align="left" ><input type="text" name="billing[x_exp_date]" value="<?php echo (isset($tUser->card) &&  $tUser->card)?$tUser->card->x_exp_date:''?>" class="inputbox" />
+
+		            &nbsp;&nbsp;(mm/yy)</td><td> </td>
+
+		        </tr>
+        
+   <!-----------billing------------- -->
    </table>
-
+   
    <input type="hidden" name="formsubmit" value="edit" />
 
    <input type="hidden" name="option" value="com_dtregister" />
@@ -214,7 +352,8 @@ $pMethods = $paymthd->getMergeList(true);
 <script type="text/javascript">
 
  DTjQuery(function(){
-
+    
+	
    //DTjQuery.validator.messages.required = " ";
 
     DTjQuery(document.adminForm).validate({
@@ -239,7 +378,32 @@ $pMethods = $paymthd->getMergeList(true);
 		});
 
 	});
+     DTjQuery("#UserFeepayment_method").change(function(){
+   		
+		if(DTjQuery(this).val()=='offline_payment') {
+			
+			if(navigator.appName.indexOf("Micro") >=0){
 
+					display = 'block';
+
+				}else{
+
+					display = 'table-row';
+
+				}
+			
+			DTjQuery(".billinginfo").css({display:display});
+			DTjQuery("input[name^='billing']").addClass('required');
+			
+			
+		} else {
+			
+			DTjQuery(".billinginfo").css({display:'none'});
+			DTjQuery("input[name^='billing']").removeClass('required');
+		}
+		
+   });
+    DTjQuery("#UserFeepayment_method").trigger('change');
  })
 
  function submitbutton(pressbutton){

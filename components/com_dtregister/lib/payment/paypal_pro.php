@@ -27,6 +27,8 @@ class paypal_pro extends Payment
 	public $NVP_HEADER;
 	
 	public $bywebservice = true;
+	
+	public $cardtype = "";
 
 	// function __construct($API_USERNAME, $API_PASSWORD, $API_SIGNATURE, $PROXY_HOST, $PROXY_PORT, $IS_ONLINE = FALSE, $USE_PROXY = FALSE, $VERSION = '57.0')
 	function __construct()
@@ -34,13 +36,15 @@ class paypal_pro extends Payment
 		global $paypal_api_user , $paypal_api_password , $paypal_api_signature , $paypal_pro_country  ,$godaddy_hosting;
 		$VERSION = '57.0';
 		parent::__construct();
+		/*  below 3 lines info is only for testing
 		$this->API_USERNAME = 'chahal_1217571131_biz_api1.hotmail.com'; // $API_USERNAME;
 		$this->API_PASSWORD = 'J48TN67TC5BDUVDV'; // $API_PASSWORD;
 		$this->API_SIGNATURE = 'A9LC3Qajo-H2V8mPq4eIktgPvG2RAUCxfRRLEPhAB8Q8wU1uWETp1Nib'; //$API_SIGNATURE;
-		
+		*/
 		$this->API_USERNAME = $paypal_api_user; // $API_USERNAME;
 		$this->API_PASSWORD =  $paypal_api_password; // $API_PASSWORD;
 		$this->API_SIGNATURE = $paypal_api_signature; //$API_SIGNATURE;
+		
 		$this->API_ENDPOINT = ($this->paymentmode=='test')?'https://api-3t.sandbox.paypal.com/nvp':'https://api-3t.paypal.com/nvp';
 		$this->USE_PROXY = false;
 		if($godaddy_hosting){
@@ -153,6 +157,7 @@ class paypal_pro extends Payment
             <?php
 
 			$options=DtHtml::options($cardtype);
+			
 			echo JHTML::_('select.genericlist', $options,'billing[cardtype]','','value','text',isset($this->cardtype)?$this->cardtype:'');
 
 			?>
@@ -212,15 +217,16 @@ class paypal_pro extends Payment
    }
 
 	function process(){
-        global $currency_code;
+        global $currency_code , $cardtype;
 		if($currency_code==""){$currency_code='USD';}
 		
-		switch($card_type){			
+		
+		switch($cardtype[$this->cardtype]){			
 			case 'AmericanExpress':
 				$this->cardtype = 'Amex';
 			break;
 			default:
-				$this->cardtype = $card_type;
+				 $this->cardtype = $cardtype[$this->cardtype];
 			break;
 		}
 		$card_expiry_array = explode("/", $this->x_exp_date);
@@ -236,7 +242,7 @@ class paypal_pro extends Payment
 		$address2 			= '';
 		$city 				= urlencode($this->city);
 		$state 				= urlencode($this->state);
-		$zip 				= urlencode($this->zip);
+		$zip 				= isset($this->zipcode)?urlencode($this->zipcode):'';
 		$amount 			= urlencode($this->cart->getAmount());
 		$currencyCode		= urlencode($currency_code);
 		$paymentAction 		= urlencode("Sale");
@@ -244,6 +250,7 @@ class paypal_pro extends Payment
 		$methodToCall 		= 'DoDirectPayment';
 		$nvpstr='&PAYMENTACTION='.$paymentAction.'&AMT='.$amount.'&CREDITCARDTYPE='.$creditCardType.'&ACCT='.$creditCardNumber.'&EXPDATE='.$expDateMonth.$expDateYear.'&CVV2='.$cvv2Number.'&FIRSTNAME='.$firstName.'&LASTNAME='.$lastName.'&STREET='.$address1.'&CITY='.$city.'&STATE='.$state.'&ZIP='.$zip.'&COUNTRYCODE='.$this->country.'&CURRENCYCODE='.$currencyCode.'&IPADDRESS='.urlencode($_SERVER['REMOTE_ADDR']).'';
 		
+
 		//$nvpstr='&PAYMENTACTION=Sale&AMT=2&CREDITCARDTYPE=Visa&ACCT=4340325581348705&EXPDATE=082019&CVV2=123&FIRSTNAME=Lucky&LASTNAME=Litt&STREET=address&CITY=city&STATE=state&ZIP=12345&COUNTRYCODE=US&CURRENCYCODE=USD&IPADDRESS='.urlencode($_SERVER['REMOTE_ADDR']).'';
 		
 		//pr($nvpstr);
@@ -254,6 +261,7 @@ class paypal_pro extends Payment
 		
 		if(isset($resArray['TRANSACTIONID']) && $resArray['TRANSACTIONID'] !=""){
 		   	$this->transactionId = $res['TRANSACTIONID'];
+
              DT_Session::set('register.payment.transactionId',$this->transactionId);
 			 return true;
 	    }else{

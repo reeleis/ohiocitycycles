@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -76,14 +76,15 @@ class DtregisterModelCountry extends DtrModel
 								'Fiji'=>'Fiji',
 								'Finland'=>'Finland',
 								'France'=>'France',
+								'FYROM'=>'FYROM',
 								'Gabon'=>'Gabon',
 								'Gambia, Th'=>'Gambia, Th',
 								'Georgia'=>'Georgia',
 								'Germany'=>'Germany',
 								'Ghana'=>'Ghana',
 								'Great Britain'=>'Great Britain',
-								'Greece'=>'Grenada',
-								'Grenada'=>'Bahrain',
+								'Greece'=>'Greece',
+								'Grenada'=>'Grenada',
 								'Guatemala'=>'Guatemala',
 								'Guinea'=>'Guinea',
 								'Guinea-Bissau'=>'Guinea-Bissau',
@@ -120,7 +121,6 @@ class DtregisterModelCountry extends DtrModel
 								'Lithuania'=>'Lithuania',
 								'Lithuania'=>'Lithuania',
 								'Luxembourg'=>'Luxembourg',
-								'Macedonia'=>'Macedonia',
 								'Madagascar'=>'Madagascar',
 				                'Malawi'=>'Malawi',
 								'Malaysia'=>'Malaysia',

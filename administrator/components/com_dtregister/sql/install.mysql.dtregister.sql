@@ -30,6 +30,24 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_captcha` (
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
 
+CREATE TABLE IF NOT EXISTS `#__dtregister_cards` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT,
+  `status` tinyint(4) default NULL,
+  `x_card_num` text default NULL,
+  `firstname` varchar(100) default NULL,
+  `lastname` varchar(100) default NULL,
+  `address` varchar(255) default NULL,
+  `city` varchar(200) default NULL,
+  `state` varchar(200) default NULL,
+  `zipcode` varchar(10) default NULL,
+  `country` varchar(200) default NULL,
+  `phone` varchar(50) default NULL,
+  `cardtype` varchar(50) default NULL,
+  `x_exp_date` varchar(50) default NULL,
+  `userId` bigint(11) default NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
 CREATE TABLE IF NOT EXISTS `#__dtregister_categories` (
   `categoryId` int(11) NOT NULL auto_increment,
   `categoryName` varchar(100) NOT NULL default '',
@@ -290,24 +308,19 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_group_event` (
   `admin_notification` text default NULL,
   `partial_payment_enable` int(1) default '0',
   `prevent_duplication` tinyint(1) NULL default '1',
+  `event_admin_email_set` tinyint(4) NOT NULL default '0',
+  `event_admin_email_from_name` varchar(100) default NULL,
+  `event_admin_email_from_email` varchar(100) default NULL,
+  `thanks_redirection` int(2) NULL default '0',
+  `thanks_redirect_url` varchar(255) default NULL,
+  `pay_later_redirection` int(2) NULL default '0',
+  `pay_later_redirect_url` varchar(255) default NULL,
   PRIMARY KEY  (`slabId`)
 ) TYPE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `#__dtregister_group_member` (
   `groupMemberId` int(11) NOT NULL auto_increment,
   `groupUserId` int(11) NOT NULL default '0',
-  `title` varchar(10) default NULL,
-  `firstname` varchar(100) NOT NULL default '',
-  `lastname` varchar(100) default NULL,
-  `organization` varchar(255) default NULL,
-  `address` varchar(255) default NULL,
-  `address2` varchar(255) default NULL,
-  `city` varchar(100) default NULL,
-  `state` varchar(50) default NULL,
-  `country` varchar(100) default NULL,
-  `zip` varchar(50) default NULL,
-  `phone` varchar(50) default NULL,
-  `email` varchar(100) NOT NULL default '',
   `created` DATETIME DEFAULT NULL,
   PRIMARY KEY  (`groupMemberId`)
 ) TYPE=MyISAM;
@@ -419,18 +432,6 @@ CREATE TABLE IF NOT EXISTS `#__dtregister_user` (
   `userId` int(11) NOT NULL auto_increment,
   `eventId` int(11) NOT NULL default '0',
   `type` enum('I','G') default 'I',
-  `userTitle` varchar(10) NOT NULL default '',
-  `userFirstName` varchar(50) NOT NULL default '',
-  `userLastName` varchar(50) NOT NULL default '',
-  `userOrganization` varchar(250) NOT NULL default '',
-  `userAddress` varchar(250) NOT NULL default '',
-  `userAddress2` varchar(250) NOT NULL default '',
-  `userCity` varchar(50) NOT NULL default '',
-  `userState` varchar(50) NOT NULL default '',
-  `userCountry` varchar(100) NOT NULL default '0',
-  `userZip` varchar(50) default NULL,
-  `userPhone` varchar(50) NOT NULL default '',
-  `userEmail` varchar(100) NOT NULL default '',
   `register_date` DATETIME NULL,
   `payment_type` varchar(100) default NULL,
   `due_amount` decimal(10,2) NOT NULL default '0.00',

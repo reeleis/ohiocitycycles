@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -58,15 +58,21 @@ class DtregisterControllerRegistrantemail extends DtrController {
 		if(!$fromEmail) {
 			$fromEmail=$mosConfig_mailfrom;
 		}
-		
+		$this->TableEvent = $this->getModel('event')->table;
+		$this->TableEvent->load($this->eventId);      
+		if($this->TableEvent->event_admin_email_set){
+			$fromEmail = $this->TableEvent->event_admin_email_from_email;
+			$fromName = $this->TableEvent->event_admin_email_from_name;
+		}
         $bcc = JRequest::getVar( 'bcc', array(), 'post' );
 	
 	    $bcc = explode(";",$bcc);
 		
 		if (is_array($bcc)) 
 		foreach($bcc as $bccemail){
-		   // if($bccemail !="" && $message != "")
-		   // JUTility::sendMail( $fromEmail, $fromName,$bccemail,$subject,$message,1);
+			if($bccemail !="" && $message != "") {
+				JUTility::sendMail( $fromEmail, $fromName,$bccemail,$subject,$message,1);
+			}
 		}
 		
 		

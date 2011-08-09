@@ -108,7 +108,7 @@
 
 								   $options[]=JHTML::_('select.option', "jevent",JText::_( 'DT_JEVENT'));   
 
-								  // $options[]=JHTML::_('select.option', "article",JText::_( 'DT_ARTICLE'));
+								   $options[]=JHTML::_('select.option', "article",JText::_( 'DT_ARTICLE'));
 
 								   echo JHTML::_('select.genericlist', $options,"config[event_title_link]","","value","text",$config->getGlobal('event_title_link'));
 
@@ -564,10 +564,13 @@
 
                                 <?php
 
-								$options = array(JText::_('NO'),JText::_('YES'));
+								$options = array();
 
-							
-
+							    $options[0] = JText::_('DT_NO');
+								$options[1] = JText::_('DT_NAME');
+								$options['username'] = JText::_('DT_USERNAME');
+								$options['name_username'] = JText::_('DT_NAME_AND_USERNAME');
+								
 							     echo JHTML::_('select.genericlist', DtHtml::options($options),'config[show_moderator]','','value','text',$config->getGlobal('show_moderator',0));
 
 								?>

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -39,61 +39,33 @@
 
  					<?php	
 
-
-
 					//jimport('joomla.application.component.model');
-
-
 
 					//include( JPATH_SITE.'/administrator/components/com_dtregister/models/jomsocial.php');
 
-
-
 					echo $pane->startPane('dtregister');
-
-
 
  						//$tabs->startTab(JText::_( 'DT_REGISTER_GENERAL' ),'dtregister1');
 
-
-
  						echo $pane->startPanel(JText::_( 'DT_REGISTER_GENERAL' ),'dtregister1');
-
-
 
  					?>
 
-
-
  						<div class="dtTabs" id='general'>
-
-
 
                         </div>
 
-
-
 	 					<?php
-
-
 
 	 						echo $pane->endPanel();
                           
                             echo $pane->startPanel(JText::_( 'DT_EVENT_LISTING' ),'dtregister6');
 
-
-
 							?>
-
-
 
                                <div class="dtTabs" id='event_listing'>
 
-
-
                                </div>					  
-
-                       
 
                             <?php
 
@@ -122,19 +94,11 @@
 
 	 					<?php
 
-
-
 	 						echo $pane->endPanel();
-
-
 
 	 						echo $pane->startPanel(JText::_( 'DT_EMAILS' ),'dtregister9');
 
-
-
 	 					?>
-
-
 
                           <div class="dtTabs1" id='email'>
 
@@ -145,100 +109,46 @@
 
                           </div>	
 
-
-
 	 					<?php
 
-
-
 	 						echo $pane->endPanel();
-
-
 
 	 						//echo $pane->startPanel(JText::_( 'DT_REGISTER_PAYMENT' ),'dtregister3');
 
-
-
 	 					?>
 
-
-
-                            <!--div class="dtTabs" id='payment'>
-
-
-
-                            </div-->	
-
-
-
 	 					<?php
-
-
 
 	 						echo $pane->endPanel();
 
-
-
 	 						//echo $pane->startPanel(JText::_( 'DT_REGISTER_FIELDS' ),'dtregister4');
-
-
 
 	 					?>
 
-
-
-							<!--div class="dtTabs" id='field'>
-
-
-
-                            </div -->	
-
-
-
 	 					<?php
-
-
 
 	 					//	echo $pane->endPanel();
 
-
-
 							echo $pane->startPanel(JText::_( 'DT_REGISTER_REGISTRANTS' ),'dtregister5');
 
-
-
 							?>
-
-
 
                                  <div class="dtTabs1" id='registrant'>
 
                                       <?php
 		   include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.registrant.php');
 
-		 ?>
-
-                        
+		 ?>                
 
                             </div>	
 
-
-
                               <?php
 
-
-
-							              echo $pane->endPanel();
-
-
+							echo $pane->endPanel();
 
                             echo $pane->startPanel(JText::_( 'DT_USER_PANEL' ),'dtregister6');
 
-
-
 							              ?>
-
-
 
                                    <div class="dtTabs1" id='userpanel'>
 
@@ -247,67 +157,35 @@
 
 		 ?>
 
-                        
-
                                      </div>	
 
-
-
                             <?php
-
-
 
 							echo $pane->endPanel();
 
-
-
 						echo $pane->startPanel(JText::_( 'DT_PROFILE_SYNC' ),'dtregister7');
-
-
 
                             ?>
 
-
-
                             <?php
-
-
 
                             $model = & JModel::getInstance('Model','Jomsocial');
 
-
-
-							$options =  array();
-
-
+							$options = array();
 
 							 // $options = $model->getFieldsOption();
 
-
-
 							?>
-
-
 
                              <div class="dtTabs1" id='fieldmap'>
 
-                                  
-
                                 <?php
 
+ include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.fieldmap.php');
 
+		 ?>                         
 
-		  include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.fieldmap.php');
-
-
-
-		 ?>  
-
-                                  
-
-                             </div>	
-
-
+                             </div>
 
                             <?php
 
@@ -319,8 +197,7 @@
 
                           <div class="dtTabs1" id='fieldmap'>
 
-                                <?php
-
+                             <?php
 		  include(JPATH_SITE.DS.'administrator'.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'config'.DS.'tmpl'.DS.'tab.barcode.php');
 
 		 ?>  
@@ -341,11 +218,11 @@
 
 	 		</table>
 
-  <input name="task"  type="hidden" value="edit" />
+  <input name="task" type="hidden" value="edit" />
 
   <input type="hidden" name="controller" value="config" />
 
-  <input name="option"  type="hidden" value="<?php echo DTR_COM_COMPONENT; ?>" />
+  <input name="option" type="hidden" value="<?php echo DTR_COM_COMPONENT; ?>" />
 
 </form>
 
@@ -382,15 +259,6 @@
 
 			 }
              DTjQuery(this).load("index.php?option=com_dtregister&controller=config"+nohtml+"&task=loadtab&type="+DTjQuery(this).attr('id'));
-
-			/*if(jQuery(this).attr('id') == 'jomsocial'){
-			   jQuery(this).load("index.php?option=com_dtregister&task=loadtab&type="+jQuery(this).attr('id'),function(data){ loadeditor() ; });
-
-			}else{
-
-			   jQuery(this).load("index.php?option=com_dtregister&task=loadtab&type="+jQuery(this).attr('id'));
-
-			}*/
 
 		 });
 

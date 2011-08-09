@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -137,8 +137,8 @@ class DtrController extends JController {
 	 }else{
 	 	$task = $this->_taskMap['__default'];
 	 }
-	 
-	 if($task == $this->_taskMap['__default'] && $task != 'eventlist'){ 
+	
+	 if($task == $this->_taskMap['__default'] && $task != 'eventlist' && $task !="index"){
 	 	 $editaco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="edit" ');
 		 $addaco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="add" ');
 		 if(isset($editaco[0]) && isset($addaco[0])){
@@ -163,16 +163,33 @@ class DtrController extends JController {
 	 }else{
 	   
 	   $aco = $this->getModel( 'aco' )->table->find(' controller="'.$acoController.'" and task="'.$task.'" ');
-	   
-	   if(isset($aco[0])){
+	   $index = 0;
+	   if($acoController == 'event' || $acoController == 'eventmanage' ) {
+	   		if($task == 'publish' || $task == 'unpublish') {
+				foreach($aco as $acodata) {
+					if($acodata->type == "action") {
+						$actionaco = $acodata;
+					} else{
+					    $sessionaco = $acodata;
+					}
+				}
+				if($this->actionCheck($actionaco,$aro)) {
+					return $this->sessionUserCheck($sessionaco,$aro);
+				} else {
+					return false;
+				}
+			}
+	   }
+	 
+	   if(isset($aco[$index])){
 		  
-		   $aco = $aco[0];
+		   $aco = $aco[$index];
 		   $function = $aco->type."Check";
 		   return $this->{$function}($aco,$aro);
   
 	   }
 	 }
-	 
+	 //die ;
 	 return true;
 
   }
@@ -238,7 +255,7 @@ class DtrController extends JController {
 	   //$Tagparser->getTagcontent('GROUP_MEMBER',$thanksemail);
 	  // $Tagparser->replaceTagContent('GROUP_MEMBER',$thanksemail);
        $user = $this->getModel('user')->table;
-	   $user->load(383);
+	   $user->load(541);
 	  // $user->TableEvent->load($user->eventId);
 	  if($user->TableEvent->thksmsg_set){
 
@@ -307,10 +324,29 @@ class DtrController extends JController {
 	  echo $adminmsg = ob_get_clean();*/
   }
   
+  
+  function test2(){
+	  
+	  $user = $this->getModel('user')->table;
+	  $user->eventId = 3;
+	  $user->load(0);
+	  $user->TableEvent->overrideGlobal($user->TableEvent->slabId);
+	   global $DT_mailfrom,$DT_fromname;
+	   global $currency_code,$email_cancel_confirm,$upsubcancelemail;
+      $Tagparser = new Tagparser();
+	  $msg = "";
+	  $msg .= '<p>[EVENT_NAME] [LASTNAME]</p>';
+	  
+	  pr($msg) ;
+	  $msg = $Tagparser->parsetags($msg,$user);
+	  prd($msg);
+	
+	  
+  }
   function testcancel(){
 	   
 	   $user = $this->getModel('user')->table;
-	   $user->load(340);
+	   $user->load(540);
 	   $user->TableEvent->overrideGlobal($user->TableEvent->slabId);
 	   global $DT_mailfrom,$DT_fromname;
 	   global $currency_code,$email_cancel_confirm,$upsubcancelemail;

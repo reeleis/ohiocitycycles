@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -161,14 +161,14 @@ echo $this->loadTemplate('description');
 
            <td><?php echo $pageNav->getRowOffset( $i ); ?></td>
 
-           <td><?php echo  $checked    = JHTML::_('grid.id', $i, $row->userId); ?></td>
+           <td><?php echo $checked = JHTML::_('grid.id', $i, $row->userId); ?></td>
 
            <td align="center"><a href="<?php echo $link?>"><?php echo $name; ?></a></td>
 
            <td align="center"><a href="mailto:<?php echo stripslashes($email);?>"><?php echo stripslashes($email);?></a></td>
 
            <td align="center"><?php 
-		    $evtTable =  $this->getModel('event')->table;
+		    $evtTable = $this->getModel('event')->table;
 			$evtTable->slabId = $row->slabId;
 			$evtTable->dtstart = $row->dtstart;
 			$evtTable->title = $row->title;
@@ -196,7 +196,7 @@ echo $this->loadTemplate('description');
 
            <td align="center"><?php echo  (isset($fee->fee) && $fee->fee >0)?DtHtml::gridTask($row, $i,'fee_status'):''; ?></td>
 
-           <td><?php echo  DtHtml::gridTask($row, $i,'attend'); ?></td>
+           <td><?php echo DtHtml::gridTask($row, $i,'attend'); ?></td>
 
            <td>	<?php if($row->type=='G'){
 			   
@@ -215,11 +215,11 @@ echo $this->loadTemplate('description');
 
 				  if($row->cancel == 1){
 
-				    echo DTreg::numberFormat($row->due,2) ;
+				    echo DTreg::numberFormat($row->due,2);
 
 				  }else{
 
-				    echo DTreg::numberFormat(($row->fee-$row->paid_amount),2) ;
+				    echo DTreg::numberFormat(($row->fee-$row->paid_amount),2);
 
 				  }
 

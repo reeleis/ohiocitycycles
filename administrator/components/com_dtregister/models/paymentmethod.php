@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -29,7 +29,8 @@ class DtregisterModelPaymentmethod extends DtrModel {
 								'saferpay' => JText::_( 'DT_SAFER_PAY' ),
                                 'psigate'=>JText::_('DT_PSIGATE'),
 								"pay_later"=>JText::_( 'DT_PAY_LATER' ),
-								"paypal_pro"=>JText::_( 'DT_PAYPAL_PRO' )
+								"paypal_pro"=>JText::_( 'DT_PAYPAL_PRO' ),
+								'offline_payment' => JText::_( 'DT_OFFLINE_PAYMENT' )
 
 								);
 										
@@ -50,7 +51,8 @@ class DtregisterModelPaymentmethod extends DtrModel {
 						   'saferpay'=>$path.'saferpay_pay.jpg',
 						   'psigate'=> $path .'psigate_pay.jpg',
 						   'usaepay_credit_card'=>$path.'card_pay.jpg',
-						   'usaepay_echeck'=>$path.'echeck_pay.jpg'
+						   'usaepay_echeck'=>$path.'echeck_pay.jpg',
+						   'offline_payment' => $path.'card_pay.jpg',
 		               );
 		$this->paylater  =& DtrModel::getInstance('Paylater','DtregisterModel');
 

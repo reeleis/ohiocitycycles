@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -11,33 +11,23 @@
 
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
-
-
 class DtregisterControllerConfig extends DtrController {
-
-		
 
 	var $name ='config';
 
-	
-
 	function __construct($config = array()){
-
+         $config = array('default_task'=>'index');
 		 parent::__construct($config);
 
 		 $this->view = & $this->getView( 'config', 'html' );
 
 		 $this->view->setModel($this->getModel('field'),false);
 
-		 $this->registerTask( 'edit',  'edit' );
+		 $this->registerTask( 'edit', 'edit' );
 
 		 $this->registerDefaultTask("index");
 
-
-
 	}
-
-
 
 	function index(){	
 
@@ -45,65 +35,37 @@ class DtregisterControllerConfig extends DtrController {
 
 			$document->setTitle(JText::_('DT_CONFIGURATION'));
 
-			
-
 			JToolBarHelper::title( JText::_( 'DT_CONFIGURATION' ), 'dtregister' );
-
-
-
-			
 
 			$this->view->setLayout('edit');
 
-			
-
-			
-
-			
-
 			$this->view->display();
 
 		}
-
-	
 
 		function loadtab(){
 
-			
-
-			$type = JRequest::getVar('type') ;
-
-			
+			$type = JRequest::getVar('type');
 
 			$this->view->setLayout('tab.'.$type);
 
-			$this->view->display();
-
-			
+			$this->view->display();		
 
 		}
 
-		
-
 		function save(){
 
-		
-
-			global $mainframe ,$eventListOrder;
-            
+			global $mainframe,$eventListOrder;
 
 			$conf = $this->getModel('config');
 
 			if($eventListOrder != $_POST['config']["eventListOrder"]){
 	            $conf->updateEventorder( $_POST['config']["eventListOrder"]);
 	        }
-
             
 			$database = &JFactory::getDBO();
 
-			$sql="TRUNCATE TABLE `#__dtregister_config`  ";
-
-	
+			$sql="TRUNCATE TABLE `#__dtregister_config` ";
 
 			$database->setQuery($sql);
 
@@ -143,59 +105,32 @@ class DtregisterControllerConfig extends DtrController {
 
 					}
 
-	
-
 				  }else{
 
-					 $value= JRequest::_cleanVar($value,JREQUEST_ALLOWHTML);
+					$value= JRequest::_cleanVar($value,JREQUEST_ALLOWHTML);
 
 					$key=$database->Quote($key);
 
-	
-
 					$value=$database->Quote($value);
-
-	
 
 					$sql="Insert Into #__dtregister_config(config_key,config_value,`title`) Values($key,$value,$key)";
 
 					$database->setQuery($sql);
 
-	
-
 				   if(!$database->query()){
 
 						echo $database->getErrorMsg();
 
-										
-
-						die ;
+						die;
 
 					}
 
 				}
 
-			
+			}			
 
-			}
-
-							
-
-		  $mainframe->redirect("index.php?option=".DTR_COM_COMPONENT."&task=index&controller=config", JText::_( 'SETTINGS_SAVED' ));
-
-		 
-
-			
-
-			
+		  $mainframe->redirect("index.php?option=".DTR_COM_COMPONENT."&task=index&controller=config", JText::_( 'SETTINGS_SAVED' ));		
 
 		}
 
-
-
-			
-
-
-
 }
-

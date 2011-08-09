@@ -63,7 +63,7 @@ class DtregisterControllerCalendar extends DtrController {
 
 	   $query = $mevt->listingQuery($daterange,$cat);
 	   
-	   // prd($query);
+	  ///  prd($query);
 
 	   $events = $tevt->query($query,null,null); 
        

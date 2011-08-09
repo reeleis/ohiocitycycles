@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.2
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -93,7 +93,7 @@ function validateForm(){
 
 <form name="frmcart" method="post" action="index.php?option=com_dtregister&Itemid=<?php echo $Itemid ?>" enctype="multipart/form-data" onSubmit="return validateForm();">
 
- <table><tr><td><?php echo JText::_( 'GROUP_NUMBER' );?>: </td><td>
+ <table style="float:left;"><tr><td><?php echo JText::_( 'GROUP_NUMBER' );?>: </td><td>
   <input type="text" size="4" name="memtot" id="memtot" /></td> </tr>
   <tr><td colspan="2">
   

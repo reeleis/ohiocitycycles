@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -125,11 +125,11 @@
 </form>
 <?php
 
-$document	=& JFactory::getDocument();
+$document =& JFactory::getDocument();
 
 $document->addStyleSheet(JURI::root(true).'/components/com_dtregister/assets/css/south-street/jquery-ui.css');
 
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery-ui.js');
 

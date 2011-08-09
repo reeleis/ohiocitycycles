@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -98,6 +98,8 @@ global $Itemid;
 		  
 		  }
 
+	  } else {
+	  	 document.adminForm.submit();
 	  }
   
   }

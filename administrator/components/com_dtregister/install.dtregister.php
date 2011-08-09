@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -121,6 +121,24 @@ function com_install() {
 	if(!in_array('old_event_id',$arrFields))
 	{
 		$sql="DROP TABLE `#__dtregister_sync`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+
+	$sql="Show columns from #__dtregister_waiting";
+	$database->setQuery($sql);
+	$rows=$database->loadObjectList();
+	$arrFields=array();
+
+	for($i=0,$n=count($rows);$i<$n;$i++)
+	{
+		$row=$rows[$i];
+		$arrFields[]=$row->Field;
+	}
+
+	if(!in_array('number_registrants',$arrFields))
+	{
+		$sql="DROP TABLE `#__dtregister_waiting`";
 		$database->setQuery($sql);
 		$database->query();
 	}
@@ -449,6 +467,55 @@ function com_install() {
 		$database->query();
 	}
 	
+	if(!in_array('event_admin_email_set',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `event_admin_email_set` tinyint(4) NOT NULL default '0'";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(!in_array('event_admin_email_from_name',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `event_admin_email_from_name` varchar(100) default NULL";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(!in_array('event_admin_email_from_email',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `event_admin_email_from_email` varchar(100) default NULL";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(!in_array('thanks_redirection',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `thanks_redirection` int(2) NULL default '0'";
+		$database->setQuery($sql);
+		$database->query();
+	}
+
+	if(!in_array('thanks_redirect_url',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `thanks_redirect_url` varchar(255) default NULL";
+		$database->setQuery($sql);
+		$database->query();
+	}
+
+	if(!in_array('pay_later_redirection',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `pay_later_redirection` int(2) NULL default '0'";
+		$database->setQuery($sql);
+		$database->query();
+	}
+
+	if(!in_array('pay_later_redirect_url',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_event` ADD `pay_later_redirect_url` varchar(255) default NULL";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
 	$sql= "ALTER TABLE `#__dtregister_group_event` CHANGE `ordering` `ordering` INT(7) UNSIGNED NULL DEFAULT '1'";
 	$database->setQuery($sql);
 	$database->query();
@@ -471,6 +538,90 @@ function com_install() {
 	if(!in_array('created',$arrFields))
 	{
 		$sql="ALTER TABLE `#__dtregister_group_member` ADD `created` DATETIME DEFAULT NULL";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('title',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `title`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('firstname',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `firstname`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('lastname',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `lastname`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('organization',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `organization`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('address',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `address`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('address2',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `address2`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('city',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `city`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('state',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `state`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('country',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `country`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('zip',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `zip`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('phone',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `phone`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('email',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_group_member` DROP `email`";
 		$database->setQuery($sql);
 		$database->query();
 	}
@@ -552,6 +703,174 @@ function com_install() {
 	if(!in_array('memtot',$arrFields))
 	{
 		$sql="ALTER TABLE `#__dtregister_user` ADD `memtot` int(4) NULL default '0'";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('title',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `title`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('firstname',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `firstname`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('lastname',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `lastname`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('organization',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `organization`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('address',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `address`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('address2',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `address2`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('city',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `city`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('state',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `state`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('country',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `country`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('zip',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `zip`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('phone',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `phone`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('email',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `email`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userTitle',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userTitle`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userFirstName',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userFirstName`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userLastName',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userLastName`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userOrganization',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userOrganization`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userAddress',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userAddress`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userAddress2',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userAddress2`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userCity',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userCity`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userState',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userState`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userCountry',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userCountry`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userZip',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userZip`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userPhone',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userPhone`";
+		$database->setQuery($sql);
+		$database->query();
+	}
+	
+	if(in_array('userEmail',$arrFields))
+	{
+		$sql="ALTER TABLE `#__dtregister_user` DROP `userEmail`";
 		$database->setQuery($sql);
 		$database->query();
 	}
@@ -1139,6 +1458,18 @@ function com_install() {
 		$database->query();
 		
 		$sql="INSERT INTO `#__dtregister_config` VALUES(127, 'event_location_show', '0', 'event_location_show');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(128, 'thanks_redirection', '1', 'thanks_redirection');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(129, 'pay_later_redirection', '1', 'pay_later_redirection');";
+		$database->setQuery($sql);
+		$database->query();
+		
+		$sql="INSERT INTO `#__dtregister_config` VALUES(130, 'admin_email_from_user', '0', 'admin_email_from_user');";
 		$database->setQuery($sql);
 		$database->query();
 	}

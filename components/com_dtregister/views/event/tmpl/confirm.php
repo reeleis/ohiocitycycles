@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -131,7 +131,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 
        &nbsp;
 
-       <input type="submit" name="confirm" class="button" id="next"; value="<?php echo JText::_( 'DT_NEXT_BUTTON' ); ?>" />
+       <input type="submit" name="confirm" class="button" id="next" value="<?php echo JText::_( 'DT_NEXT_BUTTON' ); ?>" />
 
      </td>
 

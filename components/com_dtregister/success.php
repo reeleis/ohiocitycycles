@@ -62,9 +62,7 @@ JPluginHelper::importPlugin('system');
 $lang =& JFactory::getLanguage();
 $lang->load('com_dtregister');
 JRequest::setVar('controller','payment');
-//echo "<pre>";
-//print_r($_REQUEST);
-//die;
+
 if(!isset($_REQUEST['task'])){
    $_REQUEST['task'] = 'restore';
 }

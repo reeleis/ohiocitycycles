@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -36,12 +36,13 @@ class DtregisterControllerMigration extends DtrController {
 	function process(){
 		global $mainframe;
 		$migrate = $this->getModel('migration');
-		if($migrate->migrated){
+		
+		$dtreg = $this->getModel('dtregister');
+		if($dtreg->migrated){
 			$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_ALREADY_MIGRATED'));
 		}else{
 		    $migrate->event();
 			$migrate->usertable();
-			$dtreg = $this->getModel('dtregister');
 			$dtreg->setmigrated(1);
 			$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_MIGRATION_SUCCESSFUL'));	
 		}
@@ -88,7 +89,7 @@ class DtregisterControllerMigration extends DtrController {
 	    global $mainframe;
 		$mainframe->redirect("index.php?option=com_dtregister&controller=cpanel");
 		$dtreg = $this->getModel('dtregister');
-		$migrate =  $this->getModel('migration');
+		$migrate = $this->getModel('migration');
 		if(!$dtreg->migrated){
 			$mainframe->redirect("index.php?option=com_dtregister&controller=migration",JText::_('DT_NOT_MIGRATED'));
 		}else{

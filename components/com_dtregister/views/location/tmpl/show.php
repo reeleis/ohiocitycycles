@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,19 +9,19 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $googlekey , $amp , $location_img_w , $location_img_h ,$linktogoogle;
-$document	=& JFactory::getDocument();
+global $googlekey,$amp,$location_img_w,$location_img_h,$linktogoogle;
+$document =& JFactory::getDocument();
 if($googlekey!==""){
 
    $document->addScript( "http://maps.google.com/maps?file=api".$amp."v=2.x".$amp."key=".$googlekey);
 }
-$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 $mlocation = $this->getModel('location');
 $location = $mlocation->table;
 $location->load(JRequest::getVar('id',0));
 
 ?>
-<script type="text/javascript" >
+<script type="text/javascript">
    var map = null;
 
     var geocoder = null;

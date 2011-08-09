@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -56,7 +56,7 @@ class DTrCommon {
 	}
 
 	function objectToArray( $object ){
-
+   
         if( !is_object( $object ) && !is_array( $object ) )
 
         {
@@ -68,12 +68,12 @@ class DTrCommon {
         if( is_object( $object ) )
 
         {
-
-            $object = get_object_vars( $object );
+			
+            $object_vars = get_object_vars( $object );
+			return array_map( array('DTrCommon','objectToArray'), $object_vars );
 
         }
-
-        return array_map( array('DTrCommon','objectToArray'), $object );
+		return array_map( array('DTrCommon','objectToArray'), $object );
 
     }
 

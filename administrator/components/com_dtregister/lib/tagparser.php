@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -21,7 +21,7 @@ class Tagparser {
 	   $this->mfield = & DtrModel::getInstance('Field','DtregisterModel'); 
 
 	   $this->tfield = $this->mfield->table;
-     $fieldType = DtrModel::getInstance('Fieldtype','DtregisterModel');
+       $fieldType = DtrModel::getInstance('Fieldtype','DtregisterModel');
 
 	   $this->fieldTypes = $fieldType->getTypes();
 		 
@@ -34,7 +34,7 @@ class Tagparser {
 	 function getTagcontent($tag,$msg){
 		 
 		 $tagstart = preg_quote("{".$tag."}","%");
-		 $tagend   = preg_quote("{/".$tag."}","5");
+		 $tagend = preg_quote("{/".$tag."}","5");
 		 $expression = "/(?<=".$tagstart.")(.*)*(?=".$tagend.")/msU";
 		 $expression = "(?<=".$tagstart.")(.*)(?=".$tagend.")";
 		
@@ -49,12 +49,13 @@ class Tagparser {
 	 }
      
 	 function replaceTagContent($tag,$msg,$replace=""){
-	   $tagstart = preg_quote("{".$tag."}",'%');
-		 $tagend   = preg_quote("{/".$tag."}","%");
-		 $expression = "/".$tagstart."(.*)*".$tagend."/msU";
+	    $tagstart = preg_quote("{".$tag."}",'%');
+		$tagend = preg_quote("{/".$tag."}","%");
+		$expression = "/".$tagstart."(.*)*".$tagend."/msU";
 		$expression = $tagstart."(.*)".$tagend;
-		
 		$data = preg_replace("%".$expression."%msU",$replace,$msg);
+		$data = str_replace("{GROUP_MEMBER}","",$data);
+		$data = str_replace("{/GROUP_MEMBER}","",$data);
 		 // $data = preg_quote($expression);
 		 return $data;
 		
@@ -165,9 +166,9 @@ class Tagparser {
 	 function all_fields($recipient){
 	 	
 		$user = $this->getuser($recipient);
-		$field =  DtrTable::getInstance('field','Table');
+		$field = DtrTable::getInstance('field','Table');
 		
-	    $fieldType =  DtrModel::getInstance('Fieldtype','DtregisterModel');
+	    $fieldType = DtrModel::getInstance('Fieldtype','DtregisterModel');
         $txt =  "";
 		$txt_parts = array();
 	    $fieldTypes =  $fieldType->getTypes();
@@ -188,13 +189,15 @@ class Tagparser {
 		    	
 				$value = $fieldTable->{$function}((array)$user);
 				
-				//$txt .= $fieldTable->label.': '.$value.'<br />' ;
-				$txt_parts[] = stripslashes($fieldTable->label).': '.$value;
+				//$txt .= $fieldTable->label.': '.$value.'<br />';
+				if (isset($value) && $value != "") {
+					$txt_parts[] = stripslashes($fieldTable->label).': '.$value;
+				}
 			}
 			
 		}
-		// $txt_parts = array_reverse($txt_parts);
-		$txt =  implode("<br />",$txt_parts);
+		//$txt_parts = array_reverse($txt_parts);
+		$txt = implode("<br />",$txt_parts);
 		return $txt;
 		
 	 }
@@ -210,7 +213,7 @@ class Tagparser {
 
 	    $user = $this->getuser($recipient);
 
-		 return $user->TableEvent->displaydate();
+		return $user->TableEvent->displaydate();
 
 	 }
 
@@ -224,7 +227,7 @@ class Tagparser {
 
 	 function confirm_num($recipient ){
 
-		 $user = $this->getuser($recipient);
+		$user = $this->getuser($recipient);
 
 		return $user->confirmNum;
 
@@ -249,7 +252,7 @@ class Tagparser {
 
 	     $user = $this->getuser($recipient);
 
-		 global $barCodeImagetypeToExt , $barcode_image_type;
+		 global $barCodeImagetypeToExt,$barcode_image_type;
 //pr($barCodeImagetypeToExt);
          $barcodePath =JURI::root( false )."images/dtregister/barcode/".$user->confirmNum.".".$barcode_image_type;
          $barcodePath = str_replace('/components/com_dtregister','',$barcodePath);
@@ -415,7 +418,7 @@ class Tagparser {
 
 		$details[] = $user->getFieldByName('phone');
 
-		$details[] = $user->getFieldByName('email') ;
+		$details[] = $user->getFieldByName('email');
 
 		$details = array_filter($details);
 
@@ -442,8 +445,8 @@ class Tagparser {
 	 function amount($recipient){
         global $currency_code;
 		$user  = $this->getuser($recipient);
-
-		return DTreg::displayRate($user->TableFee->formatamount($user->TableFee->fee),$currency_code); 
+		
+		return DTreg::displayRate($user->TableFee->formatamount($user->fee->fee),$currency_code); 
 
 	 }
 
@@ -527,17 +530,21 @@ class Tagparser {
 
 	 }
 
-	 function amount_notax(){
-
-		 return 'amount_notax';
-
+	 function amount_notax($recipient){
+		 global $currency_code;
+	     $user = $this->getuser($recipient);
+		 $amount = $user->TableFee->fee - $user->TableFee->tax;
+		 return DTreg::displayRate($user->TableFee->formatamount($amount),$currency_code);
+		 
 	}
 
-	 function tax(){
-
-		 return 'tax';
-
-	}
+	function tax($recipient ){
+		
+         global $currency_code;
+	     $user = $this->getuser($recipient);
+         return DTreg::displayRate($user->TableFee->tax,$currency_code); 
+		 
+    }
 
 	function  date_registered($recipient){
 
@@ -614,10 +621,86 @@ class Tagparser {
 	 function code($recipient){
      	$user = $this->getuser($recipient);
 		if($user->discount_code_id){
-		  return $user->TableDiscountcode->code ;
+		  return $user->TableDiscountcode->code;
 		}else{
 		   return '';
 		}
+	 }
+	 
+	 function offline_payment($recipient) {
+	 	global $cardtype;
+		pr($cardtype);
+		$cardtype_temp = array_values($cardtype);
+		$user = $this->getuser($recipient);
+		$billingInfo = DT_Session::get('register.payment.billing');
+		
+		//if(DT_Session::get('register.payment.offline_process')) {
+	    if($user->card) { 
+		$billingInfo = (array)$user->card;
+		pr($billingInfo);
+		$country_field = $this->tfield->fingbyName('country');
+		$countries =explode("|",$country_field->values);
+		ob_start();
+	    ?>
+		  <table>
+			 <tr>
+				<td><?php echo JText::_( 'DT_CARD_HOLDER_FIRSTNAME' ); ?></td><td><?php echo $billingInfo['firstname']; ?></td>
+			 </tr>
+			 <tr>
+				<td><?php echo JText::_( 'DT_CARD_HOLDER_LASTNAME' ); ?></td><td><?php echo $billingInfo['lastname']; ?></td>
+			 </tr>
+			 <tr>
+				<td><?php echo JText::_( 'DT_BILLING_ADDRESS' ); ?></td><td><?php echo $billingInfo['address']; ?></td>
+			 </tr>
+			 <tr>
+                <td><?php echo JText::_( 'DT_CITY' ); ?></td><td><?php echo $billingInfo['city']; ?></td>
+             </tr>
+             
+             <tr>
+                <td><?php echo JText::_( 'DT_STATE' ); ?></td><td><?php echo $billingInfo['state']; ?></td>
+             </tr>
+             
+             <tr>
+                <td><?php echo JText::_( 'DT_COUNTRY' ); ?></td><td><?php echo $countries[$billingInfo['country']]; ?></td>
+             </tr>
+             
+             <tr>
+                <td><?php echo JText::_( 'DT_ZIPCODE' ); ?></td><td><?php echo $billingInfo['zipcode']; ?></td>
+             </tr>
+             
+             <tr>
+                <td><?php echo JText::_( 'DT_PHONE' ); ?></td><td><?php echo $billingInfo['phone']; ?></td>
+             </tr>
+             
+              <tr>
+                <td><?php echo JText::_( 'CARD_TYPE' ); ?></td><td><?php echo $cardtype_temp[$billingInfo['cardtype']]; ?></td>
+             </tr>
+             
+              <tr>
+                <td><?php echo JText::_( 'CARD_NUMBER' ); ?></td>
+                <td><?php echo 'XXXX-XXXX-XXXX-'.substr($billingInfo['x_card_num'],-4);  ?></td>
+             </tr>
+             
+              <tr>
+                <td><?php echo JText::_( 'CARD_EXPIRY_DATE' ); ?></td><td><?php echo $billingInfo['x_exp_date']; ?></td>
+             </tr>
+             <?php 
+			  if(DT_Session::get('register.payment.billing.x_card_code')) {
+				  $ccv_code = DT_Session::get('register.payment.billing.x_card_code');
+			?>
+              <tr>
+                <td><?php echo JText::_( 'CVV_CODE' ); ?></td><td><?php echo $ccv_code; ?></td>
+             </tr>
+          	<?php
+			  }
+			?>
+          </table>
+	    <?php
+		return str_replace("\n","",ob_get_clean());
+		} else {
+			return "";
+		}
+		
 	 }
 
 }

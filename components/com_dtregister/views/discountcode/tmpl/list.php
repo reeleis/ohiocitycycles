@@ -1,20 +1,21 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
-global $Itemid ;
+
+global $Itemid;
 $d_code = $this->getModel('discountcode')->table;
 
 $rows = $this->getModel('discountcode')->find();
 $document =& JFactory::getDocument();
 
-	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
 ?>
@@ -58,12 +59,12 @@ $document =& JFactory::getDocument();
 
       $row = &$rows[$i];
 
-			$task 	= $row->publish ? 'unpublish' : 'publish';
+			$task = $row->publish ? 'unpublish' : 'publish';
 
-			$img 	= $row->publish ? 'publish_g.png' : 'publish_x.png';
+			$img = $row->publish ? 'publish_g.png' : 'publish_x.png';
 
-			$alt 	= $row->publish ? JText::_( 'DT_PUBLISHED' ) : JText::_( 'DT_UNPUBLISHED' );
-      $row->published = $row->publish ;
+			$alt = $row->publish ? JText::_( 'DT_PUBLISHED' ) : JText::_( 'DT_UNPUBLISHED' );
+      $row->published = $row->publish;
 	   $d_code->load($row->id);
 
 ?>
@@ -103,7 +104,7 @@ $document =& JFactory::getDocument();
 
          <td align="left"><?php echo ($d_code->used())?$d_code->uses:0; ?></td>
 
-      <?php $k = 1 - $k; echo  "</tr>" ; }
+      <?php $k = 1 - $k; echo  "</tr>"; }
 
     } else { ?>
 

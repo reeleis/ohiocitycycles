@@ -12,7 +12,7 @@
 global $Itemid, $xhtml;
 // pr(DT_Session::get('register.User'));
 
-$eventTable = $this->getModel('event')->table;
+
 
 $events = array();
 
@@ -20,12 +20,13 @@ $html = "";
 
 
 foreach(DT_Session::get('register.User') as $key=>$registration){
-
+    $eventTable = DtrTable::getInstance('event','Table');
 	if(!isset($events[$registration['eventId']])){
 
 	   $eventTable->load($registration['eventId']);
 
 	   $events[$registration['eventId']] = $eventTable;
+	   
 
 	}
 
@@ -40,7 +41,7 @@ foreach(DT_Session::get('register.User') as $key=>$registration){
 	}
 	
 	$event = $events[$registration['eventId']];
-
+    
 	$this->assign('index',$key);
 
 	$this->assign('event',$event);

@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -32,13 +32,13 @@ class DtregisterControllerValidate extends DtrController {
 			
 			 $discount_code_id = $event->validate_code($_REQUEST['discount_code']); 
 			if($discount_code_id !== false){
-			   $error = false ;	
+			   $error = false;	
 			  // DT_Session::set('register.User.'.$userIndex.'.discount_code_id', $discount_code_id );
 			}else{
 			  // DT_Session::set('register.User.'.$userIndex.'.discount_code_id', false );
-			   $error = true ;	
+			   $error = true;	
 			  $this->view->assign('discountCodeError',$event->TableEventdiscountcode->TableDiscountcode->error );
-			    $event->TableEventdiscountcode->TableDiscountcode->error ;
+			    $event->TableEventdiscountcode->TableDiscountcode->error;
 			}
 			
 		}
@@ -87,12 +87,6 @@ die;
 		$database = &JFactory::getDBO();
 
 		ob_clean();
-
-		$sql="Select config_value From #__dtregister_config where config_key = 'prevent_duplication'";
-
-		$database->setQuery($sql);
-
-		$prevent_duplication=$database->loadResult();
 		
 		$eventId=$_GET['eventId'];
 		
@@ -107,7 +101,7 @@ die;
 		$eventTable =& DtrTable::getInstance('Event','Table');
 
 		$eventTable->load($eventId);
-
+        $prevent_duplication = $eventTable->prevent_duplication;
 		$eventTable->overrideGlobal($eventId);
 		
 		$usercreation = $eventTable->usercreation;
@@ -116,7 +110,7 @@ die;
 		$field_id = key($_REQUEST['Field']);
 		$email=array_pop($_REQUEST['Field']);
 		
-		if(!$my->id &&  $usercreation > 0){
+		if(!$my->id &&  $usercreation > 0 && !isset($_GET['member_check'])){
 
 			$sql="SELECT COUNT(*) FROM #__users WHERE email='$email' ";
 
@@ -126,7 +120,7 @@ die;
 
 			if($total){
 
-				echo JText::_( 'DT_JOOMLA_EMAIL_EXISTS' );
+				echo "\"".JText::_( 'DT_JOOMLA_EMAIL_EXISTS' )."\"";
 
 			}else{
 
@@ -134,10 +128,10 @@ die;
 
 			}
 			
-			die ;
+			die;
 		}
-
-		if($prevent_duplication==1){
+		
+		if($prevent_duplication){
 
 		  $prevent_duplication = $global_prevent_duplication;
 
@@ -161,7 +155,7 @@ die;
 
 			if($total){
 
-				echo JText::_('DT_ALREADY_REGISTERED');
+				$clean = ob_get_clean();echo "\"".JText::_('DT_ALREADY_REGISTERED')."\"";die;
 
 			}else{
 
@@ -203,7 +197,7 @@ die;
 
 		if($total){
 
-			echo JText::_( 'DT_JOOMLA_USERNAME_EXISTS' );
+			echo "\"".JText::_( 'DT_JOOMLA_USERNAME_EXISTS' )."\"";
 
 		}else{
 

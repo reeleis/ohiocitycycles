@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -14,8 +14,32 @@ $config = $this->getModel('config');
 ?>
 
    <table class="adminlist" width="100%" cellpadding="10" cellspacing="10">
+   
+                <tr>
+                  <td align="left"><strong><?php echo JText::_( 'DT_THANKS_REDIRECTION' ); ?>:</strong></td>
+                  <td>
+                      <?php
+                              $options=array();
+                              $options[]=JHTML::_('select.option',"0",JText::_( 'DT_REDIRECT_URL' ));
+                              $options[]=JHTML::_('select.option',"1",JText::_( 'DT_ONSCREEN_MESSAGE' ));
+							  
+							  echo JHTML::_('select.radiolist', $options, 'config[thanks_redirection]','','value','text',$config->getGlobal('thanks_redirection',1));
+                      ?>
+                  </td>
+                  <td><?php echo JHTML::tooltip((JText::_( 'DT_THANKS_REDIRECTION_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+                </tr>
 
-			    <tr align="center" valign="middle">
+			    <tr>
+
+					<td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_THANKS_REDIRECT_URL' );?>:</strong></td>
+
+					<td style="width:620px"><input type="text" name="config[thanks_redirect_url]" size="60" value="<?php echo $config->getGlobal('thanks_redirect_url','') ; ?>" /></td>
+
+					<td><?php echo JHTML::tooltip((JText::_( 'DT_THANKS_REDIRECT_URL_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+				</tr>
+                
+                <tr align="center" valign="middle">
                   <td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_THANKS_MSG' ); ?>:</strong>
                      <div style="padding:5px 5px 5px 15px;">
                      <br /><?php echo JText::_( 'DT_TAG_INSERT_TEXT' );?>:
@@ -26,7 +50,31 @@ $config = $this->getModel('config');
 				   <td align="left" valign="top" style="width:620px"><?php echo $editor->display("config[thanksmsg]",stripslashes($config->getGlobal('thanksmsg','')),'','340','70','20','0'); ?></td>
 				   <td><?php echo JHTML::tooltip((JText::_( 'DT_THANKS_MSG_AUTH' )), '', 'tooltip.png', '', '');?> </td>
 				</tr>
-				
+                
+                <tr>
+                  <td align="left"><strong><?php echo JText::_( 'DT_PAY_LATER_REDIRECTION' ); ?>:</strong></td>
+                  <td>
+                      <?php
+                              $options=array();
+							  $options[]=JHTML::_('select.option',"0",JText::_( 'DT_REDIRECT_URL' ));
+                              $options[]=JHTML::_('select.option',"1",JText::_( 'DT_ONSCREEN_MESSAGE' ));
+							  
+							  echo JHTML::_('select.radiolist', $options, 'config[pay_later_redirection]','','value','text',$config->getGlobal('pay_later_redirection',1));
+                      ?>
+                  </td>
+                  <td><?php echo JHTML::tooltip((JText::_( 'DT_PAY_LATER_REDIRECTION_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+                </tr>
+
+			    <tr>
+
+					<td align="left" valign="top" style="width:420px; padding-right:5px"><strong><?php echo JText::_( 'DT_PAY_LATER_REDIRECT_URL' );?>:</strong></td>
+
+					<td style="width:620px"><input type="text" name="config[pay_later_redirect_url]" size="60" value="<?php echo $config->getGlobal('pay_later_redirect_url','') ; ?>" /></td>
+
+					<td><?php echo JHTML::tooltip((JText::_( 'DT_PAY_LATER_REDIRECT_URL_TIP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+				</tr>
+                
                 <tr align="center" valign="middle"> 
                    <td align="left" valign="top"><strong><?php echo JText::_( 'DT_PAY_LATER_MSG'); ?>:</strong> 
                       <div style="padding:5px 5px 5px 15px;">
@@ -88,6 +136,74 @@ $config = $this->getModel('config');
 
 	 		</table>
             <script type="text/javascript">
-							   
+				DTjQuery(function(){
+					DTjQuery('input[name*="config[thanks_redirection]"]').live('click',function(){
+    
+    	if(navigator.appName.indexOf("Micro") >=0){
+
+					display = 'block';
+
+				}else{
+
+					display = 'table-row';
+
+				}
+
+			
+    if(this.checked) {
+        tr = DTjQuery(this).parent().parent() ;
+       
+        if(this.value == '1'){
+          
+			
+		   tr.next().hide();
+           tr.next().next().css({display:display});	
+        } else {
+             
+			 tr.next().next().hide();
+             tr.next().css({display:display});
+
+       }
+    }
+                    })
+					checked = DTjQuery('input[name*="config[thanks_redirection]"]:checked');
+				    checked.trigger('click');
+					checked.attr('checked',true);
+					
+					DTjQuery('input[name*="config[pay_later_redirection]"]').live('click',function(){
+    
+    	if(navigator.appName.indexOf("Micro") >=0){
+
+					display = 'block';
+
+				}else{
+
+					display = 'table-row';
+
+				}
+
+			
+    if(this.checked) {
+        tr = DTjQuery(this).parent().parent() ;
+       
+        if(this.value == '1'){
+          
+			
+		   tr.next().hide();
+           tr.next().next().css({display:display});	
+        } else {
+             
+			 tr.next().next().hide();
+             tr.next().css({display:display});
+
+       }
+    }
+                    })
+					checked = DTjQuery('input[name*="config[thanks_redirection]"]:checked');
+				    checked.trigger('click');
+					checked.attr('checked',true);
+					
+				
+				})  
 			</script>
                            

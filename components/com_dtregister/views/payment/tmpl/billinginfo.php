@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid ,$xhtml_url;  
+global $Itemid,$xhtml_url;  
 
 if(DT_Session::get('register.User.process')){
   include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'user'.DS.'tmpl'.DS.'event_header.php');
@@ -26,13 +26,13 @@ if(DT_Session::get('register.User.process')){
 
 <table>
 
-  <?php echo $this->form ;?>
+  <?php echo $this->form; ?>
 
   <tr>
 
     <td colspan="2">
 
-      <input type="submit" id="billinginfo" name="billinginfo"  value="Submit" />
+      <input type="submit" id="billinginfo" name="billinginfo" value="Submit" />
 
     </td>
 
@@ -65,7 +65,8 @@ if(DT_Session::get('register.User.process')){
 	  
 	  DTjQuery("#billinginfo").click(function(){
 			if(DTjQuery(document.frmcart).valid()){
-				DTjQuery('').attr('disabled','disabled');
+				DTjQuery(this).attr('disabled','disabled');
+				DTjQuery(document.frmcart).submit();
 			}
 			  
 	  });

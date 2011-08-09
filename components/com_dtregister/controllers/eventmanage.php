@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.1
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -102,7 +102,7 @@ function getarticle(){
 
 				}
 
-			echo $section_html =  JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text");
+			echo $section_html = JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text");
 
 			?>
 
@@ -133,11 +133,10 @@ function getarticle(){
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	      $event->load($id);
-
-		  $event->publish = 1;
-
-		  $event->store();      
+	      $publish = 1;
+		  
+		  $query = "update #__dtregister_group_event set publish = ".$publish." where parent_id=".$id." or slabId=".$id; 
+		  $event->rawquery($query);       
 
 	  }
 
@@ -150,15 +149,15 @@ function getarticle(){
       $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
 
 	  $event = $this->getModel('event')->table;
-
+       
 	   if (is_array($cid)) 
 	   foreach($cid as $id){
 
-	      $event->load($id);
+	   $publish = 0;
 
-		  $event->publish = 0;
+		 $query = "update #__dtregister_group_event set publish = ".$publish." where parent_id=".$id." or slabId=".$id; 
+		 $event->rawquery($query);    
 
-		  $event->store();      
 
 	  }
 
@@ -192,25 +191,48 @@ function getarticle(){
 
    function remove(){
 
-      global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname;
+      global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname,$frontendEventNotification;
 
 	  $event = $this->getModel('event')->table;
 
 	  $cid = JRequest::getVar( 'cid', array(0), 'request', 'array' );
-
+       if($DT_mailfrom == ""){
+		  $conf = &JFactory::getConfig();
+		  $DT_mailfrom = $conf->_registry['config']['data']->mailfrom;
+	  }
+	  if($DT_fromname==""){
+		  $DT_fromname =$conf->_registry['config']['data']->fromname;
+	  }
+	 
+	  $user = $this->getModel('user')->table;
+	  $Tagparser = new Tagparser();
+	  $token_msg = "";
+	  $token_msg .= '<p>'.JText::_('DT_EVENT_DELETE_MESSAGE').'</p><p>'.JText::_('DT_EVENT_NAME').': [EVENT_NAME]';
+      $token_msg .= '<br />'.JText::_('DT_EVENT_DATE').': [EVENT_DATE]';
+      $token_msg .= '<br />'.JText::_('DT_EVENT_TIME').': [EVENT_TIME]';
+      $token_msg .= '<br />'.JText::_('DT_LOCATION').': [LOCATION]</p>';
+	
+	  $token_subject = JText::_('DT_EVENT_DELETE_SUBJECT');
+	  $email = $frontendEventNotification;
 	  if (is_array($cid)) 
 	  foreach($cid as $id){
 
 	      $event->load($id);
-
-		  $event->delete($id);      
+          $user->eventId = $id;
+	  	  $user->load(0);
+		   if($event->event_admin_email_set){
+			  $DT_mailfrom = $event->event_admin_email_from_email;
+			  $DT_fromname = $event->event_admin_email_from_name;
+		  }
+		  $user->TableEvent->overrideGlobal($user->TableEvent->slabId);
+		  $message = $Tagparser->parsetags($token_msg,$user);
+		  $subject = $Tagparser->parsetags($token_subject,$user);
+		  $event->delete($id);
+		  $emails =  explode(";",$email);
+		  foreach ($emails  as $email)
+		  JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subject,$message,1);
 
 	  }
-
-      $subject = JText::_('DT_EVENT_DELETE_SUBJECT');
-	  $message = JText::_('DT_EVENT_DELETE_MESSAGE');
-	  $email = $frontendEventNotification;
-	  JUTility::sendMail($DT_mailfrom,$DT_fromname,$email,$subject,$message,1);
 
 	 $mainframe->redirect( "index.php?option=".DTR_COM_COMPONENT."&controller=eventmanage&Itemid=$Itemid" );
 
@@ -334,9 +356,26 @@ function getarticle(){
 
 	  if($row->save(JRequest::getVar('data'))){
 
-	      $subject = JText::_('DT_EVENT_EDIT_SUBJECT');
-		  $message = JText::_('DT_EVENT_EDIT_MESSAGE');
-		  $email = $frontendEventNotification ;
+	      $email = $frontendEventNotification;
+		  $user = $this->getModel('user')->table;
+		  $Tagparser = new Tagparser();
+		 
+		  if(isset($_POST['data']['event']['slabId']) && $_POST['data']['event']['slabId'] > 0){
+			  
+		    $token_subject = JText::_('DT_EVENT_EDIT_SUBJECT');
+		    $token_msg = '<p>'.JText::_('DT_EVENT_EDIT_MESSAGE').'</p><p>'.JText::_('DT_EVENT_NAME').' [EVENT_NAME]!!</p>';
+		  }else{
+			 
+		       $token_subject = JText::_('DT_EVENT_CREATE_SUBJECT');
+		       $token_msg = '<p>'.JText::_('DT_EVENT_CREATE_SUBJECT').'</p><p>'.JText::_('DT_EVENT_NAME').' [EVENT_NAME]!!</p>';
+		  }
+		  
+	      $user->eventId = $row->slabId;
+	  	  $user->load(0);
+		  $message = $Tagparser->parsetags($token_msg,$user);
+		  $subject = $Tagparser->parsetags($token_subject,$user);
+		  $emails =  explode(";",$email);
+		  foreach ($emails  as $email)
 		  JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subject,$message,1);
 
 	  }else{
@@ -349,8 +388,8 @@ function getarticle(){
 	}
 
 	function editconfirm(){
-	    global $mainframe ,$Itemid;
-	   	$data =  DT_Session::get('event.data');
+	    global $mainframe,$Itemid;
+	   	$data = DT_Session::get('event.data');
 		$files = DT_Session::get('event.event_files');
 		JRequest::setVar('event_files', $files, 'files');
 		DT_Session::clear('event');
@@ -364,19 +403,19 @@ function getarticle(){
 	}
 	
 	function editcancel(){
-	   global $mainframe , $Itemid;
+	   global $mainframe,$Itemid;
 	   DT_Session::clear('event');
 	   $mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid");
 	}
 
 	function save(){
 
-	  global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname;
+	  global $mainframe,$Itemid,$DT_mailfrom,$DT_fromname,$frontendEventNotification;
 
 	  $row = $this->getModel('event')->table;
 
-	  $data =  JRequest::getVar('data');
-	  $error = false ;
+	  $data = JRequest::getVar('data');
+	  $error = false;
 	  if($data['event']['slabId']!=""){
 		   $row->load($data['event']['slabId']);
 		  
@@ -392,7 +431,7 @@ function getarticle(){
 	  
 	  if($error){
 		   DT_Session::set('event.data',$data);
-		   $files =  JRequest::getVar('event_files', null, 'files', 'array');
+		   $files = JRequest::getVar('event_files', null, 'files', 'array');
 		   DT_Session::set('event.event_files',$files);
 		   $this->view->setLayout('warning');
 		   $this->view->assign('message',JText::_("DT_REPEAT_DELETE_WARNING"));
@@ -402,18 +441,43 @@ function getarticle(){
 		if($row->save($data) !== false){
 		   
            global $eventListOrder;
-		   $conf  = DtrModel::getInstance('config','DtregisterModel');
+		   $conf = DtrModel::getInstance('config','DtregisterModel');
 		   $conf->updateEventorder($eventListOrder);
             
 		   $subject = JText::_('DT_EVENT_EDIT_SUBJECT');
 		   $message = JText::_('DT_EVENT_EDIT_MESSAGE');
+		   $user = $this->getModel('user')->table;
+		   $Tagparser = new Tagparser();
+		  
+		   if(isset($data['event']['slabId']) && $data['event']['slabId'] > 0){
+				$token_subject = JText::_('DT_EVENT_EDIT_SUBJECT');
+				$token_msg = "";
+				$token_msg .= '<p>'.JText::_('DT_EVENT_EDIT_MESSAGE').'</p><p>'.JText::_('DT_EVENT_NAME').': [EVENT_NAME]';
+				$token_msg .= '<br />'.JText::_('DT_EVENT_DATE').': [EVENT_DATE]';
+				$token_msg .= '<br />'.JText::_('DT_EVENT_TIME').': [EVENT_TIME]';
+				$token_msg .= '<br />'.JText::_('DT_LOCATION').': [LOCATION]</p>';
+		  }else{
+		        $token_subject = JText::_('DT_EVENT_CREATE_SUBJECT');
+				$token_msg = "";
+				$token_msg .= '<p>'.JText::_('DT_EVENT_CREATE_MESSAGE').'</p><p>'.JText::_('DT_EVENT_NAME').': [EVENT_NAME]';
+				$token_msg .= '<br />'.JText::_('DT_EVENT_DATE').': [EVENT_DATE]';
+				$token_msg .= '<br />'.JText::_('DT_EVENT_TIME').': [EVENT_TIME]';
+				$token_msg .= '<br />'.JText::_('DT_LOCATION').': [LOCATION]</p>';
+		  }
+		 
+	       $user->eventId = $row->slabId;
+	  	   $user->load(0);
+		   $message = $Tagparser->parsetags($token_msg,$user);
+		   $subject = $Tagparser->parsetags($token_subject,$user);
 		   $email = $frontendEventNotification;
+		   $emails =  explode(";",$email);
+		   foreach ($emails  as $email)
 		   JUTility::sendMail($DT_mailfrom, $DT_fromname,$email,$subject,$message,1);
 		}else{
 		$mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid&task=edit&cid[]=".$row->slabId,$row->error);
   
 		}
-  
+ 
 		$mainframe->redirect("index.php?option=com_dtregister&controller=eventmanage&Itemid=$Itemid");
 
 	  }
@@ -470,7 +534,7 @@ function getarticle(){
 
 	 function order($inc){
 
-       global $mainframe ,$Itemid;
+       global $mainframe,$Itemid;
 
 	   $row = $this->getModel('event')->table;
 

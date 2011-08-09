@@ -157,47 +157,7 @@
 
                                
 
-                               <tr align="center" valign="middle">  <td align="left" valign="top"><strong><?php echo JText::_( 'DT_GODADDY_HOSTING' ) ?>:</strong></td>
-
-
-
-							   <td align="left" valign="top">
-
-
-
-								   <?php
-
-
-
-								   $options=array();
-
-
-
-								   $options[]=JHTML::_('select.option', '0', JText::_( 'NO' ));
-
-
-
-								   $options[]=JHTML::_('select.option', '1', JText::_( 'YES' ));
-
-
-
-								   echo JHTML::_('select.genericlist', $options,'config[godaddy_hosting]','','value','text',$config->getGlobal('godaddy_hosting'));
-
-
-
-								   ?>
-
-
-
-							   </td>
-
-
-
-								<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_GODADDY_HOSTING_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
-
-
-
-							   </tr>            
+                                           
 
                                <tr>
 
@@ -801,6 +761,52 @@
 
 
 							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_EVENT_SHOW_DATE_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
+
+
+
+							   </tr>
+                               
+    <tr>
+
+
+
+							   		<td align="left" valign="top"><strong><?php echo JText::_( 'DT_FORM_FIELD_STYLING' );?>:</strong></td>
+
+
+
+                                     <td>
+
+
+
+                                       <?php
+
+
+
+								   $options=array();
+
+
+
+								   $options[]=JHTML::_('select.option', '0', JText::_( 'DT_STYLED_TEMPLATE' ));
+
+
+
+								   $options[]=JHTML::_('select.option', '1', JText::_( 'DT_STYLED_TEMPLATE_DTREGISTER' ));
+
+
+
+								   echo JHTML::_('select.genericlist', $options,'config[form_field_style]','','value','text', $config->getGlobal('form_field_style'));
+
+
+
+								   ?>
+
+
+
+							   	</td>
+
+
+
+							   		<td align="center"><?php echo JHTML::tooltip((JText::_( 'DT_FORM_FIELD_STYLING_HELP' )), '', 'tooltip.png', '', ''); ?> </td>
 
 
 

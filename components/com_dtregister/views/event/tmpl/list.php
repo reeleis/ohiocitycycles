@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -79,21 +79,26 @@ if($task == "category"){
 
 	if(count($cats)>0){
 
-	   $where[] = "  c.categoryId in( ".implode(",",$cats)." ) ";
+	   $where[] = "  ( c.categoryId in( ".implode(",",$cats)." ) or c.parent_id in (".implode(",",$cats).") )";
 	   
 	}
 
  }
 
-/*if (l.id) {
-	$where[] = "  c.categoryId in( ".implode(",",$cats)." ) ";
-}*/
+if (isset($location) && $location != "") {
+	$locations[] = $location;
+	// pr($locations);
+	$where[] = "  b.location_id in( ".implode(",",$locations)." ) ";
+}
 
- 	$search = $config->getDBO()->getEscaped( trim( strtolower( $search ) ) );
+$search = $config->getDBO()->getEscaped( trim( strtolower( $search ) ) );
 
 if ($search){
 
-  $where[] = "(b.event_describe LIKE '%{$search}%' OR b.title LIKE '%{$search}%' OR c.categoryName LIKE '%{$search}%'  OR l.name LIKE '%{$search}%' OR b.dtstart LIKE '%{$search}%' OR b.dtend LIKE '%{$search}%') ";
+   $where[] = "(b.event_describe LIKE '%{$search}%' OR b.title LIKE '%{$search}%' OR c.categoryName LIKE '%{$search}%'  OR l.name LIKE '%{$search}%' OR b.dtstart LIKE '%{$search}%' OR b.dtend LIKE '%{$search}%') ";
+	$searchs[] = $search;
+	$where[] = "  b.title LIKE  '%".implode(",",$searchs)."%' ";
+	$where[] = "(b.title LIKE '%{$search}%') ";
 
 }
 
@@ -141,7 +146,7 @@ if($end_month > 12){
 
 $end_date->setOffset($conf->getValue('config.offset'));
 
-   $where[] = " b.dtstart >= '".($start_date->toFormat('%Y-%m-%d'))."' and b.dtstart <  '".($end_date->toFormat('%Y-%m-%d'))."' " ;
+   $where[] = " b.dtstart >= '".($start_date->toFormat('%Y-%m-%d'))."' and b.dtstart <  '".($end_date->toFormat('%Y-%m-%d'))."' ";
 
 }
 
@@ -153,7 +158,7 @@ if($month =="" && $year !="" ){
 
    $end_date = $end_year."-01-01";
 
-   $where[] = " b.dtstart >= '".($start_date)."' and b.dtstart <  '".($end_date)."' " ;
+   $where[] = " b.dtstart >= '".($start_date)."' and b.dtstart <  '".($end_date)."' ";
 
 }
 
@@ -173,25 +178,23 @@ foreach ($rows2 as $rows) {
 	$arrLocation[$rows->id] = $rows->name;
 }
 
- $arrCategory = array();
+$arrCategory = array();
 
-	    for ($i=0,$n=count($rows1);$i<$n;$i++){
+for ($i=0,$n=count($rows1);$i<$n;$i++){
 
-	    	$row1 = $rows1[$i];
+	$row1 = $rows1[$i];
+	$catId = $row1->categoryId;
+	$catName = $row1->categoryName;
+	$tmpArr=array($catId=>$catName);
+	DTrCommon::array_push_associative($arrCategory,$tmpArr);
 
-	    	$catId = $row1->categoryId;
-
-	    	$catName = $row1->categoryName;
-
-	    	$tmpArr=array($catId=>$catName);
-
-	    	DTrCommon::array_push_associative($arrCategory,$tmpArr);
-
-	    }
+}
 
 // $rows = $eventTable->findAllByCategory($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
 
 $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1),implode(' and ',array_filter($where))," c.ordering, b.ordering ASC ");
+
+/// pr($rows);
 
 ?>
 
@@ -281,17 +284,16 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
         <?php
 
-		  $options = DtHtml::options( $categoryTable->optionslist(),JText::_( 'DT_CATEGORY_VIEW' ));
+		$options = DtHtml::options( $categoryTable->optionslist_filtered(),JText::_( 'DT_CATEGORY_VIEW' ));
+		echo JHTML::_('select.genericlist', $options,"category",'onchange="submit()"',"value","text",JRequest::getVar('category','')); ?>
 
-		 echo JHTML::_('select.genericlist', $options,"category",'onchange="submit()"',"value","text",JRequest::getVar('category','')); ?>
-
-         <?php } ?>
+        <?php } ?>
 
       </td>
       
       	<td align="right">
 
-         <?php if($config->getGlobal('event_filter_show',0)==1){?>
+         <?php if($config->getGlobal('event_location_show',0)==1){?>
 
         <?php
 
@@ -370,7 +372,7 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
 		$limitstart = trim( JRequest::getVar('limitstart', 0 ) );
         
-		$pageNav = new DtPagination( $total, $limitstart, $limit  );
+		$pageNav = new DtPagination( $total, $limitstart, $limit );
 
 	//Get the number of registrants
 
@@ -431,7 +433,7 @@ $rows = $eventTable->findAllByCategoryTree($categoryTable->orderByParent($rows1)
 
 		$this->assign('currCat',$currCat);
 
-		echo  $this->loadTemplate('row');
+		echo $this->loadTemplate('row');
 
 		$prevCat = $currCat;
 

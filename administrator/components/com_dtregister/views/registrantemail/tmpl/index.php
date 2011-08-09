@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -31,7 +31,7 @@ $event_options = DtHtml::options($mevent->table->optionslist(),JText::_('DT_SELE
 
         <tr><td><?php echo JText::_( 'DT_PAYMENT_STATUS' ); ?>:</td>
 	        <td>
-                <?php  echo JHTML::_('select.genericlist', DtHtml::options(array(0=>JText::_('DT_PAID'),1=>JText::_('DT_NOT_PAID'),2=>JText::_('DT_BOTH'))),'search[fee_status]',' ','value','text',2) ?>
+                <?php  echo JHTML::_('select.genericlist', DtHtml::options(array(1=>JText::_('DT_PAID'),0=>JText::_('DT_NOT_PAID'),2=>JText::_('DT_BOTH'))),'search[fee_status]',' ','value','text',2) ?>
                 <?php $options = array('1'=>JText::_('DT_INCLUDE_FREE_RECORDS'));
 	                  echo DtHtml::checkboxList('search[free]',$options,array(1));
 	            ?>
@@ -160,7 +160,7 @@ $event_options = DtHtml::options($mevent->table->optionslist(),JText::_('DT_SELE
 <?php
 $document =& JFactory::getDocument();
 
-  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+  $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
   $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
   $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/validate.js');
 ?>

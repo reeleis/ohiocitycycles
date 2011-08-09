@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
-* @license Commercial
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
 global $Itemid,$calendar_startDay,$calendar_showCat,$calendar_eventTitle_wrap,$calendar_showTime,$now,$xhtml_url ,$calendar_show_popup;
@@ -56,10 +56,10 @@ ${"fcurrent".$calview} = "fcurrent";
 <?php
 	if($calendar_showCat == '1' || $calendar_showCat == '3'){
 		echo $this->loadTemplate('category');
-		echo '<br /><br />';
+		//echo '<br /><br /><br /><br />';
 	}
 ?>
-
+<div style="clear:both"></div>
  <div>
 
       <div id="calhead" style="padding-left:1px;padding-right:1px;">          
@@ -78,7 +78,7 @@ ${"fcurrent".$calview} = "fcurrent";
 
              <div id="showtodaybtn" class="fbutton">
 
-                <div><span title='<?php echo  JText::_('DT_CLICK_TODAY')?> ' class="showtoday">
+                <div><span title='<?php echo JText::_('DT_CLICK_TODAY')?> ' class="showtoday">
 
                 <?php echo  JText::_('DT_TODAY')?></span></div>
 
@@ -86,21 +86,21 @@ ${"fcurrent".$calview} = "fcurrent";
 
               <div class="btnseparator"></div>
 
-            <div id="showdaybtn" class="fbutton <?php echo  $fcurrentday; ?>">
+            <div id="showdaybtn" class="fbutton <?php echo $fcurrentday; ?>">
 
-                <div><span title='Day' class="showdayview"><?php echo  JText::_('DT_DAY')?></span></div>
-
-            </div>
-
-              <div id="showweekbtn" class="fbutton <?php echo  $fcurrentweek; ?>">
-
-                <div><span title='Week' class="showweekview"><?php echo  JText::_('DT_WEEK')?></span></div>
+                <div><span title='Day' class="showdayview"><?php echo JText::_('DT_DAY')?></span></div>
 
             </div>
 
-              <div id="showmonthbtn" class="fbutton <?php echo  $fcurrentmonth; ?>">
+              <div id="showweekbtn" class="fbutton <?php echo $fcurrentweek; ?>">
 
-                <div><span title='Month' class="showmonthview"><?php echo  JText::_('DT_MONTH')?></span></div>
+                <div><span title='Week' class="showweekview"><?php echo JText::_('DT_WEEK')?></span></div>
+
+            </div>
+
+              <div id="showmonthbtn" class="fbutton <?php echo $fcurrentmonth; ?>">
+
+                <div><span title='Month' class="showmonthview"><?php echo JText::_('DT_MONTH')?></span></div>
 
             </div>
 
@@ -108,13 +108,13 @@ ${"fcurrent".$calview} = "fcurrent";
 
               <div  id="showreflashbtn" class="fbutton">
 
-                <div><span title='Refresh view' class="showdayflash"><?php echo  JText::_('DT_REFRESH')?></span></div>
+                <div><span title='Refresh view' class="showdayflash"><?php echo JText::_('DT_REFRESH')?></span></div>
 
                 </div>
 
              <div class="btnseparator"></div>
 
-            <div id="sfprevbtn" title="Prev"  class="fbutton">
+            <div id="sfprevbtn" title="Prev" class="fbutton">
 
               <span class="fprev"></span>
 
@@ -132,7 +132,7 @@ ${"fcurrent".$calview} = "fcurrent";
 
                         <input type="hidden" name="txtshow" id="hdtxtshow" />
 
-                        <span id="txtdatetimeshow"><?php echo  JText::_('DT_LOADING_DATA')?></span>
+                        <span id="txtdatetimeshow"><?php echo JText::_('DT_LOADING_DATA')?></span>
 
                     </div>
 
@@ -194,20 +194,29 @@ ${"fcurrent".$calview} = "fcurrent";
   }else{
 	 $showTime = "false"; 
   }
+  
   if(isset($_REQUEST['showby'])){
 	  
 	  switch($_REQUEST['showby']){
 		  case 0:
-		     $showday = Jrequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
-		  break;
+		     $showday = JRequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+		  break; 
 		  case 1:
-		     $showday = $now->toFormat('%m/%d/%Y');
+		     if(isset($_REQUEST['showday']) && $_REQUEST['showday']) {
+			     $showday = JRequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+			 } else {
+			     
+				 $showday = $now->toFormat('%m/%d/%Y');
+			 }
+		     
 		  break;
 	 }
-	  
+	
   }else{
-	  $showday = Jrequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+	  $showday = JRequest::getVar('showday',$now->toFormat('%m/%d/%Y'));
+	
   }
+ 
   
 ?>
 <script type="text/javascript">
@@ -299,7 +308,7 @@ ${"fcurrent".$calview} = "fcurrent";
 
             {
 
-                var t="<?php echo  JText::_('DT_LOADING_DATA')?>";
+                var t="<?php echo JText::_('DT_LOADING_DATA')?>";
 
                 switch(type)
 
@@ -307,7 +316,7 @@ ${"fcurrent".$calview} = "fcurrent";
 
                     case 1:
 
-                        t="<?php echo  JText::_('DT_LOADING_DATA')?>";
+                        t="<?php echo JText::_('DT_LOADING_DATA')?>";
 
                         break;
 
@@ -317,7 +326,7 @@ ${"fcurrent".$calview} = "fcurrent";
 
                     case 4:    
 
-                        t="<?php echo  JText::_('DT_REQUEST_BEING_PROCESSED')?>";                                   
+                        t="<?php echo JText::_('DT_REQUEST_BEING_PROCESSED')?>";                                   
 
                         break;
 
@@ -332,9 +341,24 @@ ${"fcurrent".$calview} = "fcurrent";
             function cal_afterrequest(type)
 
             {
-                
-			   DTjQuery.each(this.eventItems,function(k,v){		
-					DTjQuery('#gridcontainer').find('span:contains("'+v[1]+'")').parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5])<?php if($calendar_show_popup) { ?>.tooltip({content:function(){
+               
+			   var duplicates = {};
+			   var duplicates_index = {};
+			   DTjQuery.each(this.eventItems,function(k,v){
+				    
+					var index = 0;
+					
+					if(typeof duplicates_index[v[1]] == 'undefined') {
+						duplicates_index[v[1]] = 0;
+					} else {
+						
+						duplicates_index[v[1]]++;
+					}
+					
+					index = duplicates_index[v[1]];
+							
+					
+					DTjQuery('#gridcontainer').find('span:contains("'+v[1]+'"):eq('+index+')').parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5]).parent().css('backgroundColor',v[5])<?php if($calendar_show_popup) { ?>.tooltip({content:function(){
 						
 						var str = '<div class="event_title">'+v[1]+'</div>';
 					
@@ -342,9 +366,13 @@ ${"fcurrent".$calview} = "fcurrent";
 						
 						var config = v[13];
 						if(config.calendar_show_image != "0" && v[12] != ""){
-							 str += '<center><img border="0" alt="" style="padding:0px" src="<?php echo  JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w=120&h=120&filename=images%2Fdtregister%2Feventpics%2F') ;?>'+v[12]+' /></center>';
+							 image_tag = '<center><img border="0" alt="" style="padding:0px" src="<?php echo  JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w=120&h=120&filename=images%2Fdtregister%2Feventpics%2Fimage_name',false) ;?>" /></center>';
+							 
+							 image_tag = image_tag.replace('image_name',v[12]);
+							 // '+v[12]+'
+							 str += image_tag ;
 						}
-						
+					
 						if(config.calendar_show_date != "0" && v[14] != ""){
 							 str += '<br /><?php echo JText::_('DT_DATE')?>:&nbsp;'+v[14]+'';
 						}
@@ -375,7 +403,7 @@ ${"fcurrent".$calview} = "fcurrent";
 						 
 						 }})
 						 <?php }?>
-					   
+					  
 			   })
                 switch(type)
 
@@ -511,7 +539,6 @@ ${"fcurrent".$calview} = "fcurrent";
 						
 						DTjQuery.data(this,'calview','day');
 						
-						
 				})
                 if (p && p.datestrshow) {
 
@@ -541,8 +568,6 @@ ${"fcurrent".$calview} = "fcurrent";
 						
 						DTjQuery.data(this,'calview','week');
 						
-						
-						
 				})
                 if (p && p.datestrshow) {
 
@@ -567,11 +592,9 @@ ${"fcurrent".$calview} = "fcurrent";
                 DTjQuery(this).addClass("fcurrent");
 
                 var p = DTjQuery("#gridcontainer").swtichView("month").BcalGetOp();
-                 DTjQuery(".add_date").each(function(k,v){
+                 DTjQuery(".add_date").each(function(k,v){		
 						
-						
-						DTjQuery.data(this,'calview','month');
-						
+						DTjQuery.data(this,'calview','month');	
 						
 				})
                 if (p && p.datestrshow) {

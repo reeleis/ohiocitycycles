@@ -1,7 +1,7 @@
 <?php 
 
 /**
-* @version 2.7.2
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,7 +9,7 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-global $Itemid, $show_group_members, $cb_integrated, $registrant_name,$registrant_show_avatar, $button_color, $registrant_cb_linked, $xhtml,$cb_integrated, $registrant_username, $registrant_registered_date, $userpanelmessage, $currency_code,$xhtml_url;
+global $Itemid,$show_group_members,$cb_integrated,$registrant_name,$registrant_show_avatar,$button_color,$registrant_cb_linked, $xhtml,$cb_integrated,$registrant_username,$registrant_registered_date,$userpanelmessage,$currency_code,$xhtml_url;
 
 $config = $this->getModel('config');
 
@@ -54,6 +54,7 @@ if(count($this->users)>0){
 	}
 
 $k=0;
+
 
 foreach($this->users as $user){
 
@@ -132,7 +133,11 @@ foreach($this->users as $user){
 					$html .= '<td align="center">'.DTreg::showDate($tuser->register_date).'</td>';
 				   // }
 				  if($config->getGlobal('upanel_pay_show',0)){  
-					$html .= '<td align="center">'.$payment.'</td>';
+					if ($tuser->status != -1) {
+						$html .= '<td align="center">'.$payment.'</td>';
+					} else {
+						$html .= '<td align="center">&nbsp;</td>';
+					}
 				   }
 				   if($config->getGlobal('upanel_cancel_show',0)){  
 					$html .= '<td align="center">'.$cancel_link.'</td>';
@@ -168,26 +173,33 @@ foreach($this->users as $user){
 
       <td align="left">
 
-       <?php 
+       <?php
+	   	 
+		if($config->getGlobal('upanel_paid_status_show',0)){
 
-	     $options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_PAYMENT_STATUS'));
+			 $options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_PAYMENT_STATUS'));
+			 $options[]=JHTML::_('select.option',1,JText::_( 'DT_PAID'));
+			 $options[]=JHTML::_('select.option',0,JText::_( 'DT_NOT_PAID'));
+			 $paymentVerified = JRequest::getVar('paymentVerified','');
+			 echo JHTML::_('select.genericlist',$options,"paymentVerified","class=\"evt_new\" onchange='document.frmcart.submit();'","value","text",$paymentVerified);
 
-	     $options[]=JHTML::_('select.option',1,JText::_( 'DT_PAID'));
+		}
 
-		 $options[]=JHTML::_('select.option',0,JText::_( 'DT_NOT_PAID'));
-         $paymentVerified = JRequest::getVar('paymentVerified','');
-		 echo JHTML::_('select.genericlist',$options,"paymentVerified","class=\"evt_new\" onchange='document.frmcart.submit();'","value","text",$paymentVerified);
-
-	     ?>
+	   ?>
 
       </td>
 
       <td align="left">
-         <?php $keyword = JRequest::getVar('keyword',''); ?>
+       <?php
+		if($config->getGlobal('upanel_search_show',0)){
+			
+			$keyword = JRequest::getVar('keyword',''); 
+	   ?>
          <input type="text" name="keyword" value="<?php echo $keyword; ?>" />&nbsp;&nbsp;
-
          <input type="submit" name="search_submit" value="<?php echo  JText::_( 'DT_SEARCH'); ?>" />
-
+       <?php
+        }
+	   ?>
       </td>
 
     </tr>

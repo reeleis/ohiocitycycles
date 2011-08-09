@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.6
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -119,7 +119,9 @@ $jusertable = $this->getModel('user')->table->TableJUser;
         <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_SELECT_LOCATION_HELP' )), '', 'tooltip.png', '', ''); ?></td>
 
    </tr>
-
+  <?php
+  if($this->checkpermission()) {
+  ?>
     <tr>
 
       	<td align="left"><?php echo JText::_( 'DT_EVENT_PUBLISH' ); ?>:</td>
@@ -147,7 +149,13 @@ $jusertable = $this->getModel('user')->table->TableJUser;
       	</td>
 
       </tr>
-
+<?php
+  } else{
+ ?>
+    <input type="hidden" name="data[event][publish]" value="<?php echo $row->publish; ?>" />
+ <?php
+  }
+?>
    <tr align="center" valign="middle" >
 	
 	  <td align="left" valign="top"><?php echo JText::_( 'DT_TIME_FORMAT' );?>:</td>
@@ -510,19 +518,19 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
 
                 $options=DtHtml::options($section->optionslist(),JText::_('DT_SELECT_SECTION'));
 
-				$section_html =  JHTML::_('select.genericlist', $options,"articlesection","","value","text");
+				$section_html = JHTML::_('select.genericlist', $options,"articlesection","","value","text");
 
 				$options=array();
 
 				$options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_CATEGORY' ));
 
-				$category_html =  JHTML::_('select.genericlist', $options,"articlecategory","","value","text");
+				$category_html = JHTML::_('select.genericlist', $options,"articlecategory","","value","text");
 
 				$options=array();
 
 				$options[]=JHTML::_('select.option',"",JText::_( 'DT_SELECT_ARTICLE' ));
 
-				$article_html =  JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text",$row->article_id);
+				$article_html = JHTML::_('select.genericlist', $options,"data[event][article_id]","","value","text",$row->article_id);
 
 			?>
 
@@ -778,7 +786,7 @@ onclick="return DTshowCalendar('dtend','%Y-%m-%d');" />
    
    var article = <?php echo json_encode($article);?>;
 
-   if(article ==  null){
+   if(article == null){
 	   article = {};
    }
 

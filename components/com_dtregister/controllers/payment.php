@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -25,7 +25,7 @@ class DtregisterControllerPayment extends DtrController {
 		
 		 $this->view->setModel($this->getModel('event'));
 		   
-         $evtTable = $this->getModel('event')->table ;  //prd($_SESSION);
+         $evtTable = $this->getModel('event')->table;  //prd($_SESSION);
 		 if(DT_Session::get('register.Event.eventId')){
 		   $evtTable->overrideGlobal(DT_Session::get('register.Event.eventId'));
 		 }
@@ -58,14 +58,13 @@ class DtregisterControllerPayment extends DtrController {
 
 			 }else{
 
-					  $function =  DT_Session::get('register.User.process');
+					  $function = DT_Session::get('register.User.process');
 
 			 }
 			 $tableUser = $this->getModel('user')->table; 
 			
-			 $tableUser->{$function}(DT_Session::get('register'),null);
-			 
-			 $mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask);
+			 $tableUser->{$function}(DT_Session::get('register'),null);	 
+			 $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask,false));
 			 
 		}
 		if(DT_Session::get('register.User.process')){
@@ -84,11 +83,11 @@ class DtregisterControllerPayment extends DtrController {
            
 		   DT_Session::set('register.payment.billing',$_POST['billing']);
 
-		   $mainframe->redirect("index.php?option=com_dtregister&controller=payment&task=form&Itemid=".$Itemid);
+ $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=payment&task=form&Itemid=".$Itemid,false));
 
 	   }
 	   
-	   if(DT_Session::get('register.User.process')){
+	    if(DT_Session::get('register.User.process')){
 			$this->view->assign('header_eventId',DT_Session::get('register.Event.eventId'));
 		}
         $billingInfo = DT_Session::get('register.payment.billing');
@@ -97,7 +96,6 @@ class DtregisterControllerPayment extends DtrController {
 		if(!is_numeric($paymentClass)){
 			require_once( JPATH_SITE.'/components/com_dtregister/lib/payment/'.$paymentClass.'.php');
 			$payment = new $paymentClass();
-			
 			$payment->setBillinginfo($billingInfo);
 			$form = $payment->billingform();			
 		} else {
@@ -106,19 +104,18 @@ class DtregisterControllerPayment extends DtrController {
 			$paymethod = DT_Session::get('register.payment.method');
 			 
 			$tableUser->registerall(DT_Session::get('register'),$paymethod);
-			$mainframe->redirect("index.php?option=com_dtregister&controller=message&task=paylater&Itemid=".$Itemid);
+			$mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=message&task=paylater&Itemid=".$Itemid,false));
 			
-		}
-        
+		}  
 
 		$this->view->assign('form',$form);
 
 	   $this->display();
 
 	}
-    
+
 	function notification(){
-	    global $Itemid ,$mainframe,$DT_mailfrom,$DT_fromname;
+	    global $Itemid,$mainframe,$DT_mailfrom,$DT_fromname;
 		//ob_start();
 	    $paypal_session_id = JRequest::getVar('return');
 		DT_Session::restoreFromPayment($paypal_session_id);
@@ -141,7 +138,7 @@ class DtregisterControllerPayment extends DtrController {
 
 			 }else{
 
-					  $function =  DT_Session::get('register.User.process');
+					  $function = DT_Session::get('register.User.process');
 
 			 }
 			 $processed = DT_Session::get('register.restore.processed');
@@ -150,12 +147,9 @@ class DtregisterControllerPayment extends DtrController {
 		    if($processed !== false && $processed === "0"){
 				$tableUser = $this->getModel('user')->table; 
 				$paymethod = DT_Session::get('register.payment.method');
-			    $tableUser->{$function}(DT_Session::get('register'), $paymethod);
-				
+			    $tableUser->{$function}(DT_Session::get('register'), $paymethod);	
 				$payment->markprocessed(DT_Session::get('register.restore.id'),$tableUser->userId);
-			}
-             
-			  
+			}  
 
 		 }	
 			
@@ -172,11 +166,13 @@ class DtregisterControllerPayment extends DtrController {
 		$paymethod = DT_Session::get('register.payment.method');
    		$paymentClass = DT_Session::get('register.payment.method');
    		require_once( JPATH_SITE.'/components/com_dtregister/lib/payment/'.$paymentClass.'.php');
-   		$payment =  new $paymentClass();
-  		$payment->success();
+   		$payment = new $paymentClass();
 		$baseurl = str_replace('components/com_dtregister/','',Juri::base());
-		
-		$mainframe->redirect($baseurl."index.php?option=com_dtregister&controller=payment&task=success&Itemid=$Itemid");
+  		if($payment->success()){
+		   $mainframe->redirect($baseurl."index.php?option=com_dtregister&controller=payment&task=success&Itemid=$Itemid");
+		}else{
+		   $mainframe->redirect($baseurl."index.php?option=com_dtregister&controller=payment&task=cancel&Itemid=$Itemid");
+		}
 
 	}
 
@@ -186,7 +182,7 @@ class DtregisterControllerPayment extends DtrController {
 		$tableUser = $this->getModel('user')->table;
         $paymentClass = DT_Session::get('register.payment.method');
         require_once( JPATH_SITE.'/components/com_dtregister/lib/payment/'.$paymentClass.'.php');
-		$payment =  new $paymentClass();
+		$payment = new $paymentClass();
 
 		if(!$payment->bywebservice){
 
@@ -199,7 +195,7 @@ class DtregisterControllerPayment extends DtrController {
 
 			 }else{
 
-					  $function =  DT_Session::get('register.User.process');
+					  $function = DT_Session::get('register.User.process');
 					  $messageTask = DT_Session::get('register.User.process');
 
 			 }
@@ -215,7 +211,7 @@ class DtregisterControllerPayment extends DtrController {
 		 }
 		
          //DT_Session::clearAll();
-		 $mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask);
+		 $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask,false));
 		 echo "event details Thanks";
 
 	}
@@ -232,7 +228,6 @@ class DtregisterControllerPayment extends DtrController {
 
 	function form(){
 		global $Itemid;
-		
 		
 		if(DT_Session::get('register.User.process')){
 			$this->view->assign('header_eventId',DT_Session::get('register.User.0.eventId'));
@@ -281,15 +276,10 @@ class DtregisterControllerPayment extends DtrController {
 			
 		}
 		
-	
-		if(empty($billingInfo) && (!in_array($paymentClass,$no_billing) || (!is_numeric($paymentClass) && $payment->bywebservice))){
-			
-			$mainframe->redirect("index.php?option=com_dtregister&controller=payment&task=billinginfo&Itemid=".$Itemid);
+		if(empty($billingInfo) && (!in_array($paymentClass,$no_billing) || (!is_numeric($paymentClass) && $payment->bywebservice)) && $_REQUEST['paymentmethod'] != "pay_later" && !is_numeric($paymentClass)){
+			$mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=payment&task=billinginfo&Itemid=".$Itemid,false));
 
 	   }
-	   
-	 
-		
 
 	    $tableUser = $this->getModel('user')->table;
 
@@ -300,9 +290,8 @@ class DtregisterControllerPayment extends DtrController {
 			 $paymethod = DT_Session::get('register.payment.method');
 			 
 			 $tableUser->registerall(DT_Session::get('register'),$paymethod);
-			 $mainframe->redirect("index.php?option=com_dtregister&controller=message&task=paylater&Itemid=".$Itemid);
-			 
-
+			 $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=message&task=paylater&Itemid=".$Itemid,false));
+			
 		}else{
 
 		  require_once( JPATH_SITE.'/components/com_dtregister/lib/payment/'.$paymentClass.'.php');
@@ -326,7 +315,7 @@ class DtregisterControllerPayment extends DtrController {
 
 				  }else{
 
-					  $function =  DT_Session::get('register.User.process');
+					  $function = DT_Session::get('register.User.process');
 					  $payment->confirmNum = DT_Session::get('register.User.0.confirmNum');
 					  $payment->description = $this->evtTable->title;
 
@@ -345,13 +334,11 @@ class DtregisterControllerPayment extends DtrController {
 				   		$messageTask = 'thanks';
 				   }else{
 				        $messageTask = DT_Session::get('register.User.process');
-						$function =  DT_Session::get('register.User.process');
-				   }
+						$function = DT_Session::get('register.User.process');
+				   }	   
 				   
-				   
-				  $tableUser->{$function}(DT_Session::get('register'),$paymethod);
-				 
-	$mainframe->redirect("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask);
+				  $tableUser->{$function}(DT_Session::get('register'),$paymethod);		 
+				  $mainframe->redirect(JRoute::_("index.php?option=com_dtregister&controller=message&Itemid=$Itemid&task=".$messageTask,false));
 
 			  }else if($success === false){
 
@@ -364,7 +351,6 @@ class DtregisterControllerPayment extends DtrController {
 		   }
 		   
 		}
-		
 
 	  	$this->view->setLayout('form');
 

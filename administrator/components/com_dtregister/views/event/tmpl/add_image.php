@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.0
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -14,7 +14,7 @@ $document =& JFactory::getDocument();
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 $document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
-$config =  $this->getModel('config');
+$config = $this->getModel('config');
 ?>
 <script>
   var html = '<img src="<?php echo JUri::root() ?>index.php?option=com_dtregister&controller=file&task=thumb&w=<?php echo $config->getGlobal('event_thumb_width',100) ?>&h=<?php echo $config->getGlobal('event_thumb_height',100); ?>&filename=images/dtregister/eventpics/[path]" border="0" alt= "[path]" />&nbsp;<a class="removeimage" href="#">X</a>';
@@ -35,23 +35,23 @@ $config =  $this->getModel('config');
 						    return false;
 
 					});
-            DTjQuery('#uploadFile').click(function(){
+            DTjQuery('#uploadFile').click(function(event){
                 
-               
-                var frm = this.form ;
+                event.preventDefault();
+                var frm = this.form;
                 var prevtask = DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val();
                 var prevcontroller = DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val();
                 
-                DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val("upload");
+            //  DTjQuery('form[name="'+this.form.name+'"] input[name="task"]').val("upload");
                 
-                DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val("file");
+            //  DTjQuery('form[name="'+this.form.name+'"] input[name="controller"]').val("file");
             
                  var options = { 
             
                 type :'POST',
             
                // target : '#debug',
-                data : {name:'event',filetypesevent:'png,jpg,jpeg,gif',filesizeevent:1000000,field_id:'',eventpic:1},
+                data : {name:'event',filetypesevent:'png,jpg,jpeg,gif',filesizeevent:1000000,field_id:'',eventpic:1,'controller':'file','task':'upload'},
                 url:        'index.php?no_html=1', 
             
               //  iframe : true ,
@@ -81,9 +81,9 @@ $config =  $this->getModel('config');
                    }else{
                      alert(data.Error);
                    }
-                   DTjQuery('form[name="'+frm.name+'"] input[name="task"]').val(prevtask);
+                //  DTjQuery('form[name="'+frm.name+'"] input[name="task"]').val(prevtask);
                 
-                   DTjQuery('form[name="'+frm.name+'"] input[name="controller"]').val(prevcontroller);
+              //  DTjQuery('form[name="'+frm.name+'"] input[name="controller"]').val(prevcontroller);
                    //DTjQuery(frm).validate().element('#Field<?php //echo $this->id;?>' );
                 }
             
@@ -108,7 +108,7 @@ $config =  $this->getModel('config');
 </script>
 <tr>
  <td>
-  <?php echo  JText::_('DT_EVENT_IMAGE');?>
+  <?php echo JText::_('DT_EVENT_IMAGE');?>
  </td>
  <td>
     <?php
@@ -122,7 +122,7 @@ $config =  $this->getModel('config');
 	    $image = "";	 
 	 }
 	  
-     echo  "<input id='FileField' class='inputbox' name='file_event' value='' type='file' /> <button id='uploadFile'>".JText::_( 'DT_UPLOAD' )."</button><input type='hidden'  name='data[event][imagepath]' id='FileId' value='".$this->row->imagepath."' />&nbsp;<span id='filename'>".$image.'</span><label for="FileId" style="display:none" generated="true" class="error"></label>'
+     echo  "<input id='FileField' class='inputbox' name='file_event' value='' type='file' /> <button class = 'cancel' id='uploadFile'>".JText::_( 'DT_UPLOAD' )."</button><input type='hidden'  name='data[event][imagepath]' id='FileId' value='".$this->row->imagepath."' />&nbsp;<span id='filename'>".$image.'</span><label for="FileId" style="display:none" generated="true" class="error"></label>'
 	?><span id="debug"></span>
  </td>
   <td colspan="2" align="left">&nbsp;&nbsp;<?php echo JHTML::tooltip((JText::_( 'DT_EVENT_IMAGE_HELP' )), '', 'tooltip.png', '', ''); ?></td>

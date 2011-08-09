@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.7.3
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -25,7 +25,7 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 <div>
 <?php 
  if(isset($this->pageTile)){
- 	echo $this->pageTile ;
+ 	echo $this->pageTile;
  }
 ?>
 </div>
@@ -36,29 +36,36 @@ include(JPATH_SITE.DS.'components'.DS.'com_dtregister'.DS.'views'.DS.'event'.DS.
 </div>
 <form name="frmcart" method="post" action="index.php?option=com_dtregister&Itemid=<?php echo $Itemid ?>" enctype="multipart/form-data">
    <table>
-     <?php if($this->tEvent->use_discountcode){?>
+
+     <?php
+       
+       echo $this->userFields($this->tEvent->usercreation);
+	   
+	 ?>
+	
+	 <?php if($this->tEvent->use_discountcode){?>
       <tr>
          <td>
            <?php echo JText::_( 'DT_DISCOUNT_CODE'); ?>
          </td>
          <td>
-           <input type="text" name="discount_code" id="discount_code" value="" class="inputbox"  /><label for="discount_code" style="display:none" generated="true" class="error" ></label>
+           <input type="text" name="discount_code" id="discount_code" value="" class="inputbox" /><label for="discount_code" style="display:none" generated="true" class="error" ></label>
          </td>
       </tr>
       <?php } ?>
+
      <?php
-       
+
 	   echo $this->form;
-	   echo $this->userFields($this->tEvent->usercreation);
 	   echo $this->capthaField();
 	   echo $this->termsField($this->eventId);
-	   
+
 	 ?>
      
      <tr>
      <td>
          <input type="button" class="button" onclick="window.location='<?php echo $this->back; ?>'" value="<?php echo JText::_('DT_BACK'); ?>" id="next" name="billingInfo"/>
-       <input type="submit" name="confirm" class="button" id="next" value="<?php echo JText::_( 'DT_NEXT_BUTTON' ); ?>"  />
+       <input type="submit" name="confirm" class="button" id="next" value="<?php echo JText::_( 'DT_NEXT_BUTTON' ); ?>" />
      </td>
      
      </tr>

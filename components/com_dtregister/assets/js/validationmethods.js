@@ -335,7 +335,7 @@ DTjQuery.validator.addMethod(
 
 	}, 
 
-	"Please enter a correct date"
+	" "
 
 );
 
@@ -695,6 +695,10 @@ DTjQuery.validator.addMethod("uniquevalue", function(value, element) {
 	
 
 }, "Duplicate values ");  
+
+DTjQuery.validator.addClassRules("dateDTval", { dateDT: true }  );
+
+
 Array.prototype.unique = function () {
 	var r = new Array();
 	o:for(var i = 0, n = this.length; i < n; i++)

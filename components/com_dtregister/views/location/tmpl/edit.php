@@ -1,7 +1,7 @@
 <?php
 
 /**
-* @version 2.6.2
+* @version 2.7.5
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
@@ -9,22 +9,21 @@
 * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
-	$document	=& JFactory::getDocument();
+	$document =& JFactory::getDocument();
     
-	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/jquery.js');
+	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/dt_jquery.js');
 
 	$document->addScript( JURI::root(true).'/components/com_dtregister/assets/js/form.js');
     $config = $this->getModel('config');
-	$country =  $this->getModel('country');
-	$row = $this->getModel('location')->location ;
-	$id  = JRequest::getVar( 'cid', array(0), 'request', 'array' );
-    global $Itemid ;
+	$country = $this->getModel('country');
+	$row = $this->getModel('location')->location;
+	$id = JRequest::getVar( 'cid', array(0), 'request', 'array' );
+    global $Itemid;
 	if($id){
 
 	   $row->load($id[0]);
 
 	}
-
 
 ?>
 
@@ -42,7 +41,7 @@ DTjQuery('#imageUpload').click(function(){
 
 	target : '#debug',
 
-    url:        'index.php?no_html=1', 
+    url: 'index.php?no_html=1', 
 
     iframe : true ,
 
@@ -182,7 +181,7 @@ function submitbutton(pressbutton){
       <input type="hidden" name="controller" value="location" />
       <input type="hidden" id="task" name="task" value="" />
 
-      <input type="hidden"  name="id" value="<?php echo $row->id; ?>" />
+      <input type="hidden" name="id" value="<?php echo $row->id; ?>" />
       <input type="hidden" name="Itemid" value="<?php echo $Itemid; ?>" />
 
       <br /><?php echo JText::_( 'DT_LOCATION_IMAGE_CHECKBOX_HELP'); ?>

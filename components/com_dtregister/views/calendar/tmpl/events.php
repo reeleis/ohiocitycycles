@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @version 2.7.4
+* @version 2.7.7
 * @package Joomla 1.5
 * @subpackage DT Register
 * @copyright Copyright (C) 2006 DTH Development
 * @copyright contact dthdev@dthdevelopment.com
-* @license Commercial
+* @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
 */
 
   global $calendar_link,$xhtml_url,$Itemid,$calendar_show_moderator,$calendar_show_location,$calendar_show_registered;
@@ -147,10 +147,11 @@
 	  $temp[] = $registered;
 
 	  $locationTable->load($event->location_id);
-	  if($locationTable->name != ""){
-			$location = stripslashes($locationTable->name);
+	  if($event->loc_name != ""){
+			$location = stripslashes($event->loc_name);
 	  } else {
 	  		$location = JText::_('DT_NOT_SPECIFY');
+			$location = '';
 	  }
 	  $temp[] = $location;
 	  
@@ -163,7 +164,7 @@
 	  }
 	  $temp[] = $spaces_left;
 	  
-      $profile->load($event->user_id) ;
+      $profile->load($event->user_id);
 	  if ($profile->name != "") {
 		  $moderator = $profile->name;
 	  } else {
@@ -172,7 +173,10 @@
 	  $temp[] = $moderator;
 	  
 	   if(isset($event->imagepath) && $event->imagepath != "") {
-			$temp[] = '<img border="0" alt="" src="'.JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w='.$event_image_gridview_width.'&h='.$event_image_gridview_height.'&filename=images%2Fdtregister%2Feventpics%2F').$event->imagepath.'" />';
+			$image_tag = '<img border="0" alt="" src="'.JRoute::_('index.php?option=com_dtregister&controller=file&task=thumb&w='.$event_image_gridview_width.'&h='.$event_image_gridview_height.'&filename=images%2Fdtregister%2Feventpics%2Fimage_name').'" />';
+
+			$image_tag = str_replace('image_name',$event->imagepath,$image_tag);
+			$temp[] = $image_tag;
 	  }else{
 			$temp[] = '';
 	  }

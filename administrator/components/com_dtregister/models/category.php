@@ -117,5 +117,38 @@ class TableCategory extends DtrTable{
 		return $options;
 
   }
+  
+  
+  function optionslist_filtered(){
+	  
+		$user	=& JFactory::getUser();
+	   // $rows = $this->find(NULL,' ordering ');
+	   $rows = $this->find('published = 1 and access <= '.$user->get('aid'),' ordering ');
+
+	   $children = $this->orderByParent($rows);
+
+       $options=array();
+
+		if(isset($children[0]) && is_array($children[0]))
+
+		foreach($children[0] as $pcategory){
+
+		   $options[$pcategory->categoryId]=$pcategory->categoryName;
+
+		   if(isset($children[$pcategory->categoryId])){
+
+		       foreach($children[$pcategory->categoryId] as $childcat){
+
+			       $options[$childcat->categoryId]="--".$childcat->categoryName;
+
+			   }
+
+		   }
+
+		}
+
+		return $options;
+
+  }
 
 }
