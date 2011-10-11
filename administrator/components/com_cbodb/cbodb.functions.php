@@ -1860,25 +1860,32 @@ function showStaffTotals( $option )
 
   // Look up all commissions earned this period, by user
   // Right now just getting Al's, since that's all we seem to care about
+  // Updated by Lee on 10/10/11 to reduce execution time
   $queryCommissions =
     "SELECT
-      i.commissionUserID,
-      m.nameFirst,
-      m.nameLast,
-	    SUM(t.cash) AS commissionCash,
-	    SUM(t.credits) AS commissionCredits
-    FROM
-      #__cbodb_transactions t,
-      #__cbodb_items i,
-      #__cbodb_members m
-    WHERE
-      i.commissionUserID = 1180 AND
-      t.itemID = i.tag AND
-      t.dateOpen >= '$dateStart 00:00:00' AND
-      t.dateOpen <= '$dateEnd 23:59:59' AND
-      m.id = i.commissionUserID
-    GROUP BY
-      i.commissionUserID";
+ 	commissionUserID,
+ 	nameFirst,
+ 	nameLast,
+ 	SUM(cash) AS commissionCash,
+ 	SUM(credits) AS commissionCredits
+ FROM
+	((SELECT
+	      i.commissionUserID AS commissionUserID,
+	      m.nameFirst AS nameFirst,
+	      m.nameLast AS nameLast,
+		 t.cash AS cash,
+		 t.credits AS credits
+	    FROM
+	      #__cbodb_transactions t,
+	      #__cbodb_items i,
+	      #__cbodb_members m
+	    WHERE
+	      i.commissionUserID = 1180 AND
+	      t.itemID = i.tag AND
+	      t.dateOpen >= '$dateStart 00:00:00' AND
+	      t.dateOpen <= '$dateEnd 23:59:59' AND
+	      m.id = i.commissionUserID) ct)
+	GROUP BY commissionUserID";
 
 	$db->setQuery($queryCommissions);
   $rowsCommissions = $db->loadObjectList();
