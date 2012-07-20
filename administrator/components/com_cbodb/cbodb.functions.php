@@ -763,7 +763,7 @@ class CbodbItem {
     public static $itemBikeDrivetrainArray = array("Not specified", "F&R Derailer", "Rear Derailer", "Hub Gears", "Singlespeed", "Fixed Gear", "Unispeed");
     public static $itemSourceArray = array("Not specified", "Individual Donation", "Bike shop collection", "Police", "Purchased new");
     public static $itemBikeFrameStyleArray = array("Not specified", "Diamond", "Mixte", "Step-through", "Tandem");
-    public static $commissionMechanics = array(0 => "No one", 1180 => "Al");
+    public static $commissionMechanics = array(0 => "No one", 1180 => "Al", 1271=> "Stuart", 240=>"Ray", 1139=>"Ben");
     
     /*******************************************************/
     /*******************************************************/
@@ -1860,7 +1860,6 @@ function showStaffTotals( $option )
 
   // Look up all commissions earned this period, by user
   // Right now just getting Al's, since that's all we seem to care about
-  // Updated by Lee on 10/10/11 to reduce execution time
   $queryCommissions =
     "SELECT
  	commissionUserID,
@@ -1880,7 +1879,7 @@ function showStaffTotals( $option )
 	      #__cbodb_items i,
 	      #__cbodb_members m
 	    WHERE
-	      i.commissionUserID = 1180 AND
+	      i.commissionUserID <> 0 AND
 	      t.itemID = i.tag AND
 	      t.dateOpen >= '$dateStart 00:00:00' AND
 	      t.dateOpen <= '$dateEnd 23:59:59' AND
