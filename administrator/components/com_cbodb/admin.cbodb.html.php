@@ -1875,7 +1875,7 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,$transaction->type);?></td>
+		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$transactionTypeArray,$transaction->type,true);?></td>
 	</tr>
 	<tr>
 		<td class="key">Credits</td>
