@@ -124,11 +124,12 @@ function showMembers( $option, &$rows )
                count( $rows ); ?>);" />
         </th>
         <th width="20%">Name</th>
+        <th width="20%">Address</th>
         <th width="15%">Email</th>
         <th width="10%">Emergency Phone</th>
         <th width="5%">Member?</th>
         <th width="20%">Clock out</th>
-        <th width="30%">Other options</th>
+        <th width="10%">Other options</th>
       </tr>
     </thead>
 
@@ -146,6 +147,9 @@ function showMembers( $option, &$rows )
         </td>
         <td>
           <a href="<?php echo $link; ?>"><?php echo $row->nameFirst . ' ' . $row->nameLast; ?></a>
+        </td>
+        <td>
+          <?php echo ($row->address1 != null && $row->address1 != '' ? $row->address1 . ', ':'') . ($row->address2 != null && $row->address2 != '' ? $row->address2 . ', ':'') . ($row->city != null && $row->city != '' ?$row->city . ', ':'') . ($row->state != null && $row->state != ''  ? $row->state . ' ' : '') . $row->zip ?> 
         </td>
         <td>
           <?php echo $row->emailAddress; ?>
@@ -965,6 +969,47 @@ function editMember( $member, $option )
 			<input class="text_area" type="text" name="nameLast" id="nameLast" size="20" maxlength="50" value="<?php echo $member->nameLast;?>" />
 		</td>
 	</tr>
+        <tr>
+                <td width="100" align="right" class="key">
+                        Address 1:
+		</td>
+                <td>
+                        <input class="text_area" type="text" name="address1" id="address1" size="20" maxlength="50" value="<?php echo $member->address1;?>"/>
+                </td>
+        </tr>
+        <tr>
+                <td width="100" align="right" class="key">
+                       Address 2:
+                </td>
+                <td>
+			<input class="text_area" type="text" name="address2" id="address2" size="20" maxlength="50" value="<?php echo $member->address2;?>"/>
+		</td>
+        </tr>
+        <tr>
+                <td width="100" align="right" class="key">
+			City:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="city" id="city" size="20" maxlength="50" value="<?php echo $member->city;?>"/>
+                </td>
+        </tr>
+
+	<tr>
+		<td width="100" align="right" class="key">
+			State:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="state" id="state" size="20" maxlength="50" value="<?php echo $member->state;?>"/>
+                </td>
+        </tr>
+        <tr>
+		<td width="100" align="right" class="key">
+			Zip:
+		</td>
+		<td>
+			<input class="text_area" type="text"name="zip" id="zip" size="20" maxlength="50" value="<?php echo $member->zip ?>"/>
+		</td>
+        </tr>
 	<tr>
 		<td width="100" align="right" class="key">
 			Email Address:
@@ -1164,6 +1209,47 @@ function addMember( $member, $option, $mailing_list_groups )
 			<input class="text_area" type="text" name="nameLast" id="nameLast" size="20" maxlength="50" />
 		</td>
 	</tr>
+	<tr>
+                <td width="100" align="right" class="key">
+			Address 1:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="address1" id="address2" size="20" maxlength="50" />
+                </td>
+        </tr>
+	<tr>
+                <td width="100" align="right" class="key">
+			Address 2:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="address2" id="address2" size="20" maxlength="50" />
+                </td>
+        </tr>
+	<tr>
+                <td width="100" align="right" class="key">
+			City:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="city" id="city" size="20" maxlength="50" />
+                </td>
+        </tr>
+	<tr>
+                <td width="100" align="right" class="key">
+			State:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="state" id="state" size="20" maxlength="50" />
+                </td>
+        </tr>
+	<tr>
+                <td width="100" align="right" class="key">
+			Zip:
+                </td>
+                <td>
+                        <input class="text_area" type="text" name="zip" id="zip" size="20" maxlength="50" />
+                </td>
+        </tr>
+
 	<tr>
 		<td width="100" align="right" class="key">
 			Email Address:
