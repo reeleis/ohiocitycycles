@@ -149,14 +149,15 @@ class CbodbMember
     /*******************************************************/
     
   public static $memberGroupArray = array(
-    1 => "Class graduate or test-out",
-    2 => "Skilled mechanic",
-    3 => "Super volunteer",
-    4 => "Staff",
-    5 => "Trustee",
-    6 => "New volunteer",
-    7 => "Current student",
-    8 => "Key volunteer");
+	1 => "Class graduate or test-out",
+	2 => "Skilled mechanic",
+	3 => "Super volunteer",
+	4 => "Staff",
+	5 => "Trustee",
+	6 => "New volunteer",
+	7 => "Current student",
+	8 => "Key volunteer",
+	9 => "Commission mechanic");
     
     /*******************************************************/
     /*******************************************************/
@@ -533,7 +534,33 @@ class CbodbMember
 		}
 		return $rows;
     }
-	
+
+
+	/*
+	* getGroupMemberList()
+	*
+	* Show all of the members in a group; specify group by text name
+	*
+	* example: CbodbMember::getGroupMemberList("Key volunteer")
+	*
+	* returns array with value pairs in the format of member_id => display name
+	*/
+	public static function getGroupMemberList( $option, $groupName )
+	{
+		// array of all keys to which group name applies (should only be one)
+		$group_nums = array_keys(CbodbMember::$memberGroupArray, $groupName);
+		$query = "SELECT id,nameFirst,nameLast from #__cbodb_members WHERE isGroup".$group_nums[0]." = 1 ORDER BY nameLast";
+		$db =& JFactory::getDBO();
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		$groupMembers = array();
+		foreach ($rows as $row)
+		{
+		 $groupMembers[$row->id] = $row->nameFirst. ($row->nameFirst != "" && $row->nameLast != "" ? " " : "") .$row->nameLast;
+		}
+		return $groupMembers;
+	}
+		
 } /* END class CbodbMember */
 
 
@@ -764,7 +791,6 @@ class CbodbItem {
     public static $itemBikeDrivetrainArray = array("Not specified", "F&R Derailer", "Rear Derailer", "Hub Gears", "Singlespeed", "Fixed Gear", "Unispeed");
     public static $itemSourceArray = array("Not specified", "Individual Donation", "Bike shop collection", "Police", "Purchased new");
     public static $itemBikeFrameStyleArray = array("Not specified", "Diamond", "Mixte", "Step-through", "Tandem");
-    public static $commissionMechanics = array(0 => "No one", 1180 => "Al", 1271=> "Stuart", 240=>"Ray", 1139=>"Ben");
     
     /*******************************************************/
     /*******************************************************/
@@ -1150,6 +1176,7 @@ function showLoggedInMembers( $option )
 	$rows = CbodbMember::loggedInList(TRUE);
 	HTML_cbodb::showLoggedInMembers( $option, $rows );
 }
+
 
 function doSetAddress ( $option )
 {
