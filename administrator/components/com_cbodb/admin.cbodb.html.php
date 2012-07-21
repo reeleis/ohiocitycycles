@@ -1793,7 +1793,22 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Item or Bike tag number</td>
-		<td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td>
+		<td>
+		    <?php $itemDropdownList = CbodbItem::itemList(); ?>
+        <select name="itemID">
+        <option value="0">Choose a Item or Bike tag number below...</option>
+        <?php
+        	foreach ($itemDropdownList as $bikeTag ) {
+        		if ($bikeTag->tag == $transaction->itemID) {
+        		echo "<option selected=\"selected\" value=\"$bikeTag->id\">$bikeTag->id</option>";
+			} else {
+        		echo "<option value=\"$bikeTag->id\">$bikeTag->id</option>";
+			}
+        	}
+        ?>
+        </select>
+		</td>
+		<!-- <td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td> -->
 	</tr>
 	<tr>
 		<td class="key">Comment</td>
@@ -1890,7 +1905,17 @@ function newProvisionalTransaction( $option, $transaction, $member, $memberCredi
 	</tr>
 	<tr>
 		<td class="key">Item or Bike tag number</td>
-		<td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td>
+		<td>
+		    <?php $itemDropdownList = CbodbItem::itemList(); ?>
+        <select name="itemID">
+        <option value="0">Choose a Item or Bike tag number below...</option>
+        <?php
+        	foreach ($itemDropdownList as $bikeTag ) {
+        		echo "<option value=\"$bikeTag->id\">$bikeTag->id</option>";
+        	}
+        ?>
+        </select>
+		</td>
 	</tr>
 	<tr>
 		<td class="key">Comment</td>
