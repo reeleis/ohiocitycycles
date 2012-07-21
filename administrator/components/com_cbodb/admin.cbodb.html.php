@@ -230,6 +230,13 @@ function showBicycles( $option, &$rows )
         </td>
         <td>
           <a href="<?php echo $link; ?>"><?php echo $row->tag; ?></a>
+          <?php
+            if ($row->isForSale && $row->isReady && !$row->isSold) {
+            	$purchase_this_bicycle_link = JFilterOutput::ampReplace( 'index.php?option=' .$option . '&task=add&cbodb_mode=transaction&type=1001&itemID='. $row->tag . '&cash=' . $row->priceSale . '&comment=' . urlencode($row->description));
+            	$purchase_this_bicycle_link_markup = "<br /><a href=\"$purchase_this_bicycle_link\" title=\"Purchase $row->tag - $row->description\">Purchase this bicycle</a>";
+            	echo $purchase_this_bicycle_link_markup;
+	    }
+          ?>
         </td>
         <td>
           <a href="<?php echo $link; ?>"><?php echo $row->bikeBrand; ?></a>
@@ -393,7 +400,16 @@ function editBicycle( $item, $option )
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Is it sold?</td>
-		<td><input type="checkbox" name="isSold" id="isSold" <?php echo ($item->isSold ? "checked" : "");?> /></td>
+		<td>
+			<input type="checkbox" name="isSold" id="isSold" <?php echo ($item->isSold ? "checked" : "");?> />
+          <?php
+            if ($item->isForSale && $item->isReady && !$item->isSold) {
+            	$purchase_this_bicycle_link = JFilterOutput::ampReplace( 'index.php?option=' .$option . '&task=add&cbodb_mode=transaction&type=1001&itemID='. $item->tag . '&cash=' . $item->priceSale . '&comment=' . urlencode($item->description));
+            	$purchase_this_bicycle_link_markup = "<a href=\"$purchase_this_bicycle_link\" title=\"Purchase $item->tag - $item->description\">Purchase this bicycle</a>";
+            	echo $purchase_this_bicycle_link_markup;
+	    }
+          ?>
+		</td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Size:</td>
@@ -1879,7 +1895,19 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Item or Bike tag number</td>
-		<td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td>
+		<td>
+		    <?php $itemDropdownList = CbodbItem::itemList(); ?>
+        <select name="itemID">
+        <option value="0">Choose a Item or Bike tag number below...</option>
+        <?php
+        	foreach ($itemDropdownList as $bikeTag ) {
+			$selectedStr = ($bikeTag->tag == $transaction->itemID) ? 'selected="selected" ' : '';
+        		echo "<option ${selectedStr}value=\"$bikeTag->tag\">$bikeTag->tag</option>";
+        	}
+        ?>
+        </select>
+		</td>
+		<!-- <td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td> -->
 	</tr>
 	<tr>
 		<td class="key">Comment</td>
@@ -1964,7 +1992,15 @@ function newProvisionalTransaction( $option, $transaction, $member, $memberCredi
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,1002);?></td>
+		<td>
+			<?php
+			$type = $transaction->type;
+			if (!$type) {
+				$type = 1002;
+			}
+			HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,$type);
+			?>
+		</td>
 	</tr>
 	<tr>
 		<td class="key">Credits</td>

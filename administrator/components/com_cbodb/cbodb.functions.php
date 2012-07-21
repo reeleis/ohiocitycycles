@@ -1411,6 +1411,10 @@ function newProvisionalTransaction( $option, $fromTransaction = FALSE )
 	$memberCredits = $member->getMemberInfo();
 	
 	$transaction = new CbodbTransaction();
+	$transaction->itemID = JRequest::getVar('itemID', 0, '', 'INT');
+	$transaction->cash = JRequest::getVar('cash', '', '', 'string');
+	$transaction->comment = JRequest::getVar('comment', '', '', 'string');
+	$transaction->type = JRequest::getVar('type', '', '', 'INT');
 	
 	//  John Mikolich   December 30, 2010
     //  This is the first (and so far, the only working) example
