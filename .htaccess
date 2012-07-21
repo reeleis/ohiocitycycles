@@ -1,7 +1,4 @@
 #--- DH-PHP handlers ---
-AddHandler fastcgi-script fcg fcgi fpl
-AddHandler php-fastcgi .php
-Action php-fastcgi /cgi-bin/dispatch.fcgi
 
 SetEnv TZ America/New_York
 
