@@ -722,6 +722,7 @@ class CbodbItem {
 		
 		$this->data->isForSale = ($this->data->isForSale=="on") ? 1 : 0;
 		$this->data->isForRent = ($this->data->isForRent=="on") ? 1 : 0;
+		$this->data->isSold = ($this->data->isSold=="on") ? 1 : 0;
 		$this->data->isReady = ($this->data->isReady=="on") ? 1 : 0;
 		$this->data->isBike = ($this->data->isBike=="on") ? 1 : 0;
 
