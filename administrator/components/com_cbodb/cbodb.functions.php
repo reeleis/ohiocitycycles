@@ -1198,6 +1198,7 @@ function showMembers( $option, $filtered=FALSE )
 {
 	if ($filtered) {
 		$filter = JRequest::getVar('filter');
+		$namefilter = JRequest::getVar('namefilter');
 		if (strcmp($filter,"") == 0) { $filter = "Logged In"; }
 		if (strcmp($filter,"Logged In")==0)
 		{
@@ -1208,6 +1209,9 @@ function showMembers( $option, $filtered=FALSE )
 		} else if (strcmp($filter,"Recent")==0)
 		{
 		$rows = CbodbMember::memberList("ORDER BY timeChanged DESC LIMIT 40");
+		} else if ((strcmp($filter,"Name")==0) &&  (strcmp($namefilter,"") != 0))
+		{
+		$rows = CbodbMember::memberList("WHERE nameFirst || ' ' || nameLast LIKE '".$namefilter."%' ORDER BY nameLast, nameFirst");
 		} else 
 		{
 		$rows = CbodbMember::memberList("WHERE nameLast LIKE '".$filter."%' ORDER BY nameLast, nameFirst");
@@ -1231,11 +1235,9 @@ function showBicycles( $option, $filter=FALSE )
 		if($saleFilter == 'true') {
 			$saleFilter = ' AND isSold = 1';
 			$b = 'true';
-			echo $saleFilter;
 		} else if($saleFilter == 'false') {
 			$saleFilter = ' AND isSold = 0';
 			$b = 'false';
-			echo $saleFilter;
 		}
 	} else {
 		$saleFilter = '';
@@ -1766,34 +1768,38 @@ function adminLogoutMember( $option, $atTime = FALSE )
 {
   global $mainframe;
 
+  	$message = '';
 	$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
-	$transid = $cid[0];
-	$transaction = new CbodbTransaction( $transid );
+	for($i = 0; $i < sizeof($cid); $i++) {
+        	$transid = $cid[$i];
+		$transaction = new CbodbTransaction( $transid );
 
-  $openTime = strtotime($transaction->dateOpen);
+  		$openTime = strtotime($transaction->dateOpen);
 
-    if ($atTime)
-    {
-        $transaction->dateClosed = date("Y-m-d ", $openTime);
-		$transaction->dateClosed .= ((JRequest::getVar("hour"))%24) . ':' . JRequest::getVar("minute");
-    }
-    else
-    {
-        //  John Mikolich   December 30, 2010
-        //  Next statement added to resolve the 'timezone issue'.
-        date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
-        $transaction->dateClosed = date("Y-m-d H:i:s", time());
-    }
+    		if ($atTime)
+    		{
+        		$transaction->dateClosed = date("Y-m-d ", $openTime);
+			$transaction->dateClosed .= ((JRequest::getVar("hour"))%24) . ':' . JRequest::getVar("minute");
+    		}
+    		else
+    		{
+        		//  John Mikolich   December 30, 2010
+        		//  Next statement added to resolve the 'timezone issue'.
+        		date_default_timezone_set(getConfigValue("timeZone") );  // NEW!!
+        		$transaction->dateClosed = date("Y-m-d H:i:s", time());
+    		}
 
-    $transaction->isOpen = 0;
+    		$transaction->isOpen = 0;
   
-  $transaction->totalTime = calculateTotalTime($transaction->dateOpen, $transaction->dateClosed);
-  $transaction->credits = calculateCredits($transaction->totalTime, $transaction->creditRate);
+  		$transaction->totalTime = calculateTotalTime($transaction->dateOpen, $transaction->dateClosed);
+  		$transaction->credits = calculateCredits($transaction->totalTime, $transaction->creditRate);
   
-  $transaction->saveData();
+  		$transaction->saveData();
   
-  $memberCredits = CbodbTransaction::getMemberCredits($transaction->memberID);
-  $mainframe->redirect('index.php?option=' .$option.'&task=showloggedin', 'Member logged out - earned '.sprintf("%.2F",$transaction->credits).' credits, current total is '.sprintf("%.2F",$memberCredits).' and time out is '.$transaction->dateClosed);
+  		$memberCredits = CbodbTransaction::getMemberCredits($transaction->memberID);
+  		$message = $message .  'Member logged out - earned '.sprintf("%.2F",$transaction->credits).' credits, current total is '.sprintf("%.2F",$memberCredits).' and time out is '.$transaction->dateClosed . "\n";
+	}
+  	$mainframe->redirect('index.php?option=' .$option.'&task=showloggedin', $message);
 }
 
 
@@ -1827,6 +1833,11 @@ function calculateCredits($totalTime, $creditRate)
   return $credits;
 }
 
+
+function showReportForm($option)
+{
+	HTML_cbodb::showReportMenu( $option );
+}
 
 function saveBicycle( $option )
 {
@@ -1943,6 +1954,41 @@ foreach ($recipientList as $recipientRow)
 	echo "Sending email to $recipientRow->emailAddress ... <br>";
 JUtility::sendMail($from , "Ohio City Bicycle Co-op", $recipientRow->emailAddress, $subject, $body, 1);
 }
+}
+
+function runReport( $option )
+{
+	$db =& JFactory::getDBO();
+	$query = "SELECT * FROM jos_cbodb_members";
+
+	$db->setQuery($query);
+	$rows = $db->loadRowList();
+	
+		if ($db->getErrorNum())
+                {
+                        echo $db->stderr();
+                        exit;
+                }
+	$headerQuery = "SHOW COLUMNS FROM jos_cbodb_members";
+	$db->setQuery($headerQuery);
+	$headers = $db->loadRowList();
+	header("Content-type: text/csv");
+	
+	header("Content-Disposition: attachment; filename=\"members.csv\"");
+	
+	for($k = 0; $k < sizeof($headers) - 1; $k++) {
+		echo '"'.$headers[$k][0].'",';
+	}
+	echo '"'.$headers[sizeof($headers)-1][0]."\"\n";
+	for($i = 0; $i < sizeof($rows); $i++ ) {
+		$row = $rows[$i];
+		for($j = 0; $j < sizeof($row) - 1; $j++) {
+			echo '"'. $row[$j].'",';
+			
+		}
+		echo '"'.$row[sizeof($row) -1]."\"\n";
+	}
+	echo $csv;
 }
 
 function showStaffTotals( $option )

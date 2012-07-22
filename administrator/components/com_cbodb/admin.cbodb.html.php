@@ -114,14 +114,15 @@ function showMembers( $option, &$rows )
 			echo "<a href=\"".$link."\">".$filter."</a>&nbsp;&nbsp;";
 		}
 	echo '</h2>';
-  /*echo '<h2>Sort by: &nbsp;&nbsp;' ;
+  /*echo '<strong>Filter:</strong> Name: <select name="saleFilter">';
+  echo '<h2>Sort by: &nbsp;&nbsp;';
   $memberFilters = array('Size' => "bikeSize1", 'Brand' => "bikeBrand", "Color" => "bikeColor", "Price" => "priceSale", "Style" => "bikeStyle", "Serial Number" => "bikeSerial");
   foreach ( $memberFilters as $key => $filter )
 		{
 			$link = JRoute::_('index.php?option=' . $option . '&task=showfiltermembers&sortby='.$filter);
 			echo "&bull; <a href=\"".$link."\">".$key."</a>&nbsp;&nbsp;";
 		}
-	echo '&bull;</h2>';*/
+  echo '&bull;</h2>';*/
   ?>
   <table class="adminlist">
     <thead>
@@ -190,6 +191,18 @@ function showMembers( $option, &$rows )
   <?php
 }
 
+function showReportMenu($option) {
+	  ?>
+
+  <form action="./report.csv.php" method="post">
+    Start Date: <input name="startdate" id="startdate" type="text"></input><?php JHTML::calendar('01/01/01','startdate','startdate'  )   ?><br/>
+    End Date:  <input name = "enddate" id="enddate" type="text"></input><?php JHTML::calendar('01/01/01','enddate','enddate'   )   ?><br/>
+    <input type = "submit"/>
+  </form>
+
+    <?php
+}
+
 function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 {
   ?>
@@ -204,12 +217,12 @@ function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 		}
 	echo '&bull;</h2>';
   ?>
-  <select name="saleFilter">
+  <strong>Filter:</strong> Is Sold: <select name="saleFilter">
     <option value="" <?php if($saleFilter == 'none') echo 'selected="selected"';  ?> ></option>
     <option value="true" <?php if($saleFilter == 'true') echo 'selected="selected"'?>>Show Sold</option>
     <option value="false" <?php if($saleFilter == 'false') echo 'selected="selected"'?>>Show Unsold</option>
   </select>
-  <input type="submit"/>
+  <input type="submit" name="Submit" value="Filter" />
   <table class="adminlist">
     <thead>
       <tr>
