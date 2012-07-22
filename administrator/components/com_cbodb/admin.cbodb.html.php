@@ -1,5 +1,7 @@
 <?php
 defined( '_JEXEC' ) or die( 'Restricted access' );
+require_once( JApplicationHelper::getPath( 'admin_functions' ) );
+
 class HTML_cbodb
 {
 
@@ -14,6 +16,8 @@ class HTML_cbodb
 //static $itemBikeFrameStyleArray = array("Not specified", "Diamond", "Mixte", "Step-through", "Tandem");
 //static $commissionMechanics = array(0 => "No one", 1180 => "Al");
 
+/* Moved to CbodbTransaction 2012.07.21 Bart McPherson GiveCamp
+	Initing value after class declaration
 static $adminTransactionTypeArray = array(1001 => "Purchase", 1002 => "Credits Added", 1004 => "Volunteer time addition", 2001 => "Comment", 1005 => "Bike Credit");
 static $transactionTypeArray = array(
      1 => "Volunteering",
@@ -30,6 +34,10 @@ static $transactionTypeArray = array(
 	3001 => "Task check-out",
 	4001 => "Taking a Class",
 	4002 => "Teaching a Class");
+*/
+static $adminTransactionTypeArray;
+static $transactionTypeArray;
+static $timeTransactionTypeArray;
 static $taskTypeArray = array(0 => "Please choose a type",1 => "Bicycle repair", 2 => "Bicycle strip", 3 => "Other bicycle task", 4 => "Cleaning", 5 => "Organization", 6 => "Parts work", 7 => "General office work", 8 => "Skilled office labor", 9 => "Online work", 10 => "Other");
 
 // moved to CbodbMember
@@ -1883,7 +1891,7 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,1002);?></td>
+		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$transactionTypeArray,$transaction->type,true);?></td>
 	</tr>
 	<tr>
 		<td class="key">Credits</td>
@@ -2081,7 +2089,7 @@ function newTimeTransaction( $option, $transaction, $member )
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type", HTML_cbodb::$transactionTypeArray, $transaction->type, false); ?></td>
+		<td><?php HTML_cbodb::dropdownFromArray("type", HTML_cbodb::$timeTransactionTypeArray, $transaction->type, false); ?></td>
 	</tr>
 	<tr>
 		<td class="key">Date Open</td>
@@ -2140,7 +2148,7 @@ function editTimeTransaction( $option, $transaction, $member )
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type", HTML_cbodb::$transactionTypeArray, $transaction->type, true); ?></td>
+		<td><?php HTML_cbodb::dropdownFromArray("type", HTML_cbodb::$timeTransactionTypeArray, $transaction->type, true); ?></td>
 	</tr>
 	<tr>
 		<td class="key">Date Open</td>
@@ -2425,3 +2433,7 @@ function showEmailQueries( $option, &$rows, $resultCounts )
 	}
 	
 }
+
+HTML_cbodb::$transactionTypeArray = CbodbTransaction::getTransactionTypesList();
+HTML_cbodb::$adminTransactionTypeArray = CbodbTransaction::getAdminTransactionTypesList();
+HTML_cbodb::$timeTransactionTypeArray = CbodbTransaction::getTimeTransactionTypesList();

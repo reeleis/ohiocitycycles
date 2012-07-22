@@ -707,6 +707,66 @@ class CbodbTransaction {
 	  }
 	}
 	
+	/* Added 2012.07.21 Bart McPherson GiveCamp */
+	public static function getTransactionTypesList() 
+    {
+		$typeList = array();
+		$db =& JFactory::getDBO();
+    	$query = "SELECT id, name FROM #__cbodb_transaction_types";
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		if ($db->getErrorNum()) 
+		{
+			echo $db->stderr();
+			return false;
+		}
+		foreach ($rows as $singleRow) {
+			$typeList[$singleRow->id] = $singleRow->name;
+		}
+		
+		return $typeList;
+    }
+	
+	/* Added 2012.07.21 Bart McPherson GiveCamp */
+	public static function getAdminTransactionTypesList() 
+    {
+		$typeList = array();
+		$db =& JFactory::getDBO();
+    	$query = "SELECT id, name FROM #__cbodb_transaction_types where `type` = 'provisional'";
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		if ($db->getErrorNum()) 
+		{
+			echo $db->stderr();
+			return false;
+		}
+		foreach ($rows as $singleRow) {
+			$typeList[$singleRow->id] = $singleRow->name;
+		}
+		
+		return $typeList;
+    }
+	
+	/* Added 2012.07.21 Bart McPherson GiveCamp */
+	public static function getTimeTransactionTypesList() 
+    {
+		$typeList = array();
+		$db =& JFactory::getDBO();
+    	$query = "SELECT id, name FROM #__cbodb_transaction_types where `type` = 'time'";
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		if ($db->getErrorNum()) 
+		{
+			echo $db->stderr();
+			return false;
+		}
+		foreach ($rows as $singleRow) {
+			$typeList[$singleRow->id] = $singleRow->name;
+		}
+		
+		return $typeList;
+    }
+	
 } /* END class CbodbTransaction */
 
 
@@ -1272,6 +1332,9 @@ function showTransactions( $option )
   $transaction_types = array();
   //$transaction_types[] = JHTML::_('select.option', '-1', '- '.JText::_('Transaction Type').' -', 'value', 'text');
   $transaction_types[] = JHTML::_('select.option', '0', 'All Types', 'value', 'text');
+  /* Modified 2012.07.21 Bart McPherson GiveCamp
+  HTML_cbodb::$transactionTypeArray is set by CbodbTransaction::$getTransactionTypesList()
+  */
 	foreach (HTML_cbodb::$transactionTypeArray as $type_id => $type_name) {
 	  $transaction_types[] = JHTML::_('select.option', $type_id, JText::_($type_name));
 	}
@@ -1592,11 +1655,15 @@ function saveTransaction( $option )
         $msg = "Total time: ". format_time_duration($transaction->totalTime) .", Credits: $transaction->credits";
 	}
 	
-	if ($transaction->type == 1001 || $transaction->type == 1003) {
+	// added type 2 (Personal) to negative transaction type 2012.07.21 Bart McPherson Givecamp
+	if ($transaction->type == 1001 || $transaction->type == 1003 || $transaction->type == 2) {
 		/* This is a purchase - make sure credits are negative */
 		if ($transaction->credits > 0)
 			$transaction->credits = -($transaction->credits);
 		CbodbItem::markTagAsSold($transaction->itemID);
+		if ($transaction->type == 2){
+			$msg = "Total time: ". format_time_duration($transaction->totalTime) .", Credits: $transaction->credits";
+		}
 	}
 
 	if ($transaction->type == 1003)
