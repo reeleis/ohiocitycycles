@@ -772,12 +772,12 @@ class CbodbItem {
     /** static functions */
     
    
-    public static function itemList( $addsql=NULL ) 
+    public static function itemList( $addsql=NULL, $limitstart = 0, $limit = 50 ) 
     {
     	$db =& JFactory::getDBO();
     	$query = "SELECT * FROM #__cbodb_items";
     	if ($addsql) $query = "SELECT * FROM #__cbodb_items ".$addsql;
-		$db->setQuery( $query );
+		$db->setQuery( $query, $limitstart, $limit );
 		$rows = $db->loadObjectList();
 		if ($db->getErrorNum()) 
 		{
@@ -787,6 +787,20 @@ class CbodbItem {
 		return $rows;
     }
     
+   public static function itemCount($addsql=NULL) {
+           $db =& JFactory::getDBO();
+           $query = "SELECT COUNT(*) FROM #__cbodb_items";
+           if($addsql) $query = "SELECT COUNT(*) FROM #__cbodb_items ".$addsql;
+           $db->setQuery($query);
+           $count = $db->loadResult();
+           if($db->getErrorNum()){
+                  echo $db->stderr();
+                   return false;
+           }
+           return $count;
+
+   }
+
    public static function getItemFromTag( $tag )
    {
   		$db =& JFactory::getDBO();
@@ -1122,16 +1136,44 @@ function showMembers( $option, $filtered=FALSE )
 
 function showBicycles( $option, $filter=FALSE )
 {
+	global $mainframe;
+	$saleFilter = JRequest::getVar('saleFilter');
+	$limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
+	$limitstart = $mainframe->getUserStateFromRequest($option.'limitstart', 'limitstart', 0, 'int');
+
+	if($saleFilter != null && $saleFilter != '') {
+		if($saleFilter == 'true') {
+			$saleFilter = ' AND isSold = 1';
+			$b = 'true';
+			echo $saleFilter;
+		} else if($saleFilter == 'false') {
+			$saleFilter = ' AND isSold = 0';
+			$b = 'false';
+			echo $saleFilter;
+		}
+	} else {
+		$saleFilter = '';
+		$b = 'none';
+	}
+
+	$rows = null;
+	$numRows = null;
 	if ($filter) 
 	{
 		$filter = JRequest::getVar('filter');
-		$rows = CbodbItem::itemList("WHERE isBike = 1 ORDER BY ".$filter);	
-		HTML_cbodb::showBicycles( $option, $rows );
+
+		$rows = CbodbItem::itemList("WHERE isBike = 1". $saleFilter  . " ORDER BY ".$filter, $limitstart, $limit);
+		$numRows = CbodbItem::itemCount("WHERE isBike = 1".$saleFilter . " ORDER BY ".$filter);
 	} else
 	{
-		$rows = CbodbItem::itemList("WHERE isBike = 1");
-		HTML_cbodb::showBicycles( $option, $rows );
+		$rows = CbodbItem::itemList("WHERE isBike = 1" . $saleFilter, $limitstart, $limit);
+		$numRows = CbodbItem::itemCount("WHERE isBike = 1". $saleFilter);
 	}
+
+        jimport('joomla.html.pagination');
+        $pageNav = new JPagination($numRows, $limitstart, $limit);
+
+        HTML_cbodb::showBicycles( $option, $rows, $pageNav, $b );
 }
 
 function showTasks( $option, $filter=FALSE )
