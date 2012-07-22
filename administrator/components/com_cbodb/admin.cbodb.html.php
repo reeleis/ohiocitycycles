@@ -107,7 +107,7 @@ function showMembers( $option, &$rows )
   <?php
   echo '<h2>Members</h2>';
   echo '<h2>Show: &nbsp;&nbsp;' ;
-  $filters = array("Recent", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+  $filters = array("Recent","Active","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
   foreach ( $filters as $filter )
 		{
 			$link = JRoute::_('index.php?option=' . $option . '&task=showfiltermembers&filter='.$filter);
@@ -136,7 +136,8 @@ function showMembers( $option, &$rows )
         <th width="15%">Email</th>
         <th width="10%">Emergency Phone</th>
         <th width="5%">Member?</th>
-        <th width="20%">Clock out</th>
+        <th width="10%">Membership Expiration</th>
+        <th width="10%">Clock out</th>
         <th width="10%">Other options</th>
       </tr>
     </thead>
@@ -167,6 +168,9 @@ function showMembers( $option, &$rows )
         </td>
         <td align="center">
           <?php echo $row->isMember ? JHTML::image('administrator/images/tick.png','yes') : JHTML::image('administrator/images/publish_x.png','yes');?> 
+        </td>
+        <td>
+          <?php echo $row->membershipExpire; ?>
         </td>
 	<td>
 	</td>

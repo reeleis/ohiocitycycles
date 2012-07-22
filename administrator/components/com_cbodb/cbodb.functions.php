@@ -1188,6 +1188,9 @@ function showMembers( $option, $filtered=FALSE )
 		if (strcmp($filter,"Logged In")==0)
 		{
 		$rows = CbodbMember::loggedInList(TRUE);
+		} else if (strcmp($filter,"Active")==0)
+		{
+		$rows = CbodbMember::memberList("WHERE isMember>0 ORDER BY membershipExpire ASC");
 		} else if (strcmp($filter,"Recent")==0)
 		{
 		$rows = CbodbMember::memberList("ORDER BY timeChanged DESC LIMIT 40");
