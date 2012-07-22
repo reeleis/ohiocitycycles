@@ -674,6 +674,15 @@ function saveNewBicycle( $option )
 	//$item->commissionUserID = JRequest::getVar('memberID');
 
 	$item->saveData();
+	// Added 2012-07-22 Bart McPherson Givecamp 2012
+	$membertransaction = new CbodbTransaction();
+	date_default_timezone_set(getConfigValue("timeZone") );
+	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+    $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+    $membertransaction->type = 7;
+    $membertransaction->memberID = $postrow['memberID'];
+	$membertransaction->saveData();
+	// End of Added 2012-07-21
 
   $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', "Bicycle is saved with tag number $item->tag. Please write the number on the bike's tag!");
 }
