@@ -12,6 +12,7 @@ JSubMenuHelper::addEntry(JText::_('Bicycles'), 'index.php?option=com_cbodb&task=
 JSubMenuHelper::addEntry(JText::_('Transactions'), 'index.php?option=com_cbodb&task=transactions&member_id=0&limitstart=0');
 JSubMenuHelper::addEntry(JText::_('Tasks'), 'index.php?option=com_cbodb&task=showtasks');
 JSubMenuHelper::addEntry(JText::_('Staff Totals'), 'index.php?option=com_cbodb&task=showstafftotals&dateStart=&dateEnd=');
+JSubMenuHelper::addEntry(JText::_('Report'), 'index.php?option=com_cbodb&task=report&format=raw');
 
 $mode = JRequest::getVar("cbodb_mode");
 
@@ -215,6 +216,9 @@ switch($task)
 		break;
 	case 'showstafftotals':
 	  showStaffTotals( $option );
+	  break;
+	case 'report':
+	  runReport( $option );
 	  break;
 	case 'mainmenu':
 	default:

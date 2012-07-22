@@ -106,14 +106,15 @@ function showMembers( $option, &$rows )
 			echo "<a href=\"".$link."\">".$filter."</a>&nbsp;&nbsp;";
 		}
 	echo '</h2>';
-  /*echo '<h2>Sort by: &nbsp;&nbsp;' ;
+  /*echo '<strong>Filter:</strong> Name: <select name="saleFilter">';
+  echo '<h2>Sort by: &nbsp;&nbsp;';
   $memberFilters = array('Size' => "bikeSize1", 'Brand' => "bikeBrand", "Color" => "bikeColor", "Price" => "priceSale", "Style" => "bikeStyle", "Serial Number" => "bikeSerial");
   foreach ( $memberFilters as $key => $filter )
 		{
 			$link = JRoute::_('index.php?option=' . $option . '&task=showfiltermembers&sortby='.$filter);
 			echo "&bull; <a href=\"".$link."\">".$key."</a>&nbsp;&nbsp;";
 		}
-	echo '&bull;</h2>';*/
+  echo '&bull;</h2>';*/
   ?>
   <table class="adminlist">
     <thead>
