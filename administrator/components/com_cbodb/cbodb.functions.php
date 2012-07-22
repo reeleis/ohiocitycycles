@@ -851,12 +851,31 @@ class CbodbItem {
     public static $itemBikeDrivetrainArray = array("Not specified", "F&R Derailer", "Rear Derailer", "Hub Gears", "Singlespeed", "Fixed Gear", "Unispeed");
     public static $itemSourceArray = array("Not specified", "Individual Donation", "Bike shop collection", "Police", "Purchased new");
     public static $itemBikeFrameStyleArray = array("Not specified", "Diamond", "Mixte", "Step-through", "Tandem");
+    //public static $commissionMechanics = array(0 => "No one", 1180 => "Al", 1271=> "Stuart", 240=>"Ray", 1139=>"Ben");
+	public static $commissionMechanics;
     
     /*******************************************************/
     /*******************************************************/
     
     /** static functions */
     
+	public static function getCommissionedMechanics() {
+		$db =& JFactory::getDBO();
+		$query = "SELECT m.`id` id, `nameFirst` name FROM `jos_cbodb_members` m, `jos_cbodb_commisioned_users` c WHERE m.id = c.id";
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		if ($db->getErrorNum()) 
+		{
+			echo $db->stderr();
+			return false;
+		}
+		$commissionList[0] = "No one";
+		foreach ($rows as $singleRow) {
+			$commissionList[$singleRow->id] = $singleRow->name;
+		}
+		
+		return $commissionList;
+	}
    
     public static function itemList( $addsql=NULL, $limitstart = 0, $limit = 50 ) 
     {
@@ -920,6 +939,7 @@ class CbodbItem {
 	}
 	
 } /* END class CbodbItem */
+CbodbItem::$commissionMechanics = CbodbItem::getCommissionedMechanics();
 
 class CbodbTask {
 
@@ -1848,6 +1868,16 @@ function saveBicycle( $option )
 	$bicycle->setAll($postRow);
 
 	$db =& JFactory::getDBO();
+	
+	$query = "SELECT MAX(tag) FROM #__cbodb_items";
+  	$db->setQuery( $query );
+  	$maxTag = $db->loadResult();
+  	if ($db->getErrorNum()) {
+  		echo $db->stderr();
+  		return false;
+  	}
+  	$bicycle->tag = $maxTag + 1;
+  
 	$query = "SELECT id FROM #__cbodb_items WHERE tag = '".$bicycle->tag."' LIMIT 1";
 	$db->setQuery( $query );
 	$id = $db->loadResult();
@@ -1858,6 +1888,15 @@ function saveBicycle( $option )
 	}*/
 	
 	$bicycle->saveData();		
+	// Added 2012-07-21 Bart McPherson Givecamp 2012
+	$membertransaction = new CbodbTransaction();
+	date_default_timezone_set(getConfigValue("timeZone") );
+	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+    $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+    $membertransaction->type = 7;
+    $membertransaction->memberID = $postRow['memberID'];
+	$membertransaction->saveData();
+	// End of Added 2012-07-21
 	
 	$another = JRequest::getVar('another');
 

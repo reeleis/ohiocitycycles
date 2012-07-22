@@ -400,7 +400,7 @@ function editBicycle( $item, $option )
 	<table class="admintable">
 	<tr>
 		<td width="100" align="right" class="key">Tag Number:</td>
-		<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>"></td>
+		<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>" disabled="disabled"></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Brand:</td>
@@ -480,7 +480,20 @@ function editBicycle( $item, $option )
 		<td width="100" align="right" class="key">Commission:</td>
 		<td><?php HTML_cbodb::dropdownFromArray("commissionUserID",CbodbItem::$commissionMechanics,$item->commissionUserID); ?></td>
 	</tr>		
-
+	<tr>
+    	<td width="100" align="right" class="key">Entered By:</td>
+        <td>
+        <?php $dropdownList = CbodbMember::dropdownMemberList(); ?>
+        <select name="memberID">
+        <option value="0">Choose member's name below...</option>
+        <?php
+        	foreach ($dropdownList as $memberRow ) {
+        		echo "<option value=\"$memberRow->id\">$memberRow->nameLast, $memberRow->nameFirst</option>";
+        	}
+        ?>
+        </select>
+        </td>
+    </tr>
 	<tr>
 		<td width="100" align="right" class="key">Record Last Updated:</td>
 		<td><?php echo $item->timeChanged;?></td>
@@ -1235,8 +1248,38 @@ function editMember( $member, $option )
 function addMember( $member, $option, $mailing_list_groups ) 
 {
 	//JHTML::_('behavior.calendar');
+	JHTML::_('behavior.formvalidation');
+	// Added 2012.07.22 Bart McPherson Givecamp
+	// to add/modify required fields follow example at http://docs.joomla.org/Client-side_form_validation
 	?>
-	<form action="index.php" method="post" name="adminForm" id="adminForm">
+	<script type="text/javascript">
+    /* Override joomla.javascript, as form-validation not work with ToolBar */
+    function submitbutton(pressbutton) {
+        if (pressbutton == 'showall') {
+            submitform(pressbutton);
+        }else{
+            var f = document.adminForm;
+            if (document.formvalidator.isValid(f)) {
+                submitform(pressbutton);    
+            }
+            else {
+                var msg = new Array();
+                msg.push('Invalid input, please verify again!');
+                if ($('nameFirst').hasClass('invalid')) {
+                    msg.push('<?php echo JText::_('First Name is required')?>');    
+                }
+                if ($('nameLast').hasClass('invalid')) {
+                    msg.push('<?php echo JText::_('Last Name is required')?>');    
+                }
+                if($('emailAddress').hasClass('invalid')){
+                    msg.push('<?php echo JText::_('A valid email address is required')?>');
+                }
+                alert (msg.join('\n'));
+            }
+        }    
+    }
+    </script>
+	<form action="index.php" method="post" class="form-validate" name="adminForm" id="adminForm">
 	<fieldset class="adminform">
 	<legend>Member Details</legend>
 	<table class="admintable">
@@ -1246,7 +1289,7 @@ function addMember( $member, $option, $mailing_list_groups )
 			First Name:
 		</td>
 		<td>
-			<input class="text_area" type="text" name="nameFirst" id="nameFirst" size="20" maxlength="50" />
+			<input class="required text_area" type="text" name="nameFirst" id="nameFirst" size="20" maxlength="50" />
 		</td>
 	</tr>
 	<tr>
@@ -1254,7 +1297,7 @@ function addMember( $member, $option, $mailing_list_groups )
 			Last Name:
 		</td>
 		<td>
-			<input class="text_area" type="text" name="nameLast" id="nameLast" size="20" maxlength="50" />
+			<input class="required text_area" type="text" name="nameLast" id="nameLast" size="20" maxlength="50" />
 		</td>
 	</tr>
 	<tr>
@@ -1303,7 +1346,7 @@ function addMember( $member, $option, $mailing_list_groups )
 			Email Address:
 		</td>
 		<td>
-			<input class="text_area" type="text" name="emailAddress" id="emailAddress" size="50" maxlength="250" />
+			<input class="required validate-email text_area" type="text" name="emailAddress" id="emailAddress" size="50" maxlength="250" />
 		</td>
 	</tr>
 	<tr>
