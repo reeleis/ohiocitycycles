@@ -183,6 +183,18 @@ function showMembers( $option, &$rows )
   <?php
 }
 
+function showReportMenu($option) {
+	  ?>
+
+  <form action="./report.csv.php" method="post">
+    Start Date: <input name="startdate" id="startdate" type="text"></input><?php JHTML::calendar('01/01/01','startdate','startdate'  )   ?><br/>
+    End Date:  <input name = "enddate" id="enddate" type="text"></input><?php JHTML::calendar('01/01/01','enddate','enddate'   )   ?><br/>
+    <input type = "submit"/>
+  </form>
+
+    <?php
+}
+
 function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 {
   ?>

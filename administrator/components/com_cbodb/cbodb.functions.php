@@ -1740,6 +1740,11 @@ function calculateCredits($totalTime, $creditRate)
 }
 
 
+function showReportForm($option)
+{
+	HTML_cbodb::showReportMenu( $option );
+}
+
 function saveBicycle( $option )
 {
 	global $mainframe;
