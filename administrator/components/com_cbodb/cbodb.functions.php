@@ -1761,6 +1761,16 @@ function saveBicycle( $option )
 	$bicycle->setAll($postRow);
 
 	$db =& JFactory::getDBO();
+	
+	$query = "SELECT MAX(tag) FROM #__cbodb_items";
+  	$db->setQuery( $query );
+  	$maxTag = $db->loadResult();
+  	if ($db->getErrorNum()) {
+  		echo $db->stderr();
+  		return false;
+  	}
+  	$bicycle->tag = $maxTag + 1;
+  
 	$query = "SELECT id FROM #__cbodb_items WHERE tag = '".$bicycle->tag."' LIMIT 1";
 	$db->setQuery( $query );
 	$id = $db->loadResult();
@@ -1771,6 +1781,15 @@ function saveBicycle( $option )
 	}*/
 	
 	$bicycle->saveData();		
+	// Added 2012-07-21 Bart McPherson Givecamp 2012
+	$membertransaction = new CbodbTransaction();
+	date_default_timezone_set(getConfigValue("timeZone") );
+	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+    $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+    $membertransaction->type = 7;
+    $membertransaction->memberID = $postRow['memberID'];
+	$membertransaction->saveData();
+	// End of Added 2012-07-21
 	
 	$another = JRequest::getVar('another');
 

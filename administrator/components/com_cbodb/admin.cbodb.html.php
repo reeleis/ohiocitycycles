@@ -369,7 +369,7 @@ function editBicycle( $item, $option )
 	<table class="admintable">
 	<tr>
 		<td width="100" align="right" class="key">Tag Number:</td>
-		<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>"></td>
+		<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>" disabled="disabled"></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Brand:</td>
@@ -440,7 +440,20 @@ function editBicycle( $item, $option )
 		<td width="100" align="right" class="key">Commission:</td>
 		<td><?php HTML_cbodb::dropdownFromArray("commissionUserID",CbodbItem::$commissionMechanics,$item->commissionUserID); ?></td>
 	</tr>		
-
+	<tr>
+    	<td width="100" align="right" class="key">Entered By:</td>
+        <td>
+        <?php $dropdownList = CbodbMember::dropdownMemberList(); ?>
+        <select name="memberID">
+        <option value="0">Choose member's name below...</option>
+        <?php
+        	foreach ($dropdownList as $memberRow ) {
+        		echo "<option value=\"$memberRow->id\">$memberRow->nameLast, $memberRow->nameFirst</option>";
+        	}
+        ?>
+        </select>
+        </td>
+    </tr>
 	<tr>
 		<td width="100" align="right" class="key">Record Last Updated:</td>
 		<td><?php echo $item->timeChanged;?></td>
