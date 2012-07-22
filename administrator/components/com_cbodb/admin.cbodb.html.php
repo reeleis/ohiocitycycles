@@ -107,7 +107,7 @@ function showMembers( $option, &$rows )
   <?php
   echo '<h2>Members</h2>';
   echo '<h2>Show: &nbsp;&nbsp;' ;
-  $filters = array("Recent", "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
+  $filters = array("Recent","Active","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
   foreach ( $filters as $filter )
 		{
 			$link = JRoute::_('index.php?option=' . $option . '&task=showfiltermembers&filter='.$filter);
@@ -136,7 +136,8 @@ function showMembers( $option, &$rows )
         <th width="15%">Email</th>
         <th width="10%">Emergency Phone</th>
         <th width="5%">Member?</th>
-        <th width="20%">Clock out</th>
+        <th width="10%">Membership Expiration</th>
+        <th width="10%">Clock out</th>
         <th width="10%">Other options</th>
       </tr>
     </thead>
@@ -168,6 +169,9 @@ function showMembers( $option, &$rows )
         <td align="center">
           <?php echo $row->isMember ? JHTML::image('administrator/images/tick.png','yes') : JHTML::image('administrator/images/publish_x.png','yes');?> 
         </td>
+        <td>
+          <?php echo $row->membershipExpire; ?>
+        </td>
 	<td>
 	</td>
 	<td>
@@ -186,7 +190,7 @@ function showMembers( $option, &$rows )
   <?php
 }
 
-function showBicycles( $option, &$rows )
+function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 {
   ?>
   <form action="index.php" method="post" name="adminForm">
@@ -200,6 +204,12 @@ function showBicycles( $option, &$rows )
 		}
 	echo '&bull;</h2>';
   ?>
+  <select name="saleFilter">
+    <option value="" <?php if($saleFilter == 'none') echo 'selected="selected"';  ?> ></option>
+    <option value="true" <?php if($saleFilter == 'true') echo 'selected="selected"'?>>Show Sold</option>
+    <option value="false" <?php if($saleFilter == 'false') echo 'selected="selected"'?>>Show Unsold</option>
+  </select>
+  <input type="submit"/>
   <table class="adminlist">
     <thead>
       <tr>
@@ -238,6 +248,13 @@ function showBicycles( $option, &$rows )
         </td>
         <td>
           <a href="<?php echo $link; ?>"><?php echo $row->tag; ?></a>
+          <?php
+            if ($row->isForSale && $row->isReady && !$row->isSold) {
+            	$purchase_this_bicycle_link = JFilterOutput::ampReplace( 'index.php?option=' .$option . '&task=add&cbodb_mode=transaction&type=1001&itemID='. $row->tag . '&cash=' . $row->priceSale . '&comment=' . urlencode($row->description));
+            	$purchase_this_bicycle_link_markup = "<br /><a href=\"$purchase_this_bicycle_link\" title=\"Purchase $row->tag - $row->description\">Purchase this bicycle</a>";
+            	echo $purchase_this_bicycle_link_markup;
+	    }
+          ?>
         </td>
         <td>
           <a href="<?php echo $link; ?>"><?php echo $row->bikeBrand; ?></a>
@@ -281,9 +298,10 @@ function showBicycles( $option, &$rows )
     }
     ?>
   </table>
+<?php echo $pageNav->getListFooter(); ?>
   <input type="hidden" name="option" 
                     value="<?php echo $option;?>" />
-  <input type="hidden" name="task" value="" />
+  <input type="hidden" name="task" value="showbicycles" />
   <input type="hidden" name="boxchecked" value="0" />
 <input type="hidden" name="cbodb_mode" value="bicycle" />
   </form>
@@ -401,7 +419,16 @@ function editBicycle( $item, $option )
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Is it sold?</td>
-		<td><input type="checkbox" name="isSold" id="isSold" <?php echo ($item->isSold ? "checked" : "");?> /></td>
+		<td>
+			<input type="checkbox" name="isSold" id="isSold" <?php echo ($item->isSold ? "checked" : "");?> />
+          <?php
+            if ($item->isForSale && $item->isReady && !$item->isSold) {
+            	$purchase_this_bicycle_link = JFilterOutput::ampReplace( 'index.php?option=' .$option . '&task=add&cbodb_mode=transaction&type=1001&itemID='. $item->tag . '&cash=' . $item->priceSale . '&comment=' . urlencode($item->description));
+            	$purchase_this_bicycle_link_markup = "<a href=\"$purchase_this_bicycle_link\" title=\"Purchase $item->tag - $item->description\">Purchase this bicycle</a>";
+            	echo $purchase_this_bicycle_link_markup;
+	    }
+          ?>
+		</td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Size:</td>
@@ -1930,7 +1957,19 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Item or Bike tag number</td>
-		<td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td>
+		<td>
+		    <?php $itemDropdownList = CbodbItem::itemList(); ?>
+        <select name="itemID">
+        <option value="0">Choose a Item or Bike tag number below...</option>
+        <?php
+        	foreach ($itemDropdownList as $bikeTag ) {
+			$selectedStr = ($bikeTag->tag == $transaction->itemID) ? 'selected="selected" ' : '';
+        		echo "<option ${selectedStr}value=\"$bikeTag->tag\">$bikeTag->tag</option>";
+        	}
+        ?>
+        </select>
+		</td>
+		<!-- <td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td> -->
 	</tr>
 	<tr>
 		<td class="key">Comment</td>
@@ -2015,7 +2054,15 @@ function newProvisionalTransaction( $option, $transaction, $member, $memberCredi
 	</tr>
 	<tr>
 		<td class="key">Transaction Type</td>
-		<td><?php HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,1002);?></td>
+		<td>
+			<?php
+			$type = $transaction->type;
+			if (!$type) {
+				$type = 1002;
+			}
+			HTML_cbodb::dropdownFromArray("type",HTML_cbodb::$adminTransactionTypeArray,$type);
+			?>
+		</td>
 	</tr>
 	<tr>
 		<td class="key">Credits</td>

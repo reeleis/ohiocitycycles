@@ -344,6 +344,9 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 	} /* closes the function */
 
 function addBicycle( $option, $memberID ) {
+$commissionMechanics = CbodbMember::getGroupMemberList($option, "Commission mechanic");
+$commissionMechanics[0] = "No one";
+ksort($commissionMechanics);
 ?>
   <h2>Enter a Bicycle</h2>
   <p>Use this form to enter the bicycle you've been working on into our database system. When you're done, press "Save and Finish", and the system will give a tag number to write on the bicycle's paper tag.</p>
@@ -407,7 +410,7 @@ function addBicycle( $option, $memberID ) {
 	  </tr>
 	  <tr>
 	  	<td width="100" align="right" class="key">Commission:</td>
-	  	<td><?php HTML_cbodb::dropdownFromArray("commissionUserID", CbodbItem::$commissionMechanics, 0); ?></td>
+	  	<td><?php HTML_cbodb::dropdownFromArray("commissionUserID", $commissionMechanics, 0); ?></td>
 	  </tr>
   </table>
   <br />	

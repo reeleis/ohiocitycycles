@@ -223,7 +223,7 @@ function listNamesByFirstName( $option )
 function listNamesByLastName( $option )
 {
 	$db =& JFactory::getDBO();
-	$query = "SELECT id,nameFirst,nameLast FROM #__cbodb_members WHERE nameLast LIKE '". JRequest::getVar("namelast")."' ORDER BY nameLast,nameFirst";
+	$query = "SELECT id,nameFirst,nameLast FROM #__cbodb_members WHERE nameLast LIKE '". $db->getEscaped( JRequest::getVar("namelast"), true )."' ORDER BY nameLast,nameFirst";
 	$db->setQuery( $query );
 	$rows = $db->loadObjectList();
 	if ($db->getErrorNum()) 

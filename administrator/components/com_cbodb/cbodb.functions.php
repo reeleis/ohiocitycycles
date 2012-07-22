@@ -149,14 +149,15 @@ class CbodbMember
     /*******************************************************/
     
   public static $memberGroupArray = array(
-    1 => "Class graduate or test-out",
-    2 => "Skilled mechanic",
-    3 => "Super volunteer",
-    4 => "Staff",
-    5 => "Trustee",
-    6 => "New volunteer",
-    7 => "Current student",
-    8 => "Key volunteer");
+	1 => "Class graduate or test-out",
+	2 => "Skilled mechanic",
+	3 => "Super volunteer",
+	4 => "Staff",
+	5 => "Trustee",
+	6 => "New volunteer",
+	7 => "Current student",
+	8 => "Key volunteer",
+	9 => "Commission mechanic");
     
     /*******************************************************/
     /*******************************************************/
@@ -533,7 +534,33 @@ class CbodbMember
 		}
 		return $rows;
     }
-	
+
+
+	/*
+	* getGroupMemberList()
+	*
+	* Show all of the members in a group; specify group by text name
+	*
+	* example: CbodbMember::getGroupMemberList("Key volunteer")
+	*
+	* returns array with value pairs in the format of member_id => display name
+	*/
+	public static function getGroupMemberList( $option, $groupName )
+	{
+		// array of all keys to which group name applies (should only be one)
+		$group_nums = array_keys(CbodbMember::$memberGroupArray, $groupName);
+		$query = "SELECT id,nameFirst,nameLast from #__cbodb_members WHERE isGroup".$group_nums[0]." = 1 ORDER BY nameLast";
+		$db =& JFactory::getDBO();
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		$groupMembers = array();
+		foreach ($rows as $row)
+		{
+		 $groupMembers[$row->id] = $row->nameFirst. ($row->nameFirst != "" && $row->nameLast != "" ? " " : "") .$row->nameLast;
+		}
+		return $groupMembers;
+	}
+		
 } /* END class CbodbMember */
 
 
@@ -850,12 +877,12 @@ class CbodbItem {
 		return $commissionList;
 	}
    
-    public static function itemList( $addsql=NULL ) 
+    public static function itemList( $addsql=NULL, $limitstart = 0, $limit = 50 ) 
     {
     	$db =& JFactory::getDBO();
     	$query = "SELECT * FROM #__cbodb_items";
     	if ($addsql) $query = "SELECT * FROM #__cbodb_items ".$addsql;
-		$db->setQuery( $query );
+		$db->setQuery( $query, $limitstart, $limit );
 		$rows = $db->loadObjectList();
 		if ($db->getErrorNum()) 
 		{
@@ -865,6 +892,20 @@ class CbodbItem {
 		return $rows;
     }
     
+   public static function itemCount($addsql=NULL) {
+           $db =& JFactory::getDBO();
+           $query = "SELECT COUNT(*) FROM #__cbodb_items";
+           if($addsql) $query = "SELECT COUNT(*) FROM #__cbodb_items ".$addsql;
+           $db->setQuery($query);
+           $count = $db->loadResult();
+           if($db->getErrorNum()){
+                  echo $db->stderr();
+                   return false;
+           }
+           return $count;
+
+   }
+
    public static function getItemFromTag( $tag )
    {
   		$db =& JFactory::getDBO();
@@ -1181,6 +1222,9 @@ function showMembers( $option, $filtered=FALSE )
 		if (strcmp($filter,"Logged In")==0)
 		{
 		$rows = CbodbMember::loggedInList(TRUE);
+		} else if (strcmp($filter,"Active")==0)
+		{
+		$rows = CbodbMember::memberList("WHERE isMember>0 ORDER BY membershipExpire ASC");
 		} else if (strcmp($filter,"Recent")==0)
 		{
 		$rows = CbodbMember::memberList("ORDER BY timeChanged DESC LIMIT 40");
@@ -1198,16 +1242,44 @@ function showMembers( $option, $filtered=FALSE )
 
 function showBicycles( $option, $filter=FALSE )
 {
+	global $mainframe;
+	$saleFilter = JRequest::getVar('saleFilter');
+	$limit = $mainframe->getUserStateFromRequest('global.list.limit', 'limit', $mainframe->getCfg('list_limit'), 'int');
+	$limitstart = $mainframe->getUserStateFromRequest($option.'limitstart', 'limitstart', 0, 'int');
+
+	if($saleFilter != null && $saleFilter != '') {
+		if($saleFilter == 'true') {
+			$saleFilter = ' AND isSold = 1';
+			$b = 'true';
+			echo $saleFilter;
+		} else if($saleFilter == 'false') {
+			$saleFilter = ' AND isSold = 0';
+			$b = 'false';
+			echo $saleFilter;
+		}
+	} else {
+		$saleFilter = '';
+		$b = 'none';
+	}
+
+	$rows = null;
+	$numRows = null;
 	if ($filter) 
 	{
 		$filter = JRequest::getVar('filter');
-		$rows = CbodbItem::itemList("WHERE isBike = 1 ORDER BY ".$filter);	
-		HTML_cbodb::showBicycles( $option, $rows );
+
+		$rows = CbodbItem::itemList("WHERE isBike = 1". $saleFilter  . " ORDER BY ".$filter, $limitstart, $limit);
+		$numRows = CbodbItem::itemCount("WHERE isBike = 1".$saleFilter . " ORDER BY ".$filter);
 	} else
 	{
-		$rows = CbodbItem::itemList("WHERE isBike = 1");
-		HTML_cbodb::showBicycles( $option, $rows );
+		$rows = CbodbItem::itemList("WHERE isBike = 1" . $saleFilter, $limitstart, $limit);
+		$numRows = CbodbItem::itemCount("WHERE isBike = 1". $saleFilter);
 	}
+
+        jimport('joomla.html.pagination');
+        $pageNav = new JPagination($numRows, $limitstart, $limit);
+
+        HTML_cbodb::showBicycles( $option, $rows, $pageNav, $b );
 }
 
 function showTasks( $option, $filter=FALSE )
@@ -1229,6 +1301,7 @@ function showLoggedInMembers( $option )
 	$rows = CbodbMember::loggedInList(TRUE);
 	HTML_cbodb::showLoggedInMembers( $option, $rows );
 }
+
 
 function doSetAddress ( $option )
 {
@@ -1493,6 +1566,10 @@ function newProvisionalTransaction( $option, $fromTransaction = FALSE )
 	$memberCredits = $member->getMemberInfo();
 	
 	$transaction = new CbodbTransaction();
+	$transaction->itemID = JRequest::getVar('itemID', 0, '', 'INT');
+	$transaction->cash = JRequest::getVar('cash', '', '', 'string');
+	$transaction->comment = JRequest::getVar('comment', '', '', 'string');
+	$transaction->type = JRequest::getVar('type', '', '', 'INT');
 	
 	//  John Mikolich   December 30, 2010
     //  This is the first (and so far, the only working) example
