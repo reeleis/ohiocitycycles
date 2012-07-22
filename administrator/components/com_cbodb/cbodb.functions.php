@@ -824,13 +824,31 @@ class CbodbItem {
     public static $itemBikeDrivetrainArray = array("Not specified", "F&R Derailer", "Rear Derailer", "Hub Gears", "Singlespeed", "Fixed Gear", "Unispeed");
     public static $itemSourceArray = array("Not specified", "Individual Donation", "Bike shop collection", "Police", "Purchased new");
     public static $itemBikeFrameStyleArray = array("Not specified", "Diamond", "Mixte", "Step-through", "Tandem");
-    public static $commissionMechanics = array(0 => "No one", 1180 => "Al", 1271=> "Stuart", 240=>"Ray", 1139=>"Ben");
+    //public static $commissionMechanics = array(0 => "No one", 1180 => "Al", 1271=> "Stuart", 240=>"Ray", 1139=>"Ben");
+	public static $commissionMechanics;
     
     /*******************************************************/
     /*******************************************************/
     
     /** static functions */
     
+	public static function getCommissionedMechanics() {
+		$db =& JFactory::getDBO();
+		$query = "SELECT m.`id` id, `nameFirst` name FROM `jos_cbodb_members` m, `jos_cbodb_commisioned_users` c WHERE m.id = c.id";
+		$db->setQuery( $query );
+		$rows = $db->loadObjectList();
+		if ($db->getErrorNum()) 
+		{
+			echo $db->stderr();
+			return false;
+		}
+		$commissionList[0] = "No one";
+		foreach ($rows as $singleRow) {
+			$commissionList[$singleRow->id] = $singleRow->name;
+		}
+		
+		return $commissionList;
+	}
    
     public static function itemList( $addsql=NULL ) 
     {
@@ -880,6 +898,7 @@ class CbodbItem {
 	}
 	
 } /* END class CbodbItem */
+CbodbItem::$commissionMechanics = CbodbItem::getCommissionedMechanics();
 
 class CbodbTask {
 
