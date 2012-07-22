@@ -196,12 +196,12 @@ function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 		}
 	echo '&bull;</h2>';
   ?>
-  <select name="saleFilter">
+  <strong>Filter:</strong> Is Sold: <select name="saleFilter">
     <option value="" <?php if($saleFilter == 'none') echo 'selected="selected"';  ?> ></option>
     <option value="true" <?php if($saleFilter == 'true') echo 'selected="selected"'?>>Show Sold</option>
     <option value="false" <?php if($saleFilter == 'false') echo 'selected="selected"'?>>Show Unsold</option>
   </select>
-  <input type="submit"/>
+  <input type="submit" name="Submit" value="Filter" />
   <table class="adminlist">
     <thead>
       <tr>

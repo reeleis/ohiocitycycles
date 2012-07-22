@@ -1145,11 +1145,9 @@ function showBicycles( $option, $filter=FALSE )
 		if($saleFilter == 'true') {
 			$saleFilter = ' AND isSold = 1';
 			$b = 'true';
-			echo $saleFilter;
 		} else if($saleFilter == 'false') {
 			$saleFilter = ' AND isSold = 0';
 			$b = 'false';
-			echo $saleFilter;
 		}
 	} else {
 		$saleFilter = '';
