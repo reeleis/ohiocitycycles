@@ -190,7 +190,7 @@ function showMembers( $option, &$rows )
   <?php
 }
 
-function showBicycles( $option, &$rows )
+function showBicycles( $option, &$rows, $pageNav, $saleFilter )
 {
   ?>
   <form action="index.php" method="post" name="adminForm">
@@ -204,6 +204,12 @@ function showBicycles( $option, &$rows )
 		}
 	echo '&bull;</h2>';
   ?>
+  <select name="saleFilter">
+    <option value="" <?php if($saleFilter == 'none') echo 'selected="selected"';  ?> ></option>
+    <option value="true" <?php if($saleFilter == 'true') echo 'selected="selected"'?>>Show Sold</option>
+    <option value="false" <?php if($saleFilter == 'false') echo 'selected="selected"'?>>Show Unsold</option>
+  </select>
+  <input type="submit"/>
   <table class="adminlist">
     <thead>
       <tr>
@@ -292,9 +298,10 @@ function showBicycles( $option, &$rows )
     }
     ?>
   </table>
+<?php echo $pageNav->getListFooter(); ?>
   <input type="hidden" name="option" 
                     value="<?php echo $option;?>" />
-  <input type="hidden" name="task" value="" />
+  <input type="hidden" name="task" value="showbicycles" />
   <input type="hidden" name="boxchecked" value="0" />
 <input type="hidden" name="cbodb_mode" value="bicycle" />
   </form>
