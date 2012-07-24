@@ -25,6 +25,7 @@ class TableMember extends JTable
   var $isGroup6 = null;
   var $isGroup7 = null;
   var $isGroup8 = null;
+  var $isGroup9 = null;
   var $timeCreated = null;
   var $timeChanged = null;
   var $address1 = null;
