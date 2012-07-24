@@ -344,7 +344,8 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 	} /* closes the function */
 
 function addBicycle( $option, $memberID ) {
-$commissionMechanics = CbodbMember::getGroupMemberList($option, "Commission mechanic");
+//$commissionMechanics = CbodbMember::getGroupMemberList($option, "Commission mechanic");
+$commissionMechanics = CbodbItem::getCommissionedMechanics();
 $commissionMechanics[0] = "No one";
 ksort($commissionMechanics);
 ?>
