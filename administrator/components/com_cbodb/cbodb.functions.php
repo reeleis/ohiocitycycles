@@ -128,6 +128,7 @@ class CbodbMember
 		$this->data->isGroup6 = ($this->data->isGroup6=="on") ? 1 : 0;
 		$this->data->isGroup7 = ($this->data->isGroup7=="on") ? 1 : 0;
 		$this->data->isGroup8 = ($this->data->isGroup8=="on") ? 1 : 0;
+		$this->data->isGroup9 = ($this->data->isGroup9=="on") ? 1 : 0;
         
 		$this->data->custom1 = ($this->data->custom1=="on") ? 1 : 0;
 		$this->data->custom2 = ($this->data->custom2=="on") ? 1 : 0;
@@ -861,7 +862,7 @@ class CbodbItem {
     
 	public static function getCommissionedMechanics() {
 		$db =& JFactory::getDBO();
-		$query = "SELECT m.`id` id, `nameFirst` name FROM `jos_cbodb_members` m, `jos_cbodb_commisioned_users` c WHERE m.id = c.id";
+		$query = "SELECT m.`id` id, `nameFirst` name FROM `jos_cbodb_members` m WHERE m.isGroup9 = 1";
 		$db->setQuery( $query );
 		$rows = $db->loadObjectList();
 		if ($db->getErrorNum()) 
@@ -993,6 +994,7 @@ class CbodbTask {
 		$this->data->forGroup6 = ($this->data->forGroup6=="on") ? 1 : 0;
 		$this->data->forGroup7 = ($this->data->forGroup7=="on") ? 1 : 0;
 		$this->data->forGroup8 = ($this->data->forGroup8=="on") ? 1 : 0;
+		$this->data->forGroup9 = ($this->data->forGroup9=="on") ? 1 : 0;
 
 		/* below is a kluge - i had been getting isOpen and isDone set to true on new tasks
 		   couldn't figure out why, so i'm doing this for now */

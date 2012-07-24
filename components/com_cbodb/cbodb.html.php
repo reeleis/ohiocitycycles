@@ -152,7 +152,10 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
 			$link = JRoute::_('index.php?option=' . $option . '&task=listnames&firstletter='.$letter);
 			echo "<a href=\"".$link."\">".$letter."</a>&nbsp;";
 		}*/
-		echo '</h1><br><h1>Or <a href="/index.php?option=com_cbodb&task=newmember#top">Create an account</a>!<br><Br></h1>';
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=newmember&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h1>Or&nbsp;<a href=' . $link . '>Create an Account</a></h1><br />';
+		//echo '</h1><br><h1>Or <a href="/index.php?option=com_cbodb&task=newmember#top">Create an account</a>!<br><Br></h1>';
 		echo '
 		Currently Logged in:
 		<table class="loggedInList">
@@ -250,7 +253,11 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
                     <br>
 		<br>
                 <br>
-                <h2>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>
+                <!--Commented out for relative linking
+                <h2>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>-->
+                <?php $option = "com_cbodb";
+        		$link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+				echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';?>
  <?php
 	}
 
@@ -340,7 +347,10 @@ function dropdownFromArray( $name, $options, $selectedKey=1, $disabled=false )
   	  	<input type="hidden" name="memberID" value="'.$member->id.'" />
 		  </form><br />';
 		}
-		echo '<br /><br /><h1>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h1>';
+		/*echo '<br /><br /><h1>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h1>';*/
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';
 	} /* closes the function */
 
 function addBicycle( $option, $memberID ) {
@@ -618,6 +628,9 @@ Email is the main way we communicate with our members and customers. We will not
         <input type="hidden" name="option" value="<?php echo $option;?>" />
         <input type="hidden" name="task" value="savenewmember" />
         </form>
+        <?php $option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';?>
         <?php
         }
 
@@ -703,7 +716,10 @@ function listMailingListSubscriptionOptions ( $groups )
 			</tr>';
 		}
 		echo '</table>';
-		echo '<br><br><h1>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h1>';
+		/*echo '<br><br><h1>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h1>';*/
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';
 	}	
 
 	function viewTask( $option, $memberID, $task, $item )
@@ -732,7 +748,9 @@ function listMailingListSubscriptionOptions ( $groups )
 		<input type="hidden" name="memberID" value="'.$memberID.'" />
   		<input type="hidden" name="task" value="listtasks" />
 		</form>';
-		echo '<br><br><h1> <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Back to start</a></h1>';
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>&nbsp;<a href=' . $link . '>Back to Start</a></h2>';
 
 	}
 
@@ -758,7 +776,9 @@ echo '		<form action="index.php#top" method="post" name="loginForm">';
   		<input type="hidden" name="option" value="'.$option.'" />
   		<input type="hidden" name="task" value="savetask" />
 		</form>';
-		echo '<br><br><h1> <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Cancel and go back to start</a></h1>';
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Cancel and return to Clock-In Page</a></h2>';
 	}
 	function listMemberTransactions($transactionList, $memberID, $page)
 	{
@@ -802,7 +822,9 @@ echo '		<form action="index.php#top" method="post" name="loginForm">';
 		echo '</table><br>';	
 		if ($page > 1) echo '<a href="/index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page-1).'#top">Newer Transactions</a> &nbsp;&nbsp;&nbsp;&nbsp;';
 		echo '<a href="/index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page+1).'#top">Older Transactions</a>';
-		echo '<br><br><h2><a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>';
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';
 
 	}
 
@@ -883,7 +905,9 @@ echo '<SELECT NAME="classdate[month]">
 		echo '</table>';
 		echo '<br><br><input class="bigbutton" type="submit" name="startclass" value="Start Class">';
 		echo '</form>';
-		echo '<br><br><h2>or <a href="http://ohiocitycycles.org/index.php?option=com_cbodb&task=shop&key=3b767559374f5132236f6e68256b2529#top">Go Back</a></h2>';
+		$option = "com_cbodb";
+        $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
+		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';
 	}
 	
 }
