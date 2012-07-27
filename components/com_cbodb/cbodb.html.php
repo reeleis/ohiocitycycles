@@ -361,27 +361,54 @@ ksort($commissionMechanics);
 ?>
   <h2>Enter a Bicycle</h2>
   <p>Use this form to enter the bicycle you've been working on into our database system. When you're done, press "Save and Finish", and the system will give a tag number to write on the bicycle's paper tag.</p>
-  <form action="index.php#top" method="post" name="addbicycleform">
+  <?php JHTML::_('behavior.formvalidation'); ?>
+	<script language="javascript">
+	function myValidate(f) {
+   	if (document.formvalidator.isValid(f)) {
+      	f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+      	return true; 
+   	}
+   	else {
+      var msg = 'You have not entered all necessary values for this bicycle:';
+ 
+      //Example on how to test specific fields
+      if($('bikeBrand').hasClass('invalid')){msg += '\n\n\tMissing Brand';}
+      if($('bikeModel').hasClass('invalid')){msg += '\n\tMissing Model';}
+      if($('bikeColor').hasClass('invalid')){msg += '\n\tMissing Color';}
+      if($('bikeSerial').hasClass('invalid')){msg += '\n\tMissing Serial';}
+      if($('priceSale').hasClass('invalid')){msg += '\n\tMissing Price';}
+      if($('bikeSize1').hasClass('invalid')){msg += '\n\tMissing Height';}
+      if($('bikeSize2').hasClass('invalid')){msg += '\n\tMissing Length';}
+      if($('bikeSize3').hasClass('invalid')){msg += '\n\tMissing Tire Size';}
+ 
+      alert(msg);
+   	}
+   return false;
+}
+</script>
+  
+  <form id="test-form" method="post" class="form-validate" onSubmit="return myValidate(this);">
+  <input type="hidden" name="check" value="post"/>
   <table>
     <tr>
     	<td width="200" align="right" class="key">Bike Brand:</td>
-    	<td><input class="text_area" type="text" name="bikeBrand" id="bikeBrand" size="20" maxlength="50" value="" /></td>
+    	<td><input type="text" class="required" name="bikeBrand" id="bikeBrand" size="20" maxlength="50" value="" /></td>
     </tr>
     <tr>
     	<td width="200" align="right" class="key">Bike Model:</td>
-    	<td><input class="text_area" type="text" name="bikeModel" id="bikeModel" size="20" maxlength="50" /></td>
+    	<td><input type="text" class="required" name="bikeModel" id="bikeModel" size="20" maxlength="50" /></td>
     </tr>
     <tr>
     	<td width="200" align="right" class="key">Color:</td>
-    	<td><input class="text_area" type="text" name="bikeColor" id="bikeColor" size="20" maxlength="50" /></td>
+    	<td><input class="required" type="text" name="bikeColor" id="bikeColor" size="20" maxlength="50" /></td>
     </tr>
     <tr>
     	<td width="200" align="right" class="key">Bike Serial Number:</td>
-    	<td><input class="text_area" type="text" name="bikeSerial" id="bikeSerial" size="20" maxlength="50" /></td>
+    	<td><input class="required" type="text" name="bikeSerial" id="bikeSerial" size="20" maxlength="50" /></td>
     </tr>
 	  <tr>
 	  	<td width="100" align="right" class="key">Sale Price:</td>
-	  	<td><input class="text_area" type="text" name="priceSale" id="priceSale" size="50" maxlength="250" /></td>	
+	  	<td><input class="required" type="text" name="priceSale" id="priceSale" size="50" maxlength="250" /></td>	
 	  </tr>
 	  <tr>
 	  	<td width="100" align="right" class="key">Is it for sale?</td>
@@ -394,9 +421,9 @@ ksort($commissionMechanics);
 	  <tr>
 	  	<td width="100" align="right" class="key">Size:</td>
 	  	<td>
-	  	  <input class="text_area" type="text" name="bikeSize1" id="bikeSize1" size="5" maxlength="250" /> x
-	  		<input class="text_area" type="text" name="bikeSize2" id="bikeSize2" size="5" maxlength="250" /> x
-	  		<input class="text_area" type="text" name="bikeSize3" id="bikeSize3" size="5" maxlength="250" /> &nbsp;
+	  	  <input class="required" type="text" name="bikeSize1" id="bikeSize1" size="5" maxlength="250" /> x
+	  		<input class="required" type="text" name="bikeSize2" id="bikeSize2" size="5" maxlength="250" /> x
+	  		<input class="required" type="text" name="bikeSize3" id="bikeSize3" size="5" maxlength="250" /> &nbsp;
 	  	</td>
 	  </tr>
 	  <tr>
@@ -425,7 +452,7 @@ ksort($commissionMechanics);
 	  </tr>
   </table>
   <br />	
-  <input type="submit" name="membersubmit" value="Save and Finish">
+  <input type="submit" name="membersubmit" value="Submit">
   <input type="hidden" name="memberID" value="<?php echo $memberID;?>">
   <input type="hidden" name="option" value="<?php echo $option;?>" />
   <input type="hidden" name="task" value="savenewbicycle" />
@@ -820,8 +847,8 @@ echo '		<form action="index.php#top" method="post" name="loginForm">';
 		}
 		
 		echo '</table><br>';	
-		if ($page > 1) echo '<a href="/index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page-1).'#top">Newer Transactions</a> &nbsp;&nbsp;&nbsp;&nbsp;';
-		echo '<a href="/index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page+1).'#top">Older Transactions</a>';
+		if ($page > 1) echo '<a href="index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page-1).'#top">Newer Transactions</a> &nbsp;&nbsp;&nbsp;&nbsp;';
+		echo '<a href="index.php?option=com_cbodb&task=listmembertransactions&memberID='.$memberID.'&page='.($page+1).'#top">Older Transactions</a>';
 		$option = "com_cbodb";
         $link = JRoute::_('index.php?option=' . $option . '&task=shop&key=3b767559374f5132236f6e68256b2529' .'#top');
 		echo '<br /><h2>or&nbsp;<a href=' . $link . '>Return to Clock-In Page</a></h2>';
