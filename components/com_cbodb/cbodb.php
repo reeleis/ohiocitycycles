@@ -629,6 +629,7 @@ function saveNewBicycle( $option )
 
 	$item = new CbodbItem();
 	$postrow = JRequest::get('post');
+	$memberID = JRequest::getVar('memberID');
 
   $db =& JFactory::getDBO();
   $query = "SELECT MAX(tag) FROM #__cbodb_items";
@@ -647,6 +648,18 @@ function saveNewBicycle( $option )
 	//$item->commissionUserID = JRequest::getVar('memberID');
 
 	$item->saveData();
+	
+	// Added 2012-07-26 Lee Reis Post-Givecamp 2012
+	$membertransaction = new CbodbTransaction();
+	date_default_timezone_set(getConfigValue("timeZone") );
+	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+    $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+    $membertransaction->type = 7;
+    $membertransaction->memberID = $memberID;
+    $membertransaction->itemID = $maxTag + 1;
+    $membertransaction->cash = $item->priceSale;
+	$membertransaction->saveData();
+	// End of Added 2012-07-26
 
   $mainframe->redirect('index.php?option=' .$option.'&task=shop&key=3b767559374f5132236f6e68256b2529#top', "Bicycle is saved with tag number $item->tag. Please write the number on the bike's tag!");
 }

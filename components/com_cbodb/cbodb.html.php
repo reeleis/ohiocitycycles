@@ -452,7 +452,7 @@ ksort($commissionMechanics);
 	  </tr>
   </table>
   <br />	
-  <input type="submit" name="membersubmit" value="Submit">
+  <input type="submit" name="membersubmit" value="Save and Finish">
   <input type="hidden" name="memberID" value="<?php echo $memberID;?>">
   <input type="hidden" name="option" value="<?php echo $option;?>" />
   <input type="hidden" name="task" value="savenewbicycle" />
