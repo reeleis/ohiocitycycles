@@ -1897,8 +1897,10 @@ function saveBicycle( $option )
     $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
     $membertransaction->type = 7;
     $membertransaction->memberID = $postRow['memberID'];
+    $membertransaction->itemID = $maxTag + 1;
+    $membertransaction->cash = $bicycle->priceSale;
 	$membertransaction->saveData();
-	// End of Added 2012-07-21
+	// End of Added 2012-07-21; adjusted by Lee to add tag number and price
 	
 	$another = JRequest::getVar('another');
 

@@ -1970,16 +1970,8 @@ function editTransaction( $option, $transaction, $member, $memberCredits )
 	</tr>
 	<tr>
 		<td class="key">Item or Bike tag number</td>
-		<td>
-		    <?php $itemDropdownList = CbodbItem::itemList(); ?>
-        <select name="itemID">
-        <option value="0">Choose a Item or Bike tag number below...</option>
-        <?php
-        	foreach ($itemDropdownList as $bikeTag ) {
-			$selectedStr = ($bikeTag->tag == $transaction->itemID) ? 'selected="selected" ' : '';
-        		echo "<option ${selectedStr}value=\"$bikeTag->tag\">$bikeTag->tag</option>";
-        	}
-        ?>
+		<td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td>
+		
         </select>
 		</td>
 		<!-- <td><input name="itemID" id="itemID" value="<?php echo $transaction->itemID; ?>"></td> -->
