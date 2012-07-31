@@ -394,33 +394,60 @@ function editBicycle( $item, $option )
 {
 	JHTML::_('behavior.calendar');
 	?>
-	<form action="index.php" method="post" name="adminForm" id="adminForm">
+	<?php JHTML::_('behavior.formvalidation'); ?>
+	<script language="javascript">
+	function myValidate(f) {
+   	if (document.formvalidator.isValid(f)) {
+      	f.check.value='<?php echo JUtility::getToken(); ?>'; //send token
+      	return true; 
+   	}
+   	else {
+      var msg = 'You have not entered all necessary values for this bicycle:';
+ 
+      //Example on how to test specific fields
+      if($('bikeBrand').hasClass('invalid')){msg += '\n\n\tMissing Brand';}
+      if($('bikeModel').hasClass('invalid')){msg += '\n\tMissing Model';}
+      if($('bikeColor').hasClass('invalid')){msg += '\n\tMissing Color';}
+      if($('bikeSerial').hasClass('invalid')){msg += '\n\tMissing Serial';}
+      if($('priceSale').hasClass('invalid')){msg += '\n\tMissing Price';}
+      if($('bikeSize1').hasClass('invalid')){msg += '\n\tMissing Height';}
+      if($('bikeSize2').hasClass('invalid')){msg += '\n\tMissing Length';}
+      if($('bikeSize3').hasClass('invalid')){msg += '\n\tMissing Tire Size';}
+ 
+      alert(msg);
+   	}
+   return false;
+}
+</script>
+	<form action="index.php" class="form-validate" method="post" name="adminForm" id="adminForm" onSubmit="return myValidate(this);">
+	<input type="hidden" name="check" value="post"/>
 	<fieldset class="adminform">
 	<legend>Bicycle Details</legend>
 	<table class="admintable">
 	<tr>
 		<td width="100" align="right" class="key">Tag Number:</td>
-		<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>" disabled="disabled"></td>
+		<td><?php echo $item->tag; ?></td>
+		<!--<td><input class="text_area" type="text" name="tag" id="tag" value="<?php echo $item->tag; ?>" disabled="disabled"></td>-->
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Brand:</td>
-		<td><input class="text_area" type="text" name="bikeBrand" id="bikeBrand" size="20" maxlength="50" value="<?php echo $item->bikeBrand;?>" /></td>
+		<td><input class="required" type="text" name="bikeBrand" id="bikeBrand" size="20" maxlength="50" value="<?php echo $item->bikeBrand;?>" /></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Model:</td>
-		<td><input class="text_area" type="text" name="bikeModel" id="bikeModel" size="20" maxlength="50" value="<?php echo $item->bikeModel;?>" /></td>
+		<td><input class="required" type="text" name="bikeModel" id="bikeModel" size="20" maxlength="50" value="<?php echo $item->bikeModel;?>" /></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Color:</td>
-		<td><input class="text_area" type="text" name="bikeColor" id="bikeColor" size="50" maxlength="250" value="<?php echo $item->bikeColor;?>" /></td>
+		<td><input class="required" type="text" name="bikeColor" id="bikeColor" size="50" maxlength="250" value="<?php echo $item->bikeColor;?>" /></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Serial:</td>
-		<td><input class="text_area" type="text" name="bikeSerial" id="bikeSerial" size="50" maxlength="250" value="<?php echo $item->bikeSerial;?>" /></td>
+		<td><input class="required" type="text" name="bikeSerial" id="bikeSerial" size="50" maxlength="250" value="<?php echo $item->bikeSerial;?>" /></td>
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Sale Price:</td>
-		<td><input class="text_area" type="text" name="priceSale" id="priceSale" size="50" maxlength="250" value="<?php echo $item->priceSale;?>" /></td>	
+		<td><input class="required" type="text" name="priceSale" id="priceSale" size="50" maxlength="250" value="<?php echo $item->priceSale;?>" /></td>	
 	</tr>
 	<tr>
 		<td width="100" align="right" class="key">Is it for sale?</td>
@@ -446,9 +473,9 @@ function editBicycle( $item, $option )
 	<tr>
 		<td width="100" align="right" class="key">Size:</td>
 		<td>
-		  <input class="text_area" type="text" name="bikeSize1" id="bikeSize1" size="5" maxlength="250" value="<?php echo $item->bikeSize1;?>" /> x
-			<input class="text_area" type="text" name="bikeSize2" id="bikeSize2" size="5" maxlength="250" value="<?php echo $item->bikeSize2;?>" /> x
-			<input class="text_area" type="text" name="bikeSize3" id="bikeSize3" size="5" maxlength="250" value="<?php echo $item->bikeSize3;?>" /> &nbsp;
+		  <input class="required" type="text" name="bikeSize1" id="bikeSize1" size="5" maxlength="250" value="<?php echo $item->bikeSize1;?>" /> x
+			<input class="required" type="text" name="bikeSize2" id="bikeSize2" size="5" maxlength="250" value="<?php echo $item->bikeSize2;?>" /> x
+			<input class="required" type="text" name="bikeSize3" id="bikeSize3" size="5" maxlength="250" value="<?php echo $item->bikeSize3;?>" /> &nbsp;
 			<?php HTML_cbodb::dropdownFromArray("bikeSizeUnit",CbodbItem::$itemBikeSizeUnitArray,$item->bikeSizeUnit); ?>
 		</td>
 	</tr>
@@ -507,6 +534,7 @@ function editBicycle( $item, $option )
 	</fieldset>
 	<input type="hidden" name="id" value="<?php echo $item->id; ?>" />
 	<input type="hidden" name="option" value="<?php echo $option;?>" />
+	<input type="hidden" name="tag" value="<?php echo $item->tag;?>" />
 	<input type="hidden" name="task" value="save" />
 	<input type="hidden" name="cbodb_mode" value="bicycle" />
 	<input type="hidden" name="isBike" value="on" />

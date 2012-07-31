@@ -139,6 +139,9 @@ class CbodbMember
 
     public function saveData()
     {
+    	date_default_timezone_set(getConfigValue("timeZone") );
+    	$this->data->timeChanged = date("Y-m-d H:i:s", time());
+    	
 	    if (!$this->data->store())
 	    {
 		    echo "<script> alert('".$row->getError()."');window.history.go(-1); </script>\n";
@@ -602,7 +605,8 @@ class CbodbTransaction {
     }
  
     public function saveData() {
-        $this->data->timeChanged = NULL;
+    	date_default_timezone_set(getConfigValue("timeZone") );
+        $this->data->timeChanged = date("Y-m-d H:i:s", time());
         $this->data->store();
     }
 
@@ -831,8 +835,9 @@ class CbodbItem {
     }
     
     public function saveData() {
-
-		$this->data->timeChanged = NULL;
+		
+		date_default_timezone_set(getConfigValue("timeZone") );
+		$this->data->timeChanged = date("Y-m-d H:i:s", time());
 
 		if (!$this->data->store())
 		{
@@ -1019,7 +1024,7 @@ class CbodbTask {
             date_default_timezone_set(getConfigValue("timeZone") );
             $this->data->timeAdded = date("Y-m-d H:i:s", time());
     	} 
-    	$this->data->timeChanged = NULL;
+    	$this->data->timeChanged = date("Y-m-d H:i:s", time());
     	
 	$this->data->store();
     }
@@ -1113,7 +1118,7 @@ class CbodbQuery {
             date_default_timezone_set(getConfigValue("timeZone") );
             $this->data->timeAdded = date("Y-m-d H:i:s", time());
         }
-        $this->data->timeChanged = NULL;
+        $this->data->timeChanged = date("Y-m-d H:i:s", time());
 
         $this->data->store();
     }
@@ -1276,8 +1281,8 @@ function showBicycles( $option, $filter=FALSE )
 		$numRows = CbodbItem::itemCount("WHERE isBike = 1".$saleFilter . " ORDER BY ".$filter);
 	} else
 	{
-		$rows = CbodbItem::itemList("WHERE isBike = 1" . $saleFilter, $limitstart, $limit);
-		$numRows = CbodbItem::itemCount("WHERE isBike = 1". $saleFilter);
+		$rows = CbodbItem::itemList("WHERE isBike = 1" . $saleFilter . " ORDER BY tag DESC", $limitstart, $limit);
+		$numRows = CbodbItem::itemCount("WHERE isBike = 1". $saleFilter . " ORDER BY tag DESC");
 	}
 
         jimport('joomla.html.pagination');
@@ -1871,46 +1876,53 @@ function saveBicycle( $option )
 
 	$db =& JFactory::getDBO();
 	
-	$query = "SELECT MAX(tag) FROM #__cbodb_items";
-  	$db->setQuery( $query );
-  	$maxTag = $db->loadResult();
-  	if ($db->getErrorNum()) {
-  		echo $db->stderr();
-  		return false;
-  	}
-  	$bicycle->tag = $maxTag + 1;
-  
-	$query = "SELECT id FROM #__cbodb_items WHERE tag = '".$bicycle->tag."' LIMIT 1";
-	$db->setQuery( $query );
-	$id = $db->loadResult();
+	// Added 2012-07-21 Bart McPherson Givecamp 2012; adjusted by Lee
+	
+	if ((isset($postRow['tag'])) && ($postRow['tag'] == NULL))
+	{
+	
+		$query = "SELECT MAX(tag) FROM #__cbodb_items";
+		$db->setQuery( $query );
+		$maxTag = $db->loadResult();
+		if ($db->getErrorNum()) {
+			echo $db->stderr();
+			return false;
+		}
+		
+		$bicycle->tag = $maxTag + 1;
+	  
+		$query = "SELECT id FROM #__cbodb_items WHERE tag = '".$bicycle->tag."' LIMIT 1";
+		$db->setQuery( $query );
+		$id = $db->loadResult();
+	
+		$membertransaction = new CbodbTransaction();
+		date_default_timezone_set(getConfigValue("timeZone") );
+		$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
+		$membertransaction->dateClosed = date("Y-m-d H:i:s",time());
+		$membertransaction->type = 7;
+		$membertransaction->memberID = $postRow['memberID'];
+		$membertransaction->itemID = $maxTag + 1;
+		$membertransaction->cash = $bicycle->priceSale;
+		$membertransaction->saveData();
+	}
+	// End of Added 2012-07-21; adjusted by Lee to only be added for new bike and add tag number and price
 
 /*	if ($id > 0)
 	{
 	$mainframe->redirect('index.php?option=' .$option.'&task=editbicycle&cid='.$id, 'Sorry, that tag number is in use. Here is the bike.');
 	}*/
 	
-	$bicycle->saveData();		
-	// Added 2012-07-21 Bart McPherson Givecamp 2012
-	$membertransaction = new CbodbTransaction();
-	date_default_timezone_set(getConfigValue("timeZone") );
-	$membertransaction->dateOpen = date("Y-m-d H:i:s",time());
-    $membertransaction->dateClosed = date("Y-m-d H:i:s",time());
-    $membertransaction->type = 7;
-    $membertransaction->memberID = $postRow['memberID'];
-    $membertransaction->itemID = $maxTag + 1;
-    $membertransaction->cash = $bicycle->priceSale;
-	$membertransaction->saveData();
-	// End of Added 2012-07-21; adjusted by Lee to add tag number and price
+	$bicycle->saveData();
 	
 	$another = JRequest::getVar('another');
 
 
 	if (strcmp($another,"on") == 0)
 	{
-	$mainframe->redirect('index.php?option=' .$option.'&task=add&cbodb_mode=bicycle', 'Bicycle Saved');
+	$mainframe->redirect('index.php?option=' .$option.'&task=add&cbodb_mode=bicycle', 'Bicycle Saved - Tag ' . ($bicycle->tag) );
 	} else
 	{
-	$mainframe->redirect('index.php?option=' .$option.'&task=showbicycles', 'Bicycle Saved');
+	$mainframe->redirect('index.php?option=' .$option.'&task=showbicycles', 'Bicycle Saved - Tag ' . ($bicycle->tag) );
 	}
 }
 
