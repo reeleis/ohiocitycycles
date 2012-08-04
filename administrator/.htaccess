@@ -1,6 +1,6 @@
 # Use PHP5 as default
 # AddHandler application/x-httpd-php5 .php .php4 .php3 .phtml
-#AuthType Basic
-#AuthUserFile "/home/ohiocity/.htpasswds/public_html/administrator/passwd"
-#require valid-user
-#AuthName "Protected public_html/administrator"
+AuthType Basic
+AuthUserFile "/home/ohiocity/.htpasswds/public_html/administrator/passwd"
+require valid-user
+AuthName "Protected public_html/administrator"
