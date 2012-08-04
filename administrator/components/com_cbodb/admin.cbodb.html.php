@@ -2508,7 +2508,8 @@ function showEmailQueries( $option, &$rows, $resultCounts )
             ?>
           </td>
           <td>
-            <?php echo $row->commissionCredits; ?>
+          	<?php echo $row->commissionCredits * (-1) .' / 10 = '. money_format('%n', $row->commissionCredits  / -10); ?>
+            <!--<?php echo $row->commissionCredits; ?>-->
           </td>
         </tr>
         <?php
