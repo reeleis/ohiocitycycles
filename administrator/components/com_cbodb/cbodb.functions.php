@@ -2124,6 +2124,7 @@ function showStaffTotals( $option )
 	      #__cbodb_items i,
 	      #__cbodb_members m
 	    WHERE
+	      t.type = 1001 AND
 	      i.commissionUserID <> 0 AND
 	      t.itemID = i.tag AND
 	      t.dateOpen >= '$dateStart 00:00:00' AND
