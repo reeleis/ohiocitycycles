@@ -194,9 +194,26 @@ function showMembers( $option, &$rows )
 function showReportMenu($option) {
 	  ?>
 
-  <form action="./report.csv.php" method="post">
-    Start Date: <input name="startdate" id="startdate" type="text"></input><?php JHTML::calendar('01/01/01','startdate','startdate'  )   ?><br/>
+  <form action="./volunteering.csv.php" method="post">
+    Volunteer Hours Report:<br/>
+    Start Date: <input name="startdate" id="startdate" type="text"></input><?php JHTML::calendar('01/01/01','startdate','startdate'  )  ?>&nbsp
     End Date:  <input name = "enddate" id="enddate" type="text"></input><?php JHTML::calendar('01/01/01','enddate','enddate'   )   ?><br/>
+    <input type = "submit"/>
+  </form>
+  
+  <br/><br/>
+  
+  <form action="./bicycleinventory.csv.php" method="post">
+    Bicycle Inventory Report:<br/>
+    <input type = "submit"/>
+  </form>
+  
+  <br/><br/>
+  
+  <form action="./staffproductivity.csv.php" method="post">
+    Staff Productivity Report:<br/>
+    Start Date: <input name="startdate" id="startdate3" type="text"></input><?php JHTML::calendar('01/01/01','startdate','startdate3'  )  ?>&nbsp
+    End Date:  <input name = "enddate" id="enddate3" type="text"></input><?php JHTML::calendar('01/01/01','enddate','enddate3'   )   ?><br/>
     <input type = "submit"/>
   </form>
 
